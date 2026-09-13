@@ -61,22 +61,53 @@ Web検索を使って、直近2週間以内に実際にあった湘南エリア�
 
 def call_claude():
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+    messages = [{
+        "role": "user",
+        "content": "本日分の3記事を、直近2週間以内のニュースまたは今後のイベント情報から作成してください。出力は指定のJSON配列のみとし、それ以外の文章（挨拶・説明・前置き）は一切含めないでください。",
+    }]
+
+    # Web検索ツールを使うと複数ターンに分かれることがあるため、
+    # stop_reasonがend_turnになるまでツール結果を返しながら会話を継続する
     response = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=8000,
         system=SYSTEM_PROMPT,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        messages=[{
-            "role": "user",
-            "content": "本日分の3記事を、直近2週間以内のニュースまたは今後のイベント情報から作成してください。",
-        }],
+        messages=messages,
     )
-    # 最後のtextブロックにJSONが入っている想定
-    text_blocks = [b.text for b in response.content if b.type == "text"]
-    raw = text_blocks[-1].strip()
-    # ```json ... ``` で囲まれている場合に備えて除去
-    raw = re.sub(r"^```json\s*|\s*```$", "", raw.strip())
-    return json.loads(raw)
+
+    # 最終的なテキスト全体（複数のtextブロックがあれば連結）を集める
+    all_text = "\n".join(b.text for b in response.content if b.type == "text").strip()
+
+    if not all_text:
+        raise RuntimeError(
+            "Claudeからのテキスト応答が空でした。response.content="
+            + repr(response.content)
+        )
+
+    # ```json ... ``` で囲まれている場合は中身だけ取り出す
+    fence_match = re.search(r"```(?:json)?\s*(\[.*?\])\s*```", all_text, re.DOTALL)
+    if fence_match:
+        raw = fence_match.group(1)
+    else:
+        # フェンスがない場合は、最初の '[' から対応する最後の ']' までを抜き出す
+        start = all_text.find("[")
+        end = all_text.rfind("]")
+        if start == -1 or end == -1 or end <= start:
+            print("---- Claudeからの生の応答（デバッグ用）----", file=sys.stderr)
+            print(all_text, file=sys.stderr)
+            print("--------------------------------------------", file=sys.stderr)
+            raise RuntimeError("応答内にJSON配列（[...]）が見つかりませんでした。上のログを確認してください。")
+        raw = all_text[start:end + 1]
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as e:
+        print("---- JSON解析に失敗した文字列（デバッグ用）----", file=sys.stderr)
+        print(raw, file=sys.stderr)
+        print("------------------------------------------------", file=sys.stderr)
+        raise
 
 def js_escape(s: str) -> str:
     return s.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n")
