@@ -143,6 +143,13 @@
   .foot-mission{max-width:540px; font-size:13px; line-height:1.9; color:var(--ink-soft);}
   .foot-mission .serif{font-size:17px; color:var(--ink); display:block; margin-bottom:8px;}
   .foot-note{font-size:11.5px; color:var(--ink-faint); line-height:1.9; max-width:320px;}
+  .foot-links a{color:var(--ink-soft); text-decoration:underline; margin-right:12px; cursor:pointer;}
+  .foot-links a:hover{color:var(--trust);}
+  .static-modal-body{padding:34px 38px 44px; font-size:13.5px; line-height:2; color:var(--ink);}
+  .static-modal-body h3{font-family:'Shippori Mincho',serif; font-size:21px; margin:26px 0 10px;}
+  .static-modal-body h3:first-child{margin-top:0;}
+  .static-modal-body p{margin:0 0 12px;}
+  .static-modal-close{position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; background:var(--bg-deep); border:none; cursor:pointer; font-size:16px; color:var(--ink); display:flex; align-items:center; justify-content:center;}
 
   /* ===== SNS follow icons ===== */
   .sns-row{display:flex; gap:8px; margin-top:10px;}
@@ -322,7 +329,12 @@
     <div class="foot-note">
       掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
       広告掲載プランをご用意しています（松：ページ最上部プレミアム枠 ／ 竹：カテゴリ内スポンサー枠 ／ 梅：記事内タイアップ枠）。詳しくはお問い合わせください。<br><br>
-      © 湘南Doors編集部
+      <span class="foot-links">
+        <a href="#" id="footPrivacy">プライバシーポリシー</a>
+        <a href="#" id="footContact">お問い合わせ</a>
+        <a href="#" id="footOperator">運営者情報</a>
+      </span><br><br>
+      © 湘南Doors運営事務局
     </div>
   </div>
 </footer>
@@ -833,6 +845,60 @@ const overlay = document.getElementById('overlay');
 const modal = document.getElementById('modal');
 const SITE_TITLE = document.title;
 function slugFor(item){ return 'article-' + item.id; }
+
+/* ---------- フッターの静的ページ（プライバシーポリシー・お問い合わせ・運営者情報） ---------- */
+const STATIC_PAGES = {
+  privacy: {
+    title: 'プライバシーポリシー',
+    html: `
+      <h3>個人情報の取り扱いについて</h3>
+      <p>湘南Doors運営事務局（以下「当サイト」）は、本サイトのご利用にあたり取得する情報について、以下の通りプライバシーポリシーを定めます。</p>
+      <h3>アクセス解析ツールについて</h3>
+      <p>当サイトでは、サイトの利用状況を把握するためにGoogleアナリティクスを利用しています。Googleアナリティクスは、Cookieを使用してトラフィックデータを収集しますが、これには個人を特定する情報は含まれません。この機能はCookieを無効にすることで収集を拒否することが可能ですので、お使いのブラウザの設定をご確認ください。この規約に関して、詳しくは<a href="https://marketingplatform.google.com/about/analytics/terms/jp/" target="_blank" rel="noopener">Googleアナリティクス利用規約のページ</a>や<a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" rel="noopener">Googleポリシーと規約ページ</a>をご覧ください。</p>
+      <h3>広告配信について</h3>
+      <p>当サイトは、将来的に第三者配信の広告サービスを利用する場合があります。広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookieを使用することがあります。</p>
+      <h3>お問い合わせ先で取得する情報について</h3>
+      <p>お問い合わせフォームやメールにてご提供いただいたお名前・メールアドレス等の個人情報は、お問い合わせへの対応、および必要な情報をお伝えする目的にのみ使用し、ご本人の同意なく第三者に提供することはありません。</p>
+      <h3>プライバシーポリシーの変更について</h3>
+      <p>当サイトは、必要に応じて本ポリシーの内容を変更することがあります。変更後のプライバシーポリシーは、本ページに掲載した時点から効力を生じるものとします。</p>
+      <p style="color:var(--ink-faint); font-size:12px;">制定日：2026年9月13日</p>
+    `,
+  },
+  contact: {
+    title: 'お問い合わせ',
+    html: `
+      <h3>お問い合わせ</h3>
+      <p>取材のご依頼、掲載情報の誤りのご指摘、広告掲載（松・竹・梅プラン）に関するお問い合わせなど、下記のメールアドレスまでお気軽にご連絡ください。</p>
+      <p style="font-size:16px; font-weight:700;"><a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
+      <p>内容を確認の上、担当より折り返しご連絡いたします。返信までお時間をいただく場合がございますので、あらかじめご了承ください。</p>
+    `,
+  },
+  operator: {
+    title: '運営者情報',
+    html: `
+      <h3>運営者情報</h3>
+      <p>運営：湘南Doors運営事務局</p>
+      <p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
+      <p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+    `,
+  },
+};
+
+function openStaticModal(key){
+  const page = STATIC_PAGES[key];
+  if(!page) return;
+  modal.innerHTML = `
+    <button class="static-modal-close" id="staticModalClose">✕</button>
+    <div class="static-modal-body">${page.html}</div>`;
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.title = page.title + '｜' + SITE_TITLE;
+  document.getElementById('staticModalClose').addEventListener('click', ()=> closeModal());
+}
+
+document.getElementById('footPrivacy').addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal('privacy'); });
+document.getElementById('footContact').addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal('contact'); });
+document.getElementById('footOperator').addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal('operator'); });
 
 function openModal(item, pushState = true){
   modal.innerHTML = `
