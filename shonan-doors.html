@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>湘南Doors｜湘南の人・企業・文化・体験をつなぐメディア</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!--
+  Google Analytics (GA4) — 実際に計測する際は、下の "G-XXXXXXXXXX" を
+  ご自身のGA4測定IDに置き換えてから、2つのscriptタグのコメントを外してください。
+  測定IDは Google アナリティクス管理画面 > データストリーム で確認できます。
+-->
+<!--
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+-->
+<style>
+  :root{
+    --bg:#F4F5F1;
+    --bg-deep:#ECEEE7;
+    --card:#FFFFFF;
+    --ink:#16233A;
+    --ink-soft:#57626F;
+    --ink-faint:#8B9199;
+    --line:#E2E4DC;
+    --line-soft:#EAEBE3;
+    --trust:#1D3557;
+    --trust-deep:#0F2038;
+    --cta:#E8542B;
+    --cta-deep:#A6431E;
+    --gold:#C99A3E;
+    --cream:#F4EDE1;
+    --slate:#33424F;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    font-feature-settings:"palt"; letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:'Shippori Mincho', serif;}
+  a{color:inherit;} img,svg{display:block;}
+
+  /* ===== HEADER ===== */
+  header{border-bottom:1px solid var(--line); background:linear-gradient(180deg, var(--bg-deep), var(--bg) 85%); overflow:hidden; position:relative;}
+  .wave-deco{position:absolute; right:-30px; top:-50px; width:320px; opacity:.5; z-index:0;}
+  .head-inner{
+    max-width:1160px; margin:0 auto; padding:34px 28px 24px; position:relative; z-index:1;
+    display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;
+  }
+  .brand-block{display:flex; align-items:center; gap:16px;}
+  .brand-mark{width:52px; height:52px; flex-shrink:0;}
+  .brand-name{font-size:34px; font-weight:600; letter-spacing:.06em; line-height:1;}
+  .brand-tagline{margin-top:8px; font-size:12.5px; letter-spacing:.15em; color:var(--ink-soft);}
+  .head-meta{text-align:right; font-size:12px; color:var(--ink-faint); letter-spacing:.05em; line-height:1.8;}
+  .head-meta b{color:var(--trust); font-weight:700;}
+
+  .mission-strip{border-top:1px solid var(--line-soft); background:var(--bg);}
+  .mission-inner{max-width:760px; margin:0 auto; padding:22px 28px; text-align:center;}
+  .mission-text{font-size:15px; line-height:1.9; color:var(--ink);}
+  .mission-text strong{color:var(--trust); font-weight:700;}
+  @media (max-width:760px){ .brand-name{font-size:27px;} }
+
+  /* ===== SNS latest feed ===== */
+  .sidebar-card{background:var(--card); border:1px solid var(--line-soft); border-radius:5px; padding:16px; margin-bottom:20px;}
+  .sidebar-card-title{font-size:13px; font-weight:700; color:var(--ink); margin-bottom:12px;}
+  .insta-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:12px;}
+  .insta-grid-item{aspect-ratio:1/1; overflow:hidden; border-radius:2px; cursor:pointer;}
+  .insta-grid-item svg{width:100%; height:100%; display:block;}
+  .insta-follow-btn{
+    display:block; text-align:center; text-decoration:none;
+    background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5);
+    color:#fff; font-size:12.5px; font-weight:700; padding:10px; border-radius:4px;
+  }
+
+  /* ===== FILTER BAR ===== */
+  .filterbar{background:rgba(244,245,241,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  .filter-inner{max-width:1160px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+  .chip-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{font-size:13px; padding:7px 15px; border-radius:3px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); cursor:pointer; letter-spacing:.03em; transition:.15s; white-space:nowrap;}
+  .chip:hover{border-color:var(--cta);}
+  .chip.active{background:var(--cta); color:#fff; border-color:var(--cta-deep);}
+  .filter-right{display:flex; align-items:center; gap:10px; margin-left:auto;}
+  select, input[type=text]{font-family:'Zen Kaku Gothic New',sans-serif; font-size:13px; padding:7px 10px; border-radius:3px; border:1px solid var(--line); background:var(--card); color:var(--ink);}
+  input[type=text]{width:190px;}
+  input[type=text]:focus, select:focus{outline:2px solid var(--cta);}
+
+  /* ===== GRID ===== */
+  main{max-width:1300px; margin:0 auto; padding:34px 28px 80px;}
+  .content-layout{display:grid; grid-template-columns:1fr 300px; gap:32px; align-items:start;}
+  .content-sidebar{}
+  @media (max-width:980px){
+    .content-layout{grid-template-columns:1fr;}
+  }
+  #resultCount{font-size:12.5px; color:var(--ink-faint); margin:0 0 18px; letter-spacing:.04em;}
+  .grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:22px;}
+  @media (min-width:1300px){ .grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:600px){ .grid{grid-template-columns:1fr;} }
+
+  .card{background:var(--card); border:1px solid var(--line-soft); border-radius:3px; cursor:pointer; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s, box-shadow .15s;}
+  .card:hover{transform:translateY(-3px); box-shadow:0 10px 24px rgba(15,32,56,.10);}
+  .card-art{height:120px; position:relative; overflow:hidden;}
+  .card-art svg{width:100%; height:100%;}
+  .card-eyebrow{position:absolute; left:12px; bottom:9px; display:flex; gap:6px; align-items:center; font-size:10.5px; color:#fff; letter-spacing:.08em; opacity:.95;}
+  .card-eyebrow .dot{width:4px;height:4px;border-radius:50%;background:var(--cream);}
+  .card-body{padding:16px 18px 20px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .card-date{font-size:10.5px; color:var(--ink-faint); letter-spacing:.04em;}
+  .card-title{font-family:'Shippori Mincho',serif; font-size:17.5px; font-weight:600; line-height:1.55;}
+  .card-dek{font-size:12.5px; color:var(--ink-soft); line-height:1.75; flex:1;}
+  .card-foot{display:flex; justify-content:space-between; align-items:center; margin-top:6px;}
+  .read-more{font-size:11.5px; color:var(--cta-deep); letter-spacing:.06em; font-weight:700;}
+  .area-tag{font-size:10.5px; color:var(--ink-faint); border:1px solid var(--line); padding:2px 8px; border-radius:20px;}
+  .empty-state{grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--ink-faint); font-size:14px; border:1px dashed var(--line); border-radius:4px;}
+
+  /* ===== MODAL ===== */
+  .overlay{position:fixed; inset:0; background:rgba(15,20,25,.6); z-index:100; display:none; align-items:flex-start; justify-content:center; padding:5vh 20px; overflow-y:auto;}
+  .overlay.open{display:flex;}
+  .modal{background:#fff; max-width:660px; width:100%; border-radius:4px; margin-bottom:5vh; box-shadow:0 30px 60px rgba(0,0,0,.28);}
+  .modal-art{height:170px; position:relative;}
+  .modal-art svg{width:100%; height:100%;}
+  .modal-close{position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.9); border:none; cursor:pointer; font-size:16px; color:var(--ink); display:flex; align-items:center; justify-content:center; z-index:2;}
+  .modal-body{padding:30px 36px 40px;}
+  .modal-eyebrow{font-size:11.5px; color:var(--cta-deep); letter-spacing:.1em; font-weight:700; display:flex; gap:10px; align-items:center;}
+  .modal-title{font-family:'Shippori Mincho',serif; font-size:26px; font-weight:700; margin:10px 0 6px; line-height:1.5;}
+  .modal-dek{font-size:13.5px; color:var(--ink-soft); margin-bottom:22px; line-height:1.8; border-left:3px solid var(--cta); padding-left:12px;}
+  .modal-text{font-size:14.5px; line-height:2.1; color:var(--ink); white-space:pre-line;}
+  .modal-tags{margin-top:24px; display:flex; gap:8px; flex-wrap:wrap;}
+  .tag-pill{font-size:11px; color:var(--ink-soft); border:1px solid var(--line); padding:4px 11px; border-radius:20px;}
+
+  /* ===== FOOTER ===== */
+  footer{border-top:1px solid var(--line); background:var(--bg-deep); padding:42px 28px 34px;}
+  .foot-inner{max-width:1160px; margin:0 auto; display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap;}
+  .foot-mission{max-width:540px; font-size:13px; line-height:1.9; color:var(--ink-soft);}
+  .foot-mission .serif{font-size:17px; color:var(--ink); display:block; margin-bottom:8px;}
+  .foot-note{font-size:11.5px; color:var(--ink-faint); line-height:1.9; max-width:320px;}
+
+  /* ===== SNS follow icons ===== */
+  .sns-row{display:flex; gap:8px; margin-top:10px;}
+  .sns-icon{
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    transition:.15s; flex-shrink:0;
+  }
+  .sns-icon:hover{transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.18);}
+  .sns-icon svg{width:15px; height:15px;}
+
+  /* ===== PICK UP carousel (松プラン想定スロット) ===== */
+  .pickup-section{max-width:1160px; margin:20px auto 0; padding:0 28px;}
+  .pickup-viewport{
+    position:relative;
+    overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
+    padding:14px 0 18px;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .pickup-viewport::-webkit-scrollbar{ display:none; height:0; }
+  .pickup-track{
+    display:flex; gap:18px;
+  }
+  .pickup-card{
+    flex:0 0 auto; width:min(560px,74vw);
+    scroll-snap-align:center; scroll-snap-stop:always;
+    background:var(--card); border-radius:5px; overflow:hidden; cursor:pointer;
+    opacity:.4; transform:scale(.92); transition:opacity .3s, transform .3s;
+    box-shadow:0 4px 16px rgba(15,32,56,.06);
+  }
+  .pickup-card.active{ opacity:1; transform:scale(1); box-shadow:0 14px 34px rgba(15,32,56,.14); }
+  .pickup-card-img{position:relative; height:230px;}
+  .pickup-card-img svg{width:100%; height:100%;}
+  .pickup-card-body{padding:16px 20px 20px;}
+  .pickup-taglist{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
+  .pickup-tag{color:#fff; font-size:11.5px; font-weight:700; padding:4px 11px; border-radius:3px;}
+  .pickup-area{font-size:11.5px; color:var(--ink-faint);}
+  .pickup-card-title{font-family:'Shippori Mincho',serif; font-weight:700; font-size:17px; line-height:1.5; margin-bottom:8px;}
+  .pickup-card-dek{font-size:12.5px; color:var(--ink-soft); line-height:1.7; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+
+  .pickup-nav{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:6px;}
+  .pickup-arrow{
+    width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:var(--card);
+    color:var(--ink-soft); font-size:16px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:.15s; flex-shrink:0;
+  }
+  .pickup-arrow:hover{border-color:var(--trust); color:var(--trust);}
+  .pickup-dots{display:flex; gap:7px; align-items:center;}
+  .pickup-dot{width:7px; height:7px; border-radius:50%; background:var(--line); cursor:pointer; transition:.2s; flex-shrink:0;}
+  .pickup-dot.active{background:var(--trust); width:20px; border-radius:5px;}
+
+  @media (max-width:640px){
+    .pickup-section{padding:0 16px;}
+    .pickup-card{width:80vw;}
+    .pickup-card-img{height:170px;}
+  }
+
+  /* ===== modal official-link / video ===== */
+  .modal-linkbtn{
+    display:inline-flex; align-items:center; gap:6px; margin-top:18px;
+    font-size:12.5px; font-weight:700; color:#fff; background:var(--trust);
+    padding:9px 18px; border-radius:3px; text-decoration:none; letter-spacing:.03em;
+  }
+  .modal-linkbtn:hover{background:var(--trust-deep);}
+  .modal-video{position:relative; width:100%; padding-top:56.25%; margin-top:20px; background:#000; border-radius:3px; overflow:hidden;}
+  .modal-video iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+
+  /* ===== related housing block (暮らし記事の下に表示) ===== */
+  .related-estate{
+    margin-top:26px; padding-top:20px; border-top:1px solid var(--line-soft);
+  }
+  .related-estate-label{font-size:11px; letter-spacing:.06em; color:var(--ink-faint); margin-bottom:8px;}
+  .related-estate-btn{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
+    color:var(--ink); background:var(--bg-deep); border:1px solid var(--line);
+    padding:9px 16px; border-radius:3px; cursor:pointer;
+  }
+  .related-estate-btn:hover{border-color:var(--trust); color:var(--trust);}
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="wave-deco" viewBox="0 0 300 200" fill="none">
+    <path d="M0 120 Q40 90 80 120 T160 120 T240 120 T320 120" stroke="#1D3557" stroke-width="2" opacity=".3"/>
+    <path d="M0 145 Q40 115 80 145 T160 145 T240 145 T320 145" stroke="#E8542B" stroke-width="2" opacity=".25"/>
+    <path d="M0 170 Q40 140 80 170 T160 170 T240 170 T320 170" stroke="#1D3557" stroke-width="1.5" opacity=".18"/>
+  </svg>
+  <div class="head-inner">
+    <div class="brand-block">
+      <svg class="brand-mark" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
+        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
+        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
+        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
+      </svg>
+      <div>
+        <div class="brand-name serif">湘南Doors</div>
+        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="sns-row" id="snsRow"></div>
+      </div>
+    </div>
+  </div>
+  <div class="mission-strip">
+    <div class="mission-inner">
+      <p class="mission-text">
+        湘南には、まだ知られていない人がいる。まだ知られていない企業がある。<br>
+        「湘南Doors」は、湘南にある魅力を見つけ、伝え、つなぐことに情熱を注ぐ地域メディアです。<br>
+        湘南で暮らす人にも、これから関わりたい人にも、<strong>「知ってよかった」と思える出会い</strong>を届けます。
+      </p>
+    </div>
+  </div>
+  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+</header>
+
+<!-- top banner slot (松プラン想定・回転バナー) : 実際に広告主がつく際は、ステマ規制対応として小さく「PR」等の表示を追加してください -->
+<div class="pickup-section">
+  <div class="pickup-viewport" id="pickupViewport">
+    <div class="pickup-track" id="pickupTrack"></div>
+  </div>
+  <div class="pickup-nav">
+    <button class="pickup-arrow" id="pickupPrev" aria-label="前へ">‹</button>
+    <div class="pickup-dots" id="pickupDots"></div>
+    <button class="pickup-arrow" id="pickupNext" aria-label="次へ">›</button>
+  </div>
+</div>
+
+<!--
+  SNS最新投稿欄:
+  ・X（旧Twitter）は公式の埋め込みウィジェットです。実際のアカウントを開設したら、
+    下の href="https://twitter.com/shonan_doors" の部分を実際のアカウントURLに
+    差し替えるだけで、最新ツイートが自動的にここへ反映されます（追加費用なし）。
+  ・Instagramは、Xのような「無料の自動フィード埋め込み」を公式には提供していません。
+    投稿ごとにInstagram公式の埋め込みコード（各投稿ページの「埋め込み」から取得）を
+    貼るか、SnapWidget等の外部サービス（月額数百円程度〜）を契約すると自動化できます。
+    アカウント開設後、投稿の埋め込みコードをこのdivの中に差し替えてください。
+-->
+
+<div class="filterbar">
+  <div class="filter-inner">
+    <div class="chip-row" id="catChips"></div>
+    <div class="filter-right">
+      <select id="areaSelect"><option value="">エリア：すべて</option></select>
+      <input type="text" id="searchBox" placeholder="キーワードで探す">
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="content-layout">
+    <div class="content-main">
+      <p id="resultCount"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+    <aside class="content-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Instagramの最新投稿</div>
+        <div class="insta-grid" id="instaGrid"></div>
+        <a class="insta-follow-btn" href="#" target="_blank" rel="noopener">📷 Instagramでフォロー</a>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">X（旧Twitter）の最新投稿</div>
+        <a class="twitter-timeline" data-height="420" data-theme="light" href="https://twitter.com/shonan_doors?ref_src=twsrc%5Etfw">Tweets by shonan_doors</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-mission">
+      <span class="serif">「湘南に関わるなら、この場所。」</span>
+      湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
+    </div>
+    <div class="foot-note">
+      掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
+      広告掲載プランをご用意しています（松：ページ最上部プレミアム枠 ／ 竹：カテゴリ内スポンサー枠 ／ 梅：記事内タイアップ枠）。詳しくはお問い合わせください。<br><br>
+      © 湘南Doors編集部
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+const CATS = {
+  t:{label:'観光', bg:'#1D3557'},
+  b:{label:'企業・店舗', bg:'#A6431E'},
+  g:{label:'グルメ', bg:'#8B5E34'},
+  p:{label:'人', bg:'#16233A'},
+  c:{label:'文化', bg:'#0F2038'},
+  e:{label:'イベント', bg:'#E8542B'},
+  l:{label:'暮らし', bg:'#33424F'}
+};
+
+const AREA_ORDER = ['藤沢','茅ヶ崎','鎌倉','平塚','大磯','二宮','逗子','葉山'];
+
+function scene(bg, shapes){
+  return `<svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="${bg}"/>${shapes}</svg>`;
+}
+const W='#F4EDE1', O='#E8542B', G='#C99A3E', T='#7FA6C9';
+
+const SCENES = {
+  shrine: scene('#1D3557', `<path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="${W}" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="${G}" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/>`),
+  garden: scene('#0F2038', `<rect x="150" y="30" width="8" height="60" fill="${W}"/><circle cx="154" cy="24" r="10" fill="${O}"/><path d="M60 90 Q80 70 100 90" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/><path d="M200 90 Q220 65 240 90" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/><circle cx="40" cy="60" r="14" fill="${G}" opacity=".5"/>`),
+  beach: scene('#1D3557', `<circle cx="245" cy="30" r="18" fill="${G}"/><path d="M0 92 Q40 72 80 92 T160 92 T240 92 T320 92" stroke="${W}" stroke-width="2.5" fill="none" opacity=".75"/><path d="M0 104 Q40 88 80 104 T160 104 T240 104 T320 104" stroke="${T}" stroke-width="2" fill="none" opacity=".5"/><path d="M60 92 L60 40 L100 55 L60 70" fill="${O}" opacity=".85"/>`),
+  crossing: scene('#16233A', `<rect x="0" y="70" width="300" height="4" fill="${W}" opacity=".6"/><path d="M120 40 L180 40 L180 70 L120 70 Z" fill="${O}" opacity=".9"/><circle cx="130" cy="50" r="4" fill="${W}"/><circle cx="170" cy="50" r="4" fill="${W}"/><path d="M0 95 Q60 80 120 95 T240 95 T360 95" stroke="${T}" stroke-width="2" fill="none" opacity=".5"/><path d="M40 55 L40 90 M40 55 L20 62 M40 55 L60 62" stroke="${G}" stroke-width="3"/>`),
+  monorail: scene('#1D3557', `<path d="M0 30 Q150 5 300 30" stroke="${W}" stroke-width="3" fill="none"/><rect x="120" y="34" width="60" height="26" rx="6" fill="${O}"/><path d="M140 60 V72 M160 60 V72" stroke="${W}" stroke-width="2"/><path d="M0 100 Q80 70 160 100 T320 100" stroke="${T}" stroke-width="2" fill="none" opacity=".5"/>`),
+  market: scene('#A6431E', `<path d="M40 50 L60 30 L80 50 Z M100 50 L120 30 L140 50 Z M160 50 L180 30 L200 50 Z M220 50 L240 30 L260 50 Z" fill="${W}" opacity=".9"/><rect x="40" y="50" width="220" height="4" fill="${W}" opacity=".6"/><rect x="70" y="70" width="20" height="16" fill="${G}"/><rect x="150" y="70" width="20" height="16" fill="${G}"/><rect x="210" y="70" width="20" height="16" fill="${G}"/>`),
+  brewery: scene('#A6431E', `<rect x="120" y="45" width="40" height="45" rx="6" fill="${W}" opacity=".9"/><rect x="128" y="30" width="24" height="15" fill="${W}" opacity=".9"/><path d="M60 90 Q65 60 60 40" stroke="${G}" stroke-width="3" fill="none"/><path d="M230 90 Q235 60 230 40" stroke="${G}" stroke-width="3" fill="none"/><circle cx="60" cy="34" r="4" fill="${G}"/><circle cx="230" cy="34" r="4" fill="${G}"/>`),
+  surf: scene('#1D3557', `<path d="M110 95 Q150 30 190 95 Z" fill="${W}" opacity=".85"/><path d="M0 100 Q40 84 80 100 T160 100 T240 100 T320 100" stroke="${O}" stroke-width="2.5" fill="none" opacity=".8"/><path d="M0 112 Q40 96 80 112 T160 112 T240 112 T320 112" stroke="${T}" stroke-width="2" fill="none" opacity=".5"/>`),
+  butcher: scene('#A6431E', `<rect x="90" y="45" width="120" height="10" fill="${W}"/><path d="M100 45 L110 30 L120 45 M140 45 L150 30 L160 45 M180 45 L190 30 L200 45" fill="${W}" opacity=".8"/><rect x="105" y="60" width="90" height="30" fill="${G}" opacity=".5"/>`),
+  mall: scene('#0F2038', `<rect x="70" y="35" width="160" height="55" fill="${W}" opacity=".12" stroke="${W}" stroke-width="2"/><rect x="90" y="50" width="20" height="20" fill="${O}" opacity=".8"/><rect x="130" y="50" width="20" height="20" fill="${G}" opacity=".8"/><rect x="170" y="50" width="20" height="20" fill="${T}" opacity=".8"/>`),
+  seafood: scene('#A6431E', `<ellipse cx="150" cy="70" rx="70" ry="22" fill="${W}" opacity=".9"/><path d="M120 65 Q135 55 150 65 T180 65" stroke="${O}" stroke-width="2" fill="none"/><path d="M100 35 Q110 20 120 35 M180 35 Q190 20 200 35" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/>`),
+  farm: scene('#33424F', `<circle cx="245" cy="30" r="16" fill="${G}"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="${W}" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/>`),
+  kanji: scene('#0F2038', `<circle cx="230" cy="80" r="20" fill="none" stroke="${O}" stroke-width="2"/><path d="M60 30 V90 M40 45 H90 M45 65 Q65 80 85 65" stroke="${W}" stroke-width="3" fill="none"/>`),
+  stadium: scene('#1D3557', `<rect x="40" y="70" width="220" height="6" fill="${W}" opacity=".7"/><path d="M60 70 V35 M240 70 V35" stroke="${G}" stroke-width="3"/><circle cx="60" cy="30" r="6" fill="${O}"/><circle cx="240" cy="30" r="6" fill="${O}"/><circle cx="150" cy="70" r="14" fill="none" stroke="${W}" stroke-width="2" opacity=".7"/>`),
+  music: scene('#16233A', `<ellipse cx="130" cy="75" rx="28" ry="20" fill="${W}" opacity=".9"/><path d="M158 75 V25" stroke="${W}" stroke-width="4"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="${O}" stroke-width="2" fill="none" opacity=".7"/><path d="M0 105 Q40 90 80 105 T160 105 T240 105 T320 105" stroke="${G}" stroke-width="1.5" fill="none" opacity=".5"/>`),
+  mansion: scene('#0F2038', `<path d="M100 90 V55 L150 30 L200 55 V90 Z" fill="none" stroke="${W}" stroke-width="2.5"/><rect x="140" y="65" width="20" height="25" fill="${G}" opacity=".7"/><path d="M60 90 V45 M60 45 Q52 45 52 55 M60 45 Q68 45 68 55" stroke="${T}" stroke-width="3" fill="none" opacity=".7"/>`),
+  festival: scene('#E8542B', `<path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="${W}" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="${G}"/><rect x="100" y="35" width="20" height="26" rx="10" fill="${W}" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="${G}"/><rect x="200" y="35" width="20" height="26" rx="10" fill="${W}" opacity=".85"/>`),
+  portrait: scene('#16233A', `<circle cx="150" cy="42" r="18" fill="${W}" opacity=".9"/><path d="M116 92 Q150 58 184 92" stroke="${W}" stroke-width="2.5" fill="none" opacity=".75"/><circle cx="230" cy="30" r="10" fill="${G}" opacity=".7"/>`),
+  marina: scene('#1D3557', `<path d="M150 90 V25" stroke="${W}" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="${W}" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="${T}" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="${G}" opacity=".7"/>`),
+  cinema: scene('#0F2038', `<rect x="90" y="30" width="120" height="45" fill="${W}" opacity=".12" stroke="${W}" stroke-width="2"/><circle cx="60" cy="55" r="14" fill="none" stroke="${G}" stroke-width="3"/><circle cx="240" cy="55" r="14" fill="none" stroke="${O}" stroke-width="3"/>`),
+  street: scene('#33424F', `<path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="${W}" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="${G}" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="${T}" stroke-width="1.5" opacity=".5"/>`)
+};
+
+const DATA = [
+{id:1,cat:'t',area:'藤沢',scene:'shrine',title:'江の島に息づく、龍と弁財天の物語',dek:'龍神伝説と弁財天信仰が今も残る、湘南のシンボル。',
+link:'',
+date:'2026-08-18',
+body:'江の島の中心にそびえる江島神社は、龍神と結びついた弁財天信仰の聖地として長い歴史を刻んできた場所だ。境内奥の奉安殿には「八臂弁財天」と「妙音弁財天」という二体の像が祀られており、正月には七福神巡りの参拝者で賑わう。鎌倉時代、宋から帰国した僧・良真の献言によって三代将軍・源実朝が創建したと伝わり、境内には「宋国伝来の碑」という石碑も残されている。源頼朝が戦勝祈願のためにこの島を訪れたという逸話も広く知られており、江戸時代には弁財天詣でを目的とした庶民の旅がひとつのブームとなって、その賑わいの様子は数多くの浮世絵にも描き残されてきた。\n\n参道である江の島弁財天仲見世通りを抜け、幾重にも折り重なる石段を上りきったところに、辺津宮の境内が広がっている。さらに奥へ進むと中津宮、そして奥津宮へと続いていき、参道沿いには江戸時代に大百味講という人々が寄進した常夜灯が並ぶ。こうした古い信仰の足跡をたどりながら歩を進めると、視界の先には相模湾の広がりが飛び込んでくる。今でこそ江の島は観光地として多くの人で賑わっているが、その足元には、千年近くにわたって積み重ねられてきた信仰の厚みが、今も静かに息づいている。\n\n境内にはこのほか、龍神伝説の舞台となった洞窟「江の島岩屋」もあり、源頼朝や日蓮上人もかつて修行に訪れたと伝えられている。江島神社は「日本三大弁財天」のひとつに数えられ、初詣の時期には仲見世通りから境内にかけて長い行列ができるほどの混雑ぶりを見せる。境内をひと通り巡るだけでも小一時間はかかるため、江の島観光の際には弁財天信仰の歴史を意識しながら、時間に余裕を持って参拝するのがおすすめだ。\n\n湘南Doors編集部が江の島を歩くたびに感じるのは、観光地としての賑わいの奥に、こうした信仰の歴史が何層にも積み重なっているということだ。仲見世通りの喧騒を抜けた先にある静けさこそ、この島の本当の魅力なのかもしれない。\n\nアクセスは小田急線・江ノ島電鉄・湘南モノレールのいずれの江の島駅からも徒歩圏内で、弁天橋を渡って島へ入るのが基本のルートになる。参道沿いには食事処や土産物店が連なっており、参拝の前後に湘南の味覚を楽しむことができる。信仰の場としての静けさと、参道の賑わいという対照的な魅力が、同じ島の中に同居している。\n\n湘南Doors編集部では、こうした信仰にまつわる場所を「文化」カテゴリの記事ともあわせて取材しており、江の島をより深く知りたい人にはあわせて読んでいただきたい。',
+tags:['江の島','神社','信仰']},
+
+{id:2,cat:'t',area:'藤沢',scene:'garden',title:'明治の貿易商が遺した、島の頂上の庭園',dek:'イギリス人貿易商が明治期に築いた植物園が、今は江の島のランドマークに。',
+link:'',
+date:'2026-08-19',
+body:'江の島の頂上部に広がる江の島サムエル・コッキング苑は、横浜で貿易商を営んだイギリス人、サムエル・コッキングが明治期に築いた庭園がそのルーツになっている。コッキングは世界各地から集めた植物をこの島の頂に植え、当時としては珍しい温室まで整備したという。園内には明治中期に建てられたレンガ造りの温室遺構が今も地下に眠っており、日本国内に現存する温室遺構としては最古級とされる。普段は非公開だが、春に開催される江の島フラワーフェスタの期間中には特別に公開され、多くの見学者がその歴史の断片に触れようと足を運んでいる。\n\n現在の苑内には、展望灯台「江の島シーキャンドル」がそびえ立ち、晴れた日にはその展望台から富士山や伊豆大島まで見渡すことができる。園内には250種ともいわれる椿をはじめ、四季折々の花々が植えられており、湘南野菜を使ったレストランや、日本初のフレンチトースト専門店として知られるカフェも軒を連ねている。一人のイギリス人貿易商が趣味的に始めた庭づくりが、150年近い時を経て江の島を代表する観光名所として今なお残り続けていること自体が、この島の観光の歴史を物語る、小さな奇跡のような出来事だといえるだろう。\n\n苑内にはこのほかにも、東洋のマイアミビーチと呼ばれる片瀬海岸を見渡せる「マイアミビーチ広場」や、藤沢市の姉妹・友好都市を紹介する「昆明広場」など、地域交流の歴史を伝える一角も設けられている。灯台の真下には眺望を楽しみながら食事ができるカフェもあり、庭園を歩き疲れた頃にひと休みするのにちょうどいい。四季を通じて花が絶えないため、桜や紫陽花、椿など、訪れる季節によってまったく異なる表情を見せてくれるのも、この庭園の魅力のひとつだ。\n\nコッキング苑を訪れるたびに、一人の外国人の個人的な情熱が、時代を超えて地域の宝物として残り続けていることに驚かされる。庭園という形で受け継がれた歴史は、これからも江の島の風景の一部であり続けるだろう。\n\n苑内は江ノ電が管理しており、江の島エスカーという有料の屋外エスカレーターを使えば、坂道を登らずに頂上部までたどり着くこともできる。体力に自信のない人や、小さな子ども連れの家族にとっても訪れやすい工夫がされている点は、観光地としての江の島の懐の広さを物語っている。\n\n花や庭園を目当てに訪れる人には、同じ江の島エリアの「イベント」カテゴリにある江の島フラワーフェスタの記事もあわせて参考にしてほしい。',
+tags:['江の島','庭園','歴史']},
+
+{id:3,cat:'t',area:'藤沢',scene:'beach',title:'プールも交通公園も、辻堂の海辺は一日仕様',dek:'ジャンボプールから交通公園まで、家族で一日過ごせる県立公園。',
+link:'',
+date:'2026-08-19',
+body:'藤沢市辻堂西海岸に広がる神奈川県立辻堂海浜公園は、複数の施設がひとつの敷地に集約された、湘南でも屈指の複合レジャー拠点である。夏の間だけ開かれる「ジャンボプール」は毎年多くの家族連れで賑わい、海へと続く散策路「しょうなんの森」では、松林の中を歩きながら潮風を感じることができる。芝生広場ではピクニックを楽しむ人々の姿が絶えず、併設された交通公園には自転車の練習コースも整備されており、補助輪なしの自転車デビューの舞台としても地元では親しまれている場所だ。\n\n駐車場は800台規模を誇るが、夏の休日には満車になることも珍しくなく、パークアンドライドで訪れることを勧める案内も出されるほどの人気ぶりを見せる。公園に隣接する辻堂海水浴場は、観光客というよりも地元の人々が集う穴場のビーチとして知られており、幅およそ100メートルにわたる砂浜には、サーフボードを積んだ自転車が行き交う辻堂らしい光景が広がっている。都市機能と自然が同居するこの公園は、辻堂という街の暮らしやすさそのものを体現している場所だといえるだろう。\n\n公園の北側、辻堂駅周辺には個性的な飲食店も点在しており、海で遊んだ後に立ち寄れる店の選択肢も豊富だ。「しょうなんの森」という名前の通り、園内には松林が広がっており、強い潮風から砂浜の背後の街を守る防砂林としての役割も歴史的に担ってきた。駐車場は最初の1時間430円、以降30分ごとに追加料金がかかる仕組みになっており、混雑する時期にはあらかじめ周辺のコインパーキングも調べておくと安心だ。\n\n辻堂海浜公園を歩いていると、遊びの場としての賑わいと、暮らしの中の静かな時間の両方が、同じ敷地の中で自然に共存していることに気づかされる。派手さはないが、だからこそ長く愛され続けているのだろう。\n\n公園全体は入園自由で、プールなど一部有料施設を除けば、散策や芝生広場の利用に費用はかからない点も家族連れにはうれしいポイントだ。休日には家族連れだけでなく、犬の散歩やジョギングを楽しむ地元の人々の姿も多く見られ、観光と日常の暮らしが同じ空間の中で緩やかに重なり合っている。\n\n辻堂エリアの企業・店舗の記事とあわせて読むと、公園を中心とした辻堂という街全体の暮らしの姿がより立体的に見えてくるはずだ。\n\n夏以外の季節に訪れると、プールが閉まっている分だけ人出も落ち着き、松林の中をゆっくり散策するのに適した穴場の時間帯になる。',
+tags:['辻堂','公園','海水浴']},
+
+{id:4,cat:'t',area:'大磯',scene:'beach',title:'日本初の海水浴場は、大磯からはじまった',dek:'明治の軍医が漁師を説得して開いた海水浴場が、日本の海水浴文化の原点に。',
+link:'',
+date:'2026-08-19',
+body:'大磯海水浴場は、明治18年に軍医・松本順（良順）が、漁の妨げになると渋る地元の漁師たちを説得して開設した、日本で最初の海水浴場とされている。当時、西洋医学の考え方をもとに海水浴を療養法として広めようとした松本の働きかけがきっかけとなり、大磯という土地は保養地・別荘地として大きく発展していくことになる。その後、大磯駅は「湘南の海水浴関連遺産」として経済産業省の近代化産業遺産に認定され、関東の駅百選にも選ばれるなど、日本の海水浴文化発祥の地としての歴史的な価値が今も高く評価され続けている。\n\n隣接する大磯ロングビーチは昭和32年に開業したプールリゾートで、全長140メートルのウォータースライダーや波のプール、流れるプールなどを備え、太平洋を望みながら遊べる関東を代表する海辺のリゾートとして親しまれてきた。例年7月上旬から9月中旬にかけて営業し、毎年多くの家族連れで賑わいを見せる。一人の軍医の情熱から始まった小さな取り組みが、やがて日本全国に広がる海水浴という文化そのものを生み出し、さらにその歴史が現代のリゾート施設へと形を変えて受け継がれている。大磯の海岸線には、そうした百年以上にわたる物語が静かに積み重なっている。\n\n大磯ロングビーチは大磯プリンスホテルに併設される形で営業しており、宿泊とセットで一日中海辺のリゾート気分を味わえるのも魅力だ。「大磯は日本の海水浴発祥の地である」という歴史的な事実は、単なる観光アピールにとどまらず、大磯という町全体のブランディングの核になっている。松本順が切り開いたこの海岸線には、療養と保養のための土地という当時の思想が、今もリゾート施設という形を変えて息づいていると言えるだろう。\n\n大磯の海岸線を歩きながら、ここが日本の海水浴文化の出発点だったと想像すると、目の前の景色の見え方が少し変わってくる。歴史はいつも、こうした何気ない浜辺から静かに始まっているのかもしれない。\n\n大磯駅からは徒歩10分ほどで海水浴場に到着でき、ロングビーチへは駅から直行バスが運行される期間もあり、電車利用でも訪れやすい。歴史的な発祥の地という肩書きを持ちながら、今なお現役のレジャー施設として多くの人に利用され続けているという点が、この場所の価値をより一層高めている。\n\n大磯の海水浴文化については、同じ大磯エリアの「人」カテゴリにある松本順の記事とあわせて読むことで、より深く理解することができる。',
+tags:['大磯','海水浴場','歴史']},
+
+{id:5,cat:'t',area:'鎌倉',scene:'crossing',title:'一枚の踏切が、世界中から人を呼ぶ理由',dek:'アニメの舞台として知られる江ノ電の踏切に、今日も海外からカメラが向けられる。',
+link:'',
+date:'2026-08-20',
+body:'江ノ電・鎌倉高校前駅のすぐ横にある踏切は、人気アニメのオープニング映像に登場したことをきっかけに「聖地」として知られるようになり、今では訪日外国人観光客が最も集まる撮影スポットのひとつになっている。ホームから相模湾を一望できる鎌倉高校前駅そのものも「関東の駅百選」に選ばれた景勝地であり、江ノ電が海沿いを走り抜ける風景は、日常の一コマでありながら世界中から人を惹きつける被写体になっている。かつては昭和の映画作品の名場面の舞台にもなるなど、この駅は長らく多くの物語の背景として存在してきた場所でもある。\n\n一方で、その人気の高まりとともに、撮影マナーや路上駐車といった課題も生まれている。線路への進入による緊急停止や、住宅前での長時間の撮影による近隣トラブルなどが報告されており、地元では多言語の注意看板の設置や警備員の配置、防犯カメラの導入といった対策が進められてきた。観光地としての魅力と、そこで暮らす人々の日常をどう両立させていくかという課題は、江ノ電沿線に限らず、湘南全体の観光を考えるうえでも重要な論点になっている。\n\n撮影を目的に訪れる場合は、比較的落ち着いて写真が撮れる平日早朝の時間帯が狙い目とされている。少し足を延ばして七里ヶ浜海岸まで歩けば、電車と海を広角で収められる撮影スポットもあり、混雑を避けたい人にはこちらもおすすめだ。踏切そのものは地元住民の生活道路でもあるため、道路や線路内に立ち入らない、長時間立ち止まらないといった基本的なマナーを守りながら、この特別な風景を楽しみたい。\n\n一枚の踏切がこれほどまでに人を惹きつける理由を考えるとき、そこには単なる観光以上の、物語への憧れというものが関わっているように思える。マナーを守りながら、その物語の一部を体験してみてほしい。\n\n最寄りの鎌倉高校前駅は、鎌倉駅から江ノ電でおよそ20分ほどの距離にあり、藤沢方面からもアクセスしやすい立地にある。踏切だけでなく、駅のホームそのものが海を望む絶景ポイントになっているため、時間に余裕があれば少し早めに到着して、ホームからの景色もあわせて楽しんでみてほしい。\n\n鎌倉エリアの他の観光スポットや、江ノ電沿線の暮らしを紹介する記事とあわせて読むと、鎌倉高校前という場所の位置づけがより明確になる。\n\n踏切そのものに信号機はなく、遮断機が下りる仕組みになっているため、通過する電車の本数や時刻をあらかじめ調べておくと、狙った瞬間を待ちやすくなる。',
+tags:['鎌倉高校前','江ノ電','観光課題']},
+
+{id:6,cat:'t',area:'藤沢',scene:'monorail',title:'あえて丘を選んだ、日本でも珍しい懸垂式',dek:'大船と江の島を14分で結ぶ、レールにぶら下がって走るモノレール。',
+link:'https://www.shonan-monorail.co.jp/',
+date:'2026-08-19',
+body:'鎌倉市の大船駅と藤沢市の湘南江の島駅を結ぶ湘南モノレールは、車体がレールから吊り下がって走る「懸垂式」を採用した、日本でも数少ない路線のひとつである。昭和45年3月、三菱重工業によるモノレール生産のモデル路線として開業し、当初は大船から西鎌倉までの区間からスタート、翌年に湘南江の島まで延伸された。あえて起伏の激しい丘陵地帯にコースを敷いたのは、跨座式モノレールに対する懸垂式の優位性を実証するためだったとされており、最大74‰という急勾配、最小曲率半径100メートルという急カーブが随所に設けられている。\n\n最高速度およそ75km/hで駆け抜ける乗り心地は、初めて乗車する人にとってはまるでジェットコースターのような驚きを伴う。全線単線でありながら、途中の駅で列車が行き違う仕組みが整えられているため運転本数は多く、日中は前の駅ですれ違いを終えてから発車するダイヤが組まれている。「江の島への近道」というキャッチフレーズの通り、観光利用はもちろんのこと、沿線に暮らす人々にとっては通勤・通学の足としても欠かせない存在であり、この技術と運行の経験は後に千葉都市モノレールの建設にも活かされている。\n\n観光で利用する場合は、沿線施設の割引特典がついた「湘南モノレール1日フリーきっぷ」や、新江ノ島水族館の入場券とセットになった「モノレールdeえのすい」といったお得な切符も用意されている。一方で平日の朝7時15分から8時30分ごろにかけては通勤・通学利用者で混雑率が150%を超えることもあり、観光目的で乗車する場合はラッシュの時間帯を避けて9時以降に利用するのが快適に楽しむコツだ。\n\n急な勾配を駆け上がるモノレールの車窓から見える景色は、湘南という地域が海だけでなく丘陵地帯も抱えていることを教えてくれる。あえて険しい道を選んだ路線の歴史そのものが、湘南の多面的な魅力を映し出している。\n\n運賃は区間によって異なるが、大船から湘南江の島までの全区間でもワンコインでお釣りが来る程度と、観光利用の心理的なハードルは低い。丘陵地帯を縫うように走る車窓からは、住宅街の合間に相模湾がちらりと見える瞬間もあり、江ノ電とはまた違った角度から湘南の風景を楽しむことができる。\n\n湘南モノレールとあわせて、江ノ電や新江ノ島水族館の記事も読むと、藤沢・鎌倉エリアの交通と観光の全体像がつかみやすくなる。\n\n沿線には桜の名所も点在しており、春先に乗車すると、車窓越しに満開の桜と海の両方を楽しめる季節限定の景色に出会えることもある。',
+tags:['湘南モノレール','鉄道']},
+
+{id:7,cat:'t',area:'鎌倉',scene:'street',title:'参道から始まる、鎌倉の食べ歩きストリート',dek:'鶴岡八幡宮へと続く小町通りは、鎌倉グルメと土産物が並ぶ定番の散策路。',
+link:'',
+date:'2026-08-20',
+body:'源氏の守り神として篤い信仰を集めてきた鶴岡八幡宮から鎌倉駅方面へと続く小町通りは、しらす料理や鎌倉野菜を使った定食、食べ歩きグルメの店が軒を連ねる、鎌倉観光の中心地ともいえる通りだ。狭い路地の両側にはカフェや土産物店がひしめき合うように並び、週末ともなれば国内外から訪れる観光客で通りが埋め尽くされる。一方、鎌倉駅の西口から伸びる御成通りに足を向けると、小町通りとはまた違う、落ち着いた雑貨店やこぢんまりとしたカフェが点在する静かな表情に出会うことができる。\n\n小町通りから少し歩いた場所には、「レンバイ」の愛称で親しまれる鎌倉市農協連即売所もあり、観光地としての賑わいと、地元の人々の暮らしが同じエリアの中に同居しているのも鎌倉らしい風景のひとつだ。鶴岡八幡宮そのものは国の重要文化財にも指定される建造物を数多く抱えており、参道である若宮大路の中央には、源頼朝が妻・北条政子の安産を祈願して築いたと伝わる一段高い桜並木の「段葛」が続いている。歴史的な信仰の場と、現代の観光・グルメの街並みが重なり合いながら共存していることこそが、鎌倉という街の懐の深さを物語っている。\n\n鶴岡八幡宮の参道である若宮大路の中央には、周囲より一段高く盛り上げられた「段葛」と呼ばれる桜並木の道が続いており、源頼朝が妻・北条政子の安産を祈願して家臣たちとともに築いたと伝えられている。小町通りが観光客で賑わう一方、御成通りは地元の人々が普段使いする店も多く、ふたつの通りを歩き比べることで、観光地としての鎌倉と生活の場としての鎌倉、両方の表情に触れることができる。\n\n小町通りを歩くたびに、観光地としての鎌倉と、暮らしの場としての鎌倉が、同じ通りの中で自然に共存していることに気づかされる。賑わいの奥にある静かな日常にも、目を向けてみてほしい。\n\n鎌倉駅東口を出てすぐの場所から小町通りは始まっており、鶴岡八幡宮までは徒歩10分ほど、ゆっくり食べ歩きをしながら向かうのにちょうどよい距離だ。休日は通り全体が人で埋め尽くされるため、静かに散策したい場合は平日や早朝の時間帯を選ぶのもひとつの工夫になる。\n\n小町通りとレンバイの記事はセットで読むことをおすすめしたい。観光と暮らしという鎌倉の二つの顔が、より鮮明に浮かび上がってくるはずだ。\n\n小町通りの入り口付近には、鎌倉土産の定番である鳩サブレーの店舗もあり、観光の最初か最後に立ち寄る人が多い。',
+tags:['小町通り','鶴岡八幡宮']},
+
+{id:8,cat:'g',area:'茅ヶ崎',scene:'brewery',title:'明治創業の造り酒屋が、湘南ビールを醸す理由',dek:'湘南唯一の蔵元が、1996年から地ビール文化をつくってきた。',
+link:'https://kumazawa.jp/',
+date:'2026-08-19',
+body:'明治5年（1872年）創業、茅ヶ崎に残る唯一の造り酒屋である熊澤酒造は、1996年からドイツ人ブルワーを招いて「湘南ビール」の醸造を始めた。当時は地ビール解禁からまもない時期で、もともと日本酒の醸造技術を持つ酒蔵が新たに地ビールへ参入する例が全国的に見られたが、熊澤酒造は本場ドイツから醸造家を招き、伝統的な製法を一から学ぶという道を選んだ。敷地内の井戸から汲み上げた丹沢山系の伏流水を使い、無濾過・非加熱で仕上げられたビールには、酵母が生きたまま入っている。定番商品のひとつ「シュバルツ」はワールドビアカップで金賞を受賞するなど、国内外から高い評価を受けてきた。\n\n本社の敷地内には醸造所のほかに、パンを焼くベーカリーやイタリアンのトラットリア、和食レストランなどが集まっており、樹木のアーチをくぐって足を踏み入れると、まるで避暑地に来たかのような緑豊かな一角が広がっている。ラベルには大磯海岸や江ノ島、大仏といった湘南の風景を描いたアートボトルも用意されており、味だけでなくその土地らしさを楽しめる工夫が随所に凝らされている。現在は6代目の熊澤茂吉氏のもと、地元の水と原料にこだわった酒造りが今も脈々と受け継がれている。\n\n敷地内にはビールの醸造所だけでなく、パンとカフェの店「モキチ フーズ ガーデン」やイタリアンレストラン「モキチ トラットリア」なども展開されており、日本酒「天青」を使ったゼリーや湘南ビールを使ったアイスクリームといった、お酒が苦手な人でも楽しめるスイーツも用意されている。緑に囲まれた敷地は、まるで小さな村のような佇まいで、ビール片手にのんびりと過ごすもよし、家族連れでランチを楽しむもよし、さまざまな過ごし方ができる場所になっている。\n\n熊澤酒造の敷地を歩いていると、伝統を守ることと新しい挑戦を続けることは、決して矛盾しないのだと実感させられる。地元の水と原料へのこだわりは、これからも茅ヶ崎の誇りであり続けるだろう。\n\n最寄り駅はJR相模線の香川駅で、茅ヶ崎駅からは2駅というアクセスの良さも、多くの人が気軽に立ち寄れる理由のひとつになっている。駅からは徒歩10分ほどかかるが、緑豊かな敷地に足を踏み入れた瞬間に、その道のりの疲れも忘れてしまうという声も少なくない。\n\n熊澤酒造については、6代目・熊澤茂吉氏を紹介する「人」カテゴリの記事もあわせて読むことで、酒蔵の歴史をより人物に寄り添って知ることができる。',
+tags:['熊澤酒造','湘南ビール','茅ヶ崎']},
+
+{id:9,cat:'b',area:'藤沢',scene:'surf',title:'1967年創業、サーファーが憧れるサーフショップ',dek:'辻堂サーファー通りのシンボルとして半世紀以上愛されてきた老舗。',
+link:'',
+date:'2026-08-21',
+body:'辻堂のサーファー通りにたたずむMABO ROYALは、1967年創業という湘南でも屈指の歴史を持つサーフショップである。日本におけるサーフィン文化がまだ黎明期にあった時代からこの地で営業を続けており、その店の歴史そのものが、日本のサーフィンカルチャーが発展していく過程と重なり合っている。全国のサーファーの間で名前が挙がる憧れの店のひとつとされ、湘南でサーフィンを始める人にとっても、経験を積んだベテランにとっても、特別な意味を持つ場所として語り継がれてきた。\n\n辻堂という街は、海までの近さと都心への通勤のしやすさという、一見すると相反する二つの条件を兼ね備えた珍しい立地にある。自転車の荷台にサーフボードを積んで通りを走り抜ける人々の姿は、この街の日常の一部として定着しており、MABO ROYALはまさにそうした暮らし方を象徴する存在といえる。周辺には辻堂海浜公園や辻堂海水浴場といった海のスポットが広がっており、店を訪れた人々がそのまま海へ向かう動線が、街の風景の中に自然に組み込まれている。半世紀以上にわたって同じ場所で営業を続けてきたという事実自体が、辻堂という街の変わらない魅力を物語っている。\n\n辻堂のサーファー通りには、MABO ROYALのほかにも個性的なサーフショップが点在しており、初めてサーフィンに挑戦したいという人向けにボードのレンタルやスクールを行っている店も少なくない。海までの距離が近いため、仕事帰りや休日の朝に軽くひと波乗ってから帰るという「サーフィンのある暮らし」を実践しやすいのも、この通り一帯の特徴だ。長年地域に根ざしてきた店ならではの安心感を求めて、遠方からわざわざ足を運ぶ常連客も多い。\n\n半世紀以上にわたって同じ場所に立ち続けてきたという事実は、それ自体がひとつの信頼の証だ。辻堂という街が持つ変わらない魅力は、こうした老舗の存在によって支えられている。\n\n辻堂駅南口からサーファー通りまでは徒歩やバスでアクセスでき、海水浴シーズン以外も年間を通してサーファーの往来が絶えない通りだ。店先にはボードやウェットスーツが並び、通り自体が湘南のサーフィン文化を体現するひとつの景観になっている。\n\n辻堂の暮らしを紹介する「暮らし」カテゴリの記事とあわせて読むと、サーフショップという存在が街全体の中でどう位置づけられているかが見えてくる。\n\n毎年決まった時期にはサーフィン関連のイベントが辻堂周辺で開かれることもあり、ショップ巡りとあわせて参加してみるのもおすすめだ。',
+tags:['辻堂','サーフィン','老舗']},
+
+{id:10,cat:'g',area:'藤沢',scene:'butcher',title:'大正生まれの精肉店が、街の台所を支え続ける',dek:'100年以上、地元の飲食店の仕入れ先であり続ける精肉店。',
+link:'',
+date:'2026-08-21',
+body:'大正13年（1924年）創業の肉のホドシマは、辻堂で長きにわたって地元の人々に愛され続けている精肉店である。ブランド肉であるかどうかにはこだわらず、品質そのものを最優先するという姿勢を一貫して貫いており、地元の数多くの飲食店への卸売りも長年にわたって担ってきた。派手な宣伝をするわけでもなく、観光ガイドの表紙を飾るような存在でもないが、辻堂という街の食を裏側からずっと支え続けてきた、いわば「暮らしのインフラ」ともいえる店である。\n\n近年は湘南T-SITEやテラスモール湘南といった大型商業施設が相次いで開業し、辻堂の街の風景は目まぐるしく変化を続けている。移住者が増え、新しい店舗が次々と生まれていく一方で、こうした昔ながらの商店が今もなお現役で営業を続けているという事実こそが、辻堂という街の奥行きをつくり出している。新しいものと古いものが違和感なく同居しているというこの街の性格は、湘南Doorsが取材を続けるうえでも重要な視点のひとつになっている。単なる懐かしさではなく、今も現役で機能しているという点にこそ、この店の価値がある。\n\nこうした個人経営の精肉店は、地元の飲食店にとって、単なる仕入れ先ではなく、味づくりを支えるパートナーのような存在でもある。ブランドや知名度ではなく、実際に扱う肉の質と目利きの確かさで長年の信頼を積み重ねてきたからこそ、時代が変わっても選ばれ続けているのだろう。辻堂のように新しい店舗が次々と生まれる街だからこそ、こうした昔ながらの商店が持つ「変わらなさ」に価値が見出されるようになってきている。\n\n派手さのない精肉店が、街の食を長く支え続けてきたという事実は、地域経済の本当の強さがどこにあるのかを教えてくれる。新しい店が増える街だからこそ、こうした老舗の存在価値はより際立って見える。\n\n辻堂駅周辺の商店街の中に店を構えており、地元の人々が日常的に買い物に訪れる生活動線の中にごく自然に溶け込んでいる。観光客が訪れることは少ないが、だからこそ辻堂という街のありのままの日常を感じられる場所のひとつだと言えるだろう。\n\n同じ辻堂エリアの湘南T-SITEやテラスモール湘南の記事とあわせて読むと、新旧の商業が同居する辻堂の街並みの全体像がつかみやすくなる。\n\n精肉店の店先には、その日仕入れた肉を使った日替わりの惣菜が並ぶこともあり、通りがかりに立ち寄って買い求める地元客の姿も見られる。',
+tags:['辻堂','精肉店','老舗']},
+
+{id:11,cat:'b',area:'藤沢',scene:'mall',title:'蔦屋書店を核に、辻堂の休日をアップデートした複合施設',dek:'2014年開業、都心にも負けないおしゃれな一角が辻堂に生まれた。',
+link:'',
+date:'2026-08-22',
+body:'辻堂駅前のテラスモール湘南に隣接する形で2014年にオープンした湘南T-SITEは、蔦屋書店を中心に、飲食店や雑貨店、ライフスタイル関連のショップが集まる複合商業施設である。書籍や雑誌だけでなく、暮らしにまつわるさまざまな提案をひとつの空間の中で体験できるという、代官山などの都心の蔦屋書店にも通じるコンセプトがそのまま湘南に持ち込まれた形になっている。地元メディアの中には「その“おしゃれ度”は都心も完全に顔負け」と評したものもあるほど、開業当初から高い注目を集めてきた施設だ。\n\n海と自転車とサーフボードの街だった辻堂に、本と暮らしを楽しむカルチャーの拠点が加わったことで、この街を訪れる人の目的やイメージは一段と多層的なものになった。休日には家族連れやカップル、一人でゆっくり本を選びに来る人など、さまざまな過ごし方をする人々が同じ空間の中に緩やかに共存している。海辺の街というと開放的でアクティブなイメージが先行しがちだが、湘南T-SITEはそこに、静かに本を読んだり、ゆったりとカフェで過ごしたりするという、また別の休日の選択肢を加えた場所だといえる。\n\n館内にはカフェを併設した書店エリアのほか、雑貨店やレストランなど複数のテナントが入っており、一日ゆっくり過ごせる構成になっている。隣接するテラスモール湘南とあわせて利用すれば、買い物から食事、読書まで一箇所で完結してしまうほどの充実ぶりだ。海に近い立地でありながら、都会的な洗練さを併せ持つというこの複合施設の在り方は、辻堂という街のポテンシャルの高さを象徴していると言えるだろう。\n\n本と暮らしを楽しむ文化拠点が海辺の街に加わったことで、辻堂を訪れる理由はより多層的なものになった。海だけでなく、こうした静かな時間の過ごし方も、この街の新しい魅力になっている。\n\n湘南T-SITEは辻堂駅北口から徒歩数分の距離にあり、テラスモール湘南と合わせて一日かけて回る人も多い、辻堂を代表する複合施設だ。本を選ぶだけでなく、カフェでゆっくり過ごしたり、雑貨店で暮らしの道具を探したりと、さまざまな時間の使い方ができる。\n\nテラスモール湘南や肉のホドシマなど、辻堂エリアの他の記事とあわせて読むことで、この街の商業と暮らしの厚みをより多面的に理解できる。\n\n館内のカフェスペースは電源やWi-Fiが利用できる席もあり、休日にゆったりと読書や作業をしたい人にも重宝されている。',
+tags:['湘南T-SITE','蔦屋書店','辻堂']},
+
+{id:12,cat:'b',area:'藤沢',scene:'mall',title:'279店舗、湘南地区最大級のショッピング拠点',dek:'辻堂駅北口直結、2011年開業の大型商業施設。',
+link:'',
+date:'2026-08-22',
+body:'2011年11月に辻堂駅北口直結の形でオープンしたテラスモール湘南は、店舗数279という、湘南地区の中でも最大規模を誇るショッピング施設である。ファッションから雑貨、食料品、レストランまで幅広いジャンルの店舗が集まっており、日々の買い物のほとんどがこの施設ひとつで完結するといっても過言ではない。開業から10年以上が経過した今も、辻堂に住む人々の暮らしの中心的な存在であり続けており、駅から直結しているというアクセスの良さも、日常的な利用のしやすさを後押ししている。\n\n海まで徒歩10分という立地にありながら、都心に匹敵するほどの商業機能をあわせ持っているという点は、辻堂という街が持つ独特のバランス感覚を象徴している。マリンスポーツを楽しみたい人にとっても、日々の買い物や外食の利便性を重視する人にとっても、辻堂は暮らしやすい選択肢として選ばれてきた。テラスモール湘南のような大型施設の存在は、辻堂が「サーフィンもできて、都心への通勤も便利で、買い物にも困らない街」として、幅広い世代から支持を集めている理由のひとつになっている。\n\n館内にはファッションブランドのテナントに加えて、フードコートや映画館、スーパーマーケットなども入っており、生活に必要なものがほぼすべて揃う総合施設として機能している。開業から10年以上が経った今も定期的なリニューアルが行われており、常に新しい店舗が入れ替わりながら、地域の人々の暮らしのニーズに応え続けている。休日には近隣の街からも多くの買い物客が訪れる、湘南エリア屈指の集客拠点だ。\n\n巨大な商業施設が、海に近い街の暮らしをこれほどまでに便利にしているという事実は、湘南の街づくりを考えるうえでも興味深い事例だ。利便性と海辺の暮らしは、決して両立できないものではない。\n\n辻堂駅北口とはデッキで直結しており、雨の日でも濡れずに移動できる利便性の高さも、多くの利用者に支持されている理由のひとつだ。館内は広く、目的の店舗にたどり着くまでにも湘南らしい開放的な空間デザインを楽しむことができる。\n\n隣接する湘南T-SITEの記事とあわせて読むと、辻堂駅前という限られたエリアにこれだけ多様な商業施設が集まっている理由が見えてくる。\n\n季節ごとにフロア装飾が変わるなど、訪れるたびに異なる雰囲気を楽しめる工夫が施されており、リピーターを飽きさせない工夫がなされている。\n\nこうした細やかな運営の工夫が、長く選ばれ続ける商業施設としての強さを支えている。',
+tags:['テラスモール湘南','辻堂','商業施設']},
+
+{id:13,cat:'g',area:'鎌倉',scene:'seafood',title:'漁港の目の前で味わう、水揚げ当日のしらす',dek:'腰越漁港のすぐそばで、生しらす丼を提供する専門店。',
+link:'',
+date:'2026-08-22',
+body:'鎌倉市腰越の漁港を目の前にした立地にあるしらすやは、その日水揚げされたばかりの生しらすを丼で味わえる専門店である。生しらすはとにかく鮮度が命とされ、水揚げされた当日のうちにしか食べることができない、極めて希少な味わいだ。透明感のある見た目とぷりっとした食感が特徴で、一年を通していつでも食べられるわけではなく、1月から3月中旬にかけての禁漁期には提供が休止される。この禁漁期があることによって、生しらす丼は季節の巡りとともに待ち望まれる、湘南ならではの味覚として位置づけられている。\n\n店の立地は江の島や七里ヶ浜からもアクセスしやすく、湘南グルメを目当てに訪れる観光客と、日常的に通う地元の常連客が、同じカウンターに並んで箸を進める光景が日常的に見られる。禁漁期には塩ゆでした釜揚げしらすの丼が代わりに提供されるほか、生しらすの沖漬けや刺身との二色丼など、店によって少しずつ異なるスタイルで湘南しらすを楽しめるのも魅力のひとつだ。漁港という一次産業の現場のすぐそばで、獲れたての恵みをその場で食べられるという体験は、観光地としての湘南の魅力を、最もわかりやすい形で体現していると言えるだろう。\n\n腰越漁港では早朝からしらす漁の船が行き交い、水揚げされたしらすがそのまま港のすぐそばの店へと運ばれていくという、生産から消費までの距離の近さが最大の特徴になっている。しらす丼のほかにも、地魚の刺身や天ぷらなど、腰越ならではの魚介メニューを揃える店も多く、江の島や鎌倉を観光した後の食事どころとして立ち寄る人も少なくない。獲れたてをその場で味わえるという体験は、湘南の漁業文化を最も身近に感じられる瞬間のひとつだ。\n\n水揚げから食卓までの距離が近いという体験は、都市部では味わえない湘南ならではの贅沢だ。腰越の漁港に立ち寄るたびに、この土地の豊かさをあらためて実感させられる。\n\n最寄りの江ノ電・腰越駅からは徒歩数分、漁港の目の前という立地の良さが、新鮮なしらすをその場で味わえる最大の魅力になっている。周辺には同じように漁港の恵みを活かした食堂が点在しており、食べ比べをしながら腰越の町を歩くのも楽しい過ごし方だ。\n\n鎌倉野菜のレンバイや湘南しらす丼の記事とあわせて読むことで、鎌倉・腰越エリアの食文化をより広い視点から知ることができる。\n\n生しらすが手に入らない日でも、地魚の刺身や天ぷらなど、腰越ならではの魚介メニューを楽しめるのも、こうした専門店の心強いところだ。',
+tags:['腰越','しらす','鎌倉']},
+
+{id:14,cat:'g',area:'鎌倉',scene:'market',title:'「レンバイ」の愛称で親しまれる、鎌倉野菜の即売所',dek:'生産者と客が直接会話しながら買い物ができる、鎌倉の台所。',
+link:'',
+date:'2026-08-23',
+body:'鎌倉市小町にある鎌倉市農協連即売所は、地元では「レンバイ」の愛称で親しまれている野菜の直売所である。色とりどりの人参や、個性的な形をしたかぼちゃなど、いわゆる「鎌倉野菜」がずらりと店先に並び、買いに訪れるのは近所に住む主婦から、地元の飲食店で腕を振るうシェフ、観光で立ち寄った旅行者までさまざまだ。生産者自身が売り場に立ち、客と直接言葉を交わしながら商品を売るというスタイルは、都市部のスーパーではなかなか目にすることのない光景であり、この対面でのやり取りそのものがレンバイの大きな魅力になっている。\n\n地場の野菜を知ってもらう機会として、地域の子どもたちが授業の一環でレンバイを訪れることもあり、単なる買い物の場を超えて、食育の現場としての役割も担っている。観光客にとっては鎌倉らしい写真映えするスポットとして人気を集める一方で、地元の人々にとっては何気ない日常の買い物先であり続けているというギャップこそが、この場所の面白さだ。観光地としての鎌倉と、日々の暮らしが営まれる鎌倉が、ひとつの通りの中で自然に交差しているという事実は、鎌倉という街全体の性格をよく表している。\n\nレンバイは早朝から昼過ぎにかけて営業しており、日によって並ぶ野菜の顔ぶれが変わるのも魅力のひとつだ。「鎌倉野菜」という呼び名は、色や形にこだわった多品種の野菜を、生産者自らが手をかけて育て、直接売り場に立って売るというスタイルとともに、次第にブランドとして認知されるようになっていった経緯がある。観光客が写真だけ撮って通り過ぎることも多いが、実際に買って帰れば、鎌倉の食文化をそのまま自宅の食卓に持ち帰ることができる。\n\n生産者と客が言葉を交わしながら買い物をするという光景は、効率化が進む現代においてはむしろ贅沢な体験だ。レンバイに立ち寄るたびに、鎌倉という街の食の豊かさを実感させられる。\n\nレンバイは鎌倉駅から徒歩数分というアクセスの良さもあり、観光の合間にふらりと立ち寄れる場所として地元でも観光客にも親しまれている。営業は主に午前から昼過ぎにかけてで、早い時間ほど品揃えが豊富だとされている。\n\nしらすやや湘南しらす丼の記事とあわせて読むと、鎌倉という街が持つ食の豊かさが、野菜と魚介の両面から立体的に浮かび上がってくる。\n\nレンバイでは季節ごとに珍しい野菜が並ぶこともあり、地元の常連客の中には毎朝立ち寄ってその日の入荷を確認する人もいるという。',
+tags:['レンバイ','鎌倉野菜']},
+
+{id:15,cat:'g',area:'二宮',scene:'farm',title:'機械を使わず、ひとつずつ手むきする落花生',dek:'明治期から続く二宮の落花生文化を、今に伝える専門店。',
+link:'',
+date:'2026-08-23',
+body:'二宮町の落花生専門店である田中屋では、定番商品のひとつ「味付」を、機械を一切使わずにひとつひとつ手作業でむきながら味をつけていくという製法を今も守り続けている。効率だけを考えれば機械化してしまう方が早いはずだが、あえて手間のかかる方法を選び続けているところに、この店の商品づくりに対する姿勢が表れている。二宮町内には田中屋以外にも落花生を扱う店が点在しており、それぞれの店で製法や味付けが微妙に異なるため、地元では複数の店の商品を食べ比べて楽しむ「利きピー」と呼ばれる遊び方まで存在するという。\n\n人口3万人に満たない小さな町の中に、これほど多くの落花生専門店の看板が並んでいる背景には、明治時代からこの地に根付いてきた落花生栽培の歴史がある。炒っただけのシンプルな「さや付き」から、甘く味付けされた「落花糖」、揚げて塩味をつけた「バタピー」まで、商品のバリエーションも豊富だ。観光客にとっては珍しいお土産のひとつに過ぎないかもしれないが、地元の人々にとっては、幼い頃から親しんできた当たり前のおやつであり、二宮という町のアイデンティティの一部にもなっている。\n\n田中屋のような専門店は二宮駅から徒歩圏内に点在しており、魚松水産や高橋豆店といった同業の店とあわせて歩いて回ることができる。それぞれの店が独自の焙煎方法や味付けの配合を守り続けているため、パッケージだけを見ても味の違いまではわからないのが面白いところだ。町を歩けば歩くほど、また新しい落花生の看板に出会う二宮の町並みは、まるで小さな落花生博物館を歩いているような感覚を与えてくれる。\n\n小さな町にこれほど多くの専門店がひしめいているという事実は、二宮という町が持つ産業の厚みを物語っている。ひとつの作物が、これほど多様な表情を見せてくれるとは思わなかった。\n\n二宮駅北口から徒歩圏内に店を構えており、駅からのアクセスの良さも、複数の落花生専門店を歩いて食べ比べる楽しみを後押ししている。小さな町を歩きながら、店ごとの看板やパッケージの違いを見比べていくだけでも十分に楽しい時間になる。\n\n同じ二宮エリアのにの屋や、落花生の歴史を紹介する文化・人カテゴリの記事とあわせて読むことで、二宮という町の産業史をより深く知ることができる。\n\n落花生は保存が効く食品でもあるため、湘南土産としてまとめ買いする観光客も多く、店先には発送用の梱包コーナーが設けられていることもある。',
+tags:['二宮','落花生','専門店']},
+
+{id:16,cat:'g',area:'二宮',scene:'farm',title:'湘南オリーブと、二宮の農がひとつになる場所',dek:'町のアンテナショップで出会う、二宮産オリーブオイルとみかん。',
+link:'',
+date:'2026-08-23',
+body:'二宮駅から徒歩5分ほど、町民センターの1階にあるアンテナショップ「にの屋」では、二宮産の野菜やみかん、オリーブ関連商品など、町の特産品が所狭しと並んでいる。中でもスタッフのイチオシとして紹介されているのが「湘南二宮オリーブオイル」だ。温暖な気候を生かして10年ほど前からオリーブの栽培を始めた地元の農場が先駆けとなり、一粒ずつ丁寧に手摘みされた実を、新鮮なうちに搾油してつくられている。数種類の品種をブレンドすることで、フルーティーな香りとスパイシーな風味を併せ持つ味わいに仕上げられており、オイルだけでなくオリーブ茶やパスタ、素麺といった関連商品も展開されている。\n\n生産量で二宮町の農産物の第1位を誇る「湘南みかん」も、農家が自ら収穫したものを直接店頭に持ち込んで並べる形で販売されており、一年を通じてさまざまな品種のみかんに出会うことができる。にの屋は吾妻山への入り口にも近く、ハイキングの行き帰りに立ち寄る人の姿も多い。大きな商業施設があるわけではない二宮町において、こうした小さなアンテナショップが、町の農業の「今」をそのまま映し出す窓の役割を果たしている。\n\nにの屋は吾妻山公園への入り口である役場口のすぐ近くにあるため、ハイキングの前後に立ち寄る利用者も多い。吾妻山公園は富士山と菜の花畑を一緒に望める眺望で知られており、二宮を訪れる観光客にとっては欠かせないスポットのひとつだ。にの屋で農家の顔が見える野菜やみかんを買い、吾妻山からの景色を眺めるという組み合わせは、二宮という町の魅力を短時間でぎゅっと体感できる、ちょっとしたモデルコースになっている。\n\n小さなアンテナショップが、町の農業の「今」をそのまま映し出しているという事実は、二宮という町の規模感だからこそ実現できることなのかもしれない。訪れるたびに新しい発見がある場所だ。\n\nにの屋がある二宮町民センターは二宮駅北口から徒歩5分ほどの距離にあり、駅からのアクセスのしやすさも人気の理由のひとつになっている。吾妻山公園への入り口にも近いため、ハイキングの前後に立ち寄る計画を立てるのもおすすめだ。\n\n田中屋や落花生の歴史を紹介する記事とあわせて読むと、二宮という小さな町が持つ農業の厚みをより立体的に理解することができる。\n\nオリーブオイルは瓶入りのものが中心で、贈答用のパッケージも用意されているため、帰省や出張のお土産としても選ばれている。\n\n小さな町のアンテナショップが、こうして着実にファンを増やしていること自体が興味深い。',
+tags:['にの屋','二宮','オリーブ']},
+
+{id:17,cat:'c',area:'大磯',scene:'kanji',title:'「湘南」は、なぜ湘南と呼ばれるのか',dek:'相模国南部の「相南」が、中国の景勝地「湘南」に重ねられた説がある。',
+link:'',
+date:'2026-08-24',
+body:'「湘南」という呼び名の由来については諸説あるが、有力とされているのは、相模国の南部を意味する「相南」という言葉が、中国・湖南省を流れる湘江下流域の景勝地「湘南」になぞらえて書き換えられたというものだ。江戸時代の初め頃、崇雪という僧侶が大磯の鴫立庵に「著盡湘南清絶地」という言葉を石に刻んだという記録が残っており、これが大磯を「湘南発祥の地」とする根拠のひとつになっている。鴫立庵は日本三大俳諧道場のひとつにも数えられ、今でも毎年3月末には、この地にゆかりのある歌人・西行を偲ぶ祭りが催されている。\n\nただし、現在私たちがイメージするような「湘南」という言葉の広がりが定着したのは、実はもっと後の時代、明治後期以降のことだとされている。明治期に逗子で暮らした文人がその風景の美しさを讃えたことや、かつて京急電鉄が「湘南電鉄」という社名で逗子・久里浜方面へ路線を延ばしていたことなども、今の湘南のイメージ形成に影響を与えたと考えられている。行政区分としての明確な境界を持たず、藤沢や鎌倉、茅ヶ崎、平塚、大磯など、複数の市町にまたがるイメージの地域であり続けていることこそが、湘南という言葉の面白さであり、この地域の懐の深さでもある。\n\n「湘南」という言葉は、地理的な呼び名を超えて、今ではひとつのブランドとしても広く定着している。神奈川県内の一部地域で交付されているご当地ナンバー「湘南」も、その象徴的な例のひとつだ。行政の境界とは無関係に、多くの人が思い思いに「ここも湘南だ」と感じる場所を心の中に持っているということ自体が、この地域が持つイメージの強さと豊かさを物語っている。\n\n「湘南」という言葉の由来をたどると、この地域が持つイメージの豊かさは、決して偶然生まれたものではないことがわかる。それぞれの町が積み重ねてきた歴史が、今の湘南というブランドをつくっている。\n\n「湘南」を名乗る施設や商品は神奈川県内だけでも数え切れないほど存在し、その広がり自体が、この地名が持つブランド力の大きさを物語っている。行政区分にとらわれない、いわばイメージの共有財産としての湘南という言葉のあり方は、地域ブランディングを考えるうえでも興味深い題材だ。\n\n湘南ベルマーレやサザンオールスターズなど、湘南というブランドを象徴する他の記事とあわせて読むと、この地名の持つ広がりがより実感できる。\n\nこうした地名の由来を知ったうえで湘南の各地を訪れると、単なる観光以上に、その土地の成り立ちそのものに触れているような感覚を味わえる。',
+tags:['湘南','地名の由来']},
+
+{id:18,cat:'c',area:'平塚',scene:'stadium',title:'「美しい海」というラテン語から生まれたクラブ名',dek:'1968年創部のサッカー部が、湘南9市11町のクラブへと育つまで。',
+link:'https://www.bellmare.co.jp/',
+date:'2026-08-20',
+body:'Jリーグに加盟する湘南ベルマーレは、1968年に藤和不動産株式会社のサッカー部として産声を上げた。1993年に活動拠点を平塚市へ移すのに合わせてチーム名を「ベルマーレ平塚」と改称し、翌1994年にJリーグの正会員として加盟。そして2000年、ホームタウンを平塚から湘南地域の複数の市町へと拡大したことに伴い、現在の「湘南ベルマーレ」という名前に変わった。クラブ名は、湘南の美しい海をイメージして名付けられており、ラテン語で「美しい」を意味する「Bellum（ベラム）」と、「海」を意味する「Mare（マーレ）」というふたつの単語を組み合わせた造語になっている。\n\nクラブのエンブレムには、湘南の白い砂浜と青い海が描かれ、攻撃を象徴する三又の鉾と、守備を象徴する盾が組み合わされることで、攻守のバランスの良さを表現しているという。創部当初は平塚市のみだったホームタウンは、現在では厚木市、伊勢原市、小田原市、茅ヶ崎市、秦野市、平塚市、藤沢市、大磯町、寒川町、二宮町、鎌倉市など、9市11町にまで拡大しており、湘南地域全体を象徴する存在として、地元の企業や大学、信用金庫といった数多くの組織が協賛やスポンサーという形でクラブを支え続けている。\n\n2018年には、買取・販売事業を手がける企業グループが経営権を取得し、連結子会社としてクラブを支援する体制が構築された時期もあり、地域密着というクラブの性格を保ちながら、経営基盤の強化にも継続的に取り組んできた。産業能率大学のように、地元の教育機関がユニフォームスポンサーとして長年にわたり関わり続けている例もあり、湘南ベルマーレは単なるサッカークラブという枠を超えて、地域全体で支える存在として根付いている。\n\n地域の企業や教育機関がこれほど長期にわたってクラブを支え続けているという事実は、湘南ベルマーレが単なるスポーツチームを超えた存在であることを物語っている。\n\nホームスタジアムであるレモンガススタジアム平塚は、平塚市総合公園内にあり、平塚駅からバスで向かうのが一般的なアクセス方法になっている。試合開催日には駅からスタジアムまでの道のりが、青いユニフォームに身を包んだサポーターで賑わう光景が見られる。\n\n湘南ベルマーレの記事は、平塚エリアの七夕まつりや花火大会の記事ともあわせて読むと、平塚という街が持つ祭りとスポーツの文化がより立体的に見えてくる。\n\nホームゲームの日には、スタジアム周辺に多くの出店が並び、試合観戦だけでなく、地元グルメを楽しむ目的で訪れる人も少なくない。',
+tags:['湘南ベルマーレ','平塚','Jリーグ']},
+
+{id:19,cat:'c',area:'茅ヶ崎',scene:'music',title:'「勝手にシンドバッド」が生まれた海の街',dek:'桑田佳祐の地元・茅ヶ崎は、楽曲の中で何度も歌われてきた。',
+link:'',
+date:'2026-08-24',
+body:'サザンオールスターズのリーダーである桑田佳祐の出身地である茅ヶ崎は、デビュー曲「勝手にシンドバッド」をはじめ、数々の楽曲の歌詞の中に繰り返し登場してきた街である。「チャコの海岸物語」の歌詞に登場する「えぼし岩」は、実際には沖合およそ1.2キロメートルの位置にあり、肉眼で見ると小さくしか見えないというのも、地元では知られたエピソードのひとつだ。かつて「茅ヶ崎海水浴場」と呼ばれていた海岸は、平成11年に「サザンビーチちがさき」へと改名され、この改名が海水浴客の増加、いわゆる「サザン効果」につながったとも言われている。\n\nビーチにはモニュメント「茅ヶ崎サザンC」が設置されており、その円の中にえぼし岩を収めて記念撮影をするのが定番の楽しみ方になっている。地元・茅ヶ崎公園野球場を舞台に開催されてきた「茅ヶ崎ライブ」は、2000年、2013年、2023年と、これまでに3度しか行われていない特別な公演であり、地元にとって特別な意味を持つイベントであり続けている。ひとりのミュージシャンの音楽が、これほどまでに地域のアイデンティティと分かちがたく結びついている例は、湘南の中でも珍しい。\n\nデビュー45周年にあたる年には、桑田佳祐が新曲を3か月連続で配信リリースするなど、長年にわたって精力的な音楽活動を続けている。「サザン節」と呼ばれる独特の作風は、方言や地元の風景を織り交ぜながら、聴く人に茅ヶ崎という土地の空気感をそのまま届けてきた。楽曲を通じて全国に届けられてきた茅ヶ崎の海の情景は、実際に現地を訪れたことがない人々のあいだにも、湘南という土地への憧れを育ててきたと言えるだろう。\n\n楽曲を通じて茅ヶ崎の風景を全国に届け続けてきたという事実は、音楽が持つ力の大きさをあらためて教えてくれる。実際に訪れる前から、多くの人がこの土地に親しみを感じているのはそのためだろう。\n\n茅ヶ崎駅周辺には桑田佳祐や楽曲にまつわるスポットが点在しており、駅から歩いて巡ることができる規模感も、訪れやすさにつながっている。サザンビーチちがさきや茅ヶ崎サザンCまでは駅から徒歩圏内で、音楽ファンでなくても気軽に立ち寄れる散策コースになっている。\n\n桑田佳祐氏本人を紹介する「人」カテゴリの記事や、茅ヶ崎ライブの記事とあわせて読むことで、茅ヶ崎という街の音楽文化をより深く知ることができる。\n\n地元の商店の中には、サザンオールスターズにちなんだオリジナルグッズや商品を扱う店もあり、ファンにとっては見逃せない散策コースになる。',
+tags:['桑田佳祐','サザンオールスターズ','茅ヶ崎']},
+
+{id:20,cat:'c',area:'大磯',scene:'farm',title:'日本の落花生栽培は、大磯からはじまった',dek:'横浜港で手に入れた種から、100年以上続く産地文化が生まれた。',
+link:'',
+date:'2026-08-25',
+body:'大正4年（1915年）に発行された神奈川県内務部の記録によれば、日本における落花生栽培は明治4年、当時の淘綾郡国府村字寺坂、現在の大磯町にあたる場所で、渡辺慶次郎という人物が栽培を始めたのが最初とされている。渡辺は横浜港で外国人から落花生の種を手に入れたことがきっかけになったといい、南米ペルーのアンデス山脈を原産地とし、北米大陸、ユーラシア大陸、中国を経て日本にたどり着いたとされるこの作物が、横浜から大磯へと渡ってきたという壮大な旅の記録が、そこには残されている。翌明治5年には隣接する二宮町の二見庄兵衛も栽培に成功し、大正期にはこの地域の落花生がアメリカへ輸出されるほどの生産量を誇るようになったという。\n\n現在、国産落花生の生産量で全国的に知られる千葉県が栽培を始めたのは明治9年（1876年）とされており、大磯・二宮での取り組みはそれよりも早かったことになる。この事実は地元でもあまり広く知られているわけではないが、「相州落花生」という言葉には、横浜からこの地へと渡ってきた小さな種の、確かな歴史の重みが刻み込まれている。今でも大磯・二宮周辺には落花生を扱う商店が点在しており、当時の記録が単なる歴史の一節ではなく、今も続く産業として生き続けていることを実感させてくれる。\n\n大正期に最盛期を迎えたこの地域の落花生栽培は、アメリカへの輸出が行われるほどの生産量にまで発展したと伝えられており、当時としては先進的な農業のひとつだったことがうかがえる。「相州落花生」という呼び名は今も一部の商品パッケージなどに残されており、この地域が持つ農業史の厚みを今に伝える数少ない手がかりになっている。観光としてはあまり注目されない歴史かもしれないが、知れば知るほど奥行きのあるテーマだ。\n\n地元でもあまり知られていないこの歴史を知ると、当たり前のように並んでいる落花生の看板の見え方が変わってくる。小さな発見の積み重ねこそが、地域を深く知るということなのかもしれない。\n\n現在の大磯町・二宮町周辺には、当時の栽培の様子を伝える資料が地元の資料館などに残されている場合もあり、興味のある人は訪ねてみる価値がある。何気なく通り過ぎてしまいがちな町の風景の中に、こうした知られざる産業史が眠っているという発見こそ、地域を深く知ることの醍醐味だ。\n\n二宮の落花生栽培の先駆者を紹介する「人」カテゴリの記事とあわせて読むと、この産業がどのように始まり広がっていったのかがより具体的に見えてくる。',
+tags:['落花生','大磯','歴史']},
+
+{id:21,cat:'g',area:'鎌倉',scene:'seafood',title:'その日だけの味、湘南しらす丼',dek:'水揚げ当日にしか味わえない生しらすが、湘南の名物になった理由。',
+link:'',
+date:'2026-08-25',
+body:'湘南しらす丼は、鮮度と味わいに定評のある湘南しらすをご飯にのせた、湘南を代表する郷土料理のひとつである。何も加工していない生しらすは、水揚げされたその日のうちにしか味わうことができない、極めて足の早い食材だ。キラキラと輝く透明感のある見た目と、ぷりっとした食感が特徴で、地元の飲食店の多くが「本日水揚げ分のみ」という形で提供している。1月から3月中旬にかけては禁漁期にあたり、この期間は塩ゆでした釜揚げしらすの丼が代わりに提供されるが、これはこれでふっくらとした食感が楽しめる、生とはまた違った魅力を持つ一皿になっている。\n\n鎌倉市内では腰越や由比ヶ浜周辺、藤沢市側では江の島周辺に専門店が点在しており、生しらすの沖漬けや、まぐろとの二色丼など、店ごとに異なる工夫を凝らしたメニューが用意されている。旬と鮮度そのものが商品価値になっているという点で、湘南という土地の豊かさをひと皿で体現している料理だといえるだろう。観光客にとっては湘南旅行の目的のひとつになる一方、地元の人々にとっては季節の巡りを感じる、ごく身近な味覚でもある。\n\n生しらす丼を提供する店の多くは、その日の漁の状況によって仕入れ量が左右されるため、売り切れ次第終了となることも珍しくない。訪れる時間帯としては、水揚げから時間が経っていない午前中から昼過ぎにかけてが、最も新鮮な状態で味わえるとされている。禁漁期にあたる冬場には、生ではなく釜揚げしらすを使った丼や、しらすと湘南野菜を組み合わせたかき揚げなど、季節に応じたメニューに切り替える店も多い。\n\nその日だけの味という希少性こそが、湘南しらす丼を特別な一皿にしている。旬を逃さず味わうということ自体が、この土地の豊かさを実感するひとつの方法だ。\n\n湘南しらす丼を提供する店の多くは、腰越や江の島、由比ヶ浜、七里ヶ浜といった沿岸部に集中しており、江ノ電を使えば効率よく巡ることができる。店ごとに盛り付けや薬味に個性があるため、食べ比べをしながら自分好みの一杯を見つけるのも旅の楽しみのひとつになる。\n\nしらすやの記事や、鎌倉野菜のレンバイの記事とあわせて読むと、湘南という土地の食文化の豊かさをより多角的に理解することができる。\n\n生しらすの提供が始まる時間は店によって異なるため、確実に味わいたい場合は開店直後の来店がおすすめとされている。\n\n旬を逃さず味わうという体験そのものが、湘南グルメの醍醐味だといえるだろう。',
+tags:['しらす丼','食文化']},
+
+{id:22,cat:'c',area:'大磯',scene:'mansion',title:'政財界の要人が愛した、大磯という保養地',dek:'伊藤博文から吉田茂まで、大磯には8人の総理大臣が暮らした。',
+link:'',
+date:'2026-08-25',
+body:'大磯は明治期以降、伊藤博文をはじめとする数多くの政財界の要人たちが競うようにして別荘を構えた土地として知られている。記録によれば、明治以降200を超える政財界の大物たちの邸宅や別荘がこの地に建てられたともいわれ、歴代8人の総理大臣がこの大磯に居を構えたと伝えられている。戦後の宰相・吉田茂の邸宅もそのひとつで、戦後は本邸として機能していたが、2009年に原因不明の火災によって焼失した。その後、再建工事が進められ、2017年4月に大磯町郷土資料館の別館として一般公開されるに至っている。\n\n大磯駅には、伊藤博文をはじめとする元勲たちのために設けられた貴賓用の入口や貴賓室が今も残されており、駅前に広告を表示してはならないという当時からの伝統が、JRになった現在でも変わらずに受け継がれている。旧東海道沿いに続く松並木はかつて「元勲通り」と呼ばれ、駅前には高い建物や商業施設もなく、のどかな駅前の風景が今も保たれている。江の島や鎌倉のような賑わいとはまったく異なる、落ち着いた雰囲気を保ち続けている大磯の町並みは、湘南という言葉が持つイメージの幅広さを象徴する存在のひとつだといえるだろう。\n\n大磯にはこのほかにも、戦後の混血児救済施設「エリザベス・サンダース・ホーム」を創立した澤田美喜を記念する「澤田美喜記念館」など、この土地に生きた人々の記憶を伝える施設が点在している。政財界の要人たちが遺した大きな歴史の陰には、こうした民間の福祉活動に生涯を捧げた人物の存在もあり、大磯という町の歴史を多面的なものにしている。静かな町並みを歩きながら、そうした一つひとつの記念館を訪ねてみるのも、大磯観光の楽しみ方のひとつだ。\n\n静かな町並みの奥に、これほど多くの歴史ある人物の足跡が残されているという事実は、大磯という町の奥深さを物語っている。歩くたびに新しい発見がある町だ。\n\n大磯町郷土資料館や旧吉田茂邸などをあわせて訪ねれば、半日程度でこの町の歴史の厚みを一通り体感することができる。駅前から広がる静かな町並みを歩くだけでも、賑やかな観光地とは違う、大磯ならではの時間の流れを感じ取ることができるだろう。\n\n旧吉田茂邸を紹介する記事とあわせて読むことで、大磯という町がどのように政財界の要人たちに愛されてきたのかをより具体的に知ることができる。\n\n澤田美喜記念館では、隠れキリシタンにまつわる貴重な史料も展示されており、大磯という土地が持つ歴史の多様さを感じ取ることができる。',
+tags:['大磯','別荘地','歴史']},
+
+{id:23,cat:'e',area:'平塚',scene:'festival',title:'空を埋め尽くす、日本有数の七夕飾り',dek:'昭和26年から続く、関東三大七夕まつりのひとつ。',
+link:'',
+date:'2026-08-26',
+body:'戦後の商業振興策として昭和26年に始まった湘南ひらつか七夕まつりは、仙台の七夕まつりを手本として発展し、今日では茂原七夕まつり、狭山市入間川七夕まつりと並んで関東三大七夕まつりのひとつに数えられるほどの規模を誇るようになった。メイン会場である「湘南スターモール」と「紅谷パールロード」には、5メートルを超える大型飾りを含む豪華絢爛な七夕飾りが隙間なく連なり、夕方からはライトアップも行われて、空を埋め尽くすかのような圧巻の光景が広がる。開催期間の3日間には、例年150万人前後という全国でも有数の来場者が訪れている。\n\nまつりの目玉のひとつである「七夕おどりパレード」では、湘南ひらつか織り姫を先頭に、市内の企業や市民団体が街を練り歩き、まつりを盛り上げる。一方で、飾りの制作には多くの費用と手間がかかるため、1990年代をピークに飾りの数が年々減少するという課題にも直面してきた。2001年からは市民団体「湘南七夕の会」と平塚市が連携し、公募による市民飾りの掲出を続けることで、この夏の風物詩を次の世代へとつなぐ取り組みが今も続けられている。\n\n戦後まもない昭和26年に商店街の有志たちの手で始められたこのまつりは、当初は今よりもずっと小規模なものだったとされるが、年々規模を拡大しながら、日本を代表する夏の風物詩へと成長していった。期間中には七夕飾りのコンクールも実施され、商店主たちが趣向を凝らした大型飾りを競い合う様子も見どころのひとつになっている。夕方以降のライトアップされた飾りは昼間とはまったく違う表情を見せるため、日没後に訪れるのもおすすめだ。\n\n空を埋め尽くす七夕飾りを見上げるたびに、この規模を維持し続けてきた人々の努力に思いを馳せずにはいられない。夏の風物詩は、こうした地道な取り組みの積み重ねによって守られている。\n\n会場となる湘南スターモールは平塚駅北口からすぐの距離にあり、期間中は駅前一帯が多くの人で埋め尽くされる。夜のライトアップされた飾りの下を歩く体験は、昼間とはまったく違う華やかさがあり、日没後にもう一度訪れる価値のある祭りだ。\n\n湘南ひらつか花火大会の記事とあわせて読むと、平塚という街が一年を通じてどれほど祭り文化を大切にしてきたかがよくわかる。\n\n七夕飾りの多くは商店主やボランティアの手作業によってつくられており、その制作過程を紹介する展示が行われることもある。\n\nこうした積み重ねが、日本有数の七夕まつりとしての評価を支え続けている。',
+tags:['七夕まつり','平塚','夏祭り']},
+
+{id:24,cat:'e',area:'平塚',scene:'festival',title:'相模川の河口を彩る、夏の締めくくり',dek:'七夕まつりと並ぶ、平塚の夏を代表するもうひとつの風物詩。',
+link:'',
+date:'2026-08-26',
+body:'湘南ひらつか花火大会は、相模川の河口に位置する湘南潮来を舞台に、毎年8月に開催される平塚の夏の風物詩である。豪華なスターマインを含むおよそ3000発の花火が夜空に打ち上げられ、湘南の海と川が交わる場所を色鮮やかに彩る。湘南ひらつか七夕まつりが商店街を舞台にした賑わいだとすれば、この花火大会は開けた水辺の景観を活かした行事であり、平塚の夏の始まりと締めくくりという、対になる二つの行事として長く親しまれてきた。\n\n近年は、花火の打ち上げにかかる経費の一部をクラウドファンディング型のふるさと納税によってまかなう取り組みも行われており、寄付者には有料観覧席が特典として用意されるなど、地域ぐるみで夏の風物詩を支える新しい仕組みづくりが進められている。相模川の花火大会と七夕まつりという、規模の異なる二つの夏の行事が同じ平塚の街で行われているという事実は、この街が古くから商業と観光の両面で祭り文化を大切に育んできたことの証だといえるだろう。夜空に開く花火を見上げながら過ごすひとときは、平塚に暮らす人々にとっても、訪れる観光客にとっても、夏の終わりを実感させる特別な時間になっている。\n\n打ち上げ費用の一部をまかなうクラウドファンディング型のふるさと納税では、寄付をした人への返礼として有料観覧席が用意される仕組みが整えられており、より良い場所でゆっくりと花火を楽しみたいという人々のニーズに応える工夫がなされている。相模川河口という開けた立地は、遮るものが少なく、大きく打ち上がる花火を存分に堪能できる絶好のロケーションになっている。\n\n夜空に開く花火を見上げるひとときは、平塚に暮らす人々にとっても訪れる人にとっても、夏を締めくくる特別な時間だ。地域全体で支える仕組みが、この行事の継続を支えている。\n\n打ち上げ会場となる湘南潮来周辺は、平塚駅からバスやタクシーでアクセスする人が多く、当日は交通規制が敷かれるため事前の確認が欠かせない。相模川の河口という開けた立地だからこそ、大迫力のスターマインを間近で楽しむことができる。\n\n湘南ひらつか七夕まつりの記事とあわせて読むことで、平塚の夏がどのように彩られているのか、その全体像をつかむことができる。\n\n花火大会の日程は毎年決まっているわけではなく、年によって変更される場合があるため、訪れる前には最新の公式情報を確認しておきたい。\n\n夏の夜空を彩るこの行事は、平塚の人々にとって欠かせない年中行事になっている。',
+tags:['花火大会','平塚']},
+
+{id:25,cat:'e',area:'藤沢',scene:'garden',title:'温室遺構が公開される、江の島の春の特別な時間',dek:'普段は見られないレンガ造りの温室遺構が、この時期だけ公開される。',
+link:'',
+date:'2026-08-26',
+body:'江の島サムエル・コッキング苑で開催される江の島フラワーフェスタは、園内に咲く250種ともいわれる椿をはじめ、四季折々の花々を楽しめる、江の島の春を代表するイベントである。期間中の最大の見どころは、明治中期に建造されたレンガ造りの温室遺構の地下室が特別に公開されることだ。日本国内に現存する温室遺構としては最古級とされるこの遺構は、普段は非公開となっているため、このフェスタの期間だけ姿を見せる、いわば江の島の隠れた歴史の断面ともいえる存在になっている。\n\nフェスタの会場となる苑内には、江の島のシンボルである展望灯台「江の島シーキャンドル」がそびえ、そこからの眺望とあわせて、観光地としての江の島の奥行きを体感できる構成になっている。花見という華やかな体験の裏側に、明治期からの歴史が静かに折り重なっているという点が、このイベントの大きな魅力だ。単なる花のイベントにとどまらず、この土地の歴史そのものに触れることができるという意味で、江の島フラワーフェスタは春の恒例行事として、地元でも観光客からも変わらぬ人気を集め続けている。\n\nフラワーフェスタの開催時期はおおむね春先で、椿がちょうど見頃を迎える時期と重なっている。250種ともいわれる椿のコレクションは、明治期にサムエル・コッキングが世界中から集めた植物にルーツを持つとも考えられており、単なる花見にとどまらず、この庭園が歩んできた歴史そのものを追体験できるイベントになっている。天候の良い日には、花越しに富士山を望むこともでき、写真愛好家にも人気の高い時期だ。\n\n花に囲まれた庭園の奥に眠る歴史の断片に触れると、単なる観光以上の発見がある。フラワーフェスタは、そんな出会いを提供してくれる貴重な機会だ。\n\n開催時期は例年春先で、江の島サムエル・コッキング苑への入苑とあわせて楽しむのが定番のコースになっている。花と歴史、そして海の眺望という三拍子が揃ったこの時期は、江の島を訪れるうえでも特におすすめのシーズンだといえる。\n\n江の島サムエル・コッキング苑を紹介する「観光」カテゴリの記事とあわせて読むと、この庭園が持つ歴史的な奥行きをより深く理解できる。\n\nフラワーフェスタの期間中は、通常より苑内が混雑する傾向があるため、ゆっくり花を楽しみたい場合は開苑直後の時間帯が狙い目だ。\n\n花と歴史が重なり合うこの季節ならではの体験を、ぜひ味わってみてほしい。\n\n花越しに見える海の景色もまた、この季節ならではの特別な一枚になるはずだ。',
+tags:['江の島','フラワーフェスタ']},
+
+{id:26,cat:'e',area:'茅ヶ崎',scene:'music',title:'地元でしか成立しない、特別な一夜',dek:'2000年から3度だけ開催されてきた、地元凱旋公演。',
+link:'',
+date:'2026-08-27',
+body:'サザンオールスターズが地元・茅ヶ崎公園野球場で開催する「茅ヶ崎ライブ」は、2000年、2013年、2023年と、これまでに3度しか実現していない、極めて特別な公演である。デビュー45周年にあたる2023年の公演は9月から10月にかけて4日間開催され、桑田佳祐の出身地であり、デビュー曲「勝手にシンドバッド」をはじめ数々の楽曲の歌詞にも登場してきたこの場所で、多くのファンが客席を埋め尽くした。会場に入りきれなかったファンのために、全国の映画館でのライブビューイングも実施され、多くの人々がその模様を見守った。\n\n東京や横浜のような大都市の巨大アリーナではなく、あえて地元の野球場を舞台に選び続けているという事実そのものが、桑田佳祐にとって茅ヶ崎という土地が持つ意味の大きさを物語っている。単なる音楽コンサートという枠を超えて、アーティストと地元の関係性そのものを象徴するイベントとして、茅ヶ崎ライブは地域の人々にとっても特別な記憶として刻まれ続けている。次に開催されるのがいつになるかは分からないが、その希少性こそが、このイベントの価値をより一層高めている。\n\n会場に入りきれなかったファンのために実施された全国の映画館でのライブビューイングには、開催地となった映画館の数だけでも数百館規模が参加し、それぞれの会場で数万人規模の観客が同時にステージの模様を見守ったとされる。地元での公演でありながら、全国規模の一大イベントへと発展するという構図は、桑田佳祐とサザンオールスターズが持つ影響力の大きさをあらためて感じさせる。\n\n地元でしか成立しないという特別な公演が、これほど多くの人を動かすという事実は、アーティストと土地との結びつきの強さを物語っている。次にいつ開催されるのか、多くのファンが心待ちにしている。\n\n茅ヶ崎公園野球場は茅ヶ崎駅から徒歩圏内にあり、開催時には駅から会場まで多くのファンが列をなして歩く光景が見られる。開催が決まった年には、街全体がお祭りムードに包まれ、地元の店舗もこのライブにあわせた特別な企画を用意することがある。\n\nサザンオールスターズと茅ヶ崎の関係を紹介する「文化」カテゴリの記事とあわせて読むことで、このライブが持つ特別な意味がより鮮明になる。\n\n茅ヶ崎ライブが開催された年には、駅前商店街にも特設の装飾が施され、街全体でこの特別なライブを歓迎するムードに包まれる。\n\n地域とアーティストの結びつきの強さを、あらためて実感させられる瞬間だ。',
+tags:['茅ヶ崎ライブ','サザンオールスターズ']},
+
+{id:27,cat:'e',area:'大磯',scene:'festival',title:'正月の海岸を照らす、小さな火祭り',dek:'海岸で正月飾りを燃やし、一年の無病息災を祈る伝統行事。',
+link:'',
+date:'2026-08-27',
+body:'大磯では毎年1月、海岸を舞台にして家内安全や無病息災を祈願する伝統的な火祭りが行われている。正月飾りや門松を持ち寄って燃やし、その炎にあたることで一年の健康を祈るという小正月の行事は、形を変えながら全国各地に見られる風習だが、開けた砂浜という場所を舞台に執り行われる点に、大磯らしい特徴がある。夜の海岸に大きな炎が立ち上る光景は、華やかな観光イベントとはまた違った、地域の暮らしに深く根ざした季節の節目としての静かな迫力を持っている。\n\nこうした伝統行事は、大規模な集客を目的とした観光イベントとは異なり、地元の人々が世代を超えて受け継いできた信仰と結びついている。大磯にはこのほかにも、鴫立庵で毎年3月末に開かれる西行を偲ぶ祭りなど、歴史ある行事がいくつも残されている。政財界の要人が別荘を構えた保養地としての顔と、こうした素朴な地域行事が今もなお共存しているという点も、大磯という町の奥行きを感じさせる要素のひとつだ。派手さはなくとも、こうした行事が絶えることなく続いているという事実自体に、地域の暮らしの豊かさが表れている。\n\n小正月に正月飾りを燃やして無病息災を祈るこの種の行事は、地域によって「どんど焼き」や「左義長」など、さまざまな呼び名で呼ばれながら全国各地に残されている。大磯の火祭りもそうした民俗行事のひとつに連なるものであり、地域ごとに細部のやり方や規模は異なるものの、火を囲んで一年の健康を祈るという根本の願いは共通している。観光的な派手さはなくとも、こうした行事を実際に見に行くことで、その土地に暮らす人々の信仰心の厚みを肌で感じることができる。\n\n派手さのない小さな行事が、世代を超えて受け継がれてきたという事実にこそ、地域の暮らしの豊かさが表れている。観光ガイドには載らないこうした行事にも、目を向けてみてほしい。\n\n開催時期や詳しい会場は年によって案内されるため、訪れる際は事前に大磯町の公式な発信を確認しておくと安心だ。観光的な情報が少ない分、地元の人に話を聞きながら訪ねてみるのも、この行事に触れるひとつの方法かもしれない。\n\n湘南の地名の由来を紹介する記事とあわせて読むと、大磯という町が持つ歴史的な独自性がより立体的に浮かび上がってくる。\n\nこうした地域の伝統行事は、観光情報誌ではあまり大きく取り上げられないことが多く、地元の広報誌などで開催日を確認するのが確実だ。\n\n静かに受け継がれてきたこの行事にも、大磯という町の奥深さが表れている。',
+tags:['大磯','正月行事','伝統']},
+
+{id:28,cat:'p',area:'茅ヶ崎',scene:'portrait',title:'明治創業の蔵元を継ぎ、ビール文化を根付かせた6代目',dek:'日本酒の蔵元が、なぜ地ビールをつくり始めたのか。',
+link:'https://kumazawa.jp/',
+date:'2026-08-22',
+body:'明治5年創業の熊澤酒造を6代目として継いだ熊澤茂吉氏は、1996年に「湘南ビール」の醸造を始めた人物である。地ビールが解禁されてからまもない当時、日本酒の醸造技術を持つ蔵元が新たに地ビールへ参入する例は珍しくなかったが、熊澤酒造はあえてドイツから醸造家を招き、伝統的な製法を一から学ぶという道を選んだ。工場で大量生産される画一的な味のビールとは違う、豊かなコクと味わいを持つビールをつくりたいという日本酒の造り手ならではの自然な欲求から始まったこの取り組みは、四半世紀以上にわたって受け継がれてきた。\n\n敷地内の井戸から汲み上げた丹沢山系の伏流水と、厳選した原料を使い、無濾過・非加熱で仕上げられたビールには、酵母が生きたまま入っている。ドイツで学んだ伝統製法をベースにしながらも、湘南という土地の風土に合わせて醸造を続けてきたことが、シュバルツのワールドビアカップ金賞受賞という結果にもつながっている。「茅ヶ崎の人々が誇りを持ってくれるようなおいしい酒造りを」という思いを胸に、6代目としての責任を背負いながら、地元の水と原料にこだわり続ける熊澤氏の姿勢は、地域に根ざしたものづくりのひとつの理想形を示しているといえるだろう。\n\n熊澤氏のもとでは、ビールの醸造だけでなく、敷地内のベーカリーやレストランの運営を通じて、地元の人々の雇用の受け皿としての役割も果たしてきた。単に商品を売るだけでなく、訪れた人が一日中滞在して楽しめる「場」をつくるという発想は、地域の観光と経済の両方に貢献する取り組みとして、他の地域の酒蔵や醸造所からも注目されている。伝統を守りながら新しい価値を生み出し続けるその姿勢は、老舗が長く生き残るためのひとつのモデルケースだと言えるだろう。\n\n伝統を守りながら新しい挑戦を続けるという姿勢は、老舗が長く生き残るためのひとつの模範だ。熊澤氏の取り組みは、これからも茅ヶ崎の誇りであり続けるだろう。\n\n熊澤酒造の見学や飲食利用は事前予約が必要な場合もあるため、訪れる際は公式サイトなどで最新の営業情報を確認しておきたい。敷地内は広く、ビールだけでなくパンやイタリアンも楽しめるため、半日ゆっくり過ごすつもりで訪れるのがおすすめだ。\n\n熊澤酒造そのものを紹介する「企業・店舗」カテゴリの記事とあわせて読むことで、6代目が受け継いできたものの大きさがより実感できる。\n\n醸造所見学ができるツアーが企画されることもあり、ビールづくりの工程を実際に見てから試飲を楽しむという体験も可能になっている。',
+tags:['熊澤茂吉','熊澤酒造','経営者']},
+
+{id:29,cat:'p',area:'茅ヶ崎',scene:'portrait',title:'自転車で走った少年時代の街',dek:'サザンオールスターズのリーダーにとって、茅ヶ崎は今も原風景であり続ける。',
+link:'',
+date:'2026-08-28',
+body:'サザンオールスターズのリーダーである桑田佳祐は、茅ヶ崎市の出身である。少年時代によく自転車で訪れていたという地元の商店街は、現在では「サザン通り」という愛称で呼ばれ、地元の人々の間で親しまれる存在になっている。かつて「茅ヶ崎海水浴場」と呼ばれていた海岸が、平成11年に「サザンビーチちがさき」へと改名されたことをはじめ、駅前の道が「雄三通り」や「サザン通り」と名付けられているなど、街のあちこちに彼と音楽文化の存在の痕跡が刻み込まれている。\n\n2017年に公開されたドキュメンタリー映画では、桑田の中学時代の同級生であり、サザンオールスターズという名前の名付け親としても知られる音楽プロモーターが、人類学者や映画監督とともに、茅ヶ崎という土地と芸能・音楽文化との関係性を多角的に掘り下げている。加山雄三をはじめ、これまで数多くのミュージシャンや文化人を輩出してきたことから、この作品では茅ヶ崎が「芸能の地」として紹介されており、桑田佳祐という一人のアーティストの原風景が、そのまま地域全体の文化的な土壌と重なり合っていることがうかがえる。\n\n茅ヶ崎からは桑田佳祐のほかにも、加山雄三をはじめとする数多くのミュージシャンや文化人が生まれ育っており、地元では「芸能の地」として紹介されることもある。海に近く、開放的な雰囲気を持つこの土地の風土が、こうした表現者たちの感性に少なからず影響を与えてきたのではないかとも言われている。桑田佳祐という一人のアーティストの原風景をたどることは、そのまま茅ヶ崎という土地の文化的な厚みをたどることにもつながっている。\n\n一人のアーティストの原風景をたどることが、そのまま地域の文化的な厚みをたどることにつながる。茅ヶ崎という街は、そうした発見に満ちている。\n\nサザン通りは茅ヶ崎駅から海に向かって伸びる通りのひとつで、地元の人々の生活動線としても今なお活躍している。少年時代の桑田佳祐が実際に自転車で走り抜けたであろう道を歩いてみると、楽曲の中の情景がより鮮明に感じられるかもしれない。\n\nサザンオールスターズと茅ヶ崎の関係を紹介する記事、また茅ヶ崎ライブの記事とあわせて読むと、桑田佳祐という人物の輪郭がより鮮明になる。\n\nサザン通り沿いには、地元で長く営業を続ける昔ながらの商店も点在しており、桑田佳祐が少年時代に見ていたであろう風景の名残を感じられる。\n\nこうした小さな痕跡をたどることも、茅ヶ崎を歩く楽しみのひとつだ。',
+tags:['桑田佳祐','茅ヶ崎']},
+
+{id:30,cat:'p',area:'藤沢',scene:'portrait',title:'横浜の貿易商が、江の島に遺した庭',dek:'1845年アイルランド生まれの貿易商が、明治の江の島に植物園を築いた。',
+link:'',
+date:'2026-08-28',
+body:'サムエル・コッキングは1845年、イギリス領アイルランドに生まれ、明治2年、27歳のときに来日したイギリス人貿易商である。横浜の外国人居留地に拠点を構え、明治4年にコッキング商会を設立、翌年には日本人女性・宮田りきと結婚するなど、日本での生活基盤を築いていった。そうした活動の中で、コッキングは江の島の頂上部という眺望に優れた土地に目をつけ、世界各地から集めた植物を植えた庭園を築き上げた。これが現在の「江の島サムエル・コッキング苑」の原型となっている。\n\n当時としては珍しい温室まで整備し、熱帯の植物なども育てていたと伝えられており、その情熱の大きさがうかがえる。一人の貿易商が、いわば個人的な趣味として始めたこの庭づくりは、150年近い時を経た今もなお、江の島を代表する観光名所として多くの人々に親しまれ続けている。展望灯台「江の島シーキャンドル」が今日そびえ立つこの場所に、かつて一人の外国人がどのような思いで庭を育てていたのかを想像してみると、江の島観光の見え方が少しだけ変わってくるかもしれない。歴史に名を残す偉業というよりも、一個人の情熱が長い年月をかけて地域の財産へと育っていった、静かで確かな物語がここにはある。\n\nコッキングが活動した明治初期の横浜居留地は、日本が本格的に西洋文化を受け入れ始めた時代の最前線であり、多くの外国人貿易商たちが新しいビジネスの可能性を求めて集まっていた。そうした時代背景の中で、コッキングが江の島という場所に個人的な楽しみとして庭園を築いたという事実は、当時の外国人たちが日本の風景にどのような魅力を感じていたのかを知る、貴重な手がかりのひとつにもなっている。\n\n一人の貿易商の個人的な情熱が、150年近い時を経て地域の財産になったという事実は、歴史の面白さをよく表している。江の島を訪れる際には、ぜひこの物語も思い出してほしい。\n\n江の島サムエル・コッキング苑の入り口付近には、コッキングにまつわる説明板も設置されており、訪れた際にはぜひ目を通してみてほしい。庭園を歩きながら、150年前にこの土地に情熱を注いだ一人の外国人貿易商の姿を想像してみるのも一興だ。\n\n江の島サムエル・コッキング苑そのものを紹介する記事とあわせて読むことで、コッキングという人物が遺したものの大きさがより実感できる。\n\nコッキング苑の温室遺構は非公開の期間が長いため、公開のタイミングを逃さずに訪れたいという歴史好きの観光客も少なくない。',
+tags:['サムエル・コッキング','江の島','歴史人物']},
+
+{id:31,cat:'p',area:'大磯',scene:'portrait',title:'軍医が漁師を説得してつくった、日本初の海水浴場',dek:'「療養」としての海水浴を広めた、明治の軍医の情熱。',
+link:'',
+date:'2026-08-28',
+body:'明治18年、軍医の松本順（良順）は、漁の邪魔になると渋る大磯の漁師たちを丁寧に説得し、日本で最初とされる海水浴場をこの地に開設した。松本は西洋医学の知見をもとに、海水浴を病気の療養法として広めようとしており、その働きかけによって、大磯の海岸は単なる漁師町の浜辺から、療養と保養のための特別な場所へと姿を変えていくことになる。海水浴場の開設に加えて、松本の提言を受けて大磯駅の設置が実現したことも、その後の大磯の発展に大きな影響を与えたとされている。\n\nひとりの軍医が抱いた「海水浴を通じて人々の健康を守りたい」という情熱は、単に大磯という一地域の発展にとどまらず、日本全国に広がっていく海水浴文化そのものの原点になったといえる。今日私たちが当たり前のように親しんでいる「夏は海へ行く」という習慣の背後には、こうした一人の人物の粘り強い働きかけがあったという事実は、意外と知られていない。大磯駅が「湘南の海水浴関連遺産」として近代化産業遺産に認定されていることも、この歴史の重みを物語っている。今日まで続く「湘南＝海のリゾート」というイメージの原点は、まさにこの大磯の浜辺から始まったのである。\n\n松本順は、江戸幕府の奥医師を務めた家系に生まれ、幕末から明治にかけて日本の近代医学の発展に大きく貢献した人物としても知られている。西洋医学を学んだ経験を持つ松本にとって、海水浴は単なる娯楽ではなく、科学的根拠に基づいた療養法のひとつだったのだろう。そうした専門家としての信念が、漁業への影響を懸念する地元の人々を粘り強く説得する原動力になったのではないかと考えられている。\n\n一人の軍医の情熱が、日本全国に広がる海水浴文化の原点になったという事実は、意外と知られていない。大磯の浜辺に立つたびに、この歴史を思い出したい。\n\n大磯海水浴場は大磯駅から徒歩10分ほどの距離にあり、駅から海までの短い道のりの中にも、この町の歴史の痕跡が随所に残されている。浜辺に立ったとき、ここが日本の海水浴文化の出発点であったことを思い出すと、いつもとは違う感慨が湧いてくる。\n\n大磯海水浴場を紹介する「観光」カテゴリの記事とあわせて読むと、松本順という人物が果たした役割の大きさがより具体的に見えてくる。\n\n大磯海水浴場では、夏になると海の家が営業を再開し、松本順が切り開いた歴史を感じながら、現代の海水浴を楽しむことができる。\n\nこの浜辺に立つたびに、日本の海水浴文化の原点を思い出したい。',
+tags:['松本順','大磯','歴史人物']},
+
+{id:32,cat:'p',area:'二宮',scene:'farm',title:'横浜で種を手に入れた、ふたりの先駆者',dek:'渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。',
+link:'',
+date:'2026-08-29',
+body:'明治4年、大磯の渡辺慶次郎という人物が、横浜港で外国人から入手した種をもとに落花生の栽培を始めたと記録に残されている。そのわずか一年後の明治5年には、隣接する二宮町の二見庄兵衛という人物も栽培に成功し、この地域一帯が日本における落花生栽培発祥の地のひとつとなった。ふたりがどのような経緯で種を手に入れ、どのような思いで初めての栽培に挑んだのかを詳細に伝える資料は多く残されていないが、南米が原産とされるこの作物が、中国を経て横浜に伝わり、さらに大磯・二宮へとたどり着いたという壮大な旅の記録は、地域の歴史書の中に確かに刻み込まれている。\n\n二見庄兵衛が拓いた二宮の落花生栽培は、大正時代に入るとアメリカへの輸出が行われるほどの生産量にまで発展したとされており、現在も二宮町内には落花生を扱う専門店が数多く残っている。国産落花生の主要な産地として知られる千葉県よりも早くこの作物の栽培に着手していたという事実は、地元でもあまり広く知られていない。名も残りにくい二人の先駆者の小さな挑戦が、150年以上の時を経て、今なお二宮という町のアイデンティティの一部として息づいているという点に、地域の歴史の面白さが凝縮されている。\n\n大磯・二宮周辺の温暖な気候と水はけの良い土壌は、もともと落花生の栽培に適した条件を備えていたと考えられている。渡辺慶次郎や二見庄兵衛がこの地を選んで栽培を始めたのは、単なる偶然ではなく、こうした土地の特性を見抜いていた結果だったのかもしれない。今日まで100年以上にわたってこの地域で落花生栽培が続いてきたという事実こそが、二人の先駆者の選択が正しかったことの何よりの証明だと言えるだろう。\n\n名も残りにくい先駆者たちの小さな挑戦が、150年以上の時を経て地域のアイデンティティになっているという事実に、歴史の面白さが凝縮されている。\n\n落花生の栽培発祥地とされるゆかりの場所には、記念碑のような形で歴史を伝える案内が設置されている地域もある。当時の記録をたどりながら大磯・二宮の町を歩くと、普段見過ごしてしまう風景の中に、新しい発見が数多く隠れていることに気づかされる。\n\n落花生の歴史を紹介する「文化」カテゴリの記事とあわせて読むことで、渡辺慶次郎と二見庄兵衛が拓いた産業の全体像をより深く理解できる。\n\n落花生の栽培に関する当時の様子を伝える資料は限られているが、地元の郷土史家によって少しずつ掘り起こされ続けている。',
+tags:['落花生','歴史人物']},
+
+{id:33,cat:'l',area:'藤沢',scene:'surf',title:'サーフィンも、都心通勤も。辻堂という選択',dek:'海まで徒歩10分、都心へも近い。二拠点欲張りな暮らし方。',
+link:'',
+date:'2026-08-29',
+estateLink:'',
+body:'辻堂は、駅の南側に住めば海まで徒歩10分ほどという立地でありながら、都心への通勤時間が比較的短いという、湘南の中でも珍しいバランスを持つ街である。朝、自転車の荷台にサーフボードを積んで海へ向かい、シャワーを浴びてから電車で都心のオフィスへ向かうという生活スタイルを実践している人も少なくない。海のある暮らしと、都市機能へのアクセスの良さという、一見すると両立が難しそうな二つの条件を、辻堂は現実的な形で兼ね備えている。\n\n駅前にはテラスモール湘南や湘南T-SITEといった大型商業施設が充実しており、日々の買い物や外食のほとんどが徒歩圏内で完結する。北口にはチェーン店が多く並ぶ一方、南口の住宅街には昔ながらの個人経営の飲食店も点在しており、新しさと古さが緩やかに同居している。ペットを連れて砂浜を散歩するような、のんびりとした時間の過ごし方ができるのも辻堂ならではの魅力だ。海のある暮らしを諦めたくないけれど、都心での仕事や利便性も手放したくないという人にとって、辻堂は具体的で現実的な選択肢のひとつになっている。\n\n辻堂には比較的新しい分譲住宅や集合住宅も多く、子育て世代の転入者からも人気が高いエリアとして知られている。海と自然に近い環境で子どもを育てたいという家庭にとって、都心へのアクセスの良さと生活利便性を両立できる辻堂は、現実的な移住先の候補として選ばれることが多い。休日には家族で海辺を散歩したり、公園で過ごしたりする姿が街のあちこちで見られ、落ち着いた子育て環境としての一面も持っている。\n\n海のある暮らしと都市機能を両立させたいという願いを、辻堂という街は具体的な形で叶えてくれる。多くの人がこの街を選ぶ理由は、そこにあるのだろう。\n\n辻堂駅南口周辺には比較的新しいマンションや住宅も多く、街全体として世代を問わず住みやすい環境が整えられている。海と都市機能の両方を求める人にとって、辻堂はこれからも選ばれ続ける街のひとつであり続けるだろう。\n\n湘南T-SITEやテラスモール湘南の記事とあわせて読むと、辻堂という街の暮らしやすさを支えるインフラの全体像がより具体的に見えてくる。\n\n辻堂駅周辺には保育園や小学校も整備されており、子育て世代が安心して暮らせる環境づくりが進められている。\n\nこうした環境の充実も、辻堂が選ばれ続ける理由のひとつになっている。\n\nこうした暮らしの厚みが、辻堂という街の本当の価値を支えている。\n\n【この街での住まい探し】\n辻堂で住まいを探すとき、まず意識しておきたいのが「南口か北口か」という違いだ。海に近い南口エリアは、徒歩圏内に砂浜が広がり、サーフィンや散歩を日常に取り入れたい人に向いている一方、北口エリアはテラスモール湘南や湘南T-SITEといった商業施設に近く、買い物や外食の利便性を重視する人に選ばれやすい。同じ辻堂という街名の中でも、南北でかなり性格が異なるという点は、物件探しの前に知っておきたい基本のひとつだ。\n\nマンションか戸建てかという選択も、辻堂では悩ましいポイントになる。駅直結の利便性を重視するなら、テラスモール湘南に近い駅前エリアの分譲・賃貸マンションが選択肢に入ってくるし、庭付きの暮らしや将来的なリフォームの自由度を重視するなら、南口側の住宅街に多い戸建てが候補になる。近年は南口エリアに比較的新しい分譲住宅も増えており、子育て世代の転入者が増加している背景も、住まい選びに影響する要素のひとつだ。\n\n通勤のしやすさも辻堂の大きな魅力だが、朝の東海道線は混雑しやすいため、始発駅である大船・藤沢方面からの利用と比べて、着席のしやすさなどに違いが出ることもある。実際に平日の朝の時間帯に駅を訪れてみて、混雑具合を自分の目で確認しておくことをおすすめしたい。\n\n海のある暮らしと都市機能の両立という辻堂の魅力を最大限に生かすには、「海までの距離」と「駅までの距離」のどちらを優先するかを、自分の暮らし方に照らして決めておくことが、後悔のない住まい選びの第一歩になる。辻堂の暮らしを紹介する記事とあわせて読むと、この街で暮らすイメージがより具体的になるはずだ。今後、地域の不動産会社と連携し、実際の物件情報もあわせて紹介していく予定だ。\n\nまた、辻堂は保育園や小学校といった教育環境も比較的整っているため、子育て世代にとっては通勤・通学の両面から住みやすさを判断しやすい街だといえる。海と暮らしの距離感を実際に歩いて確かめてから決めることを、強くおすすめしたい。\n\n住まい選びは一度きりの大きな決断だからこそ、実際に街を歩き、時間帯を変えて訪れてみることを大切にしたい。\n\n急がず、複数の候補を比較しながら選ぶことが、長く満足できる住まい探しにつながっていく。\n\n自分の暮らし方に合った一軒を、じっくり時間をかけて見つけてほしい。\n\nそうして選んだ一軒こそが、辻堂での毎日を心地よいものにしてくれるはずだ。\n\n湘南Doors編集部としても、辻堂の住まい探しに役立つ情報をこれからも発信していきたい。',
+tags:['辻堂','暮らし','移住']},
+
+{id:34,cat:'l',area:'大磯',scene:'mansion',title:'賑わいから少し離れた、大磯の暮らしのリズム',dek:'別荘地としての落ち着きが、今も町のかたちに残っている。',
+link:'',
+date:'2026-08-29',
+estateLink:'',
+body:'江の島や鎌倉のような華やかな賑わいとは異なり、大磯には今もなお、静かな別荘地としての落ち着いた空気が流れている。大磯駅の前には大型の駅ビルや商業施設が見当たらず、三角屋根のレトロな駅舎と、こぢんまりとしたロータリーが広がるのみだ。旧東海道沿いに続く松並木は、かつて政財界の要人たちが行き交ったことから「元勲通り」と呼ばれ、その面影を今に伝えている。東京まで1時間あまりで出られる通勤圏でありながら、田舎の駅に降り立ったかのようなのどかな雰囲気が保たれていることが、大磯という町の最大の特徴だ。\n\nこうした落ち着いた環境は、若い世代の移住者にも、リタイア後の暮らしを求める層にも、一定の支持を集めている。海が近く自然が豊かでありながら、大規模な観光地化がされていないため、静かな環境で暮らしたいという人々のニーズと合致しているのだ。賑やかな湘南のイメージとはまた違う、もうひとつの湘南の暮らし方が大磯にはある。派手さはないが、その分だけ落ち着いた時間の流れが日々の暮らしの中に組み込まれているという点が、大磯を選ぶ人々にとっての大きな魅力になっている。\n\n大磯町は海だけでなく、緑豊かな高麗山などの里山にも恵まれており、海と山の両方の自然を身近に感じながら暮らせるという点も移住者にとっての魅力になっている。大規模な商業開発が進んでこなかったことは、一見すると不便に思えるかもしれないが、その分だけ昔ながらの町並みや暮らしのリズムが守られてきたとも言える。静かな環境を求めて都心から移り住む人々にとって、大磯はこれからも選ばれ続ける町であり続けるだろう。\n\n賑わいから少し離れた場所にこそ、豊かな暮らしがあるということを、大磯という町は教えてくれる。静かな時間を求める人にとって、これからも選ばれ続ける町だろう。\n\n大磯町内には高麗山をはじめとする里山も広がっており、海だけでなく緑豊かな環境も、この町で暮らす魅力のひとつになっている。静けさを求めて訪れる観光客にとっても、大磯の落ち着いた空気はきっと心地よく感じられるはずだ。\n\n旧吉田茂邸や大磯の別荘文化を紹介する記事とあわせて読むことで、大磯という町の歴史と現在の暮らしのつながりがより鮮明になる。\n\n大磯町では、こうした落ち着いた町並みを維持するための景観に関する取り組みも行われており、急激な開発を抑える工夫がなされている。\n\n静かな暮らしを求める人々にとって、大磯はこれからも特別な町であり続けるだろう。\n\n【この街での住まい探し】\n大磯で住まいを探す人の多くが求めているのは、「賑やかすぎない湘南暮らし」だ。江の島や鎌倉のような観光地としての賑わいがない分、大磯では静かな住環境を確保しやすく、駅前に大型の商業施設が少ないことも、落ち着いた暮らしを望む人にとってはむしろ魅力に映る。旧東海道沿いの松並木や、緑豊かな高麗山周辺など、緑と歴史的な町並みが残るエリアに惹かれて移り住む人も少なくない。\n\n大磯で物件を探す際は、海側のエリアと、山側・内陸のエリアとで住み心地がかなり異なる点に注意したい。海に近いエリアは潮風や湿気の影響を受けやすいため、建物の構造や設備の状態を確認しておくと安心だ。一方、山側のエリアは自然環境に恵まれる反面、駅からの距離がやや遠くなる物件も多く、車を持つかどうかで暮らしやすさが大きく変わってくる。\n\n通勤に関しては、大磯駅から東京方面まで1時間あまりというアクセスの良さがありながら、快速列車が停車しない点は事前に確認しておきたいポイントだ。日々の通勤時間をどう考えるかによって、大磯という選択の満足度は大きく変わってくる。\n\n静かな別荘地としての歴史を持つ大磯だからこそ、物件選びにおいても「賑わい」より「落ち着き」を優先する視点を持つことが、この街で満足のいく暮らしを実現する鍵になる。大磯の暮らしを紹介する記事とあわせて読むことで、この街での住まい探しのイメージがより具体的になるはずだ。今後、地域の不動産会社と連携し、実際の物件情報もあわせて紹介していく予定だ。\n\nこうした落ち着いた環境を求める人にとって、大磯はこれからも選ばれ続ける町であり続けるだろう。焦らず、何度か町を歩いてから決断することが、この町での住まい選びには特に向いている。\n\n大磯という選択肢は、派手さよりも「暮らしの質」を重視する人にこそ、じっくり検討する価値がある。潮風の影響や交通の便など、現地でしか分からない情報も多いため、内見の際は季節や時間帯を変えて複数回訪れることをおすすめしたい。落ち着いた別荘地としての大磯の魅力は、実際に住んでみて初めて実感できる部分も多いはずだ。\n\nそうして選ばれた住まいは、きっと長く愛着を持って暮らせる場所になるはずだ。\n\n大磯という土地が持つ独特の時間の流れを、住まい選びの基準に加えてみてほしい。\n\n静かな時間の中で選んだ住まいだからこそ、長く大切にできる場所になるだろう。\n\n湘南Doors編集部としても、大磯の住まい探しに役立つ情報をこれからも発信していきたい。',
+tags:['大磯','暮らし','別荘地']},
+
+{id:35,cat:'l',area:'二宮',scene:'farm',title:'落花生とオリーブに囲まれた、二宮という小さな町',dek:'温暖な気候と海山の自然が育む、二宮ならではの日常。',
+link:'',
+date:'2026-08-30',
+estateLink:'',
+body:'人口3万人に満たない二宮町は、落花生やみかん、そして近年ではオリーブといった特産品に恵まれた小さな町である。温暖な気候と、海と山の両方に囲まれた自然環境、そして東海道本線や小田原厚木道路といった交通インフラへのアクセスの良さが評価され、自然を感じながら健康的に暮らしたいと考える幅広い世代の転入者が近年増加している。大きな商業施設が立ち並ぶ賑やかな街ではないが、その分だけ生活の足元にある豊かさが際立つ町だといえる。\n\n学校給食では地産地消の取り組みが積極的に進められており、地元産の玉ねぎやさつまいも、原木しいたけ、二宮町で水揚げされたさばなど、季節ごとの旬の食材が子どもたちの食卓に届けられている。農家自身が育てた無農薬野菜を使った料理が給食に登場することもあり、生産者の顔が見える食のあり方が、日常の中に自然に根付いている。派手な観光アピールをするわけではないが、農と食、そして自然環境が緩やかに結びついたこの町の暮らしぶりは、湘南という言葉が持つイメージの中でも、あまり知られていない静かな一面を映し出している。\n\n吾妻山公園からは、菜の花畑越しに富士山を望む絶景が広がり、二宮町を代表するビュースポットとして知られている。この公園を中心に据えた散策コースは、地元の人々の日常的な運動の場としても親しまれており、観光と暮らしが自然な形で重なり合っている。大きな商業施設に頼らずとも、こうした自然の景観そのものが町の資産になっているという点が、二宮という町の豊かさをよく表している。\n\n大きな商業施設に頼らずとも、自然の景観そのものが町の資産になっているという二宮の在り方は、これからの地域づくりのひとつのヒントになるかもしれない。\n\n二宮駅からは徒歩やバスで吾妻山公園へアクセスでき、休日には多くの家族連れがハイキングを楽しんでいる。落花生やみかんといった食の豊かさと、こうした自然の景観が同じ町の中に共存していることが、二宮の暮らしやすさを支えている。\n\nにの屋や田中屋など、二宮エリアの企業・店舗の記事とあわせて読むと、この町の農業と暮らしの結びつきがより具体的に理解できる。\n\n二宮町では、農業体験ができるイベントが企画されることもあり、都市部からの移住希望者が農のある暮らしを試す機会にもなっている。\n\n農のある暮らしという二宮の魅力は、これからも多くの人を惹きつけていくはずだ。\n\n小さな町だからこそ実現できる、豊かな暮らしのかたちがそこにはある。\n\n【この街での住まい探し】\n二宮町で住まいを探す人の中には、家庭菜園やちょっとした農的な暮らしに関心を持つ人が少なくない。人口3万人に満たないこの町には、庭付きの戸建てや、農地に近い立地の物件も比較的見つけやすく、都市部では難しい「土に触れる暮らし」を実現しやすい環境が整っている。二宮産の落花生やみかん、オリーブといった特産品に囲まれた暮らしに憧れて移住を検討する人にとって、住まい選びの段階から地域とのつながりを意識しておくことが大切になる。\n\n二宮駅周辺は商業施設が少なくコンパクトな街であるため、日々の買い物動線を事前にイメージしておくことをおすすめしたい。吾妻山公園に近いエリアは自然環境に恵まれる一方、坂の多い地形のため、車の利用を前提に住まいを選ぶ人が多い。逆に駅に近い平坦なエリアは、徒歩での生活がしやすい反面、農のある暮らしを実現できる庭付き物件は限られてくる。\n\n東海道本線や小田原厚木道路へのアクセスの良さから、都心や小田原方面への通勤・通学と、二宮での落ち着いた暮らしを両立させたいと考える人にも選ばれている。二宮町では移住者向けの情報発信や交流の機会も少しずつ増えており、こうした地域とのつながりを住まい探しの段階から意識しておくと、移住後の暮らしがよりスムーズになる。\n\n「農のある暮らし」という二宮ならではの魅力を実現するためには、庭や畑になる土地の有無、日当たり、水はけといった、通常の住まい選びではあまり重視されない視点も、あわせて確認しておきたい。二宮の暮らしを紹介する記事とあわせて読むと、この町での暮らしのイメージがより具体的になるはずだ。今後、地域の不動産会社と連携し、実際の物件情報もあわせて紹介していく予定だ。\n\nこうした農のある暮らしを叶えるためには、実際に季節を変えて何度か町を訪れ、日当たりや風の通り方を確かめてから決めることをおすすめしたい。二宮ならではの豊かな暮らしが、そこから始まっていく。\n\n移住を検討する際は、地域の農業体験イベントなどに参加してみることも、住まい選びの前段階として役立つはずだ。\n\n地域とのつながりを大切にしながら選んだ住まいは、二宮での暮らしをより豊かなものにしてくれるだろう。\n\n焦らずゆっくりと、二宮という町に合う一軒を見つけていってほしい。\n\nその一軒との出会いが、二宮での新しい暮らしの始まりになるはずだ。\n\n湘南Doors編集部としても、二宮の住まい探しに役立つ情報をこれからも発信していきたい。',
+tags:['二宮','移住','田舎暮らし']},
+
+{id:36,cat:'l',area:'鎌倉',scene:'crossing',title:'電車が生活道路と重なる、江ノ電沿線に暮らすということ',dek:'観光客が写真を撮る風景が、住民にとっては通勤路でもある。',
+link:'',
+date:'2026-08-30',
+body:'鎌倉と藤沢を結ぶ江ノ電の沿線には、腰越から江の島にかけての区間のように、電車と自動車が同じ道路空間を共有しながら走る、いわゆる併用軌道が残されている。海外からの観光客にとっては絶好の撮影スポットであるこうした風景も、そこに暮らす地元の人々にとっては、日々の生活道路そのものであり、通勤や通学、買い物のための当たり前の光景に過ぎない。カメラを構える観光客の隣を、自転車に乗った地元の人が何食わぬ顔で通り過ぎていくという光景は、江ノ電沿線ならではのものだ。\n\n近年は海外からの観光客の増加に伴い、線路への立ち入りや路上での長時間の撮影といった、住民の生活に支障をきたす問題も一部で指摘されるようになっている。地元では多言語での注意喚起や、警備員の配置といった対策が進められており、観光地としての魅力と、そこで暮らす人々の日常をどう両立させていくかという課題への模索が続いている。それでもなお、江ノ電が走り抜ける風景の中で日々の暮らしを営むという体験そのものは、他の鉄道沿線にはない、湘南ならではの独特な日常をつくり出している。\n\n江ノ電には「のりおりくん」という一日乗車券もあり、沿線に暮らす人だけでなく観光客にとっても利用しやすい仕組みが整えられている。地元の学生にとっては通学に欠かせない足であり、朝夕には制服姿の学生たちが乗り込む、ごく日常的な風景が広がっている。観光名所としての顔と、生活路線としての顔をあわせ持つ江ノ電は、湘南という地域そのものが観光地でありながら生活の場でもあるという二面性を、そのまま体現していると言えるだろう。\n\n観光地でありながら生活の場でもあるという江ノ電沿線の二面性は、湘南という地域全体の性格をそのまま体現している。この土地で暮らすということの意味を、あらためて考えさせられる。\n\n江ノ電の一日乗車券「のりおりくん」を使えば、沿線の主要な観光スポットを気軽に途中下車しながら巡ることができる。観光客としてこの切符を使いながら沿線を歩くと、地元の人々の日常の風景にも自然と触れることができるはずだ。\n\n鎌倉高校前の踏切を紹介する記事とあわせて読むことで、江ノ電という鉄道が観光と生活の両方に果たしている役割がより立体的に見えてくる。\n\n江ノ電の車両には昔ながらのレトロなデザインを残したものもあり、乗車すること自体がひとつの観光体験になっている。\n\nこうした日常の風景こそが、江ノ電沿線に暮らすことの本当の魅力なのかもしれない。',
+tags:['江ノ電','暮らし']},
+
+{id:37,cat:'t',area:'藤沢',scene:'garden',title:'"えのすい"の愛称で親しまれる、日本のイルカショー発祥の水族館',dek:'クラゲの幻想的な展示から相模湾の生き物まで、江の島の定番スポット。',
+link:'https://www.enosui.com/',
+date:'2026-08-26',
+body:'江の島の玄関口ともいえる場所に立つ新江ノ島水族館は、日本で初めて本格的なイルカショーを行った水族館として知られており、地元では"えのすい"という愛称で長く親しまれてきた。相模湾に生息するさまざまな魚介類の展示に力を入れているのが特徴で、地元の海の生態系をそのまま切り取ったかのような水槽の数々を通じて、湘南という土地の海の豊かさを実感することができる。中でも、幻想的にライトアップされたクラゲの水槽は特に人気が高く、ゆらゆらと漂う姿を眺めていると時間を忘れてしまうという声も少なくない。\n\n家族連れやカップル、観光客から地元のリピーターまで、幅広い層が訪れる定番の観光スポットとして定着しており、江の島観光の起点として、江島神社や江の島サムエル・コッキング苑と組み合わせて巡るコースの中心的な存在になっている。片瀬江ノ島駅からのアクセスも良く、江の島観光の一日の中で最初に立ち寄る場所として選ばれることも多い。地域の海の生き物を紹介するという役割を通じて、観光施設でありながら、湘南の海そのものへの理解を深める入口としての機能も果たしている。\n\n館内の目玉のひとつである相模湾大水槽では、地元の海に生息する魚たちの群れを間近に観察することができ、実際の相模湾の生態系をそのまま切り取ったかのような迫力を味わえる。イルカショーが行われるスタジアムでは、日本の水族館文化を切り開いてきた歴史を感じながらパフォーマンスを楽しむことができ、家族連れには特に人気の高いプログラムになっている。江の島観光の一日の締めくくりとして立ち寄る人も多い。\n\n観光施設でありながら、湘南の海そのものへの理解を深める入口としての役割も果たしているという点に、えのすいの存在意義がある。訪れるたびに新しい発見がある水族館だ。\n\n新江ノ島水族館は片瀬江ノ島駅から徒歩数分というアクセスの良さもあり、江の島観光の起点として立ち寄る人が多い。館内でゆっくり過ごした後、そのまま江の島へ渡って神社やコッキング苑を巡るという、一日がかりの観光コースを組む人も少なくない。\n\n江の島サムエル・コッキング苑や江島神社の記事とあわせて読むと、江の島観光の全体像を一日の流れとしてイメージしやすくなる。\n\nえのすいでは季節ごとに特別展示が行われることもあり、何度訪れても新しい発見がある水族館として、リピーターも多い。\n\n何度訪れても新しい発見があるという点が、この水族館の大きな魅力になっている。',
+tags:['新江ノ島水族館','江の島']},
+
+{id:38,cat:'t',area:'大磯',scene:'mansion',title:'焼失から8年、よみがえった宰相の邸宅',dek:'2009年の火災を乗り越え、2017年に再建・公開された旧吉田茂邸。',
+link:'',
+date:'2026-08-31',
+body:'大磯の旧東海道沿いに建つ旧吉田茂邸は、戦後の復興を率いた宰相・吉田茂が暮らした邸宅である。戦後は本邸として機能していたが、2009年に原因不明の火災によって焼失するという出来事に見舞われた。長年にわたって大磯のシンボル的な存在だった建物が失われたことは、地域にとっても大きな衝撃だったというが、その後、地域の願いを受ける形で再建工事が進められ、2017年4月、ついに一般公開されるに至った。庭園からは相模湾を望むことができ、現在は大磯町郷土資料館の別館としての役割も担っている。\n\n吉田茂の邸宅だけでなく、大磯には三菱財閥の創設者である岩崎弥太郎の別邸跡をはじめ、数多くの政財界の要人たちの邸宅跡が今も点在しており、この町全体が近代日本の政治・経済の中心にいた人々の生活の痕跡を色濃く残している。静かな町並みの中にひときわ存在感を放つ旧吉田茂邸は、単なる観光施設というだけでなく、火災という危機を乗り越えて再びよみがえったという物語そのものが、大磯という町の歴史の厚みを象徴する存在になっている。\n\n邸宅の庭園は相模湾を望む高台に位置しており、四季折々の植栽とともに、政治家・吉田茂が晩年を過ごした環境の穏やかさを感じ取ることができる。館内では吉田茂にまつわる資料の展示も行われており、戦後日本の復興期を率いた人物の暮らしぶりに触れることができる、大磯町郷土資料館別館としての役割を果たしている。焼失という危機を乗り越えて再び公開に至ったこと自体が、地域の人々のこの建物への強い思い入れを物語っている。\n\n火災という危機を乗り越えて再びよみがえったという物語そのものが、この建物への地域の人々の強い思い入れを物語っている。大磯を訪れた際にはぜひ立ち寄ってほしい場所だ。\n\n旧吉田茂邸は大磯駅から徒歩、あるいはバスでアクセスでき、大磯観光のコースに組み込みやすい立地にある。庭園を含めてゆっくり見学すると1時間ほどかかるため、他の史跡とあわせて訪れる際には時間に余裕を持って計画するのがおすすめだ。\n\n大磯の別荘文化を紹介する「文化」カテゴリの記事とあわせて読むことで、旧吉田茂邸が大磯の歴史の中でどう位置づけられるかがより明確になる。\n\n旧吉田茂邸の庭園では、季節ごとに異なる花々が楽しめるよう植栽の工夫がされており、四季を通じて訪れる価値のある場所になっている。\n\n季節ごとに異なる表情を見せるこの庭園を、ぜひ何度も訪れてみてほしい。',
+tags:['旧吉田茂邸','大磯','歴史建築']},
+
+{id:39,cat:'e',area:'逗子',scene:'cinema',title:'砂浜に現れる、13日間だけの映画館',dek:'2009年から続く、逗子海岸を舞台にした野外映画祭。',
+link:'https://zushifilm.com/',
+date:'2026-08-27',
+body:'逗子海岸映画祭は、写真家やシネマカフェの運営者を中心とするクリエイター集団「CINEMA CARAVAN」が企画し、2009年から毎年ゴールデンウィークの時期に逗子海岸で開催されている野外映画祭である。「Play with the Earth（地球と遊ぶ）」というコンセプトのもと、砂浜にスクリーンを設置し、いくつもの大きなテントが立ち並ぶ手作り感あふれる会場がつくられ、日中は音楽やアート、日替わりのフードやワークショップを楽しみながら過ごし、夜になると波の音をBGMに映画を鑑賞するというスタイルが特徴だ。近年は13日間という長期間にわたって開催されるようになり、記念すべき年には初日を入場無料とするなど、地域に開かれたイベントとしての性格を強めている。\n\n上映される作品は、海辺で観たくなる名作から、CGを使わずに世界各地の世界遺産を巡って撮影されたカルト的なファンタジー作品まで幅広く、子ども向けの企画やビーチサッカー大会、スケーターによるセッションなど、映画以外のコンテンツも充実している。逗子にあるシネマカフェに集った仲間たちのつながりから始まったというこの映画祭は、地域に根ざした草の根のカルチャーが、いかにして全国的なイベントへと育っていくかを示す、ひとつの好例になっている。\n\n会場内は無料で入場できるエリアと、鑑賞スペースが確保された有料エリアに分かれており、目的に応じて楽しみ方を選べる仕組みになっている。日中はフードやアート、ワークショップを楽しみながら過ごし、日が暮れると波の音をBGMに大きなスクリーンで映画が始まるという流れは、都会の映画館では味わえない特別な体験だ。開催期間中は逗子の海岸一帯が非日常的な空気に包まれ、地元の人々にとっても年に一度の楽しみになっている。\n\n地域の小さなつながりから始まったイベントが、これほどの規模に育っていったという事実は、湘南の他のエリアにとっても大きな示唆を与えてくれる。\n\n逗子海岸へはJR逗子駅や京急新逗子駅から徒歩やバスでアクセスでき、開催期間中は多くの人でにぎわう。ゴールデンウィークの旅行先として、江の島や鎌倉とあわせてこの映画祭に立ち寄る計画を立てる人も増えている。\n\n逗子海岸花火大会やCINEMA AMIGOの記事とあわせて読むと、逗子という街が育んできたイベント文化の全体像がより立体的に見えてくる。\n\n映画祭で使用されるスクリーンは砂浜に特設されるため、天候によって上映内容や時間が変更されることもあり、事前の情報確認が欠かせない。',
+tags:['逗子海岸映画祭','逗子','野外イベント']},
+
+{id:40,cat:'e',area:'逗子',scene:'festival',title:'10万人が集まる、初夏の海と花火',dek:'20年以上にわたり地元企業が支え続けてきた逗子最大級のイベント。',
+link:'',
+date:'2026-08-31',
+body:'逗子海岸花火大会は、逗子市民をはじめ約10万人が訪れる、逗子市内でも最大級のイベントである。毎年5月に開催されており、約7000発の花火が逗子の夜空と海を彩る。この大会は、逗子を創業の地とする地元企業が2004年から20年以上にわたって特別協賛を続けており、地域への恩返しという思いのもとに支援が継続されてきたという経緯がある。開会宣言とともに打ち上げが始まり、大切な人への感謝やお祝いの言葉、プロポーズの言葉などを添えた「メッセージ花火」が打ち上げられるのも、この大会ならではの演出のひとつだ。\n\n大会の結びを飾る大型のフィナーレ花火では、音楽とシンクロした花火が次々と打ち上がり、会場は大きな拍手と歓声に包まれる。逗子海岸映画祭がゴールデンウィークの逗子を彩るイベントだとすれば、この花火大会は初夏の訪れを告げる行事として、逗子の一年の中でもうひとつの大きな節目になっている。企業と地域が長期にわたって関係を築きながらひとつのイベントを支え続けているという構図は、湘南のさまざまな祭りに共通する、地域と企業の協働のあり方を考えるうえでも興味深い事例だ。\n\n花火大会当日は逗子海岸周辺の道路が大変混雑するため、公共交通機関を利用して訪れる人がほとんどだ。観覧は基本的に無料で、砂浜に思い思いの場所を陣取って夜空を見上げる人々の姿が海岸線いっぱいに広がる。20年以上にわたって同じ企業が支援を続けてきたという継続性は、地域と企業がひとつのイベントを長期的に育てていくうえでのお手本のような関係性だと言えるだろう。\n\n20年以上にわたって続く企業と地域の関係性は、ひとつの祭りを長期的に育てていくうえでのお手本のような事例だ。逗子の夏の始まりを告げる、大切な行事であり続けている。\n\n逗子海岸花火大会当日は逗子駅からのアクセスが集中するため、時間に余裕を持って移動することをおすすめしたい。海岸沿いに広がる砂浜のどこからでも花火を楽しめるため、早めに到着して場所を確保する人の姿も多く見られる。\n\n逗子海岸映画祭の記事とあわせて読むことで、逗子という街が一年を通じてどのようにイベントを育ててきたのかがより具体的に理解できる。\n\n花火大会では、地元の飲食店が特設ブースを出店することもあり、観覧とあわせて逗子ならではのグルメを楽しむこともできる。\n\n地元グルメとあわせて花火を楽しめるという点も、この大会の魅力のひとつだ。\n\n夜空を見上げるこの時間は、逗子の一年の中でも特に大切なひとときだ。',
+tags:['逗子海岸花火大会','逗子']},
+
+{id:41,cat:'t',area:'葉山',scene:'marina',title:'富士山と江の島を望む、ヨットとウィンドサーフィンの聖地',dek:'森戸海岸は葉山を代表する景勝地であり、マリンスポーツの中心地。',
+link:'',
+date:'2026-09-01',
+body:'葉山町の森戸海岸は、前景に江の島、背景には雄大な富士山がそびえるという絶景を望むことができる、葉山を代表する景勝地である。汀線400メートル、幅40メートルという葉山の中でも特に広い砂浜を持ち、遠浅であることから、例年7月上旬から8月にかけては家族連れにも人気の海水浴場として賑わう。神奈川県が選定する「かながわの景勝50選」にも選ばれており、特に年に2回、太陽が富士山の頂上に重なって沈む「ダイヤモンド富士」が見られる時期には、多くの人がこの絶景を目当てに訪れる。\n\n海岸沿いに鎮座する森戸神社は、源頼朝が三浦半島の中でも特に古い地層が露頭するこの場所を、パワースポットとして見出したという伝承も残る古社である。神社から海辺へと続く赤い橋は「みそぎ橋」と呼ばれ、七瀬祓という祓の儀式に由来するという。沖合には、俳優・石原裕次郎の三回忌を記念して建てられた「葉山灯台（裕次郎灯台）」が佇み、夕暮れ時には海面がオレンジ色に染まる美しい光景が広がる。景観、信仰、そして文化人ゆかりの記念碑が同じ海岸線の中に重なり合っているという点が、森戸海岸の大きな魅力になっている。\n\n森戸海岸のすぐ北には一色海岸があり、こちらは葉山御用邸の跡地に整備された葉山しおさい公園に隣接する、より静かな雰囲気のビーチになっている。ふたつの海岸を歩き比べることで、葉山という町が持つ、賑わいと静けさの両方の表情に触れることができる。海水浴シーズンには海の家や監視所も開設され、ファミリー層にも安心して楽しめる環境が整えられている。\n\n景観、信仰、文化人ゆかりの記念碑が同じ海岸線に重なり合っているという事実に、森戸海岸の奥深さがある。富士山と江の島を望むこの景色は、何度訪れても飽きることがない。\n\n森戸海岸へはJR逗子駅や京急新逗子駅からバスで15分ほどの距離にあり、葉山観光の起点として多くの人が最初に訪れる場所だ。海水浴シーズン以外も、散策や写真撮影のために年間を通じて多くの人が足を運んでいる。\n\n葉山マリーナや葉山御用邸を紹介する記事とあわせて読むと、葉山という町が持つ景観と歴史の厚みをより多面的に知ることができる。\n\n森戸海岸周辺には、海を眺めながら食事ができるレストランやカフェも点在しており、景色とあわせて食事を楽しむ人も多い。\n\n景色と食事の両方を楽しめるという点が、森戸海岸の大きな魅力になっている。\n\n何度訪れても新しい発見がある、それが森戸海岸の尽きない魅力だ。',
+tags:['森戸海岸','葉山','森戸神社']},
+
+{id:42,cat:'c',area:'葉山',scene:'marina',title:'日本のヨットは、葉山からはじまった',dek:'1882年、ひとりの青年がこの海で日本初のヨットを走らせた。',
+link:'',
+date:'2026-09-01',
+body:'葉山町は「日本のヨット発祥の地」として知られている。記録によれば、明治15年、当時の農商務司法大臣であった金子堅太郎伯爵の子息が、この葉山の海でヨットを建造し、レジャーとして楽しんだのが日本人によるヨットレジャーの始まりとされている。当時、鐙摺と呼ばれた入江周辺で始まったこの海の楽しみ方は、やがて葉山という土地全体の文化として根付いていくことになる。1964年に開業したヨットハーバー「葉山マリーナ」は、そうした歴史を受け継ぐランドマーク的な存在として、今も多くのヨットやウィンドサーファーで賑わっている。\n\n葉山マリーナ周辺は、石原裕次郎主演の『狂った果実』や、加山雄三主演の『若大将シリーズ』といった、昭和の青春映画に数多く登場してきた場所でもあり、映画の中で描かれた世界観がそのまま今も現実の風景として残っている。一方で近年は、この一等地とされる森戸海岸周辺で大規模なリゾートホテルの建設計画が持ち上がり、地元住民との間で議論が続くなど、開発と景観保全をめぐる新しい局面も生まれている。ヨット文化発祥の地としての誇りと、静かな暮らしを守りたいという住民の思いが交錯する場所でもある。\n\n近年、この一等地とされる森戸海岸周辺で、アパレル企業による大規模な高級リゾートホテルの建設計画が持ち上がり、周辺住民の間で賛否が分かれる議論が続いている。狭い道路が多いこのエリアに大型車両が乗り入れることへの懸念や、景観への影響を心配する声も上がっており、ヨット文化発祥の地としての歴史的な誇りと、静かな暮らしを守りたいという住民の思いが交錯する、湘南の中でも注目される話題のひとつになっている。\n\nヨット文化発祥の地としての誇りと、静かな暮らしを守りたいという住民の思いが交錯するこの土地の今後の行方は、湘南の他の地域にとっても注目すべきテーマだ。\n\n葉山マリーナは森戸海岸のすぐ北に位置しており、ヨットハーバーの様子は海岸沿いの道からも眺めることができる。白い帆を張ったヨットが並ぶ光景は、湘南の中でも葉山ならではの上品な海辺の風景をつくり出している。\n\n森戸海岸や石原裕次郎を紹介する記事とあわせて読むことで、葉山のヨット文化が持つ歴史的な背景がより鮮明に見えてくる。\n\n葉山マリーナでは、ヨットの体験乗船やセーリングスクールが開催されることもあり、初心者でも気軽にヨット文化に触れることができる。\n\n初心者でも気軽に触れられるヨット文化は、葉山の懐の深さを物語っている。',
+tags:['葉山マリーナ','ヨット','葉山']},
+
+{id:43,cat:'c',area:'葉山',scene:'mansion',title:'皇室の保養地に選ばれた、葉山という土地の魅力',dek:'明治政府に招かれたドイツ人医師が、逗子・葉山を保養地として推した。',
+link:'',
+date:'2026-09-01',
+body:'葉山町は1894年（明治27年）、皇室の保養施設である葉山御用邸が開設されたことで知られる「御用邸の町」である。今年で町制施行100周年を迎えたこの町の海辺には、江の島を前景に富士山を望む絶景が広がり、明治政府の招きで来日したドイツ人医師、エルヴィン・フォン・ベルツ博士が、この逗子・葉山エリアを保養地として推薦したという歴史が残っている。ベルツ博士自身も明治22年に葉山に別荘を購入し、明治37年まで実際にこの地で暮らしたと伝えられており、その後、横須賀軍港への物資・人員輸送を目的として横須賀線が開通、逗子駅が開業したことも、この地域の発展を後押しした。\n\n一色海岸にある葉山しおさい公園は、もともと葉山御用邸の付属邸があった場所を公園として整備したもので、園内の葉山しおさい博物館は、旧御用邸付属邸の御車寄を玄関として移築するなど、当時の面影を今に伝えている。もともとは明治期の政財界の要人や陸海軍の将官、学者、芸術家たちが競って別荘を建てたリゾート地であった葉山は、皇室の保養地としての歴史と、別荘文化としての歴史のふたつを併せ持つ、湘南の中でも独特な位置づけの町だといえる。\n\n現在の葉山御用邸そのものは皇室の施設であるため一般には公開されていないが、隣接する葉山しおさい公園や葉山しおさい博物館を通じて、往時の雰囲気の一端に触れることができる。博物館の展示では、昭和天皇が葉山周辺で採取した生物標本なども紹介されており、皇室と葉山の海との関わりの深さを知ることができる。静かな別荘地としての葉山の性格は、こうした皇室ゆかりの歴史とも無縁ではない。\n\n皇室の保養地としての歴史と、別荘文化としての歴史のふたつを併せ持つ葉山は、湘南の中でも独特な位置づけの町であり続けている。\n\n葉山しおさい公園・博物館は一色海岸に隣接しており、森戸海岸とあわせて歩いて巡ることができる距離にある。皇室ゆかりの歴史的な背景を知ったうえで景色を眺めると、いつもとは違う奥行きを感じられるはずだ。\n\n森戸海岸を紹介する「観光」カテゴリの記事とあわせて読むと、葉山という町が皇室の保養地としてどのように発展してきたかがより具体的にわかる。\n\n葉山しおさい博物館の展示は定期的に入れ替えられており、訪れるたびに異なるテーマの企画展に出会えることもある。\n\n訪れるたびに新しい企画展に出会えるという点も、この博物館の魅力のひとつだ。\n\n皇室ゆかりの歴史と自然が重なり合う、葉山ならではの場所である。',
+tags:['葉山御用邸','ベルツ博士','葉山']},
+
+{id:44,cat:'p',area:'葉山',scene:'portrait',title:'青春時代を過ごした、石原裕次郎と葉山の海',dek:'初主演作の舞台にもなった、昭和の大スターゆかりの地。',
+link:'',
+date:'2026-09-02',
+body:'神奈川県葉山町は、昭和の大スターである石原裕次郎ゆかりの地として知られている。裕次郎は青春時代の一時期をこの葉山で過ごしたとされ、その初主演作である映画『狂った果実』も、実際にこの地で撮影が行われた。森戸海岸の沖合、名島と呼ばれる小さな岩礁には「葉山灯台」が建てられており、この灯台は裕次郎の三回忌を記念し、兄である石原慎太郎が会長を務めていた日本外洋帆走協会が、約1億円の基金を集めて建設したことから「裕次郎灯台」の愛称で呼ばれている。森戸神社の境内からは、この裕次郎灯台越しに富士山と江の島を望むことができ、記念碑もあわせて建立されている。\n\n葉山という土地が持つ、海と空の広がり、そして落ち着いた別荘地としての雰囲気は、こうした昭和の映画作品の世界観と非常によく調和していた。石原裕次郎だけでなく、加山雄三の『若大将シリーズ』の舞台としても知られる葉山マリーナ周辺には、今もその頃の映画的な空気が色濃く残っている。ひとりのスターの記憶が、灯台という形で今も海に立ち続け、多くの人がその足跡をたどりに訪れているという事実は、葉山という土地が持つ独特の文化的な厚みを物語っている。\n\n森戸神社の境内に建てられた石原裕次郎の記念碑は、裕次郎灯台と富士山、江の島を望む絶好の位置に配置されており、多くのファンが今もこの場所を訪れている。青春時代を過ごした土地への深い思い入れは、映画作品の舞台選びにもあらわれており、葉山の海と空気感が、石原裕次郎という俳優のイメージづくりに少なからぬ影響を与えたと考えられている。灯台として今も現役で機能し続けているという点も、この記念碑ならではの特徴だ。\n\n灯台という形で今も海に立ち続ける一人のスターの記憶は、葉山という土地が持つ文化的な厚みを静かに物語っている。\n\n森戸神社は逗子駅・新逗子駅からバスでアクセスでき、境内から望む富士山と裕次郎灯台の眺めは、多くの人が写真に収める定番の構図になっている。夕暮れ時に訪れると、灯台と富士山がオレンジ色に染まる特別な瞬間に出会えることもある。\n\n森戸海岸や葉山マリーナの記事とあわせて読むことで、石原裕次郎という人物と葉山という土地の結びつきがより鮮明に浮かび上がってくる。\n\n石原裕次郎の記念碑周辺は、命日にあたる時期にファンが集まることもあり、今なお多くの人に愛され続けていることがうかがえる。\n\n今なお多くの人に愛され続けているという事実が、この記念碑の価値を物語っている。',
+tags:['石原裕次郎','葉山','歴史人物']},
+
+{id:45,cat:'l',area:'逗子',scene:'street',title:'御用邸の隣町として育まれた、逗子の暮らし',dek:'葉山への玄関口として発展してきた、落ち着いた住宅地。',
+link:'',
+date:'2026-09-02',
+body:'逗子市は、隣接する葉山町の御用邸開設に合わせて横須賀線が延伸され、逗子駅が開業したことをきっかけに発展してきた歴史を持つ町である。明治期にはドイツ人医師ベルツ博士がこのエリアを保養地として推薦したこともあり、逗子・葉山エリア一帯は早くから避暑地・別荘地として注目を集めてきた。現在の逗子は、江の島や鎌倉のような観光地としての賑わいとはやや距離を置きながら、海に近い落ち着いた住宅地として、多くの人々の日常の暮らしの場になっている。\n\n毎年ゴールデンウィークには逗子海岸映画祭が、5月には逗子海岸花火大会が開催されるなど、一年を通じて地域に根ざしたイベントが続けられており、観光客だけでなく地元の人々自身がその主役として関わっているのが逗子らしい特徴だ。京急線や横須賀線、京急バスを使えば、逗子から葉山、鎌倉方面へのアクセスも良く、湘南エリアの中でも比較的落ち着いた生活拠点として、子育て世代からリタイア層まで幅広い層に選ばれている。派手な観光地ではないからこそ、日常の暮らしと海の近さが自然な形で両立している町だといえるだろう。\n\n「葉山女子旅きっぷ」のような周遊きっぷも用意されており、逗子駅を起点に京急バスで葉山方面へ気軽に足を延ばせる交通の便の良さも、このエリアの暮らしやすさを支えている。逗子・葉山エリアは名前を並べて語られることが多いが、逗子はより住宅地としての性格が強く、葉山はより別荘地・観光地としての性格が強いというように、隣り合いながらも異なる個性を持っている。\n\n隣り合いながらも異なる個性を持つ逗子と葉山を歩き比べることで、湘南という地域が持つ多様な表情に触れることができる。\n\n逗子駅は横須賀線・京急線の両方が利用でき、東京・横浜方面からのアクセスの良さも、この町の暮らしやすさを支えている。落ち着いた住宅地としての性格を持ちながら、海や自然にも恵まれているという点が、多くの人に選ばれ続ける理由になっている。\n\n逗子海岸映画祭や花火大会の記事とあわせて読むと、逗子という町の暮らしとイベント文化のつながりがより具体的に理解できる。\n\n逗子市内には海を望むカフェやレストランも多く、暮らしの中に自然な形で海辺の時間が組み込まれている。\n\n海辺の時間が自然に暮らしに組み込まれているという点が、逗子の魅力を物語っている。\n\n逗子という町が持つ、静かで確かな暮らしの豊かさがそこにある。\n\n海と山、そして人とのつながりが穏やかに共存するこの町は、これからも静かに選ばれ続けていくだろう。',
+tags:['逗子','暮らし','別荘地']},
+
+{id:46,cat:'b',area:'逗子',scene:'cinema',title:'映画祭を生んだ、逗子のシネマカフェ',dek:'クリエイターたちが集った一軒のカフェから、地域の文化は育っていった。',
+link:'',
+date:'2026-09-02',
+body:'逗子海岸のほど近くにあるシネマカフェ「CINEMA AMIGO」は、逗子海岸映画祭が生まれるきっかけとなった場所として知られている。写真家の志津野雷氏や、このカフェを運営する長島源氏を中心に、クリエイターやアーティストの集まりである「CINEMA CARAVAN」が結成され、2009年から逗子海岸映画祭を企画・開催するようになった経緯がある。一軒のカフェに集ったクリエイターたちのゆるやかなつながりが、やがて全国的にも知られる野外映画祭へと育っていったという事実は、地域の小さな拠点が持つ可能性の大きさを物語っている。\n\n映画祭の開催期間中には、この原点に光を当てる特別企画として「CINEMA AMIGO DAY」が開かれることもあり、著名な俳優がゲストとして参加するなど、カフェと映画祭との結びつきは今も大切に受け継がれている。派手な資本力に頼るのではなく、地域に根ざしたクリエイターたちの熱量とネットワークからイベントが育っていくという逗子のカルチャーのあり方は、湘南の他のエリアで新しい取り組みを始めようとする人々にとっても、ひとつの参考になる事例だといえるだろう。\n\nCINEMA AMIGOは映画祭の期間だけでなく、普段は逗子の海を望む一軒のカフェとして地元の人々に日常的に利用されている。海を眺めながらコーヒーを飲む常連客の中から、新しいアイデアやつながりが生まれていくという光景は、この店が持つ本来の役割をよく表している。大きな資本ではなく、こうした小さな場の積み重ねから地域の文化が育っていくというあり方は、湘南の他の地域にとっても示唆に富む事例だ。\n\n大きな資本ではなく、小さな場の積み重ねから地域の文化が育っていくというあり方は、湘南の他の地域にとっても示唆に富む事例だ。\n\nCINEMA AMIGOは逗子海岸のすぐ近くに店を構えており、映画祭の時期以外に訪れても、海を眺めながらのんびり過ごすことができる。一杯のコーヒーから始まった小さなつながりが、地域全体を巻き込むイベントに育っていった過程を想像しながら訪れると、また違った味わいがある。\n\n逗子海岸映画祭を紹介する「イベント」カテゴリの記事とあわせて読むことで、この一軒のカフェが果たした役割の大きさがより実感できる。\n\nCINEMA AMIGOでは、映画祭以外の時期にも小規模な上映会やトークイベントが開かれることがあり、地域の文化拠点としての役割を担い続けている。',
+tags:['CINEMA AMIGO','逗子','カフェ']},
+{id:47,cat:'t',area:'藤沢',scene:'shrine',title:'藤沢の中心に立つ、時宗総本山「遊行寺」',dek:'なぜ鎌倉ではなく藤沢に、時宗の本山が置かれたのか。',
+link:'',
+date:'2026-09-03',
+body:'正式名称を清浄光寺という遊行寺は、正中2年（1325年）に呑海上人によって開かれた時宗の総本山である。時宗の開祖・一遍上人は、諸国を巡り歩きながら念仏の教えを広める「遊行」と、踊りながら念仏を唱える「踊り念仏」で知られる僧だった。一遍が44歳のとき、鎌倉に入ろうとしたところを警護の武士に制止され、信者たちとともに片瀬、現在の藤沢へと向かったことが、時宗の本山が鎌倉ではなく藤沢に置かれることになった理由だと伝えられている。\n\n境内に足を踏み入れると、「東海道随一」ともうたわれる木造銅葺きの本堂がまず目に飛び込んでくる。現在の建物は関東大震災で倒壊した後に再建されたもので、堂内には本尊の阿弥陀如来坐像が安置されている。本堂の右手には、手を合わせた一遍上人の穏やかな表情の銅像が静かに立ち、参拝者の目を引いている。境内には樹齢を重ねた大銀杏や、宇賀弁財天を祀る宇賀神社もあり、歴史ある大寺院ならではの見どころが随所に点在している。\n\n境内にある遊行寺宝物館では、一遍の生涯を描いた国宝「一遍聖絵」をはじめとする貴重な文化財が、年に数回の企画展を通じて公開されている。毎年7月には、一遍の踊り念仏をルーツに持つとされる創作盆踊り「遊行の盆」も境内で開催されており、中世から続く信仰の歴史と、現代の地域イベントが同じ場所で重なり合っている。\n\n藤沢駅からは遊行寺通りを歩いて20分ほど、赤い欄干の遊行寺橋を渡った先に境内が広がっている。江の島や鎌倉に比べると観光客の数は少なく、静かに歴史と向き合いたい人にとっては、藤沢観光の中でも特に落ち着いた時間を過ごせる場所になっている。湘南Doors編集部としても、藤沢という街の別の一面を伝える記事として、今後も遊行寺周辺の取材を続けていきたいと考えている。\n\n藤沢駅からのアクセスの良さに加えて、境内は入場無料で気軽に立ち寄れる点も魅力だ。遊行寺通り沿いには昔ながらの和菓子店も点在しており、参拝の前後に藤沢の銘菓を味わうのもおすすめの過ごし方になっている。藤沢宿の記事とあわせて読むと、この一帯が持つ歴史の重層性がより立体的に見えてくるはずだ。静かな境内を歩きながら、七百年近く受け継がれてきた信仰の時間の流れを、ぜひ感じ取ってみてほしい。\n\n藤沢駅・小田急藤沢駅からも徒歩15分ほどとアクセスは良好で、江の島や湘南T-SITEを訪れるついでに立ち寄ることもできる立地にある。',
+tags:['遊行寺','時宗','藤沢']},
+
+{id:48,cat:'t',area:'藤沢',scene:'beach',title:'湘南屈指の賑わい、片瀬西浜・鵠沼海水浴場',dek:'約1kmのロングビーチに、夏の湘南の熱気が集まる。',
+link:'',
+date:'2026-09-03',
+body:'江の島のすぐ西側に広がる片瀬西浜・鵠沼海水浴場は、約1キロメートルにわたるロングビーチを誇る、湘南エリアの中でも屈指の人気を誇る海水浴場である。正面には江の島、西側には富士山や箱根、伊豆の山々を望むことができ、夏になると多くの海水浴客で埋め尽くされる、湘南の夏を象徴するような景観が広がる。\n\n隣接する鵠沼海岸にはビーチバレーコートが常設されており、無料でボールの貸し出しも行われているため、海水浴だけでなくスポーツを目的に訪れる人も少なくない。江ノ電の江ノ島駅や小田急線の片瀬江ノ島駅からのアクセスも良く、夏のシーズンには江の島観光とあわせて多くの人がこのビーチに足を延ばす。\n\n鵠沼エリアは古くからサーフィン文化が根付いてきた土地としても知られており、海沿いにはサーフショップやサーフィン関連の店舗が点在している。江の島を望むロケーションの良さから、朝から波に乗るサーファーの姿は、この海岸の日常的な風景のひとつになっている。華やかな夏の賑わいと、年間を通じたサーフィン文化という二つの顔を持つのが、このビーチの大きな特徴だ。\n\n湘南の中でも特に人出の多いビーチのひとつであるため、夏のピークシーズンには早めの時間に訪れることをおすすめしたい。海の家が立ち並ぶ賑やかな雰囲気を味わいたい人にも、比較的静かな朝の時間帯に散策を楽しみたい人にも、それぞれの楽しみ方ができる懐の深さがこの海岸にはある。\n\n海水浴場としての賑わいだけでなく、江の島や富士山を望む夕景の美しさでも知られており、日没の時間帯にはカメラを構える人の姿も多く見られる。江ノ電・江ノ島駅や小田急・片瀬江ノ島駅からのアクセスが良いため、江の島観光の合間に立ち寄る人も多い。片瀬西浜・鵠沼海水浴場は、湘南のビーチの中でも特に多面的な楽しみ方ができる場所であり、季節や時間帯によってまったく異なる表情を見せてくれる。\n\n夏以外の季節は人出も落ち着き、砂浜を静かに散歩したい人にとっても訪れやすいビーチになっている。\n\n海と富士山を一度に望めるこの景観は、何度訪れても飽きることのない湘南らしい絶景であり続けている。夕暮れ時に訪れる価値は特に大きい。\n\nこうした景観の豊かさこそが、湘南というブランドの説得力を支えている。江の島観光とあわせて、ぜひこのビーチにも足を延ばしてみてほしい。\n\n何度でも通いたくなる、そんな場所だ。\n\n湘南の夏を代表するこの一枚の景色を、忘れずに目に焼き付けておきたい。',
+tags:['鵠沼海岸','海水浴場','サーフィン']},
+
+{id:49,cat:'c',area:'藤沢',scene:'street',title:'東海道六番目の宿場町、藤沢宿の記憶をたどる',dek:'遊行寺の門前町として栄えた藤沢の、もうひとつの顔。',
+link:'',
+date:'2026-09-03',
+body:'藤沢市の中心部、現在の小田急線藤沢本町駅周辺にあたる一帯は、慶長6年（1602年）に整備された東海道五十三次のうち第六番目の宿場「藤沢宿」があった場所である。時宗の総本山・遊行寺の門前町として、また江の島参拝への中継地として、人馬を乗り継ぐための問屋場や宿泊施設が立ち並び、大いに賑わいを見せていたと伝えられている。歌川広重の浮世絵「東海道五十三次」にも、その様子が描き残されている。\n\n遊行寺を出て歌川広重の浮世絵に描かれた大鋸橋、現在の赤い遊行寺橋を渡ると、電線が地中化された広い通りに出る。かつての藤沢宿のメイン通りにあたるこの一帯には、今も古い蔵や商店の建物がところどころに残っており、トランスボックスを利用した案内板が、藤沢の町の変遷や当時の浮世絵を紹介している。\n\nこのエリアには源義経にゆかりのある史跡も点在している。奥州で自害した義経の首が鎌倉で首実検されたのち、里人によって清められたと伝わる「義経首洗井戸」や、その首を祀ったとされる白旗神社などがあり、源平の時代の記憶が今も藤沢の町並みの中に息づいている。\n\n戦後、藤沢市役所が現在の藤沢駅北口周辺へ移転したことで、行政・商業の中心はそちらへと移っていったが、藤沢宿があった一帯には今も歴史ある町の面影が色濃く残されている。にぎやかな藤沢駅周辺とはまた違う、静かな史跡めぐりを楽しみたい人にはぜひ訪れてほしいエリアであり、遊行寺の記事とあわせて読むことで、藤沢という街の歴史的な奥行きがより立体的に見えてくるはずだ。\n\n現在の藤沢駅周辺の賑わいからは想像しにくいかもしれないが、藤沢宿があった一帯を歩くと、宿場町として栄えた往時の空気が今も静かに息づいていることに気づかされる。遊行寺通りを起点に、白旗神社や義経首洗井戸まで歩く小さな史跡巡りは、1時間ほどで一周できる手軽さも魅力だ。藤沢という街が単なる商業都市ではなく、東海道の歴史を背負った土地であることを、あらためて実感させてくれるコースになっている。\n\n地元の商工会議所が主催する「遊行の盆」なども、こうした歴史的な土地の記憶を現代につなぐ試みのひとつだ。\n\n宿場町としての記憶を静かに受け継ぐこの一帯は、藤沢という街の奥行きを知るうえで欠かせない散策先になっている。\n\n藤沢という街を歩くときは、駅前の賑わいだけでなく、こうした宿場町の記憶にも目を向けてみると、新しい発見があるはずだ。\n\nその積み重ねが、この街の物語を今に伝えている。',
+tags:['藤沢宿','東海道','歴史']},
+
+{id:50,cat:'t',area:'茅ヶ崎',scene:'garden',title:'松林に抱かれた、茅ヶ崎の隠れ家美術館',dek:'明治の別荘地の跡地に、1998年開館した郷土美術館。',
+link:'https://www.chigasaki-museum.jp/',
+date:'2026-09-06',
+body:'茅ヶ崎駅から徒歩8分ほど、高砂緑地と呼ばれる松林の緑地の中に、静かにたたずんでいるのが茅ヶ崎市美術館である。1998年に郷土美術館として開館し、萬鐵五郎や小山敬三といった茅ヶ崎にゆかりのある作家の作品を中心に、現在およそ2000点の美術品を収蔵している。通りからは建物が見えないため隠れ家的な雰囲気があり、軽やかに羽ばたくような外観のデザインは、湘南の明るい空と深緑の松林に美しく溶け込んでいる。\n\n美術館を取り囲む高砂緑地は、1902年（明治35年）に日本近代演劇の先駆者として知られる俳優・川上音二郎とその妻・貞奴が居宅を構えたことに始まる場所だ。その後、実業家の原安三郎の別荘となり、茅ヶ崎市が往年の景観を後世に伝えるためにこの土地を購入、1984年に緑地として一般開放された。庭園内にある茶室・書院の松籟庵は、原氏の別荘時代に整備されたもので、外から見学することもできる。\n\n館内は1階と地下が展示室、2階はカフェとアトリエになっており、地元茅ヶ崎在住の建築家が手がけた展示室は、自然光の取り込み方にも工夫が凝らされている。常設展は設けず、現代美術から西洋美術まで幅広いテーマの企画展を年に数回開催しており、毎年1月から2月頃には収蔵作品展として茅ヶ崎ゆかりの作家の作品がまとめて紹介される。\n\n2月から3月上旬にかけては、松林の中に小さな梅の花が咲き始め、松の濃い緑を背景に白とピンクの花が春の訪れを告げる。美術鑑賞と季節の花の両方を楽しめるこの場所は、観光地としての茅ヶ崎とはまた違う、文化的な奥行きを感じさせてくれるスポットだ。\n\n美術館の目の前には市立図書館もあり、緑地全体が茅ヶ崎の文化的な拠点として機能している。カフェ・ルシュマンでは、木々の揺れる姿を眺めながらゆっくりとお茶を楽しむこともでき、美術鑑賞と休憩の両方を同じ空間で完結させることができる。企画展は年に数回入れ替わるため、訪れるたびに新しい発見があるのも魅力のひとつだ。高砂緑地・松籟庵の記事とあわせて読むことで、この一帯が歩んできた歴史がより深く理解できるはずだ。\n\n駐車場は10台と限られているため、満車の場合は近隣の有料駐車場を利用することになる点も覚えておきたい。\n\n松林と美術という組み合わせは全国的にも珍しく、茅ヶ崎ならではの文化拠点として今後も注目していきたい場所だ。\n\n文化と自然が同居するこの場所は、茅ヶ崎という街の知られざる魅力を発見できる貴重なスポットになっている。',
+tags:['茅ヶ崎市美術館','高砂緑地']},
+
+{id:51,cat:'p',area:'茅ヶ崎',scene:'mansion',title:'明治の演劇界を駆け抜けた夫婦が愛した、茅ヶ崎の別荘地',dek:'「オッペケペー節」で知られる俳優が、晩年を過ごした土地。',
+link:'',
+date:'2026-09-04',
+body:'「オッペケペー節」で一世を風靡した明治の新劇俳優・川上音二郎と、その妻で日本初の女優ともいわれる川上貞奴は、1902年（明治35年）、現在の高砂緑地にあたる場所に居宅「萬松園」を構えた。壮士芝居と呼ばれる政治的な内容を含む芝居で人気を博した音二郎と、芸者から女優へと転身した貞奴の夫婦は、当時の日本演劇界において常に注目の的だった存在である。海と松林に囲まれたこの茅ヶ崎の地で、二人はどのような晩年の時間を過ごしていたのだろうか。\n\n音二郎・貞奴夫妻が去った後、この土地は実業家の原安三郎の所有となり、別荘として整備された。庭園内には茶室・書院である松籟庵が設けられ、日本庭園や梅の木々が丁寧に手入れされていったという。政財界の要人が別荘を構えた大磯や、皇室の御用邸が置かれた葉山と同じように、茅ヶ崎の一角にも、こうした著名人ゆかりの別荘文化の記憶が刻まれている。\n\n1984年、茅ヶ崎市はこの土地を購入し、往年の景観を後世に伝えるとともに市民の憩いの場とするため、「高砂緑地」として一般に開放した。現在は緑地の中に茅ヶ崎市美術館が建てられ、松籟庵とともに、かつての別荘文化の面影を伝える貴重な空間として整備されている。\n\n俳優夫婦の華やかな活動の記憶と、実業家の別荘としての静かな時間、そして現在の市民の憩いの場としての姿。ひとつの土地が歩んできたこうした重層的な歴史を知ると、何気ない松林の散策も、また違った奥行きを持って感じられるようになるはずだ。茅ヶ崎市美術館の記事とあわせて読むことで、この土地の歴史がより立体的に見えてくる。\n\n萬松園があった当時の建物は現存していないが、松籟庵という形で、別荘としての庭園文化の記憶は今も受け継がれている。梅の見頃である2月中旬から3月上旬にかけては、松の緑と梅の花のコントラストが美しく、写真愛好家にも人気の時期になっている。華やかな演劇界を生きた夫婦の記憶をたどりながら緑地を歩くと、いつもとは違う視点で茅ヶ崎の風景を楽しむことができるはずだ。\n\n松籟庵は外観のみの見学となるが、緑地全体を歩くだけでも当時の別荘文化の雰囲気を十分に感じ取ることができる。\n\n華やかな演劇界の記憶が、今は静かな緑地として市民に開かれているという変遷そのものが、この土地の面白さを物語っている。\n\nこうした歴史をたどることは、茅ヶ崎という街をより深く知るための、確かな手がかりになるはずだ。\n\n訪れるたびに新しい発見がある、そんな緑地だ。',
+tags:['川上音二郎','川上貞奴','高砂緑地']},
+
+{id:52,cat:'t',area:'茅ヶ崎',scene:'street',title:'茅ヶ崎の暮らしと自然を伝える、博物館と古民家',dek:'旧和田家住宅など、市指定文化財の古民家が点在するエリア。',
+link:'',
+date:'2026-09-04',
+body:'茅ヶ崎市堤にある茅ヶ崎市博物館は、50年の歴史を持つ茅ヶ崎市文化資料館の役割を引き継ぐ形で開館した施設で、「茅ヶ崎の自然やそこで営まれた人々の暮らしを伝える資料」を、利用者とともに蓄積し、未来へ伝えていくことを使命として掲げている。周辺には、市指定重要文化財である旧和田家住宅・旧三橋家住宅をはじめ、大岡越前守の菩提寺である浄見寺、野鳥や魚類が観察できる駒寄川など、自然と歴史が入り混じった散策コースが広がっている。\n\n旧和田家住宅は、江戸時代の茅ヶ崎における農家の暮らしを今に伝える民俗資料館として、旧三橋家住宅とともに一般公開されている。かつては茅ヶ崎の田園地帯に数多く見られたであろう、こうした伝統的な農家建築が保存されているという事実は、海辺のリゾートというイメージが強い茅ヶ崎の、もうひとつの顔を教えてくれる。\n\n博物館の周辺には、下寺尾官衙遺跡群や堤貝塚といった、古代からこの地に人々が暮らしてきたことを示す遺跡も点在している。海水浴やサーフィン、湘南ビールといった現代的なイメージだけでなく、こうした古代からの人々の営みの痕跡が積み重なっているという点に、茅ヶ崎という土地の歴史の厚みがある。\n\n観光地としてはやや地味に感じられるかもしれないが、地域の暮らしと自然を丁寧に伝えるこうした施設をめぐることは、茅ヶ崎という街をより深く理解するための、確かな手がかりになるはずだ。熊澤酒造やサザンオールスターズの記事だけでは見えてこない、茅ヶ崎のもうひとつの層がここにある。\n\n耐震改修工事などのため一時休館する場合もあるため、訪れる前には最新の開館情報を確認しておくと安心だ。周辺には浄見寺をはじめとする歴史ある寺院も点在しており、博物館を起点にした散策コースを組みやすい。海水浴やビール、音楽といった華やかな茅ヶ崎のイメージの奥に、こうした静かな歴史の蓄積があることを知ると、この街の見え方が少し変わってくるはずだ。\n\n散策には駒寄川沿いの遊歩道も含めると1時間半ほどかかるため、時間に余裕を持って訪れるのがおすすめだ。\n\nこうした施設をめぐることで、観光地としてだけでなく生活の場としての茅ヶ崎の輪郭がより鮮明に見えてくるはずだ。\n\n地域の歴史と暮らしの厚みを伝えるこうした施設に、これからも注目していきたい。\n\nこれからも大切に守られていくべき場所である。\n\n地域の歴史を丁寧にたどるほど、茅ヶ崎という街への愛着も深まっていくはずだ。',
+tags:['茅ヶ崎市博物館','旧和田家住宅']},
+
+{id:53,cat:'t',area:'鎌倉',scene:'shrine',title:'謎に包まれた、鎌倉唯一の国宝仏',dek:'誰が、いつ造ったのか。今も解明されていない鎌倉大仏の謎。',
+link:'',
+date:'2026-09-05',
+body:'鎌倉の象徴ともいえる鎌倉大仏を本尊とする高徳院は、浄土宗の寺院である。正式名称を銅造阿弥陀如来坐像といい、鎌倉にある仏像の中で唯一、国宝に指定されている。『吾妻鏡』には、寛元元年（1243年）に初代の木造の大仏の開眼供養が行われたとの記録が残されているが、現在の銅造の大仏がいつ、誰によって造られたのかについては、実は今もはっきりと分かっていない部分が多いという。\n\nかつては大仏殿と呼ばれる建物の中に安置されていたとされるが、室町時代以降の記録では、すでに屋根のない露天の状態になっていたことが分かっており、「露坐の大仏」として広く知られるようになった。度重なる津波や台風によって建物が損壊し、そのまま再建されなかったのではないかとも考えられている。真言宗、臨済宗に属した時期を経て、江戸時代に浄土宗の寺院として現在の姿に落ち着いた。\n\n境内にある大仏の胎内は有料で拝観することができ、銅の鋳造技術の詳細を間近で見学できる貴重な機会になっている。参道の入り口付近には土産物店も並び、大仏をあしらったサブレーや置物など、鎌倉らしいお土産を購入することもできる。\n\n長谷寺や由比ヶ浜にも近いこのエリアは、江ノ電・長谷駅から徒歩7分というアクセスの良さもあり、鎌倉観光の定番コースに欠かせない一角になっている。謎に包まれた歴史を持つ大仏を前にすると、七百年以上の時を超えて今も多くの人を惹きつけ続けているその存在感に、あらためて圧倒される。\n\n境内には大仏だけでなく、与謝野晶子の歌碑や観月堂といった見どころも点在しており、ゆっくり散策すれば1時間ほど楽しめる。長谷駅周辺には土産物店や飲食店も多く、大仏参拝とあわせて鎌倉らしい食べ歩きを楽しむ人も多い。七百年以上前から変わらずこの地に佇んできた大仏の姿は、鎌倉という街の歴史そのものを象徴する存在であり続けている。\n\n拝観時間は季節によって変わるため、訪れる前に最新の営業時間を確認しておくと安心だ。\n\n七百年以上前からこの地に佇む大仏の存在感は、何度訪れても新鮮な感動を与えてくれる。\n\n湘南Doors編集部としても、この大仏の記事を通じて鎌倉の奥深さを伝えていきたいと考えている。\n\nその存在感に、また会いに行きたくなる。\n\n鎌倉観光の締めくくりに、ぜひこの大仏の前に立ち寄ってみてほしい。\n\n鎌倉という街の懐の深さを、この大仏はいつも静かに教えてくれる。ぜひ一度、その足元に立ってみてほしい。',
+tags:['鎌倉大仏','高徳院','国宝']},
+
+{id:54,cat:'t',area:'鎌倉',scene:'mansion',title:'日本最初の禅宗専門道場、建長寺',dek:'鎌倉幕府5代執権が創建した、鎌倉五山第一位の名刹。',
+link:'',
+date:'2026-09-05',
+body:'建長寺は、鎌倉幕府5代執権・北条時頼が建長5年（1253年）に創建した、臨済宗建長寺派の大本山である。日本で最初の禅宗専門寺院として知られ、鎌倉にある五つの禅宗寺院を格付けした「鎌倉五山」の中でも第一位に位置づけられている。谷になった地形を生かし、総門、三門、仏殿、法堂が一直線に並ぶ、宋の様式を取り入れた配置が大きな特徴だ。\n\n創建から現在に至るまでの間、江戸時代には徳川家の援助によって主要な建物の新築や移築が行われ、大正時代の関東大震災では大きな被害を受けたものの、その後再建されて今の姿を保っている。桜や紅葉の名所としても知られており、季節ごとに多くの観光客がその景観を求めて訪れる。\n\n建長寺では、毎週金曜日と土曜日の17時から18時にかけて、無料で参加できる坐禅体験が行われている。予約不要で気軽に参加できるこの取り組みは、観光としてだけでなく、禅の教えそのものに直接触れられる貴重な機会として、国内外から多くの参加者を集めている。\n\n最寄りのJR横須賀線・北鎌倉駅からは徒歩15分ほどの距離にあり、円覚寺や明月院など、北鎌倉エリアの他の名刹とあわせて巡るコースの中に組み込みやすい立地にある。歴史ある建築と、今も実践され続けている禅の修行の両方に触れられるという点で、建長寺は鎌倉観光の中でも特に奥行きのある体験を提供してくれる場所だ。\n\n境内には法堂の天井に描かれた大きな雲龍図もあり、見上げるとその迫力に圧倒される。建長寺で提供されている精進料理のルーツともいわれる「けんちん汁」は、寺の名前がそのまま料理名の由来になったという説もあり、鎌倉の食文化とも深いつながりを持っている。歴史・建築・食文化のいずれの角度からも楽しめる懐の深さが、建長寺の大きな魅力になっている。\n\n拝観料の一部は文化財の維持管理にも充てられており、訪れること自体が歴史の保存に貢献することにもつながっている。\n\n禅の教えと歴史ある建築が同居するこの寺院は、鎌倉観光の中でも特に学びの多い場所だといえるだろう。\n\n禅の教えに触れながら歴史ある建築を楽しめるこの寺院を、ぜひ訪れてみてほしい。\n\n何度訪れても新しい学びがある寺院だ。\n\n鎌倉五山第一位の風格を、その目で確かめてみてほしい。\n\n境内を歩くだけで、七百年以上にわたる禅の歴史の重みを肌で感じることができる、貴重な場所だ。\n\n宋風の伽藍配置と禅の精神性が調和したこの空間は、何度訪れても新たな発見をもたらしてくれる特別な場所である。',
+tags:['建長寺','鎌倉五山','禅']},
+
+{id:55,cat:'t',area:'鎌倉',scene:'garden',title:'2000本の竹が揺れる、鎌倉の「竹寺」',dek:'足利・上杉両氏の菩提寺として栄えた禅宗寺院の、静かな庭。',
+link:'',
+date:'2026-09-05',
+body:'報国寺は、建武元年（1334年）の創建と伝えられる、臨済宗建長寺派の禅宗寺院である。足利氏と上杉氏、両氏の菩提寺として長く栄えてきたこの寺は、開山した僧・天岸慧広のために建てられた塔頭「休耕庵」の跡地に、江戸時代半ばに竹が植えられたことから、「竹寺」の愛称で広く知られるようになった。境内の竹林にはおよそ2000本の孟宗竹が植わっており、その多くは成長が最も速く、同時に最も硬いとされる種類だという。\n\n竹林の中には小径が通り、その先には茶室が設けられている。晩年の天岸慧広は、この竹林でほとんどの時間を過ごし、坐禅を組んだり、詩を読み書きしたりして日々を送っていたと伝えられている。木漏れ日が竹の間から差し込み、風が吹くたびに竹の葉が触れ合うかすかな音が響くこの空間は、観光地としての賑わいとは一線を画した、静けさそのものを味わう場所になっている。\n\n報国寺は外国人観光客からの人気が特に高く、フランスの旅行ガイド「ミシュラン・グリーンガイド・ジャポン」では3つ星を獲得するほどの評価を得ている。竹の庭への入場には別途拝観料が必要になるが、竹林内の茶席で抹茶をいただきながら景色を楽しむこともでき、静かな時間を過ごしたい観光客にとって特別な体験になっている。\n\n毎週日曜日の早朝には、予約不要で参加できる坐禅会も開催されている。鶴岡八幡宮や小町通りの賑わいから少し離れた金沢街道沿いに位置するこの寺は、鎌倉が持つ「静」の魅力を最も色濃く感じられる場所のひとつだといえるだろう。\n\n竹の庭を出た先には、石窯で焼いたパンや紅茶が楽しめる洋館レストランを併設した浄妙寺もあり、金沢街道沿いのこのエリアは寺院巡りとカフェ巡りの両方を楽しめる散策コースになっている。報国寺の記事とあわせて、金沢街道周辺の他の寺院も訪ねてみると、鶴岡八幡宮周辺とはまた違う、静かで奥深い鎌倉の魅力に出会えるはずだ。\n\n坐禅会に参加する場合は本堂前に集合する形になるため、初めて訪れる人は少し早めに到着しておくと安心だ。\n\n竹林の静けさに包まれるひとときは、観光地としての鎌倉とはまた違う、心が落ち着く特別な体験になる。\n\n静けさを求める旅人にとって、報国寺は鎌倉の中でも特に価値のある場所であり続けるだろう。\n\nその静けさは、何度でも味わう価値がある。\n\n竹林を抜ける風の音に耳を澄ませる時間を、大切にしたい。\n\n竹林の中で過ごすわずかな時間が、旅の記憶の中で特に印象深いものになるはずだ。',
+tags:['報国寺','竹の庭','鎌倉']},
+
+{id:56,cat:'t',area:'平塚',scene:'beach',title:'360度の大パノラマ、平塚と大磯にまたがる絶景の丘',dek:'富士山から相模湾まで見渡せる、湘南屈指の展望スポット。',
+link:'',
+date:'2026-09-06',
+body:'平塚市と大磯町の境に連なる、標高およそ180メートルの丘陵地が湘南平である。「かながわの景勝50選」にも選ばれた桜の名所として知られ、展望台からは相模湾の海岸線から丹沢連峰、箱根や伊豆の連山、そして条件が良ければ富士山まで、まさに360度の大パノラマを望むことができる。北には平塚の市街地、南には相模湾、東には遠く江の島や三浦半島まで見渡せるという眺望の広さは、湘南エリアの展望スポットの中でも屈指のものだ。\n\n展望台に隣接する高麗山公園レストハウスの2階には、地産地消をテーマにしたレストランがあり、平塚在住60年以上のオーナーシェフが腕を振るう料理を、絶景とともに味わうことができる。相模湾で水揚げされた魚介類など、平塚の食材の魅力を発信したいという思いから2015年にオープンしたこのレストランは、単なる展望台以上の楽しみ方を訪れる人に提供している。\n\n園内にはハート型の南京錠を取り付けられるアートスポットもあり、カップルの聖地としても親しまれている。夜には夜景スポットとしても知られ、昼と夜でまったく異なる二つの表情を楽しめるのも湘南平の魅力のひとつだ。自然豊かなハイキングコースも整備されており、体力に応じてさまざまな楽しみ方ができる。\n\nJR平塚駅からは神奈中バスで25分から30分ほどの距離にあり、桜の季節にはお花見客で賑わう。平塚と大磯、二つの町にまたがるこの丘は、それぞれの町の魅力を同時に一望できる、いわば湘南全体を俯瞰するための特等席のような場所だといえるだろう。\n\n湘南平は平塚市と大磯町にまたがっているため、両方の町の観光情報を横断的に取材する湘南Doorsにとっても象徴的な場所だ。大磯の別荘文化を紹介する記事とあわせて読むと、この丘から見える景色の意味がより深く理解できるはずだ。晴れた日を狙って訪れれば、湘南全体を一望するという、他では味わえない体験ができる。\n\nレストハウスの営業時間は季節によって変わるため、訪れる前に確認しておくとより計画的に楽しむことができる。\n\n湘南全体を一望できるこの丘は、平塚と大磯、両方の魅力を同時に体感できる貴重な場所であり続けている。\n\nこの丘からの眺めは、湘南という地域全体の魅力を一度に体感できる、かけがえのない時間を与えてくれる。\n\n何度でも見に行きたくなる景色がそこにある。\n\n湘南全体を見渡すこの体験は、何ものにも代えがたい。\n\nこの丘に立てば、湘南という地域がいかに豊かな眺望に恵まれているかを実感できるだろう。',
+tags:['湘南平','展望台','平塚']},
+
+{id:57,cat:'t',area:'平塚',scene:'shrine',title:'「地元の守り神」として親しまれる、平塚八幡宮',dek:'湘南ひらつか七夕まつりの際にも多くの人が参拝に訪れる古社。',
+link:'',
+date:'2026-09-06',
+body:'平塚八幡宮は、平塚市の中心部に鎮座し、地元の人々から「地元の守り神」として長く親しまれてきた神社である。湘南ひらつか七夕まつりが開催される期間には、まつりを楽しむ人々がそのまま参拝に訪れることも多く、平塚の夏の賑わいの中で、静かに祈りを捧げる場所としての役割も果たしている。境内は市街地の中にありながら緑豊かで、慌ただしい商店街の喧騒からひと息つける落ち着いた空間になっている。\n\n平塚市は相模湾の最奥部、湘南海岸の西部に位置するエリアで、相模川の右岸に市街地が広がっている。湘南ひらつか七夕まつりで全国的に知られる一方、桜やつつじの名所である湘南平、Jリーグ・湘南ベルマーレの本拠地であるレモンガススタジアム平塚を擁する平塚市総合公園など、多様な魅力を併せ持つ街でもある。平塚八幡宮は、そうした賑やかな平塚の街の中心で、古くからこの土地の人々の心のよりどころとなってきた。\n\n境内では、七五三や初詣など、地域の年中行事に合わせたさまざまな神事が執り行われており、観光客だけでなく地元の家族連れの姿も日常的に見られる。派手な観光アピールをするわけではないが、平塚という街の暮らしに深く根ざした存在であり続けている点に、この神社の価値がある。\n\n七夕まつりの飾りが立ち並ぶ賑やかな駅前商店街から少し歩くだけで、こうした静かな神社の空間にたどり着けるというギャップも、平塚という街の面白さのひとつだ。まつりの喧騒に疲れたら、八幡宮の境内でひと息つくのもおすすめの過ごし方だ。\n\n境内の落ち着いた雰囲気は、七夕まつりの熱気とは対照的で、平塚という街が持つ「動」と「静」の両面を同時に体感できる場所になっている。湘南ひらつか七夕まつりの記事とあわせて訪れる計画を立てれば、平塚の夏をより多面的に楽しむことができるはずだ。\n\n初詣や七五三の時期には多くの家族連れで賑わい、地域の暮らしに寄り添う神社としての役割を今も果たし続けている。\n\n賑わいと静けさが共存するこの神社は、平塚という街の奥深さを象徴する場所のひとつだ。\n\n平塚という街を訪れる際には、まつりの熱気とあわせて、この静かな神社にもぜひ足を運んでみてほしい。\n\nこれからも大切にしたい、地域の神社だ。\n\n静かな境内で過ごす時間もまた、平塚を知る旅の一部になる。\n\nまつりの季節に限らず、一年を通じて訪れる価値のある場所であり続けている。\n\n地域の暮らしに寄り添い続けるこの神社の存在は、平塚という街の温かさをそのまま体現していると言えるだろう。',
+tags:['平塚八幡宮','平塚']},
+
+{id:58,cat:'l',area:'平塚',scene:'stadium',title:'「湘南のまんなか」で暮らすという選択',dek:'海、山、まつり、スポーツ。平塚には湘南のすべてが揃っている。',
+link:'',
+date:'2026-09-06',
+body:'平塚市は、相模湾の最も奥まった場所に位置し、地理的にも「湘南のまんなか」と呼ぶにふさわしい立地にある街である。日本有数の規模を誇る湘南ひらつか七夕まつり、Jリーグ・湘南ベルマーレの本拠地であるレモンガススタジアム平塚、360度の絶景が広がる湘南平など、湘南という言葉から連想されるさまざまな魅力が、この一つの街の中にコンパクトに詰め込まれている。\n\n平塚駅からは、七夕まつりの会場となる商店街まで徒歩数分、平塚市総合公園までもバスで手軽にアクセスでき、海だけでなく山側の湘南平まで、比較的短い移動時間でたどり着ける。この移動のしやすさこそが、平塚という街の暮らしやすさを支える大きな要素になっている。都心への通勤も、東海道本線や湘南新宿ラインを使えば1時間前後で可能であり、生活の拠点として選ぶ人も少なくない。\n\n七夕まつりや花火大会といった夏の風物詩は、単なる観光イベントではなく、平塚に暮らす人々にとって一年のリズムを形づくる大切な行事でもある。まつりの準備に商店主たちが汗を流し、地元の子どもたちが七夕おどりパレードに参加するといった光景は、この街の暮らしとまつり文化が分かちがたく結びついていることを物語っている。\n\n海と山、スポーツと祭り、そして都心へのアクセスの良さ。平塚という街が持つこうしたバランスの良さは、湘南エリアの中でも独特の暮らしやすさとして、これからも多くの人に選ばれ続けていく理由になるだろう。七夕まつりや湘南ベルマーレの記事とあわせて読むと、平塚という街の全体像がより鮮明に見えてくるはずだ。\n\n湘南平、平塚八幡宮、湘南ベルマーレ、七夕まつりといった、この記事で紹介してきたさまざまなスポットやイベントは、いずれも平塚という一つの街の中に無理なく収まっている。派手さよりもバランスの良さで選ばれる街として、平塚はこれからも多くの人にとっての現実的な選択肢であり続けるだろう。\n\nこうした暮らしやすさの積み重ねこそが、平塚という街の本当の価値だと言えるだろう。\n\n海と山、祭りとスポーツが無理なく共存する平塚の暮らしは、これからも多くの人に選ばれ続けるだろう。\n\n平塚という街の暮らしやすさは、今後もこのバランスの良さによって支えられていくはずだ。\n\nそんな街が、これからも続いていくだろう。\n\nそのバランスの良さこそが、平塚の一番の魅力なのかもしれない。\n\n海と山、都市機能のバランスという平塚の魅力は、これからも色あせることはないだろう。',
+tags:['平塚','暮らし','湘南のまんなか']},
+,
+
+,
+{id:62,cat:'e',area:'鎌倉',scene:'shrine',title:'三日間続く鎌倉の秋の大祭、鶴岡八幡宮例大祭',dek:'9月14日から16日、武道大会や日本舞踊が奉納される鎌倉最大級の神事。',
+link:'',
+date:'2026-09-07',
+body:'鶴岡八幡宮の年間行事の中でも最も重要な神事のひとつとされる例大祭が、2026年も9月14日から16日までの3日間にわたって執り行われる。源氏の氏神として、また鎌倉の総鎮守として篤い信仰を集めてきたこの神社にとって、例大祭は一年を締めくくる秋の大きな節目にあたる神事だ。期間中は、神前にお茶を供える献茶会、花を供える献華会をはじめ、武道大会や日本舞踊の奉納など、さまざまな神賑行事が舞殿や境内で次々と行われ、参道から本宮にかけて多くの参拝者で賑わう。\n\n例大祭の中日にあたる9月15日には、境内で最も格式高い神事が執り行われるのが通例となっており、白い装束をまとった神職たちが本宮へと向かう厳かな行列は、鎌倉の秋を象徴する光景のひとつとして知られている。夏の間、小町通りや若宮大路を訪れていた観光客の数は落ち着きを見せ始める時期だが、例大祭の期間だけは境内が再び多くの人で埋め尽くされる。\n\n武道大会では、弓道や剣道など複数の競技が奉納演武として披露され、日本舞踊の奉納では、地元の舞踊関係者が舞殿の上で優雅な舞を披露する。こうした奉納行事は観覧無料で、事前予約なしに見学できるものがほとんどのため、鎌倉観光のタイミングを合わせれば、普段は目にすることのできない神事の様子に触れることができる。\n\n鶴岡八幡宮は鎌倉駅から徒歩10分ほど、段葛の桜並木を歩いた先に境内が広がっている。小町通りの記事でも触れた通り、観光地としての賑わいと、こうした厳粛な信仰の場としての顔をあわせ持つのが鶴岡八幡宮の特徴だ。例大祭の時期に鎌倉を訪れる際は、普段とは違う神社の表情にもぜひ目を向けてみてほしい。混雑が予想されるため、車で訪れる場合は周辺の交通規制にも注意しておきたい。\n\n境内の授与所では、例大祭の時期にあわせた特別な御朱印が用意されることもあり、御朱印集めを楽しむ参拝者にとっても見逃せない時期になっている。段葛の桜並木は秋にはまだ紅葉には早いが、夏の緑が少しずつ落ち着いた表情を見せ始める頃で、参道を歩くだけでも季節の移ろいを感じ取ることができる。\n\n湘南Doors編集部としても、季節ごとに姿を変えるこの神社の様子を、今後も継続して取材していきたいと考えている。\n\n境内を歩きながら、鎌倉が積み重ねてきた信仰の歴史の重みを、あらためて感じ取ってみてほしい。\n\n湘南Doorsでは、こうした季節ごとの祭事も継続して取り上げていく予定だ。\n\n来年もまた、この時期に訪れたいと思わせる神社である。',
+tags:['鶴岡八幡宮','例大祭','鎌倉']},
+
+{id:63,cat:'t',area:'藤沢',scene:'beach',title:'東洋のマイアミビーチを彩る、夏のフィナーレ「江の島マイアミビーチショー」',dek:'7月から続く海開きイベントも、今シーズンは9月13日で幕を閉じる。',
+link:'',
+date:'2026-09-07',
+body:'「東洋のマイアミビーチ」という愛称で親しまれてきた片瀬海岸の海開きにあわせて、毎年夏に開催されているのが「江の島マイアミビーチショー」だ。2026年シーズンは7月1日から始まり、9月13日をもって約2か月半にわたる開催期間が幕を閉じる。会場となるのは、片瀬東浜海水浴場、片瀬西浜・鵠沼海水浴場、そして辻堂海水浴場という、江の島周辺の主要な海水浴場一帯。夏の間、これらのビーチでは音楽イベントやマリンスポーツ体験など、さまざまな催しが期間を通じて展開されてきた。\n\n片瀬海岸が「東洋のマイアミビーチ」と呼ばれるようになった由来は、昭和30年代にまで遡るとされ、白い砂浜と江の島を望む開放的な景観が、当時の人々にアメリカ・マイアミの海岸を連想させたことがきっかけだったと伝えられている。以来、この愛称は片瀬海岸のブランドとして定着し、夏になるとこの一帯には多くの海水浴客やマリンスポーツ愛好者が集まるようになった。\n\n9月に入ると、夏の盛りに比べて海水浴客の数は落ち着きを見せ始めるが、江の島マイアミビーチショーの開催期間中は、まだ夏の余韻を楽しめる催しがビーチのどこかで行われている可能性がある。今シーズン最後の週末に海辺を訪れれば、夏の終わりならではの、少し人出が落ち着いた開放的なビーチの雰囲気を味わうことができるだろう。\n\n片瀬西浜・鵠沼海水浴場については、当サイトの「観光」カテゴリでもロングビーチとしての魅力を紹介している。あわせて読むことで、このエリアが一年を通じてどのような表情を見せるのか、より立体的に知ることができるはずだ。夏の終わりの江の島エリアに足を運ぶ際は、このイベントの最終盤に間に合うかどうかも、ひとつの目安にしてみてほしい。\n\n海の家が撤去された後の静かな砂浜を歩きながら、夏の思い出を振り返るように過ごすのも、この時期ならではの楽しみ方だ。江の島観光とあわせて、夕暮れ時のビーチを訪れれば、夏の終わりの特別な光景に出会えるかもしれない。\n\n夏の間何度も訪れた人も、まだ足を運んでいない人も、シーズン最後のこの時期にもう一度海辺に立ち寄ってみてほしい。\n\n夏の終わりの静かなビーチには、賑わいの季節とはまた違う魅力が確かに息づいている。\n\nこの夏の記憶を胸に、また来年の海開きを楽しみに待ちたい。\n\n訪れるたびに新しい発見がある、そんな夏の締めくくりの場所だ。\n\nこの場所が持つ夏の記憶は、これからも多くの人の心に残り続けるだろう。',
+tags:['江の島マイアミビーチショー','片瀬海岸','夏イベント']},
+
+{id:64,cat:'e',area:'大磯',scene:'festival',title:'2万6000人が走る海岸線、湘南国際マラソンが今年も開催へ',dek:'大磯プリンスホテルを舞台に、富士山と太平洋を望むコースを走る市民マラソン。',
+link:'',
+date:'2026-09-07',
+body:'国内有数の規模を誇る市民マラソン大会「湘南国際マラソン」が、2026年は12月6日に第21回大会を迎える予定だ。会場となる大磯プリンスホテルを発着点に、太平洋を望む西湘バイパス沿いのコースを駆け抜けるこの大会には、例年およそ2万6000人ものランナーが参加する。海と富士山を同時に望みながら走れるロケーションの良さは、全国のマラソン大会の中でも屈指のものとして知られており、県外から参加するランナーも数多い。\n\n大磯町を舞台にしたこの大会は、当サイトでもたびたび取り上げてきた大磯海水浴場や旧吉田茂邸といった観光名所のすぐそばを、ランナーたちが駆け抜けていく形になる。日本の海水浴文化発祥の地としても知られるこの海岸線が、冬には一年に一度、大規模な市民マラソンの舞台に姿を変えるというのも、大磯という土地の懐の深さを感じさせるポイントのひとつだ。\n\n開催まではまだ数か月あるが、この規模の大会は例年、エントリー開始から定員に達するまでの期間が短いことでも知られている。参加を検討している場合は、早めに公式情報を確認し、エントリー開始のタイミングを逃さないようにしておきたい。当日はコース周辺で交通規制が実施されるため、大磯町内や隣接する二宮町・平塚市周辺で車を利用する予定がある人も、事前に規制区間と時間帯を確認しておくと安心だ。\n\n出場するランナーだけでなく、沿道で応援する人々にとっても、湘南の冬の一大イベントとして定着してきたこの大会。大磯の記事とあわせて読むことで、大会当日にランナーたちが目にする景色の背景にある、この土地の歴史もあわせて楽しむことができるはずだ。\n\n沿道での応援も大会の大きな見どころのひとつで、地元の住民や商店が飲み物や軽食を振る舞う光景も、この大会ならではの風物詩になっている。初めてこの大会を観戦する人は、大磯駅周辺から沿道沿いに歩きながら応援スポットを探してみるのもおすすめだ。\n\n湘南の冬を代表するこの大会に、走る側としても応援する側としても、一度は参加してみる価値があるはずだ。\n\n海と歴史が重なるこのコースを走る体験は、他のマラソン大会にはない特別なものになるはずだ。\n\nエントリー開始の告知を見逃さないよう、公式サイトのチェックを習慣にしておくと安心だ。\n\n湘南の四季を走って感じる、またとない機会になるだろう。\n\n大磯という土地の魅力を、走ることであらためて発見できるはずだ。\n\n沿道の応援と選手たちの熱気が重なるこの一日は、大磯にとって特別な日になっている。',
+tags:['湘南国際マラソン','大磯','マラソン大会']}
+];
+
+/* ---------- render ---------- */
+const grid = document.getElementById('grid');
+const catChips = document.getElementById('catChips');
+const areaSelect = document.getElementById('areaSelect');
+const searchBox = document.getElementById('searchBox');
+const resultCount = document.getElementById('resultCount');
+
+let activeCat = 'all';
+
+function buildChips(){
+  const all = document.createElement('div');
+  all.className = 'chip active'; all.textContent = 'すべて'; all.dataset.cat = 'all';
+  catChips.appendChild(all);
+  Object.keys(CATS).forEach(k=>{
+    const c = document.createElement('div');
+    c.className='chip'; c.textContent = CATS[k].label; c.dataset.cat = k;
+    catChips.appendChild(c);
+  });
+  catChips.addEventListener('click', e=>{
+    if(!e.target.classList.contains('chip')) return;
+    [...catChips.children].forEach(c=>c.classList.remove('active'));
+    e.target.classList.add('active');
+    activeCat = e.target.dataset.cat;
+    render();
+  });
+}
+
+function buildAreaOptions(){
+  const used = new Set(DATA.map(d=>d.area));
+  const areas = AREA_ORDER.filter(a=>used.has(a));
+  areas.forEach(a=>{
+    const o = document.createElement('option');
+    o.value=a; o.textContent=a;
+    areaSelect.appendChild(o);
+  });
+}
+
+function matches(item){
+  if(activeCat!=='all' && item.cat!==activeCat) return false;
+  const areaVal = areaSelect.value;
+  if(areaVal && item.area!==areaVal) return false;
+  const q = searchBox.value.trim();
+  if(q){
+    const hay = (item.title+item.dek+item.body+item.tags.join('')).toLowerCase();
+    if(!hay.includes(q.toLowerCase())) return false;
+  }
+  return true;
+}
+
+function formatDate(d){
+  const [y,m,day] = d.split('-');
+  return `${y}.${m}.${day}`;
+}
+
+function render(){
+  const list = DATA.filter(matches).sort((a,b)=> b.date.localeCompare(a.date)); // 新しい投稿順
+  grid.innerHTML='';
+  resultCount.textContent = activeCat==='all' && !areaSelect.value && !searchBox.value
+    ? `全 ${DATA.length} 件を掲載中`
+    : `${list.length} 件が見つかりました`;
+  if(list.length===0){
+    grid.innerHTML = `<div class="empty-state">条件に一致するコンテンツが見つかりませんでした。<br>条件を変えてもう一度お試しください。</div>`;
+    return;
+  }
+  list.forEach(item=>{
+    const card = document.createElement('div');
+    card.className='card';
+    card.innerHTML = `
+      <div class="card-art" style="position:relative;">
+        ${SCENES[item.scene]}
+        <div class="card-eyebrow">${CATS[item.cat].label}<span class="dot"></span>${item.area}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-date">${formatDate(item.date)}</div>
+        <div class="card-title serif">${item.title}</div>
+        <div class="card-dek">${item.dek}</div>
+        <div class="card-foot">
+          <span class="read-more">続きを読む →</span>
+          <span class="area-tag">${item.area}</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', ()=>openModal(item));
+    grid.appendChild(card);
+  });
+}
+
+const overlay = document.getElementById('overlay');
+const modal = document.getElementById('modal');
+const SITE_TITLE = document.title;
+function slugFor(item){ return 'article-' + item.id; }
+
+function openModal(item, pushState = true){
+  modal.innerHTML = `
+    <div class="modal-art">
+      ${SCENES[item.scene]}
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-eyebrow">${CATS[item.cat].label}<span style="color:var(--ink-faint); font-weight:400;">／ ${item.area}</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">${formatDate(item.date)}</span></div>
+      <div class="modal-title serif">${item.title}</div>
+      <div class="modal-dek">${item.dek}</div>
+      <div class="modal-text">${item.body}</div>
+      ${item.video ? `<div class="modal-video"><iframe src="https://www.youtube.com/embed/${item.video}" allowfullscreen></iframe></div>` : ''}
+      ${item.link ? `<a class="modal-linkbtn" href="${item.link}" target="_blank" rel="noopener">公式サイトを見る ↗</a>` : ''}
+      <div class="modal-tags">${item.tags.map(t=>`<span class="tag-pill">#${t}</span>`).join('')}</div>
+      ${item.estateLink ? `
+      <div class="related-estate">
+        <div class="related-estate-label">${item.area}の物件をさがす</div>
+        <a class="related-estate-btn" href="${item.estateLink}" target="_blank" rel="noopener">実際の物件を見る ↗</a>
+      </div>` : ''}
+    </div>`;
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.title = item.title + '｜' + SITE_TITLE;
+  document.getElementById('modalClose').addEventListener('click', ()=> closeModal());
+  if (pushState) {
+    /* 一部のプレビュー環境（srcdocサンドボックス等）ではpushStateが例外を投げることがあるため、
+       他の処理に影響しないよう try/catch で保護しています。実際にサーバーへ公開すれば正常に動作します。 */
+    try {
+      history.pushState({ articleId: item.id }, '', '#' + slugFor(item));
+    } catch (e) { /* noop */ }
+  }
+  /* GA4を有効にしている場合、記事ごとのユニークURLでページビューを計測できます */
+  if (typeof gtag === 'function') {
+    gtag('event', 'page_view', { page_title: document.title, page_location: location.href });
+  }
+}
+function closeModal(pushState = true){
+  overlay.classList.remove('open');
+  document.title = SITE_TITLE;
+  if (pushState) {
+    try {
+      history.pushState({}, '', location.pathname + location.search);
+    } catch (e) { /* noop */ }
+  }
+}
+overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && overlay.classList.contains('open')) closeModal(); });
+
+/* ブラウザの戻る/進むボタンや、記事URLへの直接アクセス（共有・広告リンク）に対応 */
+function handleLocationHash(){
+  const match = location.hash.match(/^#article-(\d+)$/);
+  if (match) {
+    const item = DATA.find(d => d.id === parseInt(match[1], 10));
+    if (item) { openModal(item, false); return; }
+  }
+  if (overlay.classList.contains('open')) closeModal(false);
+}
+window.addEventListener('popstate', handleLocationHash);
+
+areaSelect.addEventListener('change', render);
+searchBox.addEventListener('input', render);
+
+/* ---------- SNS follow icons ----------
+   下記の href="#" を、実際にSNSアカウントを開設した時点で
+   本物のURL（例: https://www.instagram.com/shonan_doors ）に置き換えてください。
+*/
+const SNS_ICONS = [
+  {name:'Instagram', href:'#', bg:'linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)', path:'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z'},
+  {name:'LINE', href:'#', bg:'#06C755', path:'M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.1 8.3 7.8.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1 .9.6 1-.4 5.6-3.3 7.6-5.6 1.4-1.5 2.4-3 2.4-5.3C22 6.6 17.5 3 12 3zM8.2 13.4H6.7c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.2h.7c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4zm2.1 0h-.4c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.6c0 .2-.2.4-.4.4zm4.3 0h-.4c-.1 0-.2 0-.3-.1l-1.6-2.2v1.9c0 .2-.2.4-.4.4h-.4c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.1 0 .2.1.3.2l1.6 2.2V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.6c0 .2-.2.4-.4.4zm3.6-3.2h-1.5v.6h1.5c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4h-1.5v.6h1.5c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4h-2.3c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h2.3c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4z'},
+  {name:'Facebook', href:'#', bg:'#1877F2', path:'M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z'},
+  {name:'X', href:'#', bg:'#000000', path:'M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z'},
+  {name:'TikTok', href:'#', bg:'#000000', path:'M14 3h2.2a4.6 4.6 0 0 0 3.8 3.9V9a7 7 0 0 1-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.2 0 .4 0 .6.03v2.2a3.3 3.3 0 1 0 2.3 3.15V3z'},
+  {name:'YouTube', href:'#', bg:'#FF0000', path:'M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 5 12 5 12 5s-6 0-7.7.3A2.7 2.7 0 0 0 2.4 7.2 28 28 0 0 0 2 12a28 28 0 0 0 .4 4.8 2.7 2.7 0 0 0 1.9 1.9C6 19 12 19 12 19s6 0 7.7-.3a2.7 2.7 0 0 0 1.9-1.9A28 28 0 0 0 22 12a28 28 0 0 0-.4-4.8zM10 15V9l5.2 3z'},
+];
+const snsRow = document.getElementById('snsRow');
+SNS_ICONS.forEach(s=>{
+  const a = document.createElement('a');
+  a.className='sns-icon'; a.href=s.href; a.title=s.name; a.target='_blank'; a.rel='noopener';
+  a.style.background = s.bg;
+  a.innerHTML = `<svg viewBox="0 0 24 24" fill="#fff"><path d="${s.path}"/></svg>`;
+  snsRow.appendChild(a);
+});
+
+/* ---------- Instagramグリッド（プレースホルダー） ----------
+   実際のInstagram投稿画像に差し替える場合は、各insta-grid-itemの中身を
+   実際の投稿のembedコードやサムネイル画像に置き換えてください。
+   （著作権上、他サイトの画像を無断で転載することはできないため、
+   ここでは記事のイラストを流用したプレースホルダー表示にしています）
+*/
+const instaGrid = document.getElementById('instaGrid');
+if(instaGrid){
+  const tileIds = [8, 1, 23, 56, 19, 39];
+  tileIds.forEach(id=>{
+    const item = DATA.find(d=>d.id===id);
+    if(!item) return;
+    const tile = document.createElement('div');
+    tile.className = 'insta-grid-item';
+    tile.innerHTML = SCENES[item.scene];
+    tile.addEventListener('click', ()=> openModal(item));
+    instaGrid.appendChild(tile);
+  });
+}
+
+buildChips();
+buildAreaOptions();
+render();
+
+/* ---------- PICK UP carousel (松プラン想定枠) ----------
+   FEATURED_IDS を編集すれば、回転させる記事を自由に入れ替えられます。
+   将来ここが実際の広告枠になった際は、DATAではなく別途「広告主データ」を
+   差し込む形に拡張してください（editorial contentとPRを明確に分けるため）。
+
+   実装方針：中央寄せの位置計算はブラウザ標準の scroll-snap に任せています
+   （JS側で細かいピクセル計算をしないため、画面サイズが変わっても崩れません）。
+   無限ループは、先頭に最後のカードの複製、末尾に最初のカードの複製を
+   1枚ずつ置いておき、複製に到達したら瞬時に（アニメーションなしで）
+   本物のカードへスクロール位置を戻すことで実現しています。
+*/
+const FEATURED_IDS = [1, 8, 19, 23, 56];
+const featuredItems = FEATURED_IDS.map(id => DATA.find(d => d.id === id)).filter(Boolean);
+const N = featuredItems.length;
+let trackIndex = 1;   // 1..N が本物のカード。0と N+1 は複製カード
+let pickupTimer = null;
+let isJumping = false;
+
+function makeCardEl(item){
+  const card = document.createElement('div');
+  card.className = 'pickup-card';
+  card.innerHTML = `
+    <div class="pickup-card-img">
+      ${SCENES[item.scene]}
+    </div>
+    <div class="pickup-card-body">
+      <div class="pickup-taglist">
+        <span class="pickup-tag" style="background:${CATS[item.cat].bg}">${CATS[item.cat].label}</span>
+        <span class="pickup-area">${item.area}</span>
+      </div>
+      <div class="pickup-card-title serif">${item.title}</div>
+      <div class="pickup-card-dek">${item.dek}</div>
+    </div>`;
+  card.addEventListener('click', ()=> openModal(item));
+  return card;
+}
+
+function buildPickupTrack(){
+  const track = document.getElementById('pickupTrack');
+  const dots = document.getElementById('pickupDots');
+  const sequence = [featuredItems[N-1], ...featuredItems, featuredItems[0]]; // 複製を前後に追加
+  sequence.forEach(item => track.appendChild(makeCardEl(item)));
+
+  featuredItems.forEach((item, i)=>{
+    const dot = document.createElement('div');
+    dot.className = 'pickup-dot' + (i===0 ? ' active' : '');
+    dot.addEventListener('click', ()=>{ goToReal(i); restartPickupTimer(); });
+    dots.appendChild(dot);
+  });
+}
+
+function updateActiveStates(){
+  const track = document.getElementById('pickupTrack');
+  const cards = [...track.children];
+  cards.forEach((c,i)=> c.classList.toggle('active', i===trackIndex));
+  const realIndex = ((trackIndex - 1) + N) % N;
+  [...document.getElementById('pickupDots').children].forEach((d,i)=> d.classList.toggle('active', i===realIndex));
+}
+
+function scrollToTrack(behavior){
+  const viewport = document.getElementById('pickupViewport');
+  const track = document.getElementById('pickupTrack');
+  const card = track.children[trackIndex];
+  if(!card || !viewport) return;
+  /* card.scrollIntoView() はページ全体のスクロールまで巻き込んでしまうため使わず、
+     カルーセルの横スクロールだけを直接動かす（縦方向のページスクロールには一切触れない） */
+  const target = card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2;
+  viewport.scrollTo({ left: target, behavior });
+}
+
+function goTo(newTrackIndex, animate){
+  trackIndex = newTrackIndex;
+  updateActiveStates();
+  scrollToTrack(animate ? 'smooth' : 'auto');
+  if(trackIndex === N+1 || trackIndex === 0){
+    isJumping = true;
+    setTimeout(()=>{
+      trackIndex = trackIndex === N+1 ? 1 : N;
+      updateActiveStates();
+      scrollToTrack('auto');
+      isJumping = false;
+    }, animate ? 420 : 0);
+  }
+}
+
+function advance(dir){
+  if(isJumping) return;
+  goTo(trackIndex + dir, true);
+}
+
+function goToReal(realIndex){
+  isJumping = false;
+  clearInterval(pickupTimer);
+  goTo(realIndex + 1, true);
+}
+
+function restartPickupTimer(){
+  clearInterval(pickupTimer);
+  pickupTimer = setInterval(()=> advance(1), 3000);
+}
+
+if(N){
+  buildPickupTrack();
+  updateActiveStates();
+  requestAnimationFrame(()=> scrollToTrack('auto'));
+  window.addEventListener('load', ()=> scrollToTrack('auto'));
+  restartPickupTimer();
+  document.getElementById('pickupPrev').addEventListener('click', ()=>{ advance(-1); restartPickupTimer(); });
+  document.getElementById('pickupNext').addEventListener('click', ()=>{ advance(1); restartPickupTimer(); });
+  const pickupViewportEl = document.getElementById('pickupViewport');
+  pickupViewportEl.addEventListener('mouseenter', ()=> clearInterval(pickupTimer));
+  pickupViewportEl.addEventListener('mouseleave', ()=> restartPickupTimer());
+  window.addEventListener('resize', ()=> scrollToTrack('auto'));
+  window.addEventListener('orientationchange', ()=> setTimeout(()=> scrollToTrack('auto'), 200));
+}
+
+/* ページ読み込み時、URLが記事の共有リンク（#article-N）になっていれば該当記事を自動で開く */
+handleLocationHash();
+</script>
+
+
+</body>
+</html>
