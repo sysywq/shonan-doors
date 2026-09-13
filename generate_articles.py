@@ -33,6 +33,48 @@ SCENES = [
     "mansion", "festival", "portrait", "marina", "cinema", "street",
 ]
 
+ARTICLE_TOOL = {
+    "name": "submit_articles",
+    "description": "調査・執筆が完了した記事3件を提出する。",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "articles": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "cat": {"type": "string", "description": "t|b|g|p|c|e|l のいずれか1文字"},
+                        "area": {"type": "string", "description": "|".join(AREAS) + " のいずれか"},
+                        "scene": {"type": "string", "description": "|".join(SCENES) + " のいずれか"},
+                        "title": {"type": "string"},
+                        "dek": {"type": "string"},
+                        "body": {"type": "string"},
+                        "tags": {"type": "array", "items": {"type": "string"}},
+                        "link": {"type": "string", "description": "一次情報源のURL。見つからなければ空文字"},
+                        "address": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
+                        "access": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
+                        "hours": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
+                        "closedDays": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
+                        "instagram": {"type": "string", "description": "公式InstagramのURL。無ければ空文字"},
+                        "facebook": {"type": "string", "description": "公式FacebookのURL。無ければ空文字"},
+                        "x": {"type": "string", "description": "公式XのURL。無ければ空文字"},
+                        "tiktok": {"type": "string", "description": "公式TikTokのURL。無ければ空文字"},
+                    },
+                    "required": [
+                        "cat", "area", "scene", "title", "dek", "body", "tags", "link",
+                        "address", "access", "hours", "closedDays",
+                        "instagram", "facebook", "x", "tiktok",
+                    ],
+                },
+            },
+        },
+        "required": ["articles"],
+    },
+}
+
 SYSTEM_PROMPT = f"""あなたは地域メディア「湘南Doors」の編集者です。
 対象エリアは次の8つに限定してください: {", ".join(AREAS)}
 カテゴリは次のいずれかを使ってください: {json.dumps(CATS, ensure_ascii=False)}
@@ -54,38 +96,15 @@ SNSアカウント等の具体的な情報は、必ずその一次情報源（�
 
 【店舗・企業を紹介する記事の場合】
 カテゴリが b（企業・店舗）または g（グルメ）の記事では、上記の一次情報源から
-以下も確認して含めてください（確認できない項目は空文字で構いません）：
-- address: 住所
-- access: アクセス方法（例：「JR茅ヶ崎駅から徒歩5分」）
-- hours: 営業時間
-- closedDays: 定休日
-- instagram / facebook / x / tiktok: それぞれの公式SNSのURL（無ければ空文字）
+住所・アクセス方法・営業時間・定休日・公式SNS（Instagram/Facebook/X/TikTok）も
+確認して含めてください（確認できない項目は空文字で構いません）。
 それ以外のカテゴリ（観光・人・文化・イベント・暮らし）では、これらは空文字で構いません。
 
-3件それぞれについて、以下の厳密なJSON形式の配列で出力してください。
-出力はJSON以外の文字を一切含めないこと。
+本文(body)は4段落程度・合計1000文字以上とし、段落の区切りは\\n\\nで表現してください。
+事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。
+他サイトの文章の丸写しは禁止、必ず自分の言葉で書き直すこと。
 
-[
-  {{
-    "cat": "t|b|g|p|c|e|l のいずれか1文字",
-    "area": "上記8エリアのいずれか",
-    "scene": "{'|'.join(SCENES)} のいずれか",
-    "title": "記事タイトル（40文字前後）",
-    "dek": "1行の要約（40〜60文字）",
-    "body": "4段落程度、合計1000文字以上の本文。段落の区切りは\\n\\nで表現。事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。他サイトの文章の丸写しは禁止、必ず自分の言葉で書き直すこと。",
-    "tags": ["タグ1","タグ2","タグ3"],
-    "link": "一次情報源のURL（見つからなければ空文字""）",
-    "address": "住所（b/gカテゴリのみ。確認できなければ空文字）",
-    "access": "アクセス方法（b/gカテゴリのみ。確認できなければ空文字）",
-    "hours": "営業時間（b/gカテゴリのみ。確認できなければ空文字）",
-    "closedDays": "定休日（b/gカテゴリのみ。確認できなければ空文字）",
-    "instagram": "公式InstagramのURL（無ければ空文字）",
-    "facebook": "公式FacebookのURL（無ければ空文字）",
-    "x": "公式XのURL（無ければ空文字）",
-    "tiktok": "公式TikTokのURL（無ければ空文字）"
-  }},
-  ...
-]
+調査・執筆が終わったら、必ず submit_articles ツールを使って3件まとめて提出してください。
 """
 
 def call_claude():
@@ -93,43 +112,48 @@ def call_claude():
 
     messages = [{
         "role": "user",
-        "content": "本日分の3記事を、直近2週間以内のニュースまたは今後のイベント情報から作成してください。出力は指定のJSON配列のみとし、それ以外の文章（挨拶・説明・前置き）は一切含めないでください。",
+        "content": "本日分の3記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。",
     }]
+    tools = [
+        {"type": "web_search_20250305", "name": "web_search"},
+        ARTICLE_TOOL,
+    ]
 
-    # Web検索ツールを使うと複数ターンに分かれることがあるため、
-    # stop_reasonがend_turnになるまでツール結果を返しながら会話を継続する
-    response = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=8000,
-        system=SYSTEM_PROMPT,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        messages=messages,
-    )
-
-    # 最終的なテキスト全体（複数のtextブロックがあれば連結）を集める
-    all_text = "\n".join(b.text for b in response.content if b.type == "text").strip()
-
-    if not all_text:
-        raise RuntimeError(
-            "Claudeからのテキスト応答が空でした。response.content="
-            + repr(response.content)
+    # submit_articlesが呼ばれるまで、最大10ターンやり取りを続ける
+    # （Web検索を挟むと複数ターンに分かれることがあるため）
+    for _ in range(10):
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=8000,
+            system=SYSTEM_PROMPT,
+            tools=tools,
+            messages=messages,
         )
 
-    # ```json ... ``` で囲まれている場合は中身だけ取り出す
-    fence_match = re.search(r"```(?:json)?\s*(\[.*?\])\s*```", all_text, re.DOTALL)
-    if fence_match:
-        raw = fence_match.group(1)
-    else:
-        # フェンスがない場合は、最初の '[' から対応する最後の ']' までを抜き出す
-        start = all_text.find("[")
-        end = all_text.rfind("]")
-        if start == -1 or end == -1 or end <= start:
-            print("---- Claudeからの生の応答（デバッグ用）----", file=sys.stderr)
-            print(all_text, file=sys.stderr)
-            print("--------------------------------------------", file=sys.stderr)
-            raise RuntimeError("応答内にJSON配列（[...]）が見つかりませんでした。上のログを確認してください。")
-        raw = all_text[start:end + 1]
+        for block in response.content:
+            if block.type == "tool_use" and block.name == "submit_articles":
+                # 構造化ツール呼び出しなので、ここで得られる中身は
+                # 既にAnthropic API側でJSONスキーマとして検証済み。
+                # 文字列パースの失敗が起こりようがない。
+                return block.input["articles"]
 
+        if response.stop_reason != "tool_use":
+            raise RuntimeError(
+                "submit_articlesが呼ばれないまま終了しました。stop_reason="
+                + str(response.stop_reason)
+                + " content=" + repr(response.content)
+            )
+
+        # web_search等、submit_articles以外のツール呼び出しがあった場合は
+        # そのままAPI側で処理済みの内容が response.content に含まれているので、
+        # それを会話履歴に積んで次のターンへ継続する
+        messages.append({"role": "assistant", "content": response.content})
+        messages.append({
+            "role": "user",
+            "content": "続けて調査を進め、準備ができ次第submit_articlesツールで提出してください。",
+        })
+
+    raise RuntimeError("10ターン以内にsubmit_articlesが呼ばれませんでした。")
     try:
         return json.loads(raw)
     except json.JSONDecodeError as e:
