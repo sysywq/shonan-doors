@@ -993,7 +993,7 @@ function openModal(item, pushState = true, source = 'organic_grid'){
       </div>` : ''}
       ${item.address ? `<iframe class="modal-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(item.address)}&output=embed"></iframe>` : ''}
       ${item.video ? `<div class="modal-video"><iframe src="https://www.youtube.com/embed/${item.video}" allowfullscreen></iframe></div>` : ''}
-      ${item.link ? `<a class="modal-linkbtn" href="${item.link}" target="_blank" rel="noopener">参照 ↗</a>` : ''}
+      ${item.link ? `<a class="modal-linkbtn" href="${item.link}" target="_blank" rel="noopener">さらに詳しい情報を見る ↗</a>` : ''}
       <div class="modal-tags">${item.tags.map(t=>`<span class="tag-pill">#${t}</span>`).join('')}</div>
       ${item.estateLink ? `
       <div class="related-estate">
