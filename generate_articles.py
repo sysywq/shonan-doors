@@ -39,8 +39,28 @@ SYSTEM_PROMPT = f"""あなたは地域メディア「湘南Doors」の編集者�
 
 Web検索を使って、直近2週間以内に実際にあった湘南エリアのニュース、または
 これから開催が確定している実在のイベント情報を3件調べてください。
-架空の情報は絶対に作らないこと。日付や場所は必ず一次情報（公式サイト等）で
-裏を取ること。
+架空の情報は絶対に作らないこと。
+
+【情報源・データの出典について（必須・例外なし）】
+タウンニュースや号外NETのような二次的なまとめメディアの記事は、ネタを見つける
+きっかけとして使うのは構いませんが、記事に実際に書く日付・住所・営業時間・
+SNSアカウント等の具体的な情報は、必ずその一次情報源（該当する店舗・団体・
+自治体の公式サイト、または公式SNSアカウント本体）まで辿って確認してから
+書いてください。二次メディアに書かれている内容をそのまま転記することは
+禁止します。一次情報源にたどり着けなかった項目は、無理に埋めず空文字("")に
+してください。
+"link"には、必ずその一次情報源のURLを入れてください（二次メディアのURLを
+入れることは禁止します。一次情報源が見つからない場合は空文字にしてください）。
+
+【店舗・企業を紹介する記事の場合】
+カテゴリが b（企業・店舗）または g（グルメ）の記事では、上記の一次情報源から
+以下も確認して含めてください（確認できない項目は空文字で構いません）：
+- address: 住所
+- access: アクセス方法（例：「JR茅ヶ崎駅から徒歩5分」）
+- hours: 営業時間
+- closedDays: 定休日
+- instagram / facebook / x / tiktok: それぞれの公式SNSのURL（無ければ空文字）
+それ以外のカテゴリ（観光・人・文化・イベント・暮らし）では、これらは空文字で構いません。
 
 3件それぞれについて、以下の厳密なJSON形式の配列で出力してください。
 出力はJSON以外の文字を一切含めないこと。
@@ -53,7 +73,16 @@ Web検索を使って、直近2週間以内に実際にあった湘南エリア�
     "title": "記事タイトル（40文字前後）",
     "dek": "1行の要約（40〜60文字）",
     "body": "4段落程度、合計1000文字以上の本文。段落の区切りは\\n\\nで表現。事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。他サイトの文章の丸写しは禁止、必ず自分の言葉で書き直すこと。",
-    "tags": ["タグ1","タグ2","タグ3"]
+    "tags": ["タグ1","タグ2","タグ3"],
+    "link": "一次情報源のURL（見つからなければ空文字""）",
+    "address": "住所（b/gカテゴリのみ。確認できなければ空文字）",
+    "access": "アクセス方法（b/gカテゴリのみ。確認できなければ空文字）",
+    "hours": "営業時間（b/gカテゴリのみ。確認できなければ空文字）",
+    "closedDays": "定休日（b/gカテゴリのみ。確認できなければ空文字）",
+    "instagram": "公式InstagramのURL（無ければ空文字）",
+    "facebook": "公式FacebookのURL（無ければ空文字）",
+    "x": "公式XのURL（無ければ空文字）",
+    "tiktok": "公式TikTokのURL（無ければ空文字）"
   }},
   ...
 ]
@@ -114,14 +143,27 @@ def js_escape(s: str) -> str:
 
 def build_entry(item: dict, new_id: int, date_str: str) -> str:
     tags = ",".join(f"'{js_escape(t)}'" for t in item["tags"])
+    link = js_escape(item.get("link") or "")
+    address = js_escape(item.get("address") or "")
+    access = js_escape(item.get("access") or "")
+    hours = js_escape(item.get("hours") or "")
+    closed_days = js_escape(item.get("closedDays") or "")
+    instagram = js_escape(item.get("instagram") or "")
+    facebook = js_escape(item.get("facebook") or "")
+    x_link = js_escape(item.get("x") or "")
+    tiktok = js_escape(item.get("tiktok") or "")
     return (
         "{id:%d,cat:'%s',area:'%s',scene:'%s',title:'%s',dek:'%s',\n"
-        "link:'',\ndate:'%s',\n"
+        "link:'%s',\ndate:'%s',\n"
+        "address:'%s',\naccess:'%s',\nhours:'%s',\nclosedDays:'%s',\n"
+        "snsLinks:{instagram:'%s',facebook:'%s',x:'%s',tiktok:'%s'},\n"
         "body:'%s',\n"
         "tags:[%s]}"
     ) % (
         new_id, item["cat"], item["area"], item["scene"],
-        js_escape(item["title"]), js_escape(item["dek"]), date_str,
+        js_escape(item["title"]), js_escape(item["dek"]), link, date_str,
+        address, access, hours, closed_days,
+        instagram, facebook, x_link, tiktok,
         js_escape(item["body"]), tags,
     )
 
