@@ -830,7 +830,7 @@ function render(){
           <span class="area-tag">${item.area}</span>
         </div>
       </div>`;
-    card.addEventListener('click', ()=>openModal(item));
+    card.addEventListener('click', ()=>openModal(item, true, 'organic_grid'));
     grid.appendChild(card);
   });
 }
@@ -894,7 +894,17 @@ document.getElementById('footPrivacy').addEventListener('click', (e)=>{ e.preven
 document.getElementById('footContact').addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal('contact'); });
 document.getElementById('footOperator').addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal('operator'); });
 
-function openModal(item, pushState = true){
+/* ---------- 広告枠（PICK UPカルーセル）と通常記事欄を分けて計測するための共通関数 ----------
+   GA4の「イベント」として送信されます。GA4管理画面の「カスタム定義」で
+   article_id / article_title / slot をカスタムディメンションとして登録すると、
+   探索レポートで「広告枠経由のクリック数」等を集計できるようになります。 */
+function trackEvent(name, params){
+  if (typeof gtag === 'function') {
+    gtag('event', name, params);
+  }
+}
+
+function openModal(item, pushState = true, source = 'organic_grid'){
   modal.innerHTML = `
     <div class="modal-art">
       ${SCENES[item.scene]}
@@ -929,6 +939,8 @@ function openModal(item, pushState = true){
   if (typeof gtag === 'function') {
     gtag('event', 'page_view', { page_title: document.title, page_location: location.href });
   }
+  /* 広告枠（pickup_carousel）か通常欄（organic_grid）かを区別してクリックを計測 */
+  trackEvent('article_click', { article_id: item.id, article_title: item.title, slot: source });
 }
 function closeModal(pushState = true){
   overlay.classList.remove('open');
@@ -947,7 +959,7 @@ function handleLocationHash(){
   const match = location.hash.match(/^#article-(\d+)$/);
   if (match) {
     const item = DATA.find(d => d.id === parseInt(match[1], 10));
-    if (item) { openModal(item, false); return; }
+    if (item) { openModal(item, false, 'direct_link'); return; }
   }
   if (overlay.classList.contains('open')) closeModal(false);
 }
@@ -992,7 +1004,7 @@ if(instaGrid){
     const tile = document.createElement('div');
     tile.className = 'insta-grid-item';
     tile.innerHTML = SCENES[item.scene];
-    tile.addEventListener('click', ()=> openModal(item));
+    tile.addEventListener('click', ()=> openModal(item, true, 'instagram_grid'));
     instaGrid.appendChild(tile);
   });
 }
@@ -1034,7 +1046,7 @@ function makeCardEl(item){
       <div class="pickup-card-title serif">${item.title}</div>
       <div class="pickup-card-dek">${item.dek}</div>
     </div>`;
-  card.addEventListener('click', ()=> openModal(item));
+  card.addEventListener('click', ()=> openModal(item, true, 'pickup_carousel'));
   return card;
 }
 
@@ -1052,12 +1064,22 @@ function buildPickupTrack(){
   });
 }
 
+let lastImpressionRealIndex = -1;
 function updateActiveStates(){
   const track = document.getElementById('pickupTrack');
   const cards = [...track.children];
   cards.forEach((c,i)=> c.classList.toggle('active', i===trackIndex));
   const realIndex = ((trackIndex - 1) + N) % N;
   [...document.getElementById('pickupDots').children].forEach((d,i)=> d.classList.toggle('active', i===realIndex));
+  /* 広告枠（PICK UP）に実際に表示された回数（インプレッション）を計測。
+     同じ記事が連続して表示され続けている間は重複カウントしない */
+  if (realIndex !== lastImpressionRealIndex) {
+    lastImpressionRealIndex = realIndex;
+    const shownItem = featuredItems[realIndex];
+    if (shownItem) {
+      trackEvent('pickup_impression', { article_id: shownItem.id, article_title: shownItem.title });
+    }
+  }
 }
 
 function scrollToTrack(behavior){
