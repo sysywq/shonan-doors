@@ -209,6 +209,11 @@
     padding:9px 18px; border-radius:3px; text-decoration:none; letter-spacing:.03em;
   }
   .modal-linkbtn:hover{background:var(--trust-deep);}
+  .modal-infobox{background:var(--bg-deep); border-radius:4px; padding:16px 18px; margin-bottom:20px;}
+  .modal-info-row{display:flex; gap:10px; font-size:13px; line-height:1.7; color:var(--ink); margin-bottom:6px;}
+  .modal-info-row:last-child{margin-bottom:0;}
+  .modal-info-label{flex-shrink:0; width:64px; font-size:11px; color:var(--ink-faint); font-weight:700; letter-spacing:.04em; padding-top:2px;}
+  .modal-info-row a{color:var(--trust); text-decoration:underline;}
   .modal-video{position:relative; width:100%; padding-top:56.25%; margin-top:20px; background:#000; border-radius:3px; overflow:hidden;}
   .modal-video iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
 
@@ -931,9 +936,15 @@ function openModal(item, pushState = true, source = 'organic_grid'){
       <div class="modal-eyebrow">${CATS[item.cat].label}<span style="color:var(--ink-faint); font-weight:400;">／ ${item.area}</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">${formatDate(item.date)}</span></div>
       <div class="modal-title serif">${item.title}</div>
       <div class="modal-dek">${item.dek}</div>
+      ${(item.address || item.hours || item.sns) ? `
+      <div class="modal-infobox">
+        ${item.address ? `<div class="modal-info-row"><span class="modal-info-label">住所</span><span>${item.address}</span></div>` : ''}
+        ${item.hours ? `<div class="modal-info-row"><span class="modal-info-label">営業時間</span><span>${item.hours}</span></div>` : ''}
+        ${item.sns ? `<div class="modal-info-row"><span class="modal-info-label">SNS</span><a href="${item.sns}" target="_blank" rel="noopener">Instagramを見る ↗</a></div>` : ''}
+      </div>` : ''}
       <div class="modal-text">${item.body}</div>
       ${item.video ? `<div class="modal-video"><iframe src="https://www.youtube.com/embed/${item.video}" allowfullscreen></iframe></div>` : ''}
-      ${item.link ? `<a class="modal-linkbtn" href="${item.link}" target="_blank" rel="noopener">公式サイトを見る ↗</a>` : ''}
+      ${item.link ? `<a class="modal-linkbtn" href="${item.link}" target="_blank" rel="noopener">情報の元サイトを見る ↗</a>` : ''}
       <div class="modal-tags">${item.tags.map(t=>`<span class="tag-pill">#${t}</span>`).join('')}</div>
       ${item.estateLink ? `
       <div class="related-estate">
