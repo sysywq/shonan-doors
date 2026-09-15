@@ -29,7 +29,9 @@
       "夏",
       "湘南"
     ],
-    "slug": "fujisawa-event-0077"
+    "slug": "fujisawa-event-0077",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 78,
@@ -61,7 +63,9 @@
       "商業施設",
       "カインズ"
     ],
-    "slug": "kamakura-life-0078"
+    "slug": "kamakura-life-0078",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 79,
@@ -93,7 +97,9 @@
       "イベント",
       "湘南"
     ],
-    "slug": "fujisawa-event-0079"
+    "slug": "fujisawa-event-0079",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 68,
@@ -120,7 +126,9 @@
       "瀧本幹也",
       "写真展"
     ],
-    "slug": "chigasaki-culture-0068"
+    "slug": "chigasaki-culture-0068",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 69,
@@ -147,7 +155,9 @@
       "旧相模川橋脚",
       "古相模川"
     ],
-    "slug": "chigasaki-culture-0069"
+    "slug": "chigasaki-culture-0069",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 70,
@@ -174,7 +184,9 @@
       "彼岸花",
       "秋の湘南"
     ],
-    "slug": "fujisawa-event-0070"
+    "slug": "fujisawa-event-0070",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 71,
@@ -205,7 +217,9 @@
       "神事",
       "秋のイベント"
     ],
-    "slug": "kamakura-event-0071"
+    "slug": "kamakura-event-0071",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 72,
@@ -236,7 +250,9 @@
       "秋の展覧会",
       "茅ヶ崎"
     ],
-    "slug": "chigasaki-culture-0072"
+    "slug": "chigasaki-culture-0072",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 73,
@@ -267,7 +283,9 @@
       "湘南の夏秋",
       "インスタ映え"
     ],
-    "slug": "fujisawa-event-0073"
+    "slug": "fujisawa-event-0073",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 74,
@@ -301,7 +319,9 @@
       "ほうじ茶",
       "ミスターマックス"
     ],
-    "slug": "fujisawa-gourmet-0074"
+    "slug": "fujisawa-gourmet-0074",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 75,
@@ -333,7 +353,9 @@
       "豚骨醤油",
       "湘南グルメ"
     ],
-    "slug": "chigasaki-gourmet-0075"
+    "slug": "chigasaki-gourmet-0075",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 76,
@@ -367,7 +389,9 @@
       "花",
       "地域イベント"
     ],
-    "slug": "fujisawa-event-0076"
+    "slug": "fujisawa-event-0076",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 65,
@@ -384,7 +408,9 @@
       "辻堂",
       "新店オープン"
     ],
-    "slug": "fujisawa-gourmet-0065"
+    "slug": "fujisawa-gourmet-0065",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 66,
@@ -401,7 +427,9 @@
       "餃子",
       "茅ヶ崎駅南口"
     ],
-    "slug": "chigasaki-gourmet-0066"
+    "slug": "chigasaki-gourmet-0066",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 67,
@@ -418,7 +446,9 @@
       "旧相模川橋脚",
       "無料展示"
     ],
-    "slug": "chigasaki-culture-0067"
+    "slug": "chigasaki-culture-0067",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 62,
@@ -435,7 +465,9 @@
       "例大祭",
       "鎌倉"
     ],
-    "slug": "kamakura-event-0062"
+    "slug": "kamakura-event-0062",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 63,
@@ -452,7 +484,9 @@
       "片瀬海岸",
       "夏イベント"
     ],
-    "slug": "fujisawa-tourism-0063"
+    "slug": "fujisawa-tourism-0063",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 64,
@@ -469,7 +503,9 @@
       "大磯",
       "マラソン大会"
     ],
-    "slug": "oiso-event-0064"
+    "slug": "oiso-event-0064",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 50,
@@ -485,7 +521,9 @@
       "茅ヶ崎市美術館",
       "高砂緑地"
     ],
-    "slug": "chigasaki-tourism-0050"
+    "slug": "chigasaki-tourism-0050",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 56,
@@ -502,7 +540,9 @@
       "展望台",
       "平塚"
     ],
-    "slug": "hiratsuka-tourism-0056"
+    "slug": "hiratsuka-tourism-0056",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 57,
@@ -518,7 +558,9 @@
       "平塚八幡宮",
       "平塚"
     ],
-    "slug": "hiratsuka-tourism-0057"
+    "slug": "hiratsuka-tourism-0057",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 58,
@@ -535,7 +577,9 @@
       "暮らし",
       "湘南のまんなか"
     ],
-    "slug": "hiratsuka-life-0058"
+    "slug": "hiratsuka-life-0058",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 53,
@@ -552,7 +596,9 @@
       "高徳院",
       "国宝"
     ],
-    "slug": "kamakura-tourism-0053"
+    "slug": "kamakura-tourism-0053",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 54,
@@ -569,7 +615,9 @@
       "鎌倉五山",
       "禅"
     ],
-    "slug": "kamakura-tourism-0054"
+    "slug": "kamakura-tourism-0054",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 55,
@@ -586,7 +634,9 @@
       "竹の庭",
       "鎌倉"
     ],
-    "slug": "kamakura-tourism-0055"
+    "slug": "kamakura-tourism-0055",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 51,
@@ -603,7 +653,9 @@
       "川上貞奴",
       "高砂緑地"
     ],
-    "slug": "chigasaki-people-0051"
+    "slug": "chigasaki-people-0051",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 52,
@@ -619,7 +671,9 @@
       "茅ヶ崎市博物館",
       "旧和田家住宅"
     ],
-    "slug": "chigasaki-tourism-0052"
+    "slug": "chigasaki-tourism-0052",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 47,
@@ -636,7 +690,9 @@
       "時宗",
       "藤沢"
     ],
-    "slug": "fujisawa-tourism-0047"
+    "slug": "fujisawa-tourism-0047",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 48,
@@ -653,7 +709,9 @@
       "海水浴場",
       "サーフィン"
     ],
-    "slug": "fujisawa-tourism-0048"
+    "slug": "fujisawa-tourism-0048",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 49,
@@ -670,7 +728,9 @@
       "東海道",
       "歴史"
     ],
-    "slug": "fujisawa-culture-0049"
+    "slug": "fujisawa-culture-0049",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 44,
@@ -687,7 +747,9 @@
       "葉山",
       "歴史人物"
     ],
-    "slug": "hayama-people-0044"
+    "slug": "hayama-people-0044",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 45,
@@ -704,7 +766,9 @@
       "暮らし",
       "別荘地"
     ],
-    "slug": "zushi-life-0045"
+    "slug": "zushi-life-0045",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 46,
@@ -721,7 +785,9 @@
       "逗子",
       "カフェ"
     ],
-    "slug": "zushi-business-0046"
+    "slug": "zushi-business-0046",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 41,
@@ -738,7 +804,9 @@
       "葉山",
       "森戸神社"
     ],
-    "slug": "hayama-tourism-0041"
+    "slug": "hayama-tourism-0041",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 42,
@@ -755,7 +823,9 @@
       "ヨット",
       "葉山"
     ],
-    "slug": "hayama-culture-0042"
+    "slug": "hayama-culture-0042",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 43,
@@ -772,7 +842,9 @@
       "ベルツ博士",
       "葉山"
     ],
-    "slug": "hayama-culture-0043"
+    "slug": "hayama-culture-0043",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 38,
@@ -789,7 +861,9 @@
       "大磯",
       "歴史建築"
     ],
-    "slug": "oiso-tourism-0038"
+    "slug": "oiso-tourism-0038",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 40,
@@ -805,7 +879,9 @@
       "逗子海岸花火大会",
       "逗子"
     ],
-    "slug": "zushi-event-0040"
+    "slug": "zushi-event-0040",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 35,
@@ -823,7 +899,9 @@
       "移住",
       "田舎暮らし"
     ],
-    "slug": "ninomiya-life-0035"
+    "slug": "ninomiya-life-0035",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 36,
@@ -839,7 +917,9 @@
       "江ノ電",
       "暮らし"
     ],
-    "slug": "kamakura-life-0036"
+    "slug": "kamakura-life-0036",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 32,
@@ -855,7 +935,9 @@
       "落花生",
       "歴史人物"
     ],
-    "slug": "ninomiya-people-0032"
+    "slug": "ninomiya-people-0032",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 33,
@@ -873,7 +955,9 @@
       "暮らし",
       "移住"
     ],
-    "slug": "fujisawa-life-0033"
+    "slug": "fujisawa-life-0033",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 34,
@@ -891,7 +975,9 @@
       "暮らし",
       "別荘地"
     ],
-    "slug": "oiso-life-0034"
+    "slug": "oiso-life-0034",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 29,
@@ -907,7 +993,9 @@
       "桑田佳祐",
       "茅ヶ崎"
     ],
-    "slug": "chigasaki-people-0029"
+    "slug": "chigasaki-people-0029",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 30,
@@ -924,7 +1012,9 @@
       "江の島",
       "歴史人物"
     ],
-    "slug": "fujisawa-people-0030"
+    "slug": "fujisawa-people-0030",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 31,
@@ -941,7 +1031,9 @@
       "大磯",
       "歴史人物"
     ],
-    "slug": "oiso-people-0031"
+    "slug": "oiso-people-0031",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 26,
@@ -957,7 +1049,9 @@
       "茅ヶ崎ライブ",
       "サザンオールスターズ"
     ],
-    "slug": "chigasaki-event-0026"
+    "slug": "chigasaki-event-0026",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 27,
@@ -974,7 +1068,9 @@
       "正月行事",
       "伝統"
     ],
-    "slug": "oiso-event-0027"
+    "slug": "oiso-event-0027",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 39,
@@ -991,7 +1087,9 @@
       "逗子",
       "野外イベント"
     ],
-    "slug": "zushi-event-0039"
+    "slug": "zushi-event-0039",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 23,
@@ -1008,7 +1106,9 @@
       "平塚",
       "夏祭り"
     ],
-    "slug": "hiratsuka-event-0023"
+    "slug": "hiratsuka-event-0023",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 24,
@@ -1024,7 +1124,9 @@
       "花火大会",
       "平塚"
     ],
-    "slug": "hiratsuka-event-0024"
+    "slug": "hiratsuka-event-0024",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 25,
@@ -1040,7 +1142,9 @@
       "江の島",
       "フラワーフェスタ"
     ],
-    "slug": "fujisawa-event-0025"
+    "slug": "fujisawa-event-0025",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 37,
@@ -1056,7 +1160,9 @@
       "新江ノ島水族館",
       "江の島"
     ],
-    "slug": "fujisawa-tourism-0037"
+    "slug": "fujisawa-tourism-0037",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 20,
@@ -1073,7 +1179,9 @@
       "大磯",
       "歴史"
     ],
-    "slug": "oiso-culture-0020"
+    "slug": "oiso-culture-0020",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 21,
@@ -1089,7 +1197,9 @@
       "しらす丼",
       "食文化"
     ],
-    "slug": "kamakura-gourmet-0021"
+    "slug": "kamakura-gourmet-0021",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 22,
@@ -1106,7 +1216,9 @@
       "別荘地",
       "歴史"
     ],
-    "slug": "oiso-culture-0022"
+    "slug": "oiso-culture-0022",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 17,
@@ -1122,7 +1234,9 @@
       "湘南",
       "地名の由来"
     ],
-    "slug": "oiso-culture-0017"
+    "slug": "oiso-culture-0017",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 19,
@@ -1139,7 +1253,9 @@
       "サザンオールスターズ",
       "茅ヶ崎"
     ],
-    "slug": "chigasaki-culture-0019"
+    "slug": "chigasaki-culture-0019",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 14,
@@ -1155,7 +1271,9 @@
       "レンバイ",
       "鎌倉野菜"
     ],
-    "slug": "kamakura-gourmet-0014"
+    "slug": "kamakura-gourmet-0014",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 15,
@@ -1172,7 +1290,9 @@
       "落花生",
       "専門店"
     ],
-    "slug": "ninomiya-gourmet-0015"
+    "slug": "ninomiya-gourmet-0015",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 16,
@@ -1189,7 +1309,9 @@
       "二宮",
       "オリーブ"
     ],
-    "slug": "ninomiya-gourmet-0016"
+    "slug": "ninomiya-gourmet-0016",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 11,
@@ -1206,7 +1328,9 @@
       "蔦屋書店",
       "辻堂"
     ],
-    "slug": "fujisawa-business-0011"
+    "slug": "fujisawa-business-0011",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 12,
@@ -1223,7 +1347,9 @@
       "辻堂",
       "商業施設"
     ],
-    "slug": "fujisawa-business-0012"
+    "slug": "fujisawa-business-0012",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 13,
@@ -1240,7 +1366,9 @@
       "しらす",
       "鎌倉"
     ],
-    "slug": "kamakura-gourmet-0013"
+    "slug": "kamakura-gourmet-0013",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 28,
@@ -1257,7 +1385,9 @@
       "熊澤酒造",
       "経営者"
     ],
-    "slug": "chigasaki-people-0028"
+    "slug": "chigasaki-people-0028",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 9,
@@ -1274,7 +1404,9 @@
       "サーフィン",
       "老舗"
     ],
-    "slug": "fujisawa-business-0009"
+    "slug": "fujisawa-business-0009",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 10,
@@ -1291,7 +1423,9 @@
       "精肉店",
       "老舗"
     ],
-    "slug": "fujisawa-gourmet-0010"
+    "slug": "fujisawa-gourmet-0010",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 5,
@@ -1308,7 +1442,9 @@
       "江ノ電",
       "観光課題"
     ],
-    "slug": "kamakura-tourism-0005"
+    "slug": "kamakura-tourism-0005",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 7,
@@ -1324,7 +1460,9 @@
       "小町通り",
       "鶴岡八幡宮"
     ],
-    "slug": "kamakura-tourism-0007"
+    "slug": "kamakura-tourism-0007",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 18,
@@ -1341,7 +1479,9 @@
       "平塚",
       "Jリーグ"
     ],
-    "slug": "hiratsuka-culture-0018"
+    "slug": "hiratsuka-culture-0018",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 2,
@@ -1358,7 +1498,9 @@
       "庭園",
       "歴史"
     ],
-    "slug": "fujisawa-tourism-0002"
+    "slug": "fujisawa-tourism-0002",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 3,
@@ -1375,7 +1517,9 @@
       "公園",
       "海水浴"
     ],
-    "slug": "fujisawa-tourism-0003"
+    "slug": "fujisawa-tourism-0003",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 4,
@@ -1392,7 +1536,9 @@
       "海水浴場",
       "歴史"
     ],
-    "slug": "oiso-tourism-0004"
+    "slug": "oiso-tourism-0004",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 6,
@@ -1408,7 +1554,9 @@
       "湘南モノレール",
       "鉄道"
     ],
-    "slug": "fujisawa-tourism-0006"
+    "slug": "fujisawa-tourism-0006",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 8,
@@ -1425,7 +1573,9 @@
       "湘南ビール",
       "茅ヶ崎"
     ],
-    "slug": "chigasaki-gourmet-0008"
+    "slug": "chigasaki-gourmet-0008",
+    "eventStartDate": "",
+    "eventEndDate": ""
   },
   {
     "id": 1,
@@ -1442,6 +1592,8 @@
       "神社",
       "信仰"
     ],
-    "slug": "fujisawa-tourism-0001"
+    "slug": "fujisawa-tourism-0001",
+    "eventStartDate": "",
+    "eventEndDate": ""
   }
 ]

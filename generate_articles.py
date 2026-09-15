@@ -80,6 +80,8 @@ ARTICLE_TOOL = {
                         "body": {"type": "string"},
                         "tags": {"type": "array", "items": {"type": "string"}},
                         "link": {"type": "string", "description": "一次情報源のURL。見つからなければ空文字"},
+                        "eventStartDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 開催日をYYYY-MM-DD形式で。複数日開催の場合は初日。不明な場合は空文字"},
+                        "eventEndDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 複数日開催の場合の最終日をYYYY-MM-DD形式で。単日開催または不明な場合は空文字"},
                         "address": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "access": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "hours": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
@@ -91,6 +93,7 @@ ARTICLE_TOOL = {
                     },
                     "required": [
                         "cat", "area", "scene", "title", "dek", "body", "tags", "link",
+                        "eventStartDate", "eventEndDate",
                         "address", "access", "hours", "closedDays",
                         "instagram", "facebook", "x", "tiktok",
                     ],
@@ -138,6 +141,13 @@ SNSアカウント等の具体的な情報は、必ずその一次情報源（�
 住所・アクセス方法・営業時間・定休日・公式SNS（Instagram/Facebook/X/TikTok）も
 確認して含めてください（確認できない項目は空文字で構いません）。
 それ以外のカテゴリ（観光・人・文化・イベント・暮らし）では、これらは空文字で構いません。
+
+【イベント記事(cat='e')の場合】
+必ず一次情報源から実際の開催日を確認し、eventStartDate(開催初日、YYYY-MM-DD形式)を
+埋めてください。複数日にわたって開催される場合はeventEndDate(最終日)も埋めてください。
+単日開催の場合はeventEndDateは空文字のままで構いません。開催日が確認できない場合のみ、
+eventStartDateを空文字にしてください(この場合、検索結果でのイベント情報表示の対象外に
+なります)。
 
 本文(body)は4段落程度・合計1000文字以上とし、段落の区切りは\\n\\nで表現してください。
 事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。
@@ -244,6 +254,10 @@ def validate_item(item):
         return "bodyが空または短すぎる(200文字未満)"
     if not isinstance(item.get("tags"), list):
         return "tagsが配列でない"
+    for key in ("eventStartDate", "eventEndDate"):
+        val = item.get(key) or ""
+        if val and not re.match(r"^\d{4}-\d{2}-\d{2}$", val):
+            return f"{key}の形式が不正(YYYY-MM-DD形式である必要): {val}"
     return None
 
 
@@ -319,6 +333,8 @@ def main():
             "dek": item["dek"],
             "link": item.get("link") or "",
             "date": today,
+            "eventStartDate": item.get("eventStartDate") or "",
+            "eventEndDate": item.get("eventEndDate") or "",
             "address": item.get("address") or "",
             "access": item.get("access") or "",
             "hours": item.get("hours") or "",
