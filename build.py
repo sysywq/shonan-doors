@@ -38,6 +38,18 @@ CATS = {
     "l": {"label": "暮らし", "bg": "#33424F"},
 }
 AREA_ORDER = ["藤沢", "茅ヶ崎", "鎌倉", "平塚", "大磯", "二宮", "逗子", "葉山"]
+AREA_EN = {
+    "藤沢": "fujisawa", "茅ヶ崎": "chigasaki", "鎌倉": "kamakura", "平塚": "hiratsuka",
+    "大磯": "oiso", "二宮": "ninomiya", "逗子": "zushi", "葉山": "hayama",
+}
+AREA_EN_TO_JA = {v: k for k, v in AREA_EN.items()}
+CAT_EN = {
+    "t": "tourism", "b": "business", "g": "gourmet",
+    "p": "people", "c": "culture", "e": "event", "l": "life",
+}
+CAT_EN_TO_JA = {v: k for k, v in CAT_EN.items()}
+
+HUB_PAGE_SIZE = 24  # 一覧系ページ(トップ/地域/カテゴリ)1ページあたりの表示件数
 
 FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E"
            "%3Ccircle cx='30' cy='30' r='30' fill='%23F4F5F1'/%3E%3Ccircle cx='30' cy='30' r='27' "
@@ -294,7 +306,106 @@ def render_infobox(item):
     return f'<div class="modal-infobox">{"".join(rows)}</div>'
 
 
-def render_article_main(item, scenes):
+# ---------- Phase 3: 関連記事・パンくずリスト ----------
+
+def score_related(item, all_articles):
+    """記事間の関連度をスコアリングする。SEO目的の機械的な羅列ではなく、
+    「同じ地域」「同じカテゴリ」「共通タグ」の重なりを見て、実際に読者が
+    次に読みたくなりそうな記事を優先する設計。"""
+    scored = []
+    item_tags = set(item.get("tags", []))
+    for other in all_articles:
+        if other["id"] == item["id"]:
+            continue
+        score = 0
+        if other["area"] == item["area"]:
+            score += 3
+        if other["cat"] == item["cat"]:
+            score += 2
+        score += len(item_tags & set(other.get("tags", [])))
+        if score > 0:
+            scored.append((score, other["date"], other))
+    # スコア優先、同点は新しい記事を優先
+    scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    return [x[2] for x in scored]
+
+
+def render_related_articles(item, all_articles, scenes, count=5):
+    related = score_related(item, all_articles)[:count]
+    if not related:
+        return ""
+    cards = "\n      ".join(render_related_card(r, scenes) for r in related)
+    return f"""<div class="related-articles">
+      <div class="related-articles-title">この記事に関連する話題</div>
+      <div class="related-articles-grid">
+      {cards}
+      </div>
+    </div>"""
+
+
+def render_related_card(item, scenes):
+    return f"""<a class="related-card" href="/articles/{item['slug']}/">
+          <div class="related-card-art">{scenes[item['scene']]}</div>
+          <div class="related-card-body">
+            <div class="related-card-eyebrow">{esc(CATS[item['cat']]['label'])} ／ {esc(item['area'])}</div>
+            <div class="related-card-title serif">{esc(item['title'])}</div>
+          </div>
+        </a>"""
+
+
+def render_breadcrumb(items):
+    """items: [(label, url_or_None), ...] 最後の要素は現在ページ(リンクなし)を想定。
+    見た目のパンくずHTMLと、BreadcrumbList構造化データの両方を返す。"""
+    parts = []
+    for label, url in items:
+        if url:
+            parts.append(f'<a href="{url}">{esc(label)}</a>')
+        else:
+            parts.append(f'<span aria-current="page">{esc(label)}</span>')
+    html_out = f'<nav class="breadcrumb" aria-label="breadcrumb">{" <span class=\"breadcrumb-sep\">›</span> ".join(parts)}</nav>'
+
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": i + 1,
+                "name": label,
+                **({"item": url} if url else {}),
+            }
+            for i, (label, url) in enumerate(items)
+        ],
+    }
+    ld_html = f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>'
+    return html_out, ld_html
+
+
+def render_pagination(base_path, current_page, total_pages):
+    """base_path例: '/', '/area/fujisawa/', '/category/event/'
+    1ページ目は base_path そのもの、2ページ目以降は base_path + 'page/{n}/' を使う。
+    Googlebotが通常の<a href>ですべてのページを辿れるようにする。"""
+    if total_pages <= 1:
+        return ""
+
+    def page_url(n):
+        return base_path if n == 1 else f"{base_path}page/{n}/"
+
+    links = []
+    if current_page > 1:
+        links.append(f'<a class="pagination-link" href="{page_url(current_page-1)}">‹ 前へ</a>')
+    for n in range(1, total_pages + 1):
+        cls = "pagination-link active" if n == current_page else "pagination-link"
+        if n == current_page:
+            links.append(f'<span class="{cls}">{n}</span>')
+        else:
+            links.append(f'<a class="{cls}" href="{page_url(n)}">{n}</a>')
+    if current_page < total_pages:
+        links.append(f'<a class="pagination-link" href="{page_url(current_page+1)}">次へ ›</a>')
+
+    return f'<nav class="pagination" aria-label="ページネーション">{"".join(links)}</nav>'
+
+def render_article_main(item, scenes, all_articles):
     tags_html = "".join(f'<span class="tag-pill">#{esc(t)}</span>' for t in item.get("tags", []))
     infobox = render_infobox(item)
     map_html = ""
@@ -313,9 +424,17 @@ def render_article_main(item, scenes):
     # 本文は改行(\n\n)で段落分けされたプレーンテキスト。既存の.modal-text(white-space:pre-line)をそのまま利用する。
     body_html = esc(item["body"])
 
+    area_en = AREA_EN[item["area"]]
+    breadcrumb_html, breadcrumb_ld = render_breadcrumb([
+        ("湘南Doors トップ", "/"),
+        (item["area"], f"/area/{area_en}/"),
+        (item["title"], None),
+    ])
+    related_html = render_related_articles(item, all_articles, scenes)
+
     return f"""<main>
   <div class="article-page-wrap">
-    <div class="breadcrumb"><a href="/">湘南Doors トップ</a> ／ {esc(CATS[item["cat"]]["label"])} ／ {esc(item["area"])}</div>
+    {breadcrumb_html}
     <div class="modal article-modal-static">
       <div class="modal-art">{scenes[item["scene"]]}</div>
       <div class="modal-body">
@@ -330,12 +449,14 @@ def render_article_main(item, scenes):
         {estate_html}
       </div>
     </div>
+    {related_html}
     <a class="back-to-top" href="/">← 湘南Doors トップへ戻る</a>
   </div>
-</main>"""
+</main>
+{breadcrumb_ld}"""
 
 
-def render_article_page(item, scenes):
+def render_article_page(item, scenes, all_articles):
     canonical = f"{SITE_DOMAIN}/articles/{item['slug']}/"
     return f"""<!DOCTYPE html>
 <html lang="ja">
@@ -345,7 +466,7 @@ def render_article_page(item, scenes):
 </head>
 <body>
 {HEADER_HTML}
-{render_article_main(item, scenes)}
+{render_article_main(item, scenes, all_articles)}
 {FOOTER_HTML}
 <script src="/assets/common.js" defer></script>
 </body>
@@ -375,13 +496,16 @@ def render_card(item, scenes):
 
 def render_index(articles, scenes):
     articles_sorted = sorted(articles, key=lambda d: d["date"], reverse=True)
-    cards_html = "\n      ".join(render_card(a, scenes) for a in articles_sorted)
+    total_pages = max(1, -(-len(articles_sorted) // HUB_PAGE_SIZE))  # 切り上げ除算
+    page_articles = articles_sorted[:HUB_PAGE_SIZE]
+    cards_html = "\n      ".join(render_card(a, scenes) for a in page_articles)
+    pagination_html = render_pagination("/", 1, total_pages)
 
-    chips_html = '<div class="chip active" data-cat="all">すべて</div>' + "".join(
-        f'<div class="chip" data-cat="{k}">{v["label"]}</div>' for k, v in CATS.items()
+    chips_html = "".join(
+        f'<a class="chip" href="/category/{CAT_EN[k]}/">{v["label"]}</a>' for k, v in CATS.items()
     )
     used_areas = {a["area"] for a in articles}
-    area_opts = "".join(f'<option value="{a}">{a}</option>' for a in AREA_ORDER if a in used_areas)
+    area_opts = "".join(f'<option value="{AREA_EN[a]}">{a}</option>' for a in AREA_ORDER if a in used_areas)
 
     # 旧hash URL(#article-{id}) → 新URL への転送用マップ(フォールバック用)
     id_to_slug = {a["id"]: a["slug"] for a in articles}
@@ -455,8 +579,10 @@ def render_index(articles, scenes):
   <div class="filter-inner">
     <div class="chip-row" id="catChips">{chips_html}</div>
     <div class="filter-right">
-      <select id="areaSelect"><option value="">エリア：すべて</option>{area_opts}</select>
-      <input type="text" id="searchBox" placeholder="キーワードで探す">
+      <select id="areaSelect" onchange="if(this.value) location.href='/area/'+this.value+'/';">
+        <option value="">エリアで探す</option>{area_opts}
+      </select>
+      <input type="text" id="searchBox" placeholder="このページ内をキーワードで絞り込み">
     </div>
   </div>
 </div>
@@ -464,10 +590,11 @@ def render_index(articles, scenes):
 <main>
   <div class="content-layout">
     <div class="content-main">
-      <p id="resultCount">全 {len(articles)} 件を掲載中</p>
+      <p id="resultCount">全 {len(articles)} 件中 最新{len(page_articles)}件を表示中</p>
       <div class="grid" id="grid">
       {cards_html}
       </div>
+      {pagination_html}
     </div>
     <aside class="content-sidebar">
       <div class="sidebar-card">
@@ -487,42 +614,30 @@ def render_index(articles, scenes):
 {FOOTER_HTML}
 
 <script>
-/* 記事一覧の絞り込み(カテゴリ/エリア/キーワード)。DOM内の.cardをクライアント側でフィルタする。
+/* このページに表示中の記事だけを対象にした、キーワードでの簡易絞り込み。
+   カテゴリ・エリアはPhase 3で /category/{{cat}}/ ・ /area/{{area}}/ の
+   実ページ(ハブページ)に分離したため、ここでは検索ボックスのみを扱う。
    ※記事本文自体はこのJSに依存せず、常に/articles/{{slug}}/の静的HTMLとして存在する。 */
 (function(){{
-  const CATS = {json.dumps({k: v["label"] for k, v in CATS.items()}, ensure_ascii=False)};
   const grid = document.getElementById('grid');
   const cards = Array.from(grid.children);
-  const catChips = document.getElementById('catChips');
-  const areaSelect = document.getElementById('areaSelect');
   const searchBox = document.getElementById('searchBox');
   const resultCount = document.getElementById('resultCount');
-  let activeCat = 'all';
+  const totalCount = {len(articles)};
+  const pageCount = cards.length;
 
-  function apply(){{
-    const areaVal = areaSelect.value;
+  searchBox.addEventListener('input', ()=>{{
     const q = searchBox.value.trim().toLowerCase();
     let shown = 0;
     cards.forEach(card=>{{
-      const cat = card.dataset.cat, area = card.dataset.area, hay = card.dataset.search;
-      let ok = true;
-      if (activeCat !== 'all' && cat !== activeCat) ok = false;
-      if (areaVal && area !== areaVal) ok = false;
-      if (q && !hay.includes(q)) ok = false;
+      const ok = !q || card.dataset.search.includes(q);
       card.style.display = ok ? '' : 'none';
       if (ok) shown++;
     }});
-    resultCount.textContent = (activeCat==='all' && !areaVal && !q) ? `全 ${{cards.length}} 件を掲載中` : `${{shown}} 件が見つかりました`;
-  }}
-  catChips.addEventListener('click', e=>{{
-    if(!e.target.classList.contains('chip')) return;
-    [...catChips.children].forEach(c=>c.classList.remove('active'));
-    e.target.classList.add('active');
-    activeCat = e.target.dataset.cat;
-    apply();
+    resultCount.textContent = q
+      ? `このページ内で ${{shown}} 件が見つかりました`
+      : `全 ${{totalCount}} 件中 最新${{pageCount}}件を表示中`;
   }});
-  areaSelect.addEventListener('change', apply);
-  searchBox.addEventListener('input', apply);
 
   /* 旧hash URL(#article-{{id}})でのアクセス・共有リンクを、新しい /articles/{{slug}}/ へ誘導する
      フォールバック。GitHub Pagesはサーバー側301ができないため、JSによる誘導としている。 */
@@ -632,9 +747,157 @@ const PICKUP_SCENES = {scenes_json};
 """
 
 
+def render_listing_page(*, title, description, canonical_url, breadcrumb_items,
+                         heading, subheading, page_articles, scenes, base_path,
+                         page_num, total_pages, total_count):
+    """地域ハブ・カテゴリハブ・トップページ2ページ目以降で共有するシンプルな一覧ページ。
+    PICK UPカルーセルやサイドバーは持たず、パンくず+見出し+記事グリッド+ページネーションのみ。"""
+    cards_html = "\n      ".join(render_card(a, scenes) for a in page_articles)
+    pagination_html = render_pagination(base_path, page_num, total_pages)
+    breadcrumb_html, breadcrumb_ld = render_breadcrumb(breadcrumb_items)
+
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": title,
+        "description": description,
+        "url": canonical_url,
+    }
+
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(description)}">
+<link rel="canonical" href="{canonical_url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="湘南Doors">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(description)}">
+<meta property="og:url" content="{canonical_url}">
+<meta property="og:image" content="{SITE_DOMAIN}/assets/ogp/beach.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
+{breadcrumb_ld}
+{HEAD_COMMON}
+</head>
+<body>
+{HEADER_HTML}
+<main>
+  <div class="hub-page-wrap">
+    {breadcrumb_html}
+    <h1 class="hub-title serif">{esc(heading)}</h1>
+    <p class="hub-subtitle">{esc(subheading)}</p>
+    <div class="grid">
+      {cards_html}
+    </div>
+    {pagination_html}
+  </div>
+</main>
+{FOOTER_HTML}
+<script src="/assets/common.js" defer></script>
+</body>
+</html>
+"""
+
+
+def render_area_hub_pages(area_ja, area_articles, scenes):
+    """1エリア分の全ページ({page: html}の辞書)を生成する。"""
+    area_en = AREA_EN[area_ja]
+    articles_sorted = sorted(area_articles, key=lambda d: d["date"], reverse=True)
+    total_pages = max(1, -(-len(articles_sorted) // HUB_PAGE_SIZE))
+    pages = {}
+    for page_num in range(1, total_pages + 1):
+        chunk = articles_sorted[(page_num - 1) * HUB_PAGE_SIZE: page_num * HUB_PAGE_SIZE]
+        base_path = f"/area/{area_en}/"
+        canonical = SITE_DOMAIN + base_path if page_num == 1 else f"{SITE_DOMAIN}{base_path}page/{page_num}/"
+        pages[page_num] = render_listing_page(
+            title=f"{area_ja}の記事一覧" + (f"({page_num}ページ目)" if page_num > 1 else "") + " | 湘南Doors",
+            description=f"{area_ja}に関する企業・お店・人・文化・イベント・観光の記事一覧({len(articles_sorted)}件)。湘南Doorsが継続的に取材しています。",
+            canonical_url=canonical,
+            breadcrumb_items=[("湘南Doors トップ", "/"), (area_ja, None)],
+            heading=f"{area_ja}の記事",
+            subheading=f"{area_ja}に関する記事を{len(articles_sorted)}件掲載しています。",
+            page_articles=chunk,
+            scenes=scenes,
+            base_path=base_path,
+            page_num=page_num,
+            total_pages=total_pages,
+            total_count=len(articles_sorted),
+        )
+    return pages
+
+
+def render_category_hub_pages(cat_key, cat_articles, scenes):
+    cat_en = CAT_EN[cat_key]
+    cat_label = CATS[cat_key]["label"]
+    articles_sorted = sorted(cat_articles, key=lambda d: d["date"], reverse=True)
+    total_pages = max(1, -(-len(articles_sorted) // HUB_PAGE_SIZE))
+    pages = {}
+    for page_num in range(1, total_pages + 1):
+        chunk = articles_sorted[(page_num - 1) * HUB_PAGE_SIZE: page_num * HUB_PAGE_SIZE]
+        base_path = f"/category/{cat_en}/"
+        canonical = SITE_DOMAIN + base_path if page_num == 1 else f"{SITE_DOMAIN}{base_path}page/{page_num}/"
+        pages[page_num] = render_listing_page(
+            title=f"{cat_label}の記事一覧" + (f"({page_num}ページ目)" if page_num > 1 else "") + " | 湘南Doors",
+            description=f"湘南エリアの「{cat_label}」に関する記事一覧({len(articles_sorted)}件)。湘南Doorsが継続的に取材しています。",
+            canonical_url=canonical,
+            breadcrumb_items=[("湘南Doors トップ", "/"), (cat_label, None)],
+            heading=f"{cat_label}の記事",
+            subheading=f"「{cat_label}」に関する記事を{len(articles_sorted)}件掲載しています。",
+            page_articles=chunk,
+            scenes=scenes,
+            base_path=base_path,
+            page_num=page_num,
+            total_pages=total_pages,
+            total_count=len(articles_sorted),
+        )
+    return pages
+
+
+def render_top_pagination_pages(articles, scenes):
+    """トップページ2ページ目以降(/page/2/, /page/3/, ...)。1ページ目はindex.html自体が担う。"""
+    articles_sorted = sorted(articles, key=lambda d: d["date"], reverse=True)
+    total_pages = max(1, -(-len(articles_sorted) // HUB_PAGE_SIZE))
+    pages = {}
+    for page_num in range(2, total_pages + 1):
+        chunk = articles_sorted[(page_num - 1) * HUB_PAGE_SIZE: page_num * HUB_PAGE_SIZE]
+        base_path = "/"
+        canonical = f"{SITE_DOMAIN}/page/{page_num}/"
+        pages[page_num] = render_listing_page(
+            title=f"記事一覧({page_num}ページ目) | 湘南Doors",
+            description=f"湘南Doorsの記事一覧 {page_num}ページ目。",
+            canonical_url=canonical,
+            breadcrumb_items=[("湘南Doors トップ", "/"), (f"{page_num}ページ目", None)],
+            heading="記事一覧",
+            subheading=f"{page_num}ページ目",
+            page_articles=chunk,
+            scenes=scenes,
+            base_path=base_path,
+            page_num=page_num,
+            total_pages=total_pages,
+            total_count=len(articles_sorted),
+        )
+    return pages
+
+
 def render_sitemap(articles):
     from datetime import date
-    urls = [{"loc": f"{SITE_DOMAIN}/", "lastmod": date.today().isoformat(), "priority": "1.0"}]
+    today = date.today().isoformat()
+    urls = [{"loc": f"{SITE_DOMAIN}/", "lastmod": today, "priority": "1.0"}]
+
+    # 地域ハブ・カテゴリハブ(各ハブの1ページ目のみ。2ページ目以降はページネーション
+    # リンクを辿ればクロールできるため、sitemapの肥大化を避ける目的で含めない)
+    used_areas = sorted({a["area"] for a in articles}, key=lambda x: AREA_ORDER.index(x) if x in AREA_ORDER else 99)
+    for area_ja in used_areas:
+        latest = max((a["date"] for a in articles if a["area"] == area_ja), default=today)
+        urls.append({"loc": f"{SITE_DOMAIN}/area/{AREA_EN[area_ja]}/", "lastmod": latest, "priority": "0.6"})
+
+    used_cats = [k for k in CATS if any(a["cat"] == k for a in articles)]
+    for cat_key in used_cats:
+        latest = max((a["date"] for a in articles if a["cat"] == cat_key), default=today)
+        urls.append({"loc": f"{SITE_DOMAIN}/category/{CAT_EN[cat_key]}/", "lastmod": latest, "priority": "0.6"})
+
     for a in sorted(articles, key=lambda x: x["date"], reverse=True):
         urls.append({
             "loc": f"{SITE_DOMAIN}/articles/{a['slug']}/",
@@ -674,46 +937,79 @@ def main():
         raise SystemExit("idの重複を検出しました。ビルドを中止します。")
 
     # ---- 原子的ビルド ----
-    # 一時ディレクトリに全ページを描画しきってから、最後に本番の articles/ と
-    # index.html / sitemap.xml / robots.txt を置き換える。途中で例外が起きても、
-    # 本番側は直前の成功時点の状態のまま残り、壊れた/不完全な状態が公開されることはない。
-    staging_articles_dir = os.path.join(ROOT, ".build_tmp_articles")
-    if os.path.isdir(staging_articles_dir):
-        shutil.rmtree(staging_articles_dir)
-    os.makedirs(staging_articles_dir, exist_ok=True)
+    # 一時ディレクトリに全ページを描画しきってから、最後に本番の articles/・area/・
+    # category/・page/ と index.html / sitemap.xml / robots.txt を置き換える。
+    # 途中で例外が起きても、本番側は直前の成功時点の状態のまま残り、
+    # 壊れた/不完全な状態が公開されることはない。
+    staging_dir = os.path.join(ROOT, ".build_tmp")
+    if os.path.isdir(staging_dir):
+        shutil.rmtree(staging_dir)
+    os.makedirs(staging_dir, exist_ok=True)
+
+    def write(rel_path, content):
+        full = os.path.join(staging_dir, rel_path)
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        with open(full, "w", encoding="utf-8") as f:
+            f.write(content)
 
     try:
         for item in articles:
-            page_dir = os.path.join(staging_articles_dir, item["slug"])
-            os.makedirs(page_dir, exist_ok=True)
-            with open(os.path.join(page_dir, "index.html"), "w", encoding="utf-8") as f:
-                f.write(render_article_page(item, scenes))
+            write(f"articles/{item['slug']}/index.html", render_article_page(item, scenes, articles))
+
+        by_area = {}
+        for a in articles:
+            by_area.setdefault(a["area"], []).append(a)
+        for area_ja, area_articles in by_area.items():
+            for page_num, html in render_area_hub_pages(area_ja, area_articles, scenes).items():
+                area_en = AREA_EN[area_ja]
+                rel = f"area/{area_en}/index.html" if page_num == 1 else f"area/{area_en}/page/{page_num}/index.html"
+                write(rel, html)
+
+        by_cat = {}
+        for a in articles:
+            by_cat.setdefault(a["cat"], []).append(a)
+        for cat_key, cat_articles in by_cat.items():
+            for page_num, html in render_category_hub_pages(cat_key, cat_articles, scenes).items():
+                cat_en = CAT_EN[cat_key]
+                rel = f"category/{cat_en}/index.html" if page_num == 1 else f"category/{cat_en}/page/{page_num}/index.html"
+                write(rel, html)
+
+        for page_num, html in render_top_pagination_pages(articles, scenes).items():
+            write(f"page/{page_num}/index.html", html)
 
         new_index_html = render_index(articles, scenes)
         new_sitemap_xml = render_sitemap(articles)
         new_robots_txt = render_robots_txt()
+        write("index.html", new_index_html)
+        write("sitemap.xml", new_sitemap_xml)
+        write("robots.txt", new_robots_txt)
 
-        # ここまで例外なく到達できた場合のみ、本番ファイルを置き換える
-        final_articles_dir = os.path.join(ROOT, "articles")
-        if os.path.isdir(final_articles_dir):
-            shutil.rmtree(final_articles_dir)
-        shutil.move(staging_articles_dir, final_articles_dir)
+        # ここまで例外なく到達できた場合のみ、本番ディレクトリを置き換える。
+        # articles/ area/ category/ page/ はビルド生成物のみが置かれるディレクトリ
+        # なので、生成物ごと丸ごと入れ替える(articles.jsonから消えた記事の
+        # ページ等が残り続けることを防ぐ)。
+        for dirname in ("articles", "area", "category", "page"):
+            final_dir = os.path.join(ROOT, dirname)
+            staged_dir = os.path.join(staging_dir, dirname)
+            if os.path.isdir(final_dir):
+                shutil.rmtree(final_dir)
+            if os.path.isdir(staged_dir):
+                shutil.move(staged_dir, final_dir)
 
-        for filename, content in [
-            ("index.html", new_index_html),
-            ("sitemap.xml", new_sitemap_xml),
-            ("robots.txt", new_robots_txt),
-        ]:
+        for filename in ("index.html", "sitemap.xml", "robots.txt"):
             tmp_path = os.path.join(ROOT, filename + ".tmp")
-            with open(tmp_path, "w", encoding="utf-8") as f:
-                f.write(content)
+            shutil.move(os.path.join(staging_dir, filename), tmp_path)
             os.replace(tmp_path, os.path.join(ROOT, filename))
     except Exception:
-        if os.path.isdir(staging_articles_dir):
-            shutil.rmtree(staging_articles_dir)
+        if os.path.isdir(staging_dir):
+            shutil.rmtree(staging_dir)
         raise
+    finally:
+        if os.path.isdir(staging_dir):
+            shutil.rmtree(staging_dir)
 
-    print(f"ビルド完了: 記事ページ {len(articles)} 件 + トップページ + sitemap.xml + robots.txt")
+    print(f"ビルド完了: 記事ページ {len(articles)} 件 + 地域ハブ{len(by_area)} + "
+          f"カテゴリハブ{len(by_cat)} + トップページ + sitemap.xml + robots.txt")
 
 
 if __name__ == "__main__":
