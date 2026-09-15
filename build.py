@@ -134,6 +134,137 @@ def format_date(d):
     return f"{y}.{m}.{day}"
 
 
+# ---------- Phase 2: SEO用メタデータ生成 ----------
+
+def build_seo_title(item):
+    """検索結果に表示される<title>を、地域名・カテゴリ・年度等を意識して組み立てる。
+    ページ本文のH1(元の編集タイトルそのまま)とはあえて分離している。
+    不自然なキーワード詰め込みは避け、要素を足しすぎない。"""
+    year = item["date"][:4]
+    area = item["area"]
+    if item["cat"] == "e":
+        # イベントは年度が重要な検索キーワードになるため明示する
+        return f"{item['title']}【{area}】{year}年 | 湘南Doors"
+    if item["cat"] in ("b", "g"):
+        return f"{item['title']}｜{area}の{CATS[item['cat']]['label']} - 湘南Doors"
+    return f"{item['title']}｜{area} - 湘南Doors"
+
+
+def build_meta_description(item):
+    """dek(編集部が書いた要約)をベースにmeta descriptionを組み立てる。
+    dekは元々100字前後で書かれており、descriptionとして十分な品質があるため
+    新規に自動生成し直すのではなく、これをそのまま活かす方針にしている。"""
+    desc = item["dek"].strip()
+    if item["area"] not in desc:
+        desc = f"【{item['area']}】{desc}"
+    if len(desc) > 155:
+        desc = desc[:154] + "…"
+    return desc
+
+
+def build_ogp_image_url(item):
+    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
+
+
+def build_structured_data(item, canonical_url):
+    """記事タイプに応じてJSON-LDを出し分ける。
+    - cat='e' かつ eventStartDateが確認できている場合 → Event
+    - cat in (b, g) かつ住所が確認できている場合       → LocalBusiness / Restaurant
+    - それ以外                                          → Article
+    確実な値が無いのに無理にEvent/LocalBusinessにすると、Search Console上で
+    構造化データエラーとして検出され逆効果になるため、必要な値が欠けている場合は
+    安全側(Article)にフォールバックする。"""
+    area = item["area"]
+    image_url = build_ogp_image_url(item)
+
+    if item["cat"] == "e" and item.get("eventStartDate"):
+        data = {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": item["title"],
+            "description": item["dek"],
+            "startDate": item["eventStartDate"],
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "location": {
+                "@type": "Place",
+                "name": f"{area}(神奈川県)",
+                "address": item.get("address") or f"神奈川県{area}",
+            },
+            "image": [image_url],
+            "organizer": {"@type": "Organization", "name": "湘南Doors運営事務局", "url": SITE_DOMAIN},
+            "url": canonical_url,
+        }
+        if item.get("eventEndDate"):
+            data["endDate"] = item["eventEndDate"]
+        return data
+
+    if item["cat"] in ("b", "g") and item.get("address"):
+        data = {
+            "@context": "https://schema.org",
+            "@type": "Restaurant" if item["cat"] == "g" else "LocalBusiness",
+            "name": item["title"],
+            "description": item["dek"],
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": item["address"],
+                "addressRegion": "神奈川県",
+                "addressCountry": "JP",
+            },
+            "image": [image_url],
+            "url": canonical_url,
+        }
+        if item.get("hours"):
+            data["openingHours"] = item["hours"]
+        if item.get("link"):
+            data["sameAs"] = [item["link"]]
+        return data
+
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": item["title"],
+        "description": item["dek"],
+        "datePublished": item["date"],
+        "dateModified": item["date"],
+        "image": [image_url],
+        "author": {"@type": "Organization", "name": "湘南Doors運営事務局"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "湘南Doors",
+            "logo": {"@type": "ImageObject", "url": f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"},
+        },
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
+    }
+    return data
+
+
+def render_head_seo(item, canonical_url):
+    """記事ページ向けの<title>・meta description・OGP・Twitter Card・JSON-LDをまとめて返す。"""
+    seo_title = build_seo_title(item)
+    description = build_meta_description(item)
+    image_url = build_ogp_image_url(item)
+    ld = build_structured_data(item, canonical_url)
+
+    return f"""<title>{esc(seo_title)}</title>
+<meta name="description" content="{esc(description)}">
+<link rel="canonical" href="{canonical_url}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="湘南Doors">
+<meta property="og:title" content="{esc(seo_title)}">
+<meta property="og:description" content="{esc(description)}">
+<meta property="og:url" content="{canonical_url}">
+<meta property="og:image" content="{image_url}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(seo_title)}">
+<meta name="twitter:description" content="{esc(description)}">
+<meta name="twitter:image" content="{image_url}">
+<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>"""
+
+
 def render_infobox(item):
     rows = []
     if item.get("address"):
@@ -205,13 +336,11 @@ def render_article_main(item, scenes):
 
 
 def render_article_page(item, scenes):
-    title_tag = f"{item['title']}｜湘南Doors"
     canonical = f"{SITE_DOMAIN}/articles/{item['slug']}/"
     return f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
-<title>{esc(title_tag)}</title>
-<link rel="canonical" href="{canonical}">
+{render_head_seo(item, canonical)}
 {HEAD_COMMON}
 </head>
 <body>
@@ -275,11 +404,36 @@ def render_index(articles, scenes):
     cats_label_bg_json = json.dumps({k: {"label": v["label"], "bg": v["bg"]} for k, v in CATS.items()}, ensure_ascii=False)
     scenes_json = json.dumps(scenes, ensure_ascii=False)
 
+    site_description = "湘南(藤沢・茅ヶ崎・鎌倉・平塚・大磯・二宮・逗子・葉山)の企業・お店・人・文化・イベント・観光情報を継続的に取材する地域メディア。"
+    website_ld = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "湘南Doors",
+        "url": f"{SITE_DOMAIN}/",
+        "description": site_description,
+        "publisher": {"@type": "Organization", "name": "湘南Doors運営事務局", "url": f"{SITE_DOMAIN}/"},
+    }
+
     return f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
 <title>{esc(SITE_TITLE)}</title>
+<meta name="description" content="{esc(site_description)}">
 <link rel="canonical" href="{SITE_DOMAIN}/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="湘南Doors">
+<meta property="og:title" content="{esc(SITE_TITLE)}">
+<meta property="og:description" content="{esc(site_description)}">
+<meta property="og:url" content="{SITE_DOMAIN}/">
+<meta property="og:image" content="{SITE_DOMAIN}/assets/ogp/beach.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(SITE_TITLE)}">
+<meta name="twitter:description" content="{esc(site_description)}">
+<meta name="twitter:image" content="{SITE_DOMAIN}/assets/ogp/beach.png">
+<script type="application/ld+json">{json.dumps(website_ld, ensure_ascii=False)}</script>
 {HEAD_COMMON}
 </head>
 <body>
@@ -478,6 +632,34 @@ const PICKUP_SCENES = {scenes_json};
 """
 
 
+def render_sitemap(articles):
+    from datetime import date
+    urls = [{"loc": f"{SITE_DOMAIN}/", "lastmod": date.today().isoformat(), "priority": "1.0"}]
+    for a in sorted(articles, key=lambda x: x["date"], reverse=True):
+        urls.append({
+            "loc": f"{SITE_DOMAIN}/articles/{a['slug']}/",
+            "lastmod": a["date"],
+            "priority": "0.7",
+        })
+    entries = "\n".join(
+        f"  <url>\n    <loc>{u['loc']}</loc>\n    <lastmod>{u['lastmod']}</lastmod>\n    <priority>{u['priority']}</priority>\n  </url>"
+        for u in urls
+    )
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{entries}
+</urlset>
+"""
+
+
+def render_robots_txt():
+    return f"""User-agent: *
+Allow: /
+
+Sitemap: {SITE_DOMAIN}/sitemap.xml
+"""
+
+
 def main():
     articles = load_json("data/articles.json")
     scenes = load_json("data/scenes.json")
@@ -493,8 +675,8 @@ def main():
 
     # ---- 原子的ビルド ----
     # 一時ディレクトリに全ページを描画しきってから、最後に本番の articles/ と
-    # index.html を置き換える。途中で例外が起きても、本番側は直前の成功時点の
-    # 状態のまま残り、壊れた/不完全な状態が公開されることはない。
+    # index.html / sitemap.xml / robots.txt を置き換える。途中で例外が起きても、
+    # 本番側は直前の成功時点の状態のまま残り、壊れた/不完全な状態が公開されることはない。
     staging_articles_dir = os.path.join(ROOT, ".build_tmp_articles")
     if os.path.isdir(staging_articles_dir):
         shutil.rmtree(staging_articles_dir)
@@ -508,6 +690,8 @@ def main():
                 f.write(render_article_page(item, scenes))
 
         new_index_html = render_index(articles, scenes)
+        new_sitemap_xml = render_sitemap(articles)
+        new_robots_txt = render_robots_txt()
 
         # ここまで例外なく到達できた場合のみ、本番ファイルを置き換える
         final_articles_dir = os.path.join(ROOT, "articles")
@@ -515,16 +699,21 @@ def main():
             shutil.rmtree(final_articles_dir)
         shutil.move(staging_articles_dir, final_articles_dir)
 
-        index_tmp_path = os.path.join(ROOT, "index.html.tmp")
-        with open(index_tmp_path, "w", encoding="utf-8") as f:
-            f.write(new_index_html)
-        os.replace(index_tmp_path, os.path.join(ROOT, "index.html"))
+        for filename, content in [
+            ("index.html", new_index_html),
+            ("sitemap.xml", new_sitemap_xml),
+            ("robots.txt", new_robots_txt),
+        ]:
+            tmp_path = os.path.join(ROOT, filename + ".tmp")
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                f.write(content)
+            os.replace(tmp_path, os.path.join(ROOT, filename))
     except Exception:
         if os.path.isdir(staging_articles_dir):
             shutil.rmtree(staging_articles_dir)
         raise
 
-    print(f"ビルド完了: 記事ページ {len(articles)} 件 + トップページ")
+    print(f"ビルド完了: 記事ページ {len(articles)} 件 + トップページ + sitemap.xml + robots.txt")
 
 
 if __name__ == "__main__":
