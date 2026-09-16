@@ -110,11 +110,19 @@ HEADER_HTML = """<header>
   <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
 </header>"""
 
-FOOTER_HTML = """<footer>
+FOOTER_AREA_LINKS = "".join(
+    f'<a href="/area/{AREA_EN[a]}/">{a}</a>' for a in AREA_ORDER
+)
+
+FOOTER_HTML = f"""<footer>
   <div class="foot-inner">
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
+      <div class="foot-area-links">
+        <span class="foot-area-links-label">エリアから探す</span>
+        {FOOTER_AREA_LINKS}
+      </div>
     </div>
     <div class="foot-note">
       掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>

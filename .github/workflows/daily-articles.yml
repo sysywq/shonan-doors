@@ -23,15 +23,42 @@ jobs:
       - name: 依存パッケージをインストール
         run: pip install anthropic
 
-      - name: 記事を生成してHTMLに追記
+      # 1) 記事を生成し、data/articles.json に追記する(index.htmlはまだ触らない)。
+      #    generate_articles.py は実行結果を /tmp/shonan_doors_run_report.json にも書き出す。
+      #    このステップが失敗した場合、後続のbuild/git add/verify/commitは一切実行されない。
+      - name: 記事を生成してarticles.jsonに追記
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python generate_articles.py
 
+      # 2) articles.json(Single Source of Truth)から静的ページを再生成する。
+      #    記事ページ・地域ハブ・カテゴリハブ・ページネーション・トップページ・
+      #    sitemap.xml・robots.txtをすべてここで再構築する。
+      #    build.pyは失敗時に本番のarticles/・index.html等を一切変更しない設計。
+      #    このステップが失敗した場合、次のgit add/verify/commitは実行されない。
+      - name: 静的ページをビルド
+        run: python build.py
+
+      # 3) コミット対象をステージする。build.pyが更新しうる範囲を明示的に指定し、
+      #    無関係なファイルが誤って巻き込まれないようにする。
+      - name: 変更をgit add
+        run: |
+          git add data/articles.json data/id_counter.json index.html \
+                  articles/ area/ category/ page/ sitemap.xml robots.txt
+
+      # 4) 「生成したと報告された記事」が、git add後のステージ内容に実際に
+      #    含まれているかを検証する。ここで1件でも食い違いがあれば、
+      #    コミットせずワークフロー全体をエラーとして終了する。
+      #    (過去に、この検証が無く「Success」なのに実際は何もpushされていない
+      #    というサイレント障害が発生したことがあるため追加。
+      #    必ずgit add実行後・git commit実行前に呼び出すこと)
+      - name: 永続化を検証(サイレント障害防止)
+        run: python verify_daily_run.py
+
+      # 5) 検証を通過した場合のみコミット・プッシュする。
       - name: 変更をコミット・プッシュ
         run: |
           git config user.name "shonan-doors-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add index.html
-          git diff --cached --quiet || git commit -m "chore: 本日分の記事3本を自動追加 ($(date +'%Y-%m-%d'))"
+          git diff --cached --quiet || git commit -m "chore: 本日分の記事を自動追加 ($(date +'%Y-%m-%d'))"
           git push

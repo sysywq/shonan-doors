@@ -262,3 +262,9 @@ a.card{text-decoration:none; color:inherit;}
 
 /* Phase 3: カテゴリチップは実リンクの<a>に変更したため、通常状態のスタイルのみ使う */
 .chip{text-decoration:none; display:inline-block;}
+
+/* ===== フッター内「エリアから探す」リンク(Phase 3追加分) ===== */
+.foot-area-links{margin-top:14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px;}
+.foot-area-links-label{font-size:11px; color:var(--ink-faint); letter-spacing:.04em; margin-right:2px;}
+.foot-area-links a{font-size:12px; color:var(--ink-soft); text-decoration:underline;}
+.foot-area-links a:hover{color:var(--trust);}
