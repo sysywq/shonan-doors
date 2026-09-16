@@ -37,6 +37,13 @@ import anthropic
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ARTICLES_JSON_PATH = os.path.join(ROOT, "data", "articles.json")
 ID_COUNTER_PATH = os.path.join(ROOT, "data", "id_counter.json")
+# 実行結果レポート。ワークフロー側が「本当に永続化されたか」を検証するための
+# 機械可読な記録。リポジトリの外(の一時領域)に書くため、誤ってcommit対象に
+# 含まれる心配がない。
+RUN_REPORT_PATH = os.environ.get(
+    "SHONAN_DOORS_RUN_REPORT_PATH",
+    os.path.join(tempfile.gettempdir(), "shonan_doors_run_report.json"),
+)
 
 AREAS = ["藤沢", "茅ヶ崎", "鎌倉", "平塚", "大磯", "二宮", "逗子", "葉山"]
 CATS = {
@@ -286,6 +293,19 @@ def is_duplicate(item, existing_articles, days=90):
     return None
 
 
+# ---------- 実行結果レポート ----------
+
+def write_run_report(**fields):
+    """ワークフロー側の検証ステップが読む、機械可読な実行結果。
+    stdout の日本語メッセージのパースに頼らず、確実に判定できるようにする。"""
+    try:
+        with open(RUN_REPORT_PATH, "w", encoding="utf-8") as f:
+            json.dump(fields, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        # レポート書き込み自体の失敗で本処理を止めたくはないが、検知はできるようにする
+        print(f"警告: 実行レポートの書き込みに失敗しました: {e}", file=sys.stderr)
+
+
 def main():
     if not os.path.exists(ARTICLES_JSON_PATH):
         raise SystemExit(f"{ARTICLES_JSON_PATH} が見つかりません。先にPhase 1の移行を完了させてください。")
@@ -302,6 +322,8 @@ def main():
         raw_items = call_claude(recent_titles)
     except Exception as e:
         print(f"エラー: 記事生成に失敗しました。articles.jsonは変更していません。詳細: {e}", file=sys.stderr)
+        write_run_report(status="error", stage="call_claude", error=str(e),
+                          accepted_ids=[], accepted_slugs=[])
         raise
 
     if len(raw_items) != ARTICLES_PER_DAY:
@@ -357,6 +379,8 @@ def main():
 
     if not accepted:
         print("採用できる記事が1件もありませんでした。articles.jsonは変更していません。", file=sys.stderr)
+        write_run_report(status="no_articles_accepted", accepted_ids=[], accepted_slugs=[],
+                          rejected_count=len(rejected), raw_count=len(raw_items))
         sys.exit(1 if not raw_items else 0)
 
     new_articles = existing_articles + accepted
@@ -366,6 +390,15 @@ def main():
           f"(id:{[a['id'] for a in accepted]}, date:{today})。"
           f"{len(rejected)}件はスキップされました。")
     print("続けて build.py を実行し、静的ページを再生成してください。")
+
+    write_run_report(
+        status="ok",
+        accepted_ids=[a["id"] for a in accepted],
+        accepted_slugs=[a["slug"] for a in accepted],
+        rejected_count=len(rejected),
+        raw_count=len(raw_items),
+        date=today,
+    )
 
 
 if __name__ == "__main__":
