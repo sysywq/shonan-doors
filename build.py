@@ -363,7 +363,18 @@ def render_related_card(item, scenes):
 
 def render_breadcrumb(items):
     """items: [(label, url_or_None), ...] 最後の要素は現在ページ(リンクなし)を想定。
-    見た目のパンくずHTMLと、BreadcrumbList構造化データの両方を返す。"""
+    見た目のパンくずHTMLと、BreadcrumbList構造化データの両方を返す。
+
+    引数のurlはルート相対パス(例: "/", "/area/fujisawa/")を想定している。
+    表示用HTML側の<a href>は従来通りこの相対パスのまま使う(ブラウザ上は
+    問題なく解決されるため)が、BreadcrumbList JSON-LDのitemはGoogleの
+    構造化データ仕様上、絶対URLである必要があるため、SITE_DOMAINを使って
+    絶対URL化してからitemへ格納する。"""
+    def to_absolute_url(u):
+        if u.startswith("http://") or u.startswith("https://"):
+            return u  # すでに絶対URLの場合はそのまま(将来の呼び出し元向けの保険)
+        return SITE_DOMAIN + u
+
     parts = []
     for label, url in items:
         if url:
@@ -381,7 +392,7 @@ def render_breadcrumb(items):
                 "@type": "ListItem",
                 "position": i + 1,
                 "name": label,
-                **({"item": url} if url else {}),
+                **({"item": to_absolute_url(url)} if url else {}),
             }
             for i, (label, url) in enumerate(items)
         ],
