@@ -50,26 +50,50 @@ def main():
     status = report.get("status")
     accepted_ids = report.get("accepted_ids", [])
     accepted_slugs = report.get("accepted_slugs", [])
+    news_ids = report.get("news_ids", [])
+    stock_ids = report.get("stock_ids", [])
+    news_count = report.get("news_count", len(news_ids))
+    stock_count = report.get("stock_count", len(stock_ids))
 
     if status == "error":
         fail(f"generate_articles.pyがエラーを報告しています: {report.get('error')}")
+
+    print(f"[内訳] news: {news_count}件 (id:{news_ids}), stock: {stock_count}件 (id:{stock_ids}), "
+          f"合計: {len(accepted_ids)}件")
+    if news_count == 0 and stock_count == 0:
+        print("news・stockともに0件です(今回追加された記事はありません)。永続化検証は不要のためスキップします。")
+        return
+    if news_count == 0:
+        print("::warning::news(ニュース/イベント型)が0件でした。stockのみの結果です。原因をログで確認してください。")
+    if stock_count == 0:
+        print("::warning::stock(ストックSEO型)が0件でした。newsのみの結果です。カニバリ判定等で全件skipされた"
+              "可能性があります(品質優先の設計上、異常ではありません)。原因をログで確認してください。")
 
     if not accepted_ids:
         print("今回追加された記事はありません(全件スキップ、または対象0件)。永続化検証は不要のためスキップします。")
         return
 
-    # 1) articles.json に永続化されているか
+    # 1) articles.json に永続化されているか(articleTypeも含めて検証する)
     articles_path = os.path.join(ROOT, "data", "articles.json")
     with open(articles_path, encoding="utf-8") as f:
         articles = json.load(f)
-    persisted_ids = {a["id"] for a in articles}
-    missing_ids = [i for i in accepted_ids if i not in persisted_ids]
+    persisted_by_id = {a["id"]: a for a in articles}
+    missing_ids = [i for i in accepted_ids if i not in persisted_by_id]
     if missing_ids:
         fail(
             f"data/articles.json に記事ID {missing_ids} が存在しません。"
             "generate_articles.pyは追加したと報告していますが、永続化されていません。"
         )
-    print(f"[OK] data/articles.json に記事ID {accepted_ids} が存在することを確認しました。")
+    type_mismatches = []
+    for i in news_ids:
+        if persisted_by_id[i].get("articleType") != "news":
+            type_mismatches.append((i, "news", persisted_by_id[i].get("articleType")))
+    for i in stock_ids:
+        if persisted_by_id[i].get("articleType") != "stock":
+            type_mismatches.append((i, "stock", persisted_by_id[i].get("articleType")))
+    if type_mismatches:
+        fail(f"articleTypeの不一致を検出しました(id, 期待値, 実際の値): {type_mismatches}")
+    print(f"[OK] data/articles.json に記事ID {accepted_ids} が、期待通りのarticleTypeで存在することを確認しました。")
 
     # 2) build.py実行後、記事ページが生成されているか
     missing_pages = []
@@ -106,10 +130,21 @@ def main():
                 f"git add後のステージ内容に新規記事 articles/{slug}/ の変更が"
                 "含まれていません。ワークフローのgit addの対象パスを確認してください。"
             )
-    print("[OK] git add後のステージ内容(git diff --cached)に articles.json および新規記事ページの変更が含まれていることを確認しました。")
+    if "sitemap.xml" not in staged:
+        fail(
+            "git add後のステージ内容に sitemap.xml の変更が含まれていません。"
+            "build.pyがsitemap.xmlを再生成しているか、git addの対象パスを確認してください。"
+        )
+    if stock_count > 0 and "data/stock_topics.json" not in staged:
+        fail(
+            "stock記事を生成したにもかかわらず、git add後のステージ内容に "
+            "data/stock_topics.json の変更が含まれていません。テーマ台帳の状態更新が"
+            "commit対象から漏れています。"
+        )
+    print("[OK] git add後のステージ内容(git diff --cached)に articles.json・新規記事ページ・sitemap.xmlの変更が含まれていることを確認しました。")
 
     print(
-        f"\n検証OK: {len(accepted_ids)}件の新規記事(id: {accepted_ids})が、"
+        f"\n検証OK: {len(accepted_ids)}件の新規記事(news:{news_count}, stock:{stock_count}, id: {accepted_ids})が、"
         "永続データ・生成ページ・gitの変更検知のすべてで一貫していることを確認しました。"
         "このあとのコミット・pushステップに進んで問題ありません。"
     )

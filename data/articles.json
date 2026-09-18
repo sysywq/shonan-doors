@@ -31,7 +31,8 @@
     ],
     "slug": "fujisawa-event-0077",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 78,
@@ -65,7 +66,8 @@
     ],
     "slug": "kamakura-life-0078",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 79,
@@ -99,7 +101,8 @@
     ],
     "slug": "fujisawa-event-0079",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 68,
@@ -128,7 +131,8 @@
     ],
     "slug": "chigasaki-culture-0068",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 69,
@@ -157,7 +161,8 @@
     ],
     "slug": "chigasaki-culture-0069",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 70,
@@ -186,7 +191,8 @@
     ],
     "slug": "fujisawa-event-0070",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 71,
@@ -219,7 +225,8 @@
     ],
     "slug": "kamakura-event-0071",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 72,
@@ -252,7 +259,8 @@
     ],
     "slug": "chigasaki-culture-0072",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 73,
@@ -285,7 +293,8 @@
     ],
     "slug": "fujisawa-event-0073",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 74,
@@ -321,7 +330,8 @@
     ],
     "slug": "fujisawa-gourmet-0074",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 75,
@@ -355,7 +365,8 @@
     ],
     "slug": "chigasaki-gourmet-0075",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 76,
@@ -391,7 +402,8 @@
     ],
     "slug": "fujisawa-event-0076",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 65,
@@ -410,7 +422,8 @@
     ],
     "slug": "fujisawa-gourmet-0065",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 66,
@@ -429,7 +442,8 @@
     ],
     "slug": "chigasaki-gourmet-0066",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 67,
@@ -448,7 +462,8 @@
     ],
     "slug": "chigasaki-culture-0067",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 62,
@@ -467,7 +482,8 @@
     ],
     "slug": "kamakura-event-0062",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 63,
@@ -486,7 +502,8 @@
     ],
     "slug": "fujisawa-tourism-0063",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 64,
@@ -505,7 +522,8 @@
     ],
     "slug": "oiso-event-0064",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "news"
   },
   {
     "id": 50,
@@ -523,7 +541,8 @@
     ],
     "slug": "chigasaki-tourism-0050",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 56,
@@ -542,7 +561,8 @@
     ],
     "slug": "hiratsuka-tourism-0056",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 57,
@@ -560,7 +580,8 @@
     ],
     "slug": "hiratsuka-tourism-0057",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 58,
@@ -579,7 +600,8 @@
     ],
     "slug": "hiratsuka-life-0058",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 53,
@@ -598,7 +620,8 @@
     ],
     "slug": "kamakura-tourism-0053",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 54,
@@ -617,7 +640,8 @@
     ],
     "slug": "kamakura-tourism-0054",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 55,
@@ -636,7 +660,8 @@
     ],
     "slug": "kamakura-tourism-0055",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 51,
@@ -655,7 +680,8 @@
     ],
     "slug": "chigasaki-people-0051",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 52,
@@ -673,7 +699,8 @@
     ],
     "slug": "chigasaki-tourism-0052",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 47,
@@ -692,7 +719,8 @@
     ],
     "slug": "fujisawa-tourism-0047",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 48,
@@ -711,7 +739,8 @@
     ],
     "slug": "fujisawa-tourism-0048",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 49,
@@ -730,7 +759,8 @@
     ],
     "slug": "fujisawa-culture-0049",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 44,
@@ -749,7 +779,8 @@
     ],
     "slug": "hayama-people-0044",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 45,
@@ -768,7 +799,8 @@
     ],
     "slug": "zushi-life-0045",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 46,
@@ -787,7 +819,8 @@
     ],
     "slug": "zushi-business-0046",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 41,
@@ -806,7 +839,8 @@
     ],
     "slug": "hayama-tourism-0041",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 42,
@@ -825,7 +859,8 @@
     ],
     "slug": "hayama-culture-0042",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 43,
@@ -844,7 +879,8 @@
     ],
     "slug": "hayama-culture-0043",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 38,
@@ -863,7 +899,8 @@
     ],
     "slug": "oiso-tourism-0038",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 40,
@@ -881,7 +918,8 @@
     ],
     "slug": "zushi-event-0040",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 35,
@@ -901,7 +939,8 @@
     ],
     "slug": "ninomiya-life-0035",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 36,
@@ -919,7 +958,8 @@
     ],
     "slug": "kamakura-life-0036",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 32,
@@ -937,7 +977,8 @@
     ],
     "slug": "ninomiya-people-0032",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 33,
@@ -957,7 +998,8 @@
     ],
     "slug": "fujisawa-life-0033",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 34,
@@ -977,7 +1019,8 @@
     ],
     "slug": "oiso-life-0034",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 29,
@@ -995,7 +1038,8 @@
     ],
     "slug": "chigasaki-people-0029",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 30,
@@ -1014,7 +1058,8 @@
     ],
     "slug": "fujisawa-people-0030",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 31,
@@ -1033,7 +1078,8 @@
     ],
     "slug": "oiso-people-0031",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 26,
@@ -1051,7 +1097,8 @@
     ],
     "slug": "chigasaki-event-0026",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 27,
@@ -1070,7 +1117,8 @@
     ],
     "slug": "oiso-event-0027",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 39,
@@ -1089,7 +1137,8 @@
     ],
     "slug": "zushi-event-0039",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 23,
@@ -1108,7 +1157,8 @@
     ],
     "slug": "hiratsuka-event-0023",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 24,
@@ -1126,7 +1176,8 @@
     ],
     "slug": "hiratsuka-event-0024",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 25,
@@ -1144,7 +1195,8 @@
     ],
     "slug": "fujisawa-event-0025",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 37,
@@ -1162,7 +1214,8 @@
     ],
     "slug": "fujisawa-tourism-0037",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 20,
@@ -1181,7 +1234,8 @@
     ],
     "slug": "oiso-culture-0020",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 21,
@@ -1199,7 +1253,8 @@
     ],
     "slug": "kamakura-gourmet-0021",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 22,
@@ -1218,7 +1273,8 @@
     ],
     "slug": "oiso-culture-0022",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 17,
@@ -1236,7 +1292,8 @@
     ],
     "slug": "oiso-culture-0017",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 19,
@@ -1255,7 +1312,8 @@
     ],
     "slug": "chigasaki-culture-0019",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 14,
@@ -1273,7 +1331,8 @@
     ],
     "slug": "kamakura-gourmet-0014",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 15,
@@ -1292,7 +1351,8 @@
     ],
     "slug": "ninomiya-gourmet-0015",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 16,
@@ -1311,7 +1371,8 @@
     ],
     "slug": "ninomiya-gourmet-0016",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 11,
@@ -1330,7 +1391,8 @@
     ],
     "slug": "fujisawa-business-0011",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 12,
@@ -1349,7 +1411,8 @@
     ],
     "slug": "fujisawa-business-0012",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 13,
@@ -1368,7 +1431,8 @@
     ],
     "slug": "kamakura-gourmet-0013",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 28,
@@ -1387,7 +1451,8 @@
     ],
     "slug": "chigasaki-people-0028",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 9,
@@ -1406,7 +1471,8 @@
     ],
     "slug": "fujisawa-business-0009",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 10,
@@ -1425,7 +1491,8 @@
     ],
     "slug": "fujisawa-gourmet-0010",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 5,
@@ -1444,7 +1511,8 @@
     ],
     "slug": "kamakura-tourism-0005",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 7,
@@ -1462,7 +1530,8 @@
     ],
     "slug": "kamakura-tourism-0007",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 18,
@@ -1481,7 +1550,8 @@
     ],
     "slug": "hiratsuka-culture-0018",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 2,
@@ -1500,7 +1570,8 @@
     ],
     "slug": "fujisawa-tourism-0002",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 3,
@@ -1519,7 +1590,8 @@
     ],
     "slug": "fujisawa-tourism-0003",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 4,
@@ -1538,7 +1610,8 @@
     ],
     "slug": "oiso-tourism-0004",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 6,
@@ -1556,7 +1629,8 @@
     ],
     "slug": "fujisawa-tourism-0006",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 8,
@@ -1575,7 +1649,8 @@
     ],
     "slug": "chigasaki-gourmet-0008",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 1,
@@ -1594,7 +1669,8 @@
     ],
     "slug": "fujisawa-tourism-0001",
     "eventStartDate": "",
-    "eventEndDate": ""
+    "eventEndDate": "",
+    "articleType": "stock"
   },
   {
     "id": 80,
@@ -1629,7 +1705,8 @@
       "江ノ電",
       "鎌倉権五郎景正"
     ],
-    "slug": "kamakura-culture-0080"
+    "slug": "kamakura-culture-0080",
+    "articleType": "news"
   },
   {
     "id": 81,
@@ -1664,7 +1741,8 @@
       "サーフカルチャー",
       "新店"
     ],
-    "slug": "fujisawa-gourmet-0081"
+    "slug": "fujisawa-gourmet-0081",
+    "articleType": "news"
   },
   {
     "id": 82,
@@ -1698,6 +1776,7 @@
       "ファストフード",
       "藤沢鎌倉線"
     ],
-    "slug": "kamakura-business-0082"
+    "slug": "kamakura-business-0082",
+    "articleType": "news"
   }
 ]
