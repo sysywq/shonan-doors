@@ -43,7 +43,7 @@ jobs:
       #    無関係なファイルが誤って巻き込まれないようにする。
       - name: 変更をgit add
         run: |
-          git add data/articles.json data/id_counter.json index.html \
+          git add data/articles.json data/id_counter.json data/stock_topics.json index.html \
                   articles/ area/ category/ page/ sitemap.xml robots.txt
 
       # 4) 「生成したと報告された記事」が、git add後のステージ内容に実際に
