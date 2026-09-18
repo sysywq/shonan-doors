@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/hiratsuka/</loc>
-    <lastmod>2026-09-06</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -37,17 +37,17 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/zushi/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/hayama/</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/tourism/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -72,12 +72,12 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/event/</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
-    <lastmod>2026-09-15</lastmod>
+    <lastmod>2026-09-19</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -92,6 +92,31 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/kamakura-business-0082/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/kamakura-event-0083/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/zushi-event-0084/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/hiratsuka-event-0085/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/kamakura-tourism-0086/</loc>
+    <lastmod>2026-09-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/hayama-life-0087/</loc>
     <lastmod>2026-09-19</lastmod>
     <priority>0.7</priority>
   </url>

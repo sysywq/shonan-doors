@@ -6,10 +6,10 @@
     "area": "茅ヶ崎",
     "category": "t",
     "searchIntent": "茅ヶ崎エリアでデートに使えるスポット・過ごし方の組み合わせを探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "茅ヶ崎デートスポット紹介という切り口は検索クエリとして現実的だが、スポットの羅列になりやすく湘南Doorsとしての独自視点を出しにくい。また茅ヶ崎エリアには既存のstock記事（美術館、博物館、桑田佳祐、熊澤酒造、サザンライブなど）が多く、デートという文脈で各スポットを再紹介する形になりカニバリゼーションが生じやすい。今回は他に優先度の高い候補があるためskip。",
     "createdAt": "2026-09-19"
   },
   {
@@ -19,10 +19,10 @@
     "area": "藤沢",
     "category": "g",
     "searchIntent": "藤沢でランチに行く店を探しているが、多すぎて選びきれない",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "「藤沢駅周辺のランチ」は検索需要は高いが、シーン別探し方という切り口では具体的な店舗情報なしには価値が薄く、一方で特定の店舗に絞ると鮮度が落ちる。既存のstock記事（辻堂エリアの精肉店・蔦屋書店・テラスモール・SHONAN TEA Luv.・鵠沼海岸コーヒーなど）と部分的に重複し、藤沢グルメ全体のカニバリゼーションリスクがある。today優先度の高い2件を選定したためskip。",
     "createdAt": "2026-09-19"
   },
   {
@@ -32,10 +32,10 @@
     "area": "藤沢",
     "category": "t",
     "searchIntent": "旅行や外出の予定日が雨予報で、江の島で屋内中心に楽しめる過ごし方を探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "江の島関連の既存記事が多数存在する（江の島灯籠、江の島サムエル・コッキング苑、えのすい、江の島神社・弁財天、江の島マイアミビーチショーなど）。「雨の日の屋内スポット」という切り口はやや差別化できるが、結局は水族館・洞窟・神社の屋根下等を案内することになり、既存記事と検索意図が実質重複する範囲が大きい。",
     "createdAt": "2026-09-19"
   },
   {
@@ -45,9 +45,9 @@
     "area": "鎌倉",
     "category": "t",
     "searchIntent": "子連れで鎌倉に行きたいが、坂道や混雑が心配で情報を探している",
-    "status": "candidate",
-    "generatedArticleId": null,
-    "generatedAt": null,
+    "status": "generated",
+    "generatedArticleId": 86,
+    "generatedAt": "2026-09-19 03:20",
     "skipReason": null,
     "createdAt": "2026-09-19"
   },
@@ -58,10 +58,10 @@
     "area": "逗子",
     "category": "t",
     "searchIntent": "湘南エリアでのドライブコースを探しているが、逗子から先の道の選び方に迷っている",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "「逗子 ドライブ コース」は検索需要があるが、既存のstock記事「御用邸の隣町として育まれた、逗子の暮らし」「逗子海岸花火大会」「逗子海岸映画祭」「CINEMA AMIGO」、さらに葉山の複数のstock記事（森戸海岸、葉山御用邸、葉山マリーナ等）と組み合わせると、逗子〜葉山エリアのコンテンツが既に手厚い。また「ドライブコースの選び方」という切り口はガイドとしての情報密度が薄くなりがちで、独自の掘り下げが難しい。t0007（葉山アクセス）を選定したため、同エリアのドライブ記事はこのタイミングではskipとする。",
     "createdAt": "2026-09-19"
   },
   {
@@ -71,10 +71,10 @@
     "area": "大磯",
     "category": "g",
     "searchIntent": "大磯で景色の良いカフェを探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "「大磯 カフェ 海が見える」は検索需要があるが、特定店舗の営業情報が変わりやすく、evergreen性を保ちながら具体的な価値を出すのが難しい。また大磯エリアには既存のstock記事（旧吉田茂邸、日本初の海水浴場、大磯の暮らし、別荘地、落花生栽培など）が存在し、カフェ情報を追加してもカテゴリ的な厚みは増えるが本日選定の2枠を他の優先度高い候補に譲る。",
     "createdAt": "2026-09-19"
   },
   {
@@ -84,9 +84,9 @@
     "area": "葉山",
     "category": "l",
     "searchIntent": "葉山には鉄道駅が無いため、公共交通でのアクセス方法を具体的に知りたい",
-    "status": "candidate",
-    "generatedArticleId": null,
-    "generatedAt": null,
+    "status": "generated",
+    "generatedArticleId": 87,
+    "generatedAt": "2026-09-19 03:20",
     "skipReason": null,
     "createdAt": "2026-09-19"
   },
@@ -97,10 +97,10 @@
     "area": "二宮",
     "category": "l",
     "searchIntent": "湘南エリアへの移住を検討しており、比較的知名度の低い二宮の暮らしやすさを知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存のstock記事「落花生とオリーブに囲まれた、二宮という小さな町（stock/二宮/暮らし）」と検索意図がほぼ同一。「湘南で家賃を抑えて暮らす」という切り口を加えても、既存記事の改訂・重複になりカニバリゼーションが避けられない。",
     "createdAt": "2026-09-19"
   },
   {
@@ -110,10 +110,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "平塚でのデートスポットを探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "「平塚 デートスポット」は既存のstock記事「360度の大パノラマ、平塚と大磯にまたがる絶景の丘（湘南平）」「地元の守り神として親しまれる、平塚八幡宮」「湘南のまんなかで暮らすという選択」と、案内するスポットが実質的に重複する。デートという文脈を加えても既存記事でカバーされている内容の組み合わせにとどまり、独自価値を十分に出しにくい。",
     "createdAt": "2026-09-19"
   },
   {
@@ -123,10 +123,10 @@
     "area": "藤沢",
     "category": "t",
     "searchIntent": "湘南でサーフィンを始めたいが、どのビーチが初心者向けか分からない",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存のstock記事「湘南屈指の賑わい、片瀬西浜・鵠沼海水浴場」でサーフィン文化が紹介済み。「1967年創業、サーファーが憧れるサーフショップ（辻堂）」もあり、湘南サーフィン初心者向けの情報として実質的な重複が生じる。また藤沢カテゴリの観光記事は既存コンテンツが最も充実しており、今回の枠では優先度が下がる。",
     "createdAt": "2026-09-19"
   }
 ]
