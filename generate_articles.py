@@ -208,6 +208,13 @@ def call_claude_news(recent_titles):
             if block.type == "tool_use" and block.name == "submit_articles":
                 return block.input["articles"]
 
+        if response.stop_reason == "pause_turn":
+            # web_search等のサーバー側ツールで長時間実行中のターンが一時停止しただけで、
+            # エラーではない。assistantの応答をそのまま積み、新しいuserメッセージは
+            # 追加せず、同じtools定義を維持したまま次のループ(=次のAPI呼び出し)へ進む。
+            messages.append({"role": "assistant", "content": response.content})
+            continue
+
         if response.stop_reason != "tool_use":
             raise RuntimeError(
                 "submit_articlesが呼ばれないまま終了しました。stop_reason="
@@ -450,6 +457,10 @@ def call_claude_stock_refill(existing_articles, stock_topics):
             if block.type == "tool_use" and block.name == "submit_new_stock_topics":
                 return block.input["topics"]
 
+        if response.stop_reason == "pause_turn":
+            messages.append({"role": "assistant", "content": response.content})
+            continue
+
         if response.stop_reason != "tool_use":
             raise RuntimeError(
                 "submit_new_stock_topicsが呼ばれないまま終了しました。stop_reason="
@@ -582,6 +593,10 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics):
         for block in response.content:
             if block.type == "tool_use" and block.name == "submit_stock_decisions":
                 return block.input["decisions"]
+
+        if response.stop_reason == "pause_turn":
+            messages.append({"role": "assistant", "content": response.content})
+            continue
 
         if response.stop_reason != "tool_use":
             raise RuntimeError(
