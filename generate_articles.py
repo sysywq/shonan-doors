@@ -245,6 +245,8 @@ def reserve_ids(count):
 def validate_item(item):
     """1件分の記事データがarticles.jsonのschemaに適合しているか検証する。
     不正なら理由の文字列を返し、問題なければNoneを返す。"""
+    if not isinstance(item, dict):
+        return f"記事オブジェクトがdictではない(型: {type(item).__name__})"
     required = ["cat", "area", "scene", "title", "dek", "body", "tags", "link"]
     for key in required:
         if key not in item:
@@ -306,6 +308,66 @@ def write_run_report(**fields):
         print(f"警告: 実行レポートの書き込みに失敗しました: {e}", file=sys.stderr)
 
 
+# ---------- APIレスポンス形状の検証(堅牢化) ----------
+
+MAX_REASONABLE_ARTICLES = 20  # これを超える件数が返ってきたら、明らかに異常なレスポンスとして処理を中断する
+
+
+def log_response_diagnostics(raw):
+    """今後GitHub Actions上で原因を追跡できるよう、安全な範囲の診断情報だけを出力する。
+    raw response全文やAPIキー等の機微情報は一切出力しない。"""
+    root_type = type(raw).__name__
+    length = None
+    try:
+        length = len(raw)
+    except Exception:
+        pass
+    first_item_type = None
+    try:
+        first = next(iter(raw))
+        first_item_type = type(first).__name__
+    except Exception:
+        pass
+    print(
+        f"[診断] articlesのroot型={root_type} 件数={length} 先頭要素の型={first_item_type}",
+        file=sys.stderr,
+    )
+
+
+def validate_response_shape(raw):
+    """call_claude()から返ってきた値が『記事dictのlist』という期待した形か検証する。
+    ここで弾かれたものは、件数のカウントにもreserve_idsにも一切渡さない。
+
+    実際に本番で、モデルのtool_use入力がJSON配列ではなく巨大な文字列になって
+    しまい、それをlist扱いしたことで「4404件」という文字数由来の異常な件数が
+    発生し、1文字ずつをitemとしてループしてクラッシュした事例があったため、
+    reserve_idsより前・件数を信用する前に必ずこの検証を通す。"""
+    log_response_diagnostics(raw)
+
+    if not isinstance(raw, list):
+        raise RuntimeError(
+            f"想定外のレスポンス形式です。articlesはlistである必要がありますが、"
+            f"実際の型は{type(raw).__name__}でした。"
+        )
+    if len(raw) == 0:
+        raise RuntimeError("articlesが空配列でした。")
+    if len(raw) > MAX_REASONABLE_ARTICLES:
+        raise RuntimeError(
+            f"articlesの件数が異常です({len(raw)}件、上限{MAX_REASONABLE_ARTICLES}件)。"
+            "APIレスポンスが壊れている可能性が高いため処理を中断します。"
+        )
+
+    non_dict_indices = [i for i, x in enumerate(raw) if not isinstance(x, dict)]
+    if non_dict_indices:
+        first_bad = raw[non_dict_indices[0]]
+        raise RuntimeError(
+            f"articles内に記事オブジェクト(dict)以外の要素が{len(non_dict_indices)}件"
+            f"含まれています(最初の不正要素のindex={non_dict_indices[0]}, "
+            f"型={type(first_bad).__name__})。"
+        )
+    return raw
+
+
 def main():
     if not os.path.exists(ARTICLES_JSON_PATH):
         raise SystemExit(f"{ARTICLES_JSON_PATH} が見つかりません。先にPhase 1の移行を完了させてください。")
@@ -320,9 +382,10 @@ def main():
 
     try:
         raw_items = call_claude(recent_titles)
+        raw_items = validate_response_shape(raw_items)
     except Exception as e:
         print(f"エラー: 記事生成に失敗しました。articles.jsonは変更していません。詳細: {e}", file=sys.stderr)
-        write_run_report(status="error", stage="call_claude", error=str(e),
+        write_run_report(status="error", stage="call_claude_or_validate", error=str(e),
                           accepted_ids=[], accepted_slugs=[])
         raise
 
@@ -338,7 +401,8 @@ def main():
     for i, item in enumerate(raw_items):
         reason = validate_item(item)
         if reason:
-            rejected.append((item.get("title", "(タイトル不明)"), f"スキーマ不正: {reason}"))
+            title_for_log = item.get("title", "(タイトル不明)") if isinstance(item, dict) else f"(dict以外: {type(item).__name__})"
+            rejected.append((title_for_log, f"スキーマ不正: {reason}"))
             continue
         dup_reason = is_duplicate(item, working_set)
         if dup_reason:
