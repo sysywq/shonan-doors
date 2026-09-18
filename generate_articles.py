@@ -87,15 +87,16 @@ MAX_STOCK_CANDIDATES_IN_PROMPT = 20  # プロンプトに渡す候補テーマ�
 NEWS_ARTICLE_TOOL = {
     "name": "submit_articles",
     "description": "調査・執筆が完了した記事を提出する。",
+    "strict": True,
     "input_schema": {
         "type": "object",
+        "additionalProperties": False,
         "properties": {
             "articles": {
                 "type": "array",
-                "minItems": NEWS_ARTICLES_PER_DAY,
-                "maxItems": NEWS_ARTICLES_PER_DAY,
                 "items": {
                     "type": "object",
+                    "additionalProperties": False,
                     "properties": {
                         "cat": {"type": "string", "enum": list(CATS.keys())},
                         "area": {"type": "string", "enum": AREAS},
@@ -324,15 +325,17 @@ def run_news_generation(existing_articles, today):
 STOCK_TOPIC_REFILL_TOOL = {
     "name": "submit_new_stock_topics",
     "description": "新しいストックSEOテーマ候補を提出する。",
+    "strict": True,
     "input_schema": {
         "type": "object",
+        "additionalProperties": False,
         "properties": {
             "topics": {
                 "type": "array",
                 "minItems": 1,
-                "maxItems": MAX_NEW_STOCK_TOPICS_PER_REFILL,
                 "items": {
                     "type": "object",
+                    "additionalProperties": False,
                     "properties": {
                         "query": {"type": "string", "description": "想定される検索クエリ(例: 「茅ヶ崎 デート」)"},
                         "titleIdea": {"type": "string", "description": "記事タイトル案"},
@@ -352,13 +355,16 @@ STOCK_DECISION_TOOL = {
     "name": "submit_stock_decisions",
     "description": "各ストック候補テーマについて、採用(write)するか見送る(skip)かを判定し、"
                     "採用する場合は記事本文もあわせて提出する。",
+    "strict": True,
     "input_schema": {
         "type": "object",
+        "additionalProperties": False,
         "properties": {
             "decisions": {
                 "type": "array",
                 "items": {
                     "type": "object",
+                    "additionalProperties": False,
                     "properties": {
                         "topicId": {"type": "string", "description": "評価対象の候補テーマのid"},
                         "decision": {"type": "string", "enum": ["write", "skip"]},
@@ -366,6 +372,7 @@ STOCK_DECISION_TOOL = {
                         "article": {
                             "type": "object",
                             "description": "decisionがwriteの場合のみ使用する。skipの場合は各項目を空文字/空配列にしてよい",
+                            "additionalProperties": False,
                             "properties": {
                                 "cat": {"type": "string", "enum": list(CATS.keys())},
                                 "area": {"type": "string", "enum": AREAS},
