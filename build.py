@@ -370,7 +370,8 @@ def render_breadcrumb(items):
             parts.append(f'<a href="{url}">{esc(label)}</a>')
         else:
             parts.append(f'<span aria-current="page">{esc(label)}</span>')
-    html_out = f'<nav class="breadcrumb" aria-label="breadcrumb">{" <span class=\"breadcrumb-sep\">›</span> ".join(parts)}</nav>'
+    breadcrumb_sep = ' <span class="breadcrumb-sep">›</span> '
+    html_out = f'<nav class="breadcrumb" aria-label="breadcrumb">{breadcrumb_sep.join(parts)}</nav>'
 
     ld = {
         "@context": "https://schema.org",
