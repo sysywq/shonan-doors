@@ -101,10 +101,9 @@ HEADER_HTML = """<header>
   </div>
   <div class="mission-strip">
     <div class="mission-inner">
+      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
       <p class="mission-text">
-        湘南には、まだ知られていない人がいる。まだ知られていない企業がある。<br>
-        「湘南Doors」は、湘南にある魅力を見つけ、伝え、つなぐことに情熱を注ぐ地域メディアです。<br>
-        湘南で暮らす人にも、これから関わりたい人にも、<strong>「知ってよかった」と思える出会い</strong>を届けます。
+        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
       </p>
     </div>
   </div>
@@ -207,6 +206,58 @@ def render_event_ended_banner(item, today=None):
         f'この記事は{int(y)}年{int(m)}月開催時点の情報です。'
         '</div>'
     )
+
+
+# ---------- トップページ PICK UP選定 ----------
+# 現時点ではGA4/Search Console等の外部人気度データを取得していないため、
+# 「終了済みイベントを除外した直近記事」を暫定fallbackとして使う。
+# 将来的にGA4等から popularity_scores={article_id: score} を用意できた場合、
+# その引数を渡すだけで人気順に切り替えられる構造にしてある
+# (呼び出し側のrender_index()やHTML/JS/CSSには一切手を加えずに済む)。
+
+def select_pickup_articles(articles, count=5, popularity_scores=None, today=None):
+    """PICK UPカルーセルに表示する記事を選ぶ。
+
+    popularity_scores が渡された場合はそのスコア降順で選ぶ(Phase 6以降、
+    GA4等の実データを使う際の差し替え口)。
+    Noneの場合(現状)は、以下の暫定fallbackロジックを使う:
+      1. event_lifecycle_status()が'ended'の記事を除外
+      2. 残りを公開日の新しい順に並べる
+      3. 同一エリアに極端に偏らないよう、まず各エリア1件ずつを優先的に
+         拾ってから、残り枠を新しい順で埋める(複雑なランキングは行わない)
+      4. 上位count件を返す
+    """
+    candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended"]
+
+    if popularity_scores:
+        candidates.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)
+        return candidates[:count]
+
+    candidates.sort(key=lambda a: a["date"], reverse=True)
+
+    picked = []
+    picked_ids = set()
+    seen_areas = set()
+    # 1巡目: エリアが被らない範囲で新しい順に拾う
+    for a in candidates:
+        if len(picked) >= count:
+            break
+        if a["area"] in seen_areas:
+            continue
+        picked.append(a)
+        picked_ids.add(a["id"])
+        seen_areas.add(a["area"])
+    # 2巡目: 件数が足りなければ、エリアの重複を気にせず新しい順で埋める
+    if len(picked) < count:
+        for a in candidates:
+            if len(picked) >= count:
+                break
+            if a["id"] in picked_ids:
+                continue
+            picked.append(a)
+            picked_ids.add(a["id"])
+
+    return picked
 
 
 # ---------- Phase 2: SEO用メタデータ生成 ----------
@@ -595,11 +646,11 @@ def render_index(articles, scenes):
         f'<a class="insta-grid-item" href="/articles/{a["slug"]}/">{scenes[a["scene"]]}</a>' for a in insta_items
     )
 
-    featured_ids = [1, 8, 19, 23, 56]
+    featured_articles = select_pickup_articles(articles, count=5)
     pickup_items = [
         {"id": a["id"], "slug": a["slug"], "cat": a["cat"], "area": a["area"],
          "title": a["title"], "dek": a["dek"], "scene": a["scene"]}
-        for a in (insta_map.get(i) for i in featured_ids) if a
+        for a in featured_articles
     ]
     pickup_items_json = json.dumps(pickup_items, ensure_ascii=False)
     cats_label_bg_json = json.dumps({k: {"label": v["label"], "bg": v["bg"]} for k, v in CATS.items()}, ensure_ascii=False)
