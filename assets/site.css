@@ -42,7 +42,8 @@
 
   .mission-strip{border-top:1px solid var(--line-soft); background:var(--bg);}
   .mission-inner{max-width:760px; margin:0 auto; padding:22px 28px; text-align:center;}
-  .mission-text{font-size:15px; line-height:1.9; color:var(--ink);}
+  .mission-tagline{font-size:20px; font-weight:700; color:var(--ink); margin:0 0 8px;}
+  .mission-text{font-size:15px; line-height:1.9; color:var(--ink-soft); margin:0;}
   .mission-text strong{color:var(--trust); font-weight:700;}
   @media (max-width:760px){ .brand-name{font-size:27px;} }
 
@@ -155,6 +156,7 @@
     background:var(--card); border-radius:5px; overflow:hidden; cursor:pointer;
     opacity:.4; transform:scale(.92); transition:opacity .3s, transform .3s;
     box-shadow:0 4px 16px rgba(15,32,56,.06);
+    text-decoration:none; color:inherit;
   }
   .pickup-card.active{ opacity:1; transform:scale(1); box-shadow:0 14px 34px rgba(15,32,56,.14); }
   .pickup-card-img{position:relative; height:230px;}
@@ -181,6 +183,11 @@
     .pickup-section{padding:0 16px;}
     .pickup-card{width:80vw;}
     .pickup-card-img{height:170px;}
+    main{padding-left:16px; padding-right:16px;}
+    .filter-inner{padding-left:16px; padding-right:16px;}
+    .mission-inner{padding-left:16px; padding-right:16px;}
+    .hub-page-wrap{padding-left:16px; padding-right:16px;}
+    .head-inner{padding-left:16px; padding-right:16px;}
   }
 
   /* ===== modal official-link / video ===== */
