@@ -195,22 +195,33 @@
        消して.brand-link自身のflexアイテムへ展開し、タグラインとSNS行に
        flex-basis:100%を与えて強制的に折り返す(＝新しい行にする)手法。 */
     .brand-block{flex-wrap:wrap; row-gap:6px;}
-    .brand-link{flex-wrap:wrap; gap:0 12px; width:100%;}
+    .brand-link{flex-wrap:wrap; gap:0 14px; width:100%;}
     .brand-text{display:contents;}
-    .brand-mark{width:34px; height:34px;}
-    .brand-name{font-size:19px;}
+    .brand-mark{width:38px; height:38px;}
+    .brand-name{font-size:26px;}
     .brand-tagline{
       flex:0 0 100%; margin-top:0;
       font-size:11px; letter-spacing:.06em;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-    .sns-row{flex:0 0 100%; margin-top:2px; gap:0; justify-content:space-between;}
+    /* SNSは画面幅いっぱいに均等配置(space-between)ではなく、
+       6個を1グループとして右寄せにする。gapで間隔は均等のまま。 */
+    .sns-row{flex:0 0 100%; margin-top:2px; gap:10px; justify-content:flex-end;}
     .sns-icon{width:30px; height:30px;}
 
-    /* 記事本文: article-page-wrapとmodal-bodyの左右paddingが二重に
-       加算されていたのを解消し、viewport端から本文まで約16pxにする。 */
-    .article-page-wrap{padding-left:16px; padding-right:16px;}
-    .modal-body{padding-left:0; padding-right:0;}
+    /* 記事カード(.modal)をviewportに対してほぼ全幅にする。
+       article-page-wrap自体の左右paddingは無くし、その代わりに
+       breadcrumb/related-articles/back-to-topなど「カードの外側」の
+       各要素へ個別に16pxのpaddingを持たせることで、カードの白背景は
+       viewport端まで広がりつつ、テキスト位置は揃った状態を保つ。 */
+    .article-page-wrap{padding-left:0; padding-right:0;}
+    .modal-body{padding-left:16px; padding-right:16px;}
+    .breadcrumb{padding-left:16px; padding-right:16px;}
+    .related-articles{padding-left:16px; padding-right:16px;}
+    .back-to-top{margin-left:16px;}
+    /* カードの縁取り(border)を外し、背景色との境界を目立たなくする。
+       ブランドカラー・box-shadowの仕様自体は変更しない(元々box-shadow:noneのまま)。*/
+    .article-modal-static{border:none; border-radius:0;}
   }
 
   /* ===== modal official-link / video ===== */
