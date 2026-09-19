@@ -34,6 +34,7 @@
     display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;
   }
   .brand-block{display:flex; align-items:center; gap:16px;}
+  .brand-link{display:flex; align-items:center; gap:16px; text-decoration:none; color:inherit;}
   .brand-mark{width:52px; height:52px; flex-shrink:0;}
   .brand-name{font-size:34px; font-weight:600; letter-spacing:.06em; line-height:1;}
   .brand-tagline{margin-top:8px; font-size:12.5px; letter-spacing:.15em; color:var(--ink-soft);}
@@ -109,7 +110,7 @@
   .modal-eyebrow{font-size:11.5px; color:var(--cta-deep); letter-spacing:.1em; font-weight:700; display:flex; gap:10px; align-items:center;}
   .modal-title{font-family:'Shippori Mincho',serif; font-size:26px; font-weight:700; margin:10px 0 6px; line-height:1.5;}
   .modal-dek{font-size:13.5px; color:var(--ink-soft); margin-bottom:22px; line-height:1.8; border-left:3px solid var(--cta); padding-left:12px;}
-  .modal-text{font-size:14.5px; line-height:2.1; color:var(--ink); white-space:pre-line;}
+  .modal-text{font-size:14.5px; line-height:2.1; color:var(--ink); white-space:pre-line; text-align:justify; text-justify:inter-character;}
   .modal-tags{margin-top:24px; display:flex; gap:8px; flex-wrap:wrap;}
   .tag-pill{font-size:11px; color:var(--ink-soft); border:1px solid var(--line); padding:4px 11px; border-radius:20px;}
 
@@ -188,6 +189,28 @@
     .mission-inner{padding-left:16px; padding-right:16px;}
     .hub-page-wrap{padding-left:16px; padding-right:16px;}
     .head-inner{padding-left:16px; padding-right:16px;}
+
+    /* ヘッダーを「ロゴ+タイトル」「タグライン」「SNS」の3段構成にする。
+       DOMは変更せず、.brand-text(ロゴ横のテキスト塊)をdisplay:contentsで
+       消して.brand-link自身のflexアイテムへ展開し、タグラインとSNS行に
+       flex-basis:100%を与えて強制的に折り返す(＝新しい行にする)手法。 */
+    .brand-block{flex-wrap:wrap; row-gap:6px;}
+    .brand-link{flex-wrap:wrap; gap:0 12px; width:100%;}
+    .brand-text{display:contents;}
+    .brand-mark{width:34px; height:34px;}
+    .brand-name{font-size:19px;}
+    .brand-tagline{
+      flex:0 0 100%; margin-top:0;
+      font-size:11px; letter-spacing:.06em;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .sns-row{flex:0 0 100%; margin-top:2px; gap:0; justify-content:space-between;}
+    .sns-icon{width:30px; height:30px;}
+
+    /* 記事本文: article-page-wrapとmodal-bodyの左右paddingが二重に
+       加算されていたのを解消し、viewport端から本文まで約16pxにする。 */
+    .article-page-wrap{padding-left:16px; padding-right:16px;}
+    .modal-body{padding-left:0; padding-right:0;}
   }
 
   /* ===== modal official-link / video ===== */
