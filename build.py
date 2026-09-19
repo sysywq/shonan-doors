@@ -958,6 +958,44 @@ def render_top_pagination_pages(articles, scenes):
     return pages
 
 
+def render_404_page():
+    """GitHub Pages用のカスタム404ページ。
+    - canonical・structured data・sitemapへの掲載は行わない(実在しないURL用のため)
+    - noindex,followを付与し、検索エンジンにインデックスさせない
+    - 既存のHEADER_HTML/FOOTER_HTML/hub-page-wrapをそのまま再利用し、
+      デザインの二重管理を避ける"""
+    area_links_html = "".join(
+        f'<a class="card" href="/area/{AREA_EN[a]}/" style="padding:14px 18px; display:inline-block; margin:4px;">{esc(a)}</a>'
+        for a in AREA_ORDER
+    )
+
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<title>お探しのページが見つかりません｜湘南Doors</title>
+<meta name="robots" content="noindex,follow">
+{HEAD_COMMON}
+</head>
+<body>
+{HEADER_HTML}
+<main>
+  <div class="hub-page-wrap">
+    <h1 class="hub-title serif">お探しのページが見つかりません</h1>
+    <p class="hub-subtitle">ページが移動・削除されたか、URLが間違っている可能性があります。</p>
+    <p style="margin:20px 0;"><a class="back-to-top" href="/" style="font-size:14px;">← 湘南Doors トップへ戻る</a></p>
+    <div style="margin-top:12px;">
+      <div class="hub-subtitle" style="margin-bottom:10px;">湘南の主要エリアから探す</div>
+      <div>{area_links_html}</div>
+    </div>
+  </div>
+</main>
+{FOOTER_HTML}
+<script src="/assets/common.js" defer></script>
+</body>
+</html>
+"""
+
+
 def render_sitemap(articles):
     from datetime import date
     today = date.today().isoformat()
@@ -1057,9 +1095,11 @@ def main():
         new_index_html = render_index(articles, scenes)
         new_sitemap_xml = render_sitemap(articles)
         new_robots_txt = render_robots_txt()
+        new_404_html = render_404_page()
         write("index.html", new_index_html)
         write("sitemap.xml", new_sitemap_xml)
         write("robots.txt", new_robots_txt)
+        write("404.html", new_404_html)
 
         # ここまで例外なく到達できた場合のみ、本番ディレクトリを置き換える。
         # articles/ area/ category/ page/ はビルド生成物のみが置かれるディレクトリ
@@ -1073,7 +1113,7 @@ def main():
             if os.path.isdir(staged_dir):
                 shutil.move(staged_dir, final_dir)
 
-        for filename in ("index.html", "sitemap.xml", "robots.txt"):
+        for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html"):
             tmp_path = os.path.join(ROOT, filename + ".tmp")
             shutil.move(os.path.join(staging_dir, filename), tmp_path)
             os.replace(tmp_path, os.path.join(ROOT, filename))
@@ -1086,7 +1126,7 @@ def main():
             shutil.rmtree(staging_dir)
 
     print(f"ビルド完了: 記事ページ {len(articles)} 件 + 地域ハブ{len(by_area)} + "
-          f"カテゴリハブ{len(by_cat)} + トップページ + sitemap.xml + robots.txt")
+          f"カテゴリハブ{len(by_cat)} + トップページ + sitemap.xml + robots.txt + 404.html")
 
 
 if __name__ == "__main__":
