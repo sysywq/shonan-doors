@@ -268,3 +268,10 @@ a.card{text-decoration:none; color:inherit;}
 .foot-area-links-label{font-size:11px; color:var(--ink-faint); letter-spacing:.04em; margin-right:2px;}
 .foot-area-links a{font-size:12px; color:var(--ink-soft); text-decoration:underline;}
 .foot-area-links a:hover{color:var(--trust);}
+
+/* ===== 終了イベントバナー(Phase 4: Event Lifecycle v1) ===== */
+.event-ended-banner{
+  display:inline-block; font-size:12.5px; font-weight:700; color:#8a4b12;
+  background:#FBEBD1; border:1px solid #E8C98A; border-radius:4px;
+  padding:8px 12px; margin:10px 0 4px;
+}

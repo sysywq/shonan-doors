@@ -41,6 +41,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 ARTICLES_JSON_PATH = os.path.join(ROOT, "data", "articles.json")
 ID_COUNTER_PATH = os.path.join(ROOT, "data", "id_counter.json")
 STOCK_TOPICS_PATH = os.path.join(ROOT, "data", "stock_topics.json")
+EVENT_SERIES_PATH = os.path.join(ROOT, "data", "event_series.json")
 # 実行結果レポート。ワークフロー側が「本当に永続化されたか」を検証するための
 # 機械可読な記録。リポジトリの外(の一時領域)に書くため、誤ってcommit対象に
 # 含まれる心配がない。
@@ -108,6 +109,7 @@ NEWS_ARTICLE_TOOL = {
                         "link": {"type": "string", "description": "一次情報源のURL。見つからなければ空文字"},
                         "eventStartDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 開催日をYYYY-MM-DD形式で。複数日開催の場合は初日。不明な場合は空文字"},
                         "eventEndDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 複数日開催の場合の最終日をYYYY-MM-DD形式で。単日開催または不明な場合は空文字"},
+                        "eventSeriesKey": {"type": "string", "description": "catが'e'(イベント)の場合のみ: このイベントの一意なシリーズ識別子(kebab-case英数字、例: tsurugaoka-hachimangu-reitaisai)。既存のイベントシリーズ台帳に一致するイベントがあれば同じキーを使い、無ければ新しいキーを考える。catが'e'以外の場合は空文字"},
                         "address": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "access": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "hours": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
@@ -119,7 +121,7 @@ NEWS_ARTICLE_TOOL = {
                     },
                     "required": [
                         "cat", "area", "scene", "title", "dek", "body", "tags", "link",
-                        "eventStartDate", "eventEndDate",
+                        "eventStartDate", "eventEndDate", "eventSeriesKey",
                         "address", "access", "hours", "closedDays",
                         "instagram", "facebook", "x", "tiktok",
                     ],
@@ -131,7 +133,7 @@ NEWS_ARTICLE_TOOL = {
 }
 
 
-def build_news_system_prompt(recent_titles):
+def build_news_system_prompt(recent_titles, event_series=None):
     recent_block = ""
     if recent_titles:
         joined = "\n".join(f"- {t}" for t in recent_titles)
@@ -143,6 +145,36 @@ def build_news_system_prompt(recent_titles):
 を選んでください。
 {joined}
 """
+
+    event_series = event_series or []
+    if event_series:
+        series_lines = "\n".join(
+            f"- key=\"{s['seriesKey']}\" 名称: {s.get('canonicalName','')}"
+            f"（エリア: {s.get('area','')}）"
+            for s in event_series
+        )
+        series_block = f"""
+【イベントシリーズ台帳(eventSeriesKeyについて・必須)】
+湘南Doorsでは、毎年繰り返し開催されるイベント(例: 例大祭、花火大会、まつり等)を
+"eventSeriesKey"という識別子で管理しています。現在登録されているシリーズ:
+{series_lines}
+
+今回書くイベント記事が、上記のいずれかと同一のイベント(同じ祭り・同じ大会等、
+開催回数や年度が違うだけの同一イベント)であれば、**必ず同じkeyをそのまま使って
+ください**(新しいキーを作らないこと)。上記のどれにも当てはまらない新しいイベント
+であれば、内容を表す新しいkebab-case(小文字英数字とハイフンのみ)のkeyを考えて
+ください(例: "enoshima-toro"、"koide-gawa-higanbana-matsuri")。
+catが'e'(イベント)以外の記事では、eventSeriesKeyは空文字にしてください。
+"""
+    else:
+        series_block = """
+【イベントシリーズ台帳(eventSeriesKeyについて・必須)】
+まだ登録されているイベントシリーズはありません。catが'e'(イベント)の記事を書く
+場合は、そのイベントの内容を表す新しいkebab-case(小文字英数字とハイフンのみ)の
+eventSeriesKeyを考えてください(例: "enoshima-toro")。catが'e'以外の記事では
+空文字にしてください。
+"""
+
     return f"""あなたは地域メディア「湘南Doors」の編集者です。
 対象エリアは次の8つに限定してください: {", ".join(AREAS)}
 カテゴリは次のいずれかを使ってください: {json.dumps(CATS, ensure_ascii=False)}
@@ -173,8 +205,8 @@ SNSアカウント等の具体的な情報は、必ずその一次情報源（�
 埋めてください。複数日にわたって開催される場合はeventEndDate(最終日)も埋めてください。
 単日開催の場合はeventEndDateは空文字のままで構いません。開催日が確認できない場合のみ、
 eventStartDateを空文字にしてください(この場合、検索結果でのイベント情報表示の対象外に
-なります)。
-
+なります)。日付は必ず情報源に明記されているものだけを使い、推測で埋めないこと。
+{series_block}
 本文(body)は4段落程度・合計1000文字以上とし、段落の区切りは\\n\\nで表現してください。
 事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。
 他サイトの文章の丸写しは禁止、必ず自分の言葉で書き直すこと。
@@ -203,9 +235,9 @@ articlesは必ずJSON配列(Python側ではlistとして解釈される構造)�
 """
 
 
-def call_claude_news(recent_titles):
+def call_claude_news(recent_titles, event_series=None):
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    system_prompt = build_news_system_prompt(recent_titles)
+    system_prompt = build_news_system_prompt(recent_titles, event_series)
 
     messages = [{
         "role": "user",
@@ -252,15 +284,16 @@ def call_claude_news(recent_titles):
     raise RuntimeError("10ターン以内にsubmit_articlesが呼ばれませんでした。")
 
 
-def run_news_generation(existing_articles, today):
-    """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines)
+def run_news_generation(existing_articles, today, event_series=None):
+    """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines, event_series)
     致命的なエラー(API呼び出し失敗・レスポンス形状異常)はそのまま例外を送出する
     (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。"""
     log_lines = []
+    event_series = list(event_series or [])
     cutoff = (datetime.now(ZoneInfo("Asia/Tokyo")) - timedelta(days=90)).strftime("%Y-%m-%d")
     recent_titles = [a["title"] for a in existing_articles if a.get("date", "") >= cutoff]
 
-    raw_items = call_claude_news(recent_titles)
+    raw_items = call_claude_news(recent_titles, event_series)
     raw_items = validate_response_shape(raw_items, label="news")
 
     if len(raw_items) != NEWS_ARTICLES_PER_DAY:
@@ -281,6 +314,10 @@ def run_news_generation(existing_articles, today):
         if dup_reason:
             log_lines.append(f"スキップ(news): 「{item['title']}」— 重複疑い: {dup_reason}")
             continue
+        series_dup_reason = check_series_year_duplicate(item, working_set)
+        if series_dup_reason:
+            log_lines.append(f"スキップ(news): 「{item['title']}」— {series_dup_reason}")
+            continue
 
         new_id = reserved_ids[i]
         entry = {
@@ -295,6 +332,7 @@ def run_news_generation(existing_articles, today):
             "date": today,
             "eventStartDate": item.get("eventStartDate") or "",
             "eventEndDate": item.get("eventEndDate") or "",
+            "eventSeriesKey": item.get("eventSeriesKey") or "",
             "address": item.get("address") or "",
             "access": item.get("access") or "",
             "hours": item.get("hours") or "",
@@ -311,11 +349,14 @@ def run_news_generation(existing_articles, today):
         }
         accepted.append(entry)
         working_set.append(entry)
+        event_series, added = register_event_series_if_new(entry, event_series)
+        if added:
+            log_lines.append(f"news: 新規イベントシリーズ「{entry['eventSeriesKey']}」を台帳に追加しました")
 
     log_lines.append(
         f"news: {len(accepted)}/{len(raw_items)}件を採用しました (id:{[a['id'] for a in accepted]})"
     )
-    return accepted, log_lines
+    return accepted, log_lines, event_series
 
 
 # ============================================================
@@ -862,6 +903,105 @@ def is_duplicate(item, existing_articles, days=90):
     return None
 
 
+# ---------- Phase 4: 同一イベントシリーズ・同一年度の重複判定 ----------
+# 「同一eventSeriesKey + 同一年度」だけでは無条件でreject しない。
+# タイトル/dek/タグのいずれかの類似度が閾値を超えた場合のみ「検索意図が
+# 同一」とみなして重複扱いにする(閾値未満なら、同じイベント・同じ年度でも
+# 異なる切り口の記事として許容する)。
+SERIES_TITLE_SIM_THRESHOLD = 0.30
+SERIES_DEK_SIM_THRESHOLD = 0.30
+SERIES_TAG_SIM_THRESHOLD = 0.25
+
+
+def _char_bigrams(s):
+    s = (s or "").replace(" ", "").replace("\u3000", "")
+    return set(s[i:i + 2] for i in range(len(s) - 1))
+
+
+def _text_similarity(a, b):
+    """日本語向けの軽量な類似度指標(文字bigramのJaccard係数)。
+    形態素解析器を導入せずに、タイトル/dekの表現ゆれをある程度吸収できる。"""
+    A, B = _char_bigrams(a), _char_bigrams(b)
+    if not A or not B:
+        return 0.0
+    return len(A & B) / len(A | B)
+
+
+def year_of(article):
+    """記事の「年度」を、eventStartDateがあればそこから、無ければdateから算出する。"""
+    if article.get("eventStartDate"):
+        return article["eventStartDate"][:4]
+    return (article.get("date") or "")[:4]
+
+
+def check_series_year_duplicate(item, existing_articles):
+    """同一eventSeriesKey・同一年度の既存記事の中に、タイトル/dek/タグの
+    類似度が閾値を超えるもの(=検索意図が実質同一と判定できるもの)があれば
+    理由文字列を返す。無ければNoneを返す(同シリーズ・同年度でも許容)。"""
+    series_key = item.get("eventSeriesKey")
+    if not series_key:
+        return None
+    item_year = year_of(item)
+    if not item_year:
+        return None
+
+    item_tags = set(item.get("tags", []))
+    for existing in existing_articles:
+        if existing.get("eventSeriesKey") != series_key:
+            continue
+        if year_of(existing) != item_year:
+            continue
+
+        title_sim = _text_similarity(item.get("title", ""), existing.get("title", ""))
+        dek_sim = _text_similarity(item.get("dek", ""), existing.get("dek", ""))
+        existing_tags = set(existing.get("tags", []))
+        tag_sim = 0.0
+        if item_tags and existing_tags:
+            tag_sim = len(item_tags & existing_tags) / len(item_tags | existing_tags)
+
+        if (title_sim >= SERIES_TITLE_SIM_THRESHOLD
+                or dek_sim >= SERIES_DEK_SIM_THRESHOLD
+                or tag_sim >= SERIES_TAG_SIM_THRESHOLD):
+            return (
+                f"同一イベントシリーズ(eventSeriesKey={series_key})・同一年度({item_year})の"
+                f"既存記事id:{existing['id']}と検索意図が同一と判定"
+                f"(title類似度{title_sim:.2f}, dek類似度{dek_sim:.2f}, tag類似度{tag_sim:.2f})"
+            )
+    return None
+
+
+# ---------- Phase 4: イベントシリーズ台帳の読み書き ----------
+
+def load_event_series():
+    if not os.path.exists(EVENT_SERIES_PATH):
+        return []
+    return load_json(EVENT_SERIES_PATH)
+
+
+def register_event_series_if_new(item, event_series):
+    """記事が新しいeventSeriesKeyを使っていれば、台帳へ追記する。
+    既存キーの場合は何もしない(台帳の内容を書き換えない)。"""
+    series_key = item.get("eventSeriesKey")
+    if not series_key or item.get("cat") != "e":
+        return event_series, False
+    if any(s["seriesKey"] == series_key for s in event_series):
+        return event_series, False
+    if not re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", series_key):
+        # kebab-case以外の値は登録しない(将来の自動運用で扱いに困る形式を弾く保険)。
+        # ただし記事自体の生成・保存は妨げない。
+        return event_series, False
+    event_series.append({
+        "seriesKey": series_key,
+        "canonicalName": item.get("title", ""),
+        "aliases": [],
+        "area": item.get("area", ""),
+        "category": item.get("cat", ""),
+        "createdAt": datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d"),
+    })
+    return event_series, True
+
+
+
 # ---------- 実行結果レポート ----------
 
 def write_run_report(**fields):
@@ -946,6 +1086,7 @@ def main():
 
     existing_articles = load_json(ARTICLES_JSON_PATH)
     today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
+    event_series = load_event_series()
 
     log_lines = []
 
@@ -960,7 +1101,7 @@ def main():
         log_lines.append("news: NEWS_ARTICLES_PER_DAY=0 のため、ニュース生成は意図的にスキップしました")
     else:
         try:
-            accepted_news, news_log = run_news_generation(existing_articles, today)
+            accepted_news, news_log, event_series = run_news_generation(existing_articles, today, event_series)
             log_lines.extend(news_log)
         except Exception as e:
             print(f"エラー: ニュース記事の生成に失敗しました。articles.jsonは変更していません。詳細: {e}", file=sys.stderr)
@@ -1009,14 +1150,18 @@ def main():
             accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
             news_count=0, stock_count=0, total_count=0,
         )
-        # ストック台帳の状態(候補追加・skip反映)だけは保存しておく価値があるため書き込む
+        # ストック台帳・イベントシリーズ台帳の状態(候補追加・skip反映)だけは
+        # 保存しておく価値があるため書き込む
         if stock_topics:
             atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
+        if event_series:
+            atomic_write_json(EVENT_SERIES_PATH, event_series)
         sys.exit(1)
 
     new_articles = existing_articles + accepted_all
     atomic_write_json(ARTICLES_JSON_PATH, new_articles)
     atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
+    atomic_write_json(EVENT_SERIES_PATH, event_series)
 
     news_ids = [a["id"] for a in accepted_news]
     stock_ids = [a["id"] for a in accepted_stock]

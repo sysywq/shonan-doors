@@ -23,6 +23,7 @@ import os
 import re
 import html
 import shutil
+from datetime import date as _date
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_DOMAIN = "https://www.shonandoors.com"  # CNAMEファイルに準拠(wwwあり)
@@ -152,6 +153,60 @@ def esc(s):
 def format_date(d):
     y, m, day = d.split("-")
     return f"{y}.{m}.{day}"
+
+
+# ---------- Phase 4: イベントライフサイクル判定(表示用途のみ) ----------
+# 重要: この判定はユーザー向けの終了表示(バナー等)にのみ使用する。
+# Event structured data(build_structured_data内)の出力可否・eventStatusの
+# 値は、この関数の結果に一切依存させない(開催日超過だけを理由に
+# Event構造化データをArticleへフォールバックさせたり、eventStatusを
+# 書き換えたりしない、という今回の方針のため)。
+
+def event_lifecycle_status(item, today=None):
+    """cat='e'の記事について、eventStartDate/eventEndDateをもとに
+    'upcoming' / 'ongoing' / 'ended' / 'unknown' のいずれかを返す。
+
+    - eventEndDateが無い場合は、eventStartDateをeffective_endとして扱う
+      (単日イベントの自然なfallback)。
+    - eventStartDateが無い場合は判定不能として'unknown'を返す
+      (日付を推測しないため)。
+    """
+    if today is None:
+        today = _date.today()
+    start = item.get("eventStartDate") or ""
+    if not start:
+        return "unknown"
+    end = item.get("eventEndDate") or start
+    try:
+        start_d = _date.fromisoformat(start)
+        end_d = _date.fromisoformat(end)
+    except (ValueError, TypeError):
+        return "unknown"
+    if today < start_d:
+        return "upcoming"
+    if start_d <= today <= end_d:
+        return "ongoing"
+    if today > end_d:
+        return "ended"
+    return "unknown"
+
+
+def render_event_ended_banner(item, today=None):
+    """cat='e'かつステータスが'ended'の場合のみ、記事上部に表示する
+    終了バナーHTMLを返す。それ以外はNoneを返す(何も挿入しない)。"""
+    if item.get("cat") != "e":
+        return None
+    status = event_lifecycle_status(item, today)
+    if status != "ended":
+        return None
+    start = item["eventStartDate"]
+    y, m, _ = start.split("-")
+    return (
+        '<div class="event-ended-banner">'
+        '⚠ このイベントは終了しました。'
+        f'この記事は{int(y)}年{int(m)}月開催時点の情報です。'
+        '</div>'
+    )
 
 
 # ---------- Phase 2: SEO用メタデータ生成 ----------
@@ -451,6 +506,7 @@ def render_article_main(item, scenes, all_articles):
         (item["title"], None),
     ])
     related_html = render_related_articles(item, all_articles, scenes)
+    event_ended_banner = render_event_ended_banner(item) or ""
 
     return f"""<main>
   <div class="article-page-wrap">
@@ -459,6 +515,7 @@ def render_article_main(item, scenes, all_articles):
       <div class="modal-art">{scenes[item["scene"]]}</div>
       <div class="modal-body">
         <div class="modal-eyebrow">{esc(CATS[item["cat"]]["label"])}<span style="color:var(--ink-faint); font-weight:400;">／ {esc(item["area"])}</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">{format_date(item["date"])}</span></div>
+        {event_ended_banner}
         <h1 class="modal-title serif">{esc(item["title"])}</h1>
         <p class="modal-dek">{esc(item["dek"])}</p>
         <div class="modal-text">{body_html}</div>
