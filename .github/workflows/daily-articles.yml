@@ -6,6 +6,13 @@ on:
     - cron: '0 20 * * *'
   workflow_dispatch: {}   # 手動実行もできるようにしておく（テスト用）
 
+# Scheduled RunとworkflowDispatch(手動実行)等が重なった場合に、
+# Daily Article Automationが同時実行されないようにする。
+# 実行中のrunをキャンセルはせず、後から来たrunを待機させる。
+concurrency:
+  group: daily-articles
+  cancel-in-progress: false
+
 jobs:
   generate:
     runs-on: ubuntu-latest
