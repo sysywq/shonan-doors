@@ -43,33 +43,52 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
+
+<section class="hero">
+  <img class="hero-visual" src="/assets/images/hero/shonan-hero.webp" width="1672" height="941" alt="湘南の海岸から望む富士山と江の島" fetchpriority="high" decoding="async">
+  <div class="hero-overlay">
+    <div class="hero-inner">
+      <p class="hero-tagline serif">湘南を、もっと<br>知りたくなる。</p>
+      <p class="hero-sub">湘南の今を、<br>人・まち・くらしの視点でお届けします。</p>
+    </div>
+  </div>
+</section>
+<nav class="cat-nav" aria-label="カテゴリーから探す">
+  <div class="cat-nav-track"><a class="cat-nav-item" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7; color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="cat-nav-label">観光</span></a><a class="cat-nav-item" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7; color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">企業・店舗</span></a><a class="cat-nav-item" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE; color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">グルメ</span></a><a class="cat-nav-item" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6; color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="cat-nav-label">人</span></a><a class="cat-nav-item" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4; color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">文化</span></a><a class="cat-nav-item" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9; color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">イベント</span></a><a class="cat-nav-item" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC; color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">暮らし</span></a></div>
+</nav>
 
 <!-- top banner slot (松プラン想定・回転バナー) : 実際に広告主がつく際は、ステマ規制対応として小さく「PR」等の表示を追加してください -->
 <div class="pickup-section">
+  <div class="pickup-section-title">ピックアップ記事</div>
   <div class="pickup-viewport" id="pickupViewport">
     <div class="pickup-track" id="pickupTrack"></div>
   </div>
@@ -82,380 +101,308 @@
 
 <div class="filterbar">
   <div class="filter-inner">
-    <div class="chip-row" id="catChips"><a class="chip" href="/category/tourism/">観光</a><a class="chip" href="/category/business/">企業・店舗</a><a class="chip" href="/category/gourmet/">グルメ</a><a class="chip" href="/category/people/">人</a><a class="chip" href="/category/culture/">文化</a><a class="chip" href="/category/event/">イベント</a><a class="chip" href="/category/life/">暮らし</a></div>
-    <div class="filter-right">
-      <select id="areaSelect" onchange="if(this.value) location.href='/area/'+this.value+'/';">
-        <option value="">エリアで探す</option><option value="fujisawa">藤沢</option><option value="chigasaki">茅ヶ崎</option><option value="kamakura">鎌倉</option><option value="hiratsuka">平塚</option><option value="oiso">大磯</option><option value="ninomiya">二宮</option><option value="zushi">逗子</option><option value="hayama">葉山</option>
-      </select>
-      <input type="text" id="searchBox" placeholder="このページ内をキーワードで絞り込み">
-    </div>
+    <select id="areaSelect" onchange="if(this.value) location.href='/area/'+this.value+'/';">
+      <option value="">エリアで探す</option><option value="fujisawa">藤沢</option><option value="chigasaki">茅ヶ崎</option><option value="kamakura">鎌倉</option><option value="hiratsuka">平塚</option><option value="oiso">大磯</option><option value="ninomiya">二宮</option><option value="zushi">逗子</option><option value="hayama">葉山</option>
+    </select>
+    <input type="text" id="searchBox" placeholder="このページ内をキーワードで絞り込み">
   </div>
 </div>
 
 <main>
   <div class="content-layout">
     <div class="content-main">
-      <p id="resultCount">全 94 件中 最新24件を表示中</p>
-      <div class="grid" id="grid">
-      <a class="card" href="/articles/chigasaki-event-0093/" data-cat="e" data-area="茅ヶ崎" data-search="タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催3年ぶりの復活となる第4回タイランドフェスティバル湘南。ナイトマーケットをテーマに、タイ料理・雑貨・音楽・ダンスを茅ヶ崎中央公園で楽しめる。入場無料。タイランドフェスティバル茅ヶ崎ナイトマーケットタイ料理グルメ音楽イベント国際無料">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.20</div>
-          <div class="card-title serif">タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催</div>
-          <div class="card-dek">3年ぶりの復活となる第4回タイランドフェスティバル湘南。ナイトマーケットをテーマに、タイ料理・雑貨・音楽・ダンスを茅ヶ崎中央公園で楽しめる。入場無料。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <div class="section-head">
+        <h2 class="section-title serif">新着記事</h2>
+        <p id="resultCount">全 94 件中 最新24件を表示中</p>
+      </div>
+      <div class="article-list" id="grid">
+      <a class="list-item" href="/articles/chigasaki-event-0093/" data-cat="e" data-area="茅ヶ崎" data-search="タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催3年ぶりの復活となる第4回タイランドフェスティバル湘南。ナイトマーケットをテーマに、タイ料理・雑貨・音楽・ダンスを茅ヶ崎中央公園で楽しめる。入場無料。タイランドフェスティバル茅ヶ崎ナイトマーケットタイ料理グルメ音楽イベント国際無料">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催</div>
+          <div class="list-item-date">2026.09.20</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-event-0094/" data-cat="e" data-area="逗子" data-search="街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。逗子アートフェスティバルzaf2026アート森山大道旧本多邸逗子イベント文化秋">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="#C99A3E" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="#7FA6C9" stroke-width="1.5" opacity=".5"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.20</div>
-          <div class="card-title serif">街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕</div>
-          <div class="card-dek">14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-event-0094/" data-cat="e" data-area="逗子" data-search="街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。逗子アートフェスティバルzaf2026アート森山大道旧本多邸逗子イベント文化秋">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕</div>
+          <div class="list-item-date">2026.09.20</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-event-0095/" data-cat="e" data-area="大磯" data-search="潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催大磯・平塚・茅ヶ崎の3拠点を出発し、湘南の海岸線を歩いて江の島を目指すウォーキングイベント。最大約18kmのコースをマイペースに楽しめる。エントリー受付は10月14日まで。湘南国際ビーチサイドウォーク大磯ウォーキング江の島ビーチクリーン平塚茅ヶ崎スポーツ環境">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><circle cx="245" cy="30" r="18" fill="#C99A3E"/><path d="M0 92 Q40 72 80 92 T160 92 T240 92 T320 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><path d="M0 104 Q40 88 80 104 T160 104 T240 104 T320 104" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/><path d="M60 92 L60 40 L100 55 L60 70" fill="#E8542B" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.20</div>
-          <div class="card-title serif">潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催</div>
-          <div class="card-dek">大磯・平塚・茅ヶ崎の3拠点を出発し、湘南の海岸線を歩いて江の島を目指すウォーキングイベント。最大約18kmのコースをマイペースに楽しめる。エントリー受付は10月14日まで。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-event-0095/" data-cat="e" data-area="大磯" data-search="潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催大磯・平塚・茅ヶ崎の3拠点を出発し、湘南の海岸線を歩いて江の島を目指すウォーキングイベント。最大約18kmのコースをマイペースに楽しめる。エントリー受付は10月14日まで。湘南国際ビーチサイドウォーク大磯ウォーキング江の島ビーチクリーン平塚茅ヶ崎スポーツ環境">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催</div>
+          <div class="list-item-date">2026.09.20</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-tourism-0096/" data-cat="t" data-area="鎌倉" data-search="鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。鎌倉紅葉寺社建長寺明月院円覚寺獅子舞瑞泉寺秋散策ルート北鎌倉混雑回避">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.20</div>
-          <div class="card-title serif">鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート</div>
-          <div class="card-dek">関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-tourism-0096/" data-cat="t" data-area="鎌倉" data-search="鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。鎌倉紅葉寺社建長寺明月院円覚寺獅子舞瑞泉寺秋散策ルート北鎌倉混雑回避">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート</div>
+          <div class="list-item-date">2026.09.20</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-tourism-0097/" data-cat="t" data-area="茅ヶ崎" data-search="茅ヶ崎でサーフィンを始める——スクール選びと体験の流れ「茅ヶ崎といえばサーフィン」はもはや定説だが、初めての一歩は意外とシンプル。スクールの選び方から当日の流れまで、ゼロから整理した。茅ヶ崎サーフィンサーフィンスクール初心者体験湘南サーフカルチャーパークポイントウェットスーツレンタル茅ヶ崎駅">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M110 95 Q150 30 190 95 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 100 Q40 84 80 100 T160 100 T240 100 T320 100" stroke="#E8542B" stroke-width="2.5" fill="none" opacity=".8"/><path d="M0 112 Q40 96 80 112 T160 112 T240 112 T320 112" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.20</div>
-          <div class="card-title serif">茅ヶ崎でサーフィンを始める——スクール選びと体験の流れ</div>
-          <div class="card-dek">「茅ヶ崎といえばサーフィン」はもはや定説だが、初めての一歩は意外とシンプル。スクールの選び方から当日の流れまで、ゼロから整理した。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-tourism-0097/" data-cat="t" data-area="茅ヶ崎" data-search="茅ヶ崎でサーフィンを始める——スクール選びと体験の流れ「茅ヶ崎といえばサーフィン」はもはや定説だが、初めての一歩は意外とシンプル。スクールの選び方から当日の流れまで、ゼロから整理した。茅ヶ崎サーフィンサーフィンスクール初心者体験湘南サーフカルチャーパークポイントウェットスーツレンタル茅ヶ崎駅">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">茅ヶ崎でサーフィンを始める——スクール選びと体験の流れ</div>
+          <div class="list-item-date">2026.09.20</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-culture-0080/" data-cat="c" data-area="鎌倉" data-search="江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる鎌倉・坂ノ下の御霊神社で毎年9月18日に行われる例祭。県の無形民俗文化財に指定された「面掛行列」は、奈良時代の伎楽面を纏った10人の行列が坂ノ下の町を練り歩く、全国的にも希少な祭礼だ。鎌倉御霊神社面掛行列坂ノ下無形民俗文化財伎楽秋祭り江ノ電鎌倉権五郎景正">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる</div>
-          <div class="card-dek">鎌倉・坂ノ下の御霊神社で毎年9月18日に行われる例祭。県の無形民俗文化財に指定された「面掛行列」は、奈良時代の伎楽面を纏った10人の行列が坂ノ下の町を練り歩く、全国的にも希少な祭礼だ。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-culture-0080/" data-cat="c" data-area="鎌倉" data-search="江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる鎌倉・坂ノ下の御霊神社で毎年9月18日に行われる例祭。県の無形民俗文化財に指定された「面掛行列」は、奈良時代の伎楽面を纏った10人の行列が坂ノ下の町を練り歩く、全国的にも希少な祭礼だ。鎌倉御霊神社面掛行列坂ノ下無形民俗文化財伎楽秋祭り江ノ電鎌倉権五郎景正">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-gourmet-0081/" data-cat="g" data-area="藤沢" data-search="焙煎士・坂口憲二が湘南へ——「the rising sun coffee 湘南店」、鵠沼海岸に7月4日オープン俳優から焙煎士に転身した坂口憲二氏が手がけるスペシャルティコーヒーブランドが、湘南エリアに初上陸。サーフカルチャーとアパレルブランドとのコラボ店舗が、鵠沼海岸の住宅街に静かに根を下ろした。藤沢鵠沼海岸コーヒースペシャルティコーヒー坂口憲二the rising sun coffeeカフェサーフカルチャー新店">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M110 95 Q150 30 190 95 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 100 Q40 84 80 100 T160 100 T240 100 T320 100" stroke="#E8542B" stroke-width="2.5" fill="none" opacity=".8"/><path d="M0 112 Q40 96 80 112 T160 112 T240 112 T320 112" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/></svg>
-          <div class="card-eyebrow">グルメ<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">焙煎士・坂口憲二が湘南へ——「The Rising Sun Coffee 湘南店」、鵠沼海岸に7月4日オープン</div>
-          <div class="card-dek">俳優から焙煎士に転身した坂口憲二氏が手がけるスペシャルティコーヒーブランドが、湘南エリアに初上陸。サーフカルチャーとアパレルブランドとのコラボ店舗が、鵠沼海岸の住宅街に静かに根を下ろした。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-gourmet-0081/" data-cat="g" data-area="藤沢" data-search="焙煎士・坂口憲二が湘南へ——「the rising sun coffee 湘南店」、鵠沼海岸に7月4日オープン俳優から焙煎士に転身した坂口憲二氏が手がけるスペシャルティコーヒーブランドが、湘南エリアに初上陸。サーフカルチャーとアパレルブランドとのコラボ店舗が、鵠沼海岸の住宅街に静かに根を下ろした。藤沢鵠沼海岸コーヒースペシャルティコーヒー坂口憲二the rising sun coffeeカフェサーフカルチャー新店">
+        <img class="list-item-thumb" src="/assets/images/categories/gourmet.svg" width="60" height="60" alt="グルメのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">焙煎士・坂口憲二が湘南へ——「The Rising Sun Coffee 湘南店」、鵠沼海岸に7月4日オープン</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-business-0082/" data-cat="b" data-area="鎌倉" data-search="藤沢と鎌倉の中間に24時間の灯——「マクドナルド 鎌倉常盤店」、9月18日グランドオープンjr藤沢駅と鎌倉駅の間を結ぶ県道32号沿いに、マクドナルドの新店舗が誕生。24時間営業にドライブスルーも完備し、車での移動が多いこのエリアに新たな選択肢が加わった。鎌倉常盤マクドナルド新店24時間ドライブスルーファストフード藤沢鎌倉線">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="#C99A3E" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="#7FA6C9" stroke-width="1.5" opacity=".5"/></svg>
-          <div class="card-eyebrow">企業・店舗<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">藤沢と鎌倉の中間に24時間の灯——「マクドナルド 鎌倉常盤店」、9月18日グランドオープン</div>
-          <div class="card-dek">JR藤沢駅と鎌倉駅の間を結ぶ県道32号沿いに、マクドナルドの新店舗が誕生。24時間営業にドライブスルーも完備し、車での移動が多いこのエリアに新たな選択肢が加わった。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-business-0082/" data-cat="b" data-area="鎌倉" data-search="藤沢と鎌倉の中間に24時間の灯——「マクドナルド 鎌倉常盤店」、9月18日グランドオープンjr藤沢駅と鎌倉駅の間を結ぶ県道32号沿いに、マクドナルドの新店舗が誕生。24時間営業にドライブスルーも完備し、車での移動が多いこのエリアに新たな選択肢が加わった。鎌倉常盤マクドナルド新店24時間ドライブスルーファストフード藤沢鎌倉線">
+        <img class="list-item-thumb" src="/assets/images/categories/business.svg" width="60" height="60" alt="企業・店舗のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">藤沢と鎌倉の中間に24時間の灯——「マクドナルド 鎌倉常盤店」、9月18日グランドオープン</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-event-0083/" data-cat="e" data-area="鎌倉" data-search="ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「endless summer 2026」、9月26日開催フットゴルフ、乗馬体験、ライブ演奏……鎌倉の丘に広がるゴルフコースが、子どもから大人まで楽しめる夏の祭典に変わる一日。鎌倉ゴルフイベント家族フットゴルフライブ秋子ども">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
-          <div class="card-dek">フットゴルフ、乗馬体験、ライブ演奏……鎌倉の丘に広がるゴルフコースが、子どもから大人まで楽しめる夏の祭典に変わる一日。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-event-0083/" data-cat="e" data-area="鎌倉" data-search="ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「endless summer 2026」、9月26日開催フットゴルフ、乗馬体験、ライブ演奏……鎌倉の丘に広がるゴルフコースが、子どもから大人まで楽しめる夏の祭典に変わる一日。鎌倉ゴルフイベント家族フットゴルフライブ秋子ども">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-event-0084/" data-cat="e" data-area="逗子" data-search="落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日円熟の話芸で笑わせる落語と、歴史の重みを語り継ぐ講談。二つの伝統話芸が逗子の舞台でひとつになる、年に一度の特別な午後。逗子落語講談伝統芸能三遊亭小遊三神田松鯉文化秋">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><ellipse cx="130" cy="75" rx="28" ry="20" fill="#F4EDE1" opacity=".9"/><path d="M158 75 V25" stroke="#F4EDE1" stroke-width="4"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#E8542B" stroke-width="2" fill="none" opacity=".7"/><path d="M0 105 Q40 90 80 105 T160 105 T240 105 T320 105" stroke="#C99A3E" stroke-width="1.5" fill="none" opacity=".5"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日</div>
-          <div class="card-dek">円熟の話芸で笑わせる落語と、歴史の重みを語り継ぐ講談。二つの伝統話芸が逗子の舞台でひとつになる、年に一度の特別な午後。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-event-0084/" data-cat="e" data-area="逗子" data-search="落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日円熟の話芸で笑わせる落語と、歴史の重みを語り継ぐ講談。二つの伝統話芸が逗子の舞台でひとつになる、年に一度の特別な午後。逗子落語講談伝統芸能三遊亭小遊三神田松鯉文化秋">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hiratsuka-event-0085/" data-cat="e" data-area="平塚" data-search="秋の湘南平が舞台に——「湘南ひらつか観光フェスティバル2026」、10月23日開催標高差のある丘陵に広がる湘南平を会場に、平塚の秋の観光を総合的に楽しむフェスティバルが今年も開幕する。平塚湘南平観光フェスティバル秋自然展望地域イベント">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>平塚</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">秋の湘南平が舞台に——「湘南ひらつか観光フェスティバル2026」、10月23日開催</div>
-          <div class="card-dek">標高差のある丘陵に広がる湘南平を会場に、平塚の秋の観光を総合的に楽しむフェスティバルが今年も開幕する。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">平塚</span>
+      <a class="list-item" href="/articles/hiratsuka-event-0085/" data-cat="e" data-area="平塚" data-search="秋の湘南平が舞台に——「湘南ひらつか観光フェスティバル2026」、10月23日開催標高差のある丘陵に広がる湘南平を会場に、平塚の秋の観光を総合的に楽しむフェスティバルが今年も開幕する。平塚湘南平観光フェスティバル秋自然展望地域イベント">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">平塚</span>
           </div>
+          <div class="list-item-title serif">秋の湘南平が舞台に——「湘南ひらつか観光フェスティバル2026」、10月23日開催</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-tourism-0086/" data-cat="t" data-area="鎌倉" data-search="小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方坂が多く混雑する鎌倉でも、スポットと順序を選べば乳幼児連れでも十分に楽しめる。鎌倉を訪れる子連れ家族に向けて、移動の視点から「回りやすさ」を考えるためのヒントを整理した。鎌倉子連れベビーカー子ども家族鶴岡八幡宮長谷寺鎌倉大仏由比ヶ浜材木座">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="#C99A3E" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="#7FA6C9" stroke-width="1.5" opacity=".5"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方</div>
-          <div class="card-dek">坂が多く混雑する鎌倉でも、スポットと順序を選べば乳幼児連れでも十分に楽しめる。鎌倉を訪れる子連れ家族に向けて、移動の視点から「回りやすさ」を考えるためのヒントを整理した。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-tourism-0086/" data-cat="t" data-area="鎌倉" data-search="小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方坂が多く混雑する鎌倉でも、スポットと順序を選べば乳幼児連れでも十分に楽しめる。鎌倉を訪れる子連れ家族に向けて、移動の視点から「回りやすさ」を考えるためのヒントを整理した。鎌倉子連れベビーカー子ども家族鶴岡八幡宮長谷寺鎌倉大仏由比ヶ浜材木座">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hayama-life-0087/" data-cat="l" data-area="葉山" data-search="葉山への行き方——電車とバスを使う場合の現実的なルート葉山町には鉄道の駅がない。だからこそ「どうやって行くのか」が最初の壁になる。jr・京急それぞれのルートと、目的地別のバス乗り場・所要時間をまとめた。葉山アクセス電車バス京急バス逗子駅逗子・葉山駅交通森戸海岸一色海岸">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M150 90 V25" stroke="#F4EDE1" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>葉山</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">葉山への行き方——電車とバスを使う場合の現実的なルート</div>
-          <div class="card-dek">葉山町には鉄道の駅がない。だからこそ「どうやって行くのか」が最初の壁になる。JR・京急それぞれのルートと、目的地別のバス乗り場・所要時間をまとめた。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">葉山</span>
+      <a class="list-item" href="/articles/hayama-life-0087/" data-cat="l" data-area="葉山" data-search="葉山への行き方——電車とバスを使う場合の現実的なルート葉山町には鉄道の駅がない。だからこそ「どうやって行くのか」が最初の壁になる。jr・京急それぞれのルートと、目的地別のバス乗り場・所要時間をまとめた。葉山アクセス電車バス京急バス逗子駅逗子・葉山駅交通森戸海岸一色海岸">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">葉山</span>
           </div>
+          <div class="list-item-title serif">葉山への行き方——電車とバスを使う場合の現実的なルート</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-event-0088/" data-cat="e" data-area="鎌倉" data-search="古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催鎌倉商工会議所青年部が主催するビールの祭典が今年も帰ってくる。神奈川・全国からブルワリーが集結し、ステージ、フード、子ども向けブースまで2日間にわたって楽しめる。オクトーバーフェスト鎌倉ビールクラフトビール秋イベントフェスティバル鎌倉商工会議所">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#A6431E"/><rect x="120" y="45" width="40" height="45" rx="6" fill="#F4EDE1" opacity=".9"/><rect x="128" y="30" width="24" height="15" fill="#F4EDE1" opacity=".9"/><path d="M60 90 Q65 60 60 40" stroke="#C99A3E" stroke-width="3" fill="none"/><path d="M230 90 Q235 60 230 40" stroke="#C99A3E" stroke-width="3" fill="none"/><circle cx="60" cy="34" r="4" fill="#C99A3E"/><circle cx="230" cy="34" r="4" fill="#C99A3E"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催</div>
-          <div class="card-dek">鎌倉商工会議所青年部が主催するビールの祭典が今年も帰ってくる。神奈川・全国からブルワリーが集結し、ステージ、フード、子ども向けブースまで2日間にわたって楽しめる。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-event-0088/" data-cat="e" data-area="鎌倉" data-search="古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催鎌倉商工会議所青年部が主催するビールの祭典が今年も帰ってくる。神奈川・全国からブルワリーが集結し、ステージ、フード、子ども向けブースまで2日間にわたって楽しめる。オクトーバーフェスト鎌倉ビールクラフトビール秋イベントフェスティバル鎌倉商工会議所">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-event-0089/" data-cat="e" data-area="藤沢" data-search="スポーツの日は鵠沼海浜公園へ——「湘南スポーツ＆ウェルネスフェスティバル2026」、10月12日に初開催スポーツ・ウェルネス・音楽・フードを海辺で丸ごと楽しむ一日完結型フェスが、藤沢・鵠沼海浜公園で初めて幕を開ける。フィットネスからアスリートトークショー、盆踊り、キッチンカーまで内容は盛りだくさん。湘南スポーツウェルネスフィットネス鵠沼海浜公園スポーツの日藤沢フェスティバルhug-ride park">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><circle cx="245" cy="30" r="18" fill="#C99A3E"/><path d="M0 92 Q40 72 80 92 T160 92 T240 92 T320 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><path d="M0 104 Q40 88 80 104 T160 104 T240 104 T320 104" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/><path d="M60 92 L60 40 L100 55 L60 70" fill="#E8542B" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">スポーツの日は鵠沼海浜公園へ——「湘南スポーツ＆ウェルネスフェスティバル2026」、10月12日に初開催</div>
-          <div class="card-dek">スポーツ・ウェルネス・音楽・フードを海辺で丸ごと楽しむ一日完結型フェスが、藤沢・鵠沼海浜公園で初めて幕を開ける。フィットネスからアスリートトークショー、盆踊り、キッチンカーまで内容は盛りだくさん。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-event-0089/" data-cat="e" data-area="藤沢" data-search="スポーツの日は鵠沼海浜公園へ——「湘南スポーツ＆ウェルネスフェスティバル2026」、10月12日に初開催スポーツ・ウェルネス・音楽・フードを海辺で丸ごと楽しむ一日完結型フェスが、藤沢・鵠沼海浜公園で初めて幕を開ける。フィットネスからアスリートトークショー、盆踊り、キッチンカーまで内容は盛りだくさん。湘南スポーツウェルネスフィットネス鵠沼海浜公園スポーツの日藤沢フェスティバルhug-ride park">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">スポーツの日は鵠沼海浜公園へ——「湘南スポーツ＆ウェルネスフェスティバル2026」、10月12日に初開催</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-event-0090/" data-cat="e" data-area="茅ヶ崎" data-search="3年目の「ちがさきこどもマルシェ」——子どもが店主になる一日、10月25日に茅ヶ崎市役所前広場で年長から中学3年生までの子どもたちがお店を出す「ちがさきこどもマルシェ2026」が10月25日に開催。昨年約3,500人を動員した人気イベントは、出店当日だけでなく4か月にわたるプロセスにこそ価値がある。こどもマルシェ茅ヶ崎子どもイベントマルシェ親子地域出店体験秋イベント">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#A6431E"/><path d="M40 50 L60 30 L80 50 Z M100 50 L120 30 L140 50 Z M160 50 L180 30 L200 50 Z M220 50 L240 30 L260 50 Z" fill="#F4EDE1" opacity=".9"/><rect x="40" y="50" width="220" height="4" fill="#F4EDE1" opacity=".6"/><rect x="70" y="70" width="20" height="16" fill="#C99A3E"/><rect x="150" y="70" width="20" height="16" fill="#C99A3E"/><rect x="210" y="70" width="20" height="16" fill="#C99A3E"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">3年目の「ちがさきこどもマルシェ」——子どもが店主になる一日、10月25日に茅ヶ崎市役所前広場で</div>
-          <div class="card-dek">年長から中学3年生までの子どもたちがお店を出す「ちがさきこどもマルシェ2026」が10月25日に開催。昨年約3,500人を動員した人気イベントは、出店当日だけでなく4か月にわたるプロセスにこそ価値がある。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-event-0090/" data-cat="e" data-area="茅ヶ崎" data-search="3年目の「ちがさきこどもマルシェ」——子どもが店主になる一日、10月25日に茅ヶ崎市役所前広場で年長から中学3年生までの子どもたちがお店を出す「ちがさきこどもマルシェ2026」が10月25日に開催。昨年約3,500人を動員した人気イベントは、出店当日だけでなく4か月にわたるプロセスにこそ価値がある。こどもマルシェ茅ヶ崎子どもイベントマルシェ親子地域出店体験秋イベント">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">3年目の「ちがさきこどもマルシェ」——子どもが店主になる一日、10月25日に茅ヶ崎市役所前広場で</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-tourism-0091/" data-cat="t" data-area="鎌倉" data-search="鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコースグループ旅行では立ち寄れない静かな路地、自分のペースで向き合える寺院の空気。ひとり旅だからこそ味わえる鎌倉がある。混雑を避けるコツとおすすめルートを紹介する。鎌倉ひとり旅モデルコース混雑回避北鎌倉銭洗弁財天報国寺竹林長谷観光">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコース</div>
-          <div class="card-dek">グループ旅行では立ち寄れない静かな路地、自分のペースで向き合える寺院の空気。ひとり旅だからこそ味わえる鎌倉がある。混雑を避けるコツとおすすめルートを紹介する。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-tourism-0091/" data-cat="t" data-area="鎌倉" data-search="鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコースグループ旅行では立ち寄れない静かな路地、自分のペースで向き合える寺院の空気。ひとり旅だからこそ味わえる鎌倉がある。混雑を避けるコツとおすすめルートを紹介する。鎌倉ひとり旅モデルコース混雑回避北鎌倉銭洗弁財天報国寺竹林長谷観光">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコース</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-tourism-0092/" data-cat="t" data-area="藤沢" data-search="愛犬と歩く江の島——ペット可スポットと、押さえておきたい注意点犬を連れて江の島に行きたいけれど、どこまで入れるの？ 何に気をつければいい？ 飼い主なら誰もが抱く疑問を、エリア別に整理する。江の島藤沢犬連れペット可散歩江島神社サムエルコッキング苑新江ノ島水族館ペット同伴湘南">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><circle cx="245" cy="30" r="18" fill="#C99A3E"/><path d="M0 92 Q40 72 80 92 T160 92 T240 92 T320 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><path d="M0 104 Q40 88 80 104 T160 104 T240 104 T320 104" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/><path d="M60 92 L60 40 L100 55 L60 70" fill="#E8542B" opacity=".85"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.19</div>
-          <div class="card-title serif">愛犬と歩く江の島——ペット可スポットと、押さえておきたい注意点</div>
-          <div class="card-dek">犬を連れて江の島に行きたいけれど、どこまで入れるの？ 何に気をつければいい？ 飼い主なら誰もが抱く疑問を、エリア別に整理する。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-tourism-0092/" data-cat="t" data-area="藤沢" data-search="愛犬と歩く江の島——ペット可スポットと、押さえておきたい注意点犬を連れて江の島に行きたいけれど、どこまで入れるの？ 何に気をつければいい？ 飼い主なら誰もが抱く疑問を、エリア別に整理する。江の島藤沢犬連れペット可散歩江島神社サムエルコッキング苑新江ノ島水族館ペット同伴湘南">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">愛犬と歩く江の島——ペット可スポットと、押さえておきたい注意点</div>
+          <div class="list-item-date">2026.09.19</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-event-0077/" data-cat="e" data-area="藤沢" data-search="夏の終わりを灯籠で彩る——「江の島灯籠2026」、9月23日まで開催中江の島・藤沢の夏の風物詩「江の島灯籠」が今年も開催中。1,000基の灯籠と「光の絵巻」が島全体を幻想的に包み込み、9月23日（水・祝）まで楽しめる。江の島藤沢灯籠夜景江島神社イベント夏湘南">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.15</div>
-          <div class="card-title serif">夏の終わりを灯籠で彩る——「江の島灯籠2026」、9月23日まで開催中</div>
-          <div class="card-dek">江の島・藤沢の夏の風物詩「江の島灯籠」が今年も開催中。1,000基の灯籠と「光の絵巻」が島全体を幻想的に包み込み、9月23日（水・祝）まで楽しめる。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-event-0077/" data-cat="e" data-area="藤沢" data-search="夏の終わりを灯籠で彩る——「江の島灯籠2026」、9月23日まで開催中江の島・藤沢の夏の風物詩「江の島灯籠」が今年も開催中。1,000基の灯籠と「光の絵巻」が島全体を幻想的に包み込み、9月23日（水・祝）まで楽しめる。江の島藤沢灯籠夜景江島神社イベント夏湘南">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">夏の終わりを灯籠で彩る——「江の島灯籠2026」、9月23日まで開催中</div>
+          <div class="list-item-date">2026.09.15</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-life-0078/" data-cat="l" data-area="鎌倉" data-search="鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン2026年9月1日、鎌倉市梶原に「ライフ鎌倉梶原店」がグランドオープン。鎌倉市内への出店は2004年以来約22年ぶりとなり、カインズとともに新商業施設を形成する。地域の買い物事情が大きく変わりそうだ。鎌倉スーパーライフ梶原新店舗暮らし商業施設カインズ">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="70" y="35" width="160" height="55" fill="#F4EDE1" opacity=".12" stroke="#F4EDE1" stroke-width="2"/><rect x="90" y="50" width="20" height="20" fill="#E8542B" opacity=".8"/><rect x="130" y="50" width="20" height="20" fill="#C99A3E" opacity=".8"/><rect x="170" y="50" width="20" height="20" fill="#7FA6C9" opacity=".8"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.15</div>
-          <div class="card-title serif">鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン</div>
-          <div class="card-dek">2026年9月1日、鎌倉市梶原に「ライフ鎌倉梶原店」がグランドオープン。鎌倉市内への出店は2004年以来約22年ぶりとなり、カインズとともに新商業施設を形成する。地域の買い物事情が大きく変わりそうだ。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-life-0078/" data-cat="l" data-area="鎌倉" data-search="鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン2026年9月1日、鎌倉市梶原に「ライフ鎌倉梶原店」がグランドオープン。鎌倉市内への出店は2004年以来約22年ぶりとなり、カインズとともに新商業施設を形成する。地域の買い物事情が大きく変わりそうだ。鎌倉スーパーライフ梶原新店舗暮らし商業施設カインズ">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン</div>
+          <div class="list-item-date">2026.09.15</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-event-0079/" data-cat="e" data-area="藤沢" data-search="秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催藤沢市から茅ヶ崎市、寒川町にまたがる小出川沿い約3kmに咲き誇るヒガンバナの祭典、「第19回小出川彼岸花まつり」が2026年9月26日（土）に開催される。地元3団体が守り続けてきた里山の景観を、今年も歩いて楽しもう。藤沢彼岸花小出川まつり里山秋イベント湘南">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.15</div>
-          <div class="card-title serif">秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催</div>
-          <div class="card-dek">藤沢市から茅ヶ崎市、寒川町にまたがる小出川沿い約3kmに咲き誇るヒガンバナの祭典、「第19回小出川彼岸花まつり」が2026年9月26日（土）に開催される。地元3団体が守り続けてきた里山の景観を、今年も歩いて楽しもう。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-event-0079/" data-cat="e" data-area="藤沢" data-search="秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催藤沢市から茅ヶ崎市、寒川町にまたがる小出川沿い約3kmに咲き誇るヒガンバナの祭典、「第19回小出川彼岸花まつり」が2026年9月26日（土）に開催される。地元3団体が守り続けてきた里山の景観を、今年も歩いて楽しもう。藤沢彼岸花小出川まつり里山秋イベント湘南">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催</div>
+          <div class="list-item-date">2026.09.15</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-culture-0068/" data-cat="c" data-area="茅ヶ崎" data-search="海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕国内公立美術館初となる写真家・瀧本幹也の大規模個展が茅ヶ崎市美術館で始まった。茅ヶ崎市美術館瀧本幹也写真展">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M150 90 V25" stroke="#F4EDE1" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.14</div>
-          <div class="card-title serif">海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕</div>
-          <div class="card-dek">国内公立美術館初となる写真家・瀧本幹也の大規模個展が茅ヶ崎市美術館で始まった。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-culture-0068/" data-cat="c" data-area="茅ヶ崎" data-search="海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕国内公立美術館初となる写真家・瀧本幹也の大規模個展が茅ヶ崎市美術館で始まった。茅ヶ崎市美術館瀧本幹也写真展">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕</div>
+          <div class="list-item-date">2026.09.14</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-culture-0069/" data-cat="c" data-area="茅ヶ崎" data-search="震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中旧相模川橋脚の国史跡指定100年を記念する展示が、茅ヶ崎市博物館で10月20日まで開催されている。茅ヶ崎市博物館旧相模川橋脚古相模川">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><circle cx="230" cy="80" r="20" fill="none" stroke="#E8542B" stroke-width="2"/><path d="M60 30 V90 M40 45 H90 M45 65 Q65 80 85 65" stroke="#F4EDE1" stroke-width="3" fill="none"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.14</div>
-          <div class="card-title serif">震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中</div>
-          <div class="card-dek">旧相模川橋脚の国史跡指定100年を記念する展示が、茅ヶ崎市博物館で10月20日まで開催されている。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-culture-0069/" data-cat="c" data-area="茅ヶ崎" data-search="震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中旧相模川橋脚の国史跡指定100年を記念する展示が、茅ヶ崎市博物館で10月20日まで開催されている。茅ヶ崎市博物館旧相模川橋脚古相模川">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中</div>
+          <div class="list-item-date">2026.09.14</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-event-0070/" data-cat="e" data-area="藤沢" data-search="3kmの真紅の回廊——小出川彼岸花まつり、今年も9月下旬に開催へ藤沢市・茅ヶ崎市・寒川町にまたがる小出川沿いで、数万株の彼岸花が一斉に咲き誇る秋の祭典。小出川彼岸花まつり彼岸花秋の湘南">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.14</div>
-          <div class="card-title serif">3kmの真紅の回廊——小出川彼岸花まつり、今年も9月下旬に開催へ</div>
-          <div class="card-dek">藤沢市・茅ヶ崎市・寒川町にまたがる小出川沿いで、数万株の彼岸花が一斉に咲き誇る秋の祭典。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-event-0070/" data-cat="e" data-area="藤沢" data-search="3kmの真紅の回廊——小出川彼岸花まつり、今年も9月下旬に開催へ藤沢市・茅ヶ崎市・寒川町にまたがる小出川沿いで、数万株の彼岸花が一斉に咲き誇る秋の祭典。小出川彼岸花まつり彼岸花秋の湘南">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">3kmの真紅の回廊——小出川彼岸花まつり、今年も9月下旬に開催へ</div>
+          <div class="list-item-date">2026.09.14</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       </div>
       <nav class="pagination" aria-label="ページネーション"><span class="pagination-link active">1</span><a class="pagination-link" href="/page/2/">2</a><a class="pagination-link" href="/page/3/">3</a><a class="pagination-link" href="/page/4/">4</a><a class="pagination-link" href="/page/2/">次へ ›</a></nav>
@@ -476,7 +423,15 @@
 </main>
 
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
@@ -544,9 +499,11 @@ function trackEvent(name, params){
    FEATURED_IDS を編集すれば、回転させる記事を自由に入れ替えられます(articleのidで指定)。
    将来ここが実際の広告枠になった際は、別途「広告主データ」を差し込む形に拡張してください。
    Phase 1でのリンク化に伴い、カードは<a href>による該当記事ページへの通常遷移に変更しています。 */
-const PICKUP_ITEMS = [{"id": 93, "slug": "chigasaki-event-0093", "cat": "e", "area": "茅ヶ崎", "title": "タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催", "dek": "3年ぶりの復活となる第4回タイランドフェスティバル湘南。ナイトマーケットをテーマに、タイ料理・雑貨・音楽・ダンスを茅ヶ崎中央公園で楽しめる。入場無料。", "scene": "festival"}, {"id": 94, "slug": "zushi-event-0094", "cat": "e", "area": "逗子", "title": "街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕", "dek": "14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。", "scene": "street"}, {"id": 95, "slug": "oiso-event-0095", "cat": "e", "area": "大磯", "title": "潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催", "dek": "大磯・平塚・茅ヶ崎の3拠点を出発し、湘南の海岸線を歩いて江の島を目指すウォーキングイベント。最大約18kmのコースをマイペースに楽しめる。エントリー受付は10月14日まで。", "scene": "beach"}, {"id": 96, "slug": "kamakura-tourism-0096", "cat": "t", "area": "鎌倉", "title": "鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート", "dek": "関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。", "scene": "shrine"}, {"id": 81, "slug": "fujisawa-gourmet-0081", "cat": "g", "area": "藤沢", "title": "焙煎士・坂口憲二が湘南へ——「The Rising Sun Coffee 湘南店」、鵠沼海岸に7月4日オープン", "dek": "俳優から焙煎士に転身した坂口憲二氏が手がけるスペシャルティコーヒーブランドが、湘南エリアに初上陸。サーフカルチャーとアパレルブランドとのコラボ店舗が、鵠沼海岸の住宅街に静かに根を下ろした。", "scene": "surf"}];
+const PICKUP_ITEMS = [{"id": 93, "slug": "chigasaki-event-0093", "cat": "e", "area": "茅ヶ崎", "title": "タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催", "dek": "3年ぶりの復活となる第4回タイランドフェスティバル湘南。ナイトマーケットをテーマに、タイ料理・雑貨・音楽・ダンスを茅ヶ崎中央公園で楽しめる。入場無料。", "scene": "festival", "date": "2026-09-20"}, {"id": 94, "slug": "zushi-event-0094", "cat": "e", "area": "逗子", "title": "街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕", "dek": "14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。", "scene": "street", "date": "2026-09-20"}, {"id": 95, "slug": "oiso-event-0095", "cat": "e", "area": "大磯", "title": "潮風を感じながら江の島へ——「湘南国際ビーチサイドウォーク2026」、11月23日に開催", "dek": "大磯・平塚・茅ヶ崎の3拠点を出発し、湘南の海岸線を歩いて江の島を目指すウォーキングイベント。最大約18kmのコースをマイペースに楽しめる。エントリー受付は10月14日まで。", "scene": "beach", "date": "2026-09-20"}, {"id": 96, "slug": "kamakura-tourism-0096", "cat": "t", "area": "鎌倉", "title": "鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート", "dek": "関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。", "scene": "shrine", "date": "2026-09-20"}, {"id": 81, "slug": "fujisawa-gourmet-0081", "cat": "g", "area": "藤沢", "title": "焙煎士・坂口憲二が湘南へ——「The Rising Sun Coffee 湘南店」、鵠沼海岸に7月4日オープン", "dek": "俳優から焙煎士に転身した坂口憲二氏が手がけるスペシャルティコーヒーブランドが、湘南エリアに初上陸。サーフカルチャーとアパレルブランドとのコラボ店舗が、鵠沼海岸の住宅街に静かに根を下ろした。", "scene": "surf", "date": "2026-09-19"}];
 const CATS_FOR_PICKUP = {"t": {"label": "観光", "bg": "#1D3557"}, "b": {"label": "企業・店舗", "bg": "#A6431E"}, "g": {"label": "グルメ", "bg": "#8B5E34"}, "p": {"label": "人", "bg": "#16233A"}, "c": {"label": "文化", "bg": "#0F2038"}, "e": {"label": "イベント", "bg": "#E8542B"}, "l": {"label": "暮らし", "bg": "#33424F"}};
 const PICKUP_SCENES = {"shrine": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><path d=\"M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88\" stroke=\"#F4EDE1\" stroke-width=\"3\" fill=\"none\"/><circle cx=\"230\" cy=\"35\" r=\"16\" fill=\"#C99A3E\" opacity=\".8\"/><path d=\"M0 95 Q60 78 120 95 T240 95 T360 95\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/></svg>", "garden": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#0F2038\"/><rect x=\"150\" y=\"30\" width=\"8\" height=\"60\" fill=\"#F4EDE1\"/><circle cx=\"154\" cy=\"24\" r=\"10\" fill=\"#E8542B\"/><path d=\"M60 90 Q80 70 100 90\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/><path d=\"M200 90 Q220 65 240 90\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/><circle cx=\"40\" cy=\"60\" r=\"14\" fill=\"#C99A3E\" opacity=\".5\"/></svg>", "beach": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><circle cx=\"245\" cy=\"30\" r=\"18\" fill=\"#C99A3E\"/><path d=\"M0 92 Q40 72 80 92 T160 92 T240 92 T320 92\" stroke=\"#F4EDE1\" stroke-width=\"2.5\" fill=\"none\" opacity=\".75\"/><path d=\"M0 104 Q40 88 80 104 T160 104 T240 104 T320 104\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".5\"/><path d=\"M60 92 L60 40 L100 55 L60 70\" fill=\"#E8542B\" opacity=\".85\"/></svg>", "crossing": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#16233A\"/><rect x=\"0\" y=\"70\" width=\"300\" height=\"4\" fill=\"#F4EDE1\" opacity=\".6\"/><path d=\"M120 40 L180 40 L180 70 L120 70 Z\" fill=\"#E8542B\" opacity=\".9\"/><circle cx=\"130\" cy=\"50\" r=\"4\" fill=\"#F4EDE1\"/><circle cx=\"170\" cy=\"50\" r=\"4\" fill=\"#F4EDE1\"/><path d=\"M0 95 Q60 80 120 95 T240 95 T360 95\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".5\"/><path d=\"M40 55 L40 90 M40 55 L20 62 M40 55 L60 62\" stroke=\"#C99A3E\" stroke-width=\"3\"/></svg>", "monorail": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><path d=\"M0 30 Q150 5 300 30\" stroke=\"#F4EDE1\" stroke-width=\"3\" fill=\"none\"/><rect x=\"120\" y=\"34\" width=\"60\" height=\"26\" rx=\"6\" fill=\"#E8542B\"/><path d=\"M140 60 V72 M160 60 V72\" stroke=\"#F4EDE1\" stroke-width=\"2\"/><path d=\"M0 100 Q80 70 160 100 T320 100\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".5\"/></svg>", "market": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#A6431E\"/><path d=\"M40 50 L60 30 L80 50 Z M100 50 L120 30 L140 50 Z M160 50 L180 30 L200 50 Z M220 50 L240 30 L260 50 Z\" fill=\"#F4EDE1\" opacity=\".9\"/><rect x=\"40\" y=\"50\" width=\"220\" height=\"4\" fill=\"#F4EDE1\" opacity=\".6\"/><rect x=\"70\" y=\"70\" width=\"20\" height=\"16\" fill=\"#C99A3E\"/><rect x=\"150\" y=\"70\" width=\"20\" height=\"16\" fill=\"#C99A3E\"/><rect x=\"210\" y=\"70\" width=\"20\" height=\"16\" fill=\"#C99A3E\"/></svg>", "brewery": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#A6431E\"/><rect x=\"120\" y=\"45\" width=\"40\" height=\"45\" rx=\"6\" fill=\"#F4EDE1\" opacity=\".9\"/><rect x=\"128\" y=\"30\" width=\"24\" height=\"15\" fill=\"#F4EDE1\" opacity=\".9\"/><path d=\"M60 90 Q65 60 60 40\" stroke=\"#C99A3E\" stroke-width=\"3\" fill=\"none\"/><path d=\"M230 90 Q235 60 230 40\" stroke=\"#C99A3E\" stroke-width=\"3\" fill=\"none\"/><circle cx=\"60\" cy=\"34\" r=\"4\" fill=\"#C99A3E\"/><circle cx=\"230\" cy=\"34\" r=\"4\" fill=\"#C99A3E\"/></svg>", "surf": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><path d=\"M110 95 Q150 30 190 95 Z\" fill=\"#F4EDE1\" opacity=\".85\"/><path d=\"M0 100 Q40 84 80 100 T160 100 T240 100 T320 100\" stroke=\"#E8542B\" stroke-width=\"2.5\" fill=\"none\" opacity=\".8\"/><path d=\"M0 112 Q40 96 80 112 T160 112 T240 112 T320 112\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".5\"/></svg>", "butcher": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#A6431E\"/><rect x=\"90\" y=\"45\" width=\"120\" height=\"10\" fill=\"#F4EDE1\"/><path d=\"M100 45 L110 30 L120 45 M140 45 L150 30 L160 45 M180 45 L190 30 L200 45\" fill=\"#F4EDE1\" opacity=\".8\"/><rect x=\"105\" y=\"60\" width=\"90\" height=\"30\" fill=\"#C99A3E\" opacity=\".5\"/></svg>", "mall": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#0F2038\"/><rect x=\"70\" y=\"35\" width=\"160\" height=\"55\" fill=\"#F4EDE1\" opacity=\".12\" stroke=\"#F4EDE1\" stroke-width=\"2\"/><rect x=\"90\" y=\"50\" width=\"20\" height=\"20\" fill=\"#E8542B\" opacity=\".8\"/><rect x=\"130\" y=\"50\" width=\"20\" height=\"20\" fill=\"#C99A3E\" opacity=\".8\"/><rect x=\"170\" y=\"50\" width=\"20\" height=\"20\" fill=\"#7FA6C9\" opacity=\".8\"/></svg>", "seafood": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#A6431E\"/><ellipse cx=\"150\" cy=\"70\" rx=\"70\" ry=\"22\" fill=\"#F4EDE1\" opacity=\".9\"/><path d=\"M120 65 Q135 55 150 65 T180 65\" stroke=\"#E8542B\" stroke-width=\"2\" fill=\"none\"/><path d=\"M100 35 Q110 20 120 35 M180 35 Q190 20 200 35\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/></svg>", "farm": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#33424F\"/><circle cx=\"245\" cy=\"30\" r=\"16\" fill=\"#C99A3E\"/><path d=\"M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64\" stroke=\"#F4EDE1\" stroke-width=\"3\" opacity=\".8\"/><path d=\"M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/></svg>", "kanji": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#0F2038\"/><circle cx=\"230\" cy=\"80\" r=\"20\" fill=\"none\" stroke=\"#E8542B\" stroke-width=\"2\"/><path d=\"M60 30 V90 M40 45 H90 M45 65 Q65 80 85 65\" stroke=\"#F4EDE1\" stroke-width=\"3\" fill=\"none\"/></svg>", "stadium": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><rect x=\"40\" y=\"70\" width=\"220\" height=\"6\" fill=\"#F4EDE1\" opacity=\".7\"/><path d=\"M60 70 V35 M240 70 V35\" stroke=\"#C99A3E\" stroke-width=\"3\"/><circle cx=\"60\" cy=\"30\" r=\"6\" fill=\"#E8542B\"/><circle cx=\"240\" cy=\"30\" r=\"6\" fill=\"#E8542B\"/><circle cx=\"150\" cy=\"70\" r=\"14\" fill=\"none\" stroke=\"#F4EDE1\" stroke-width=\"2\" opacity=\".7\"/></svg>", "music": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#16233A\"/><ellipse cx=\"130\" cy=\"75\" rx=\"28\" ry=\"20\" fill=\"#F4EDE1\" opacity=\".9\"/><path d=\"M158 75 V25\" stroke=\"#F4EDE1\" stroke-width=\"4\"/><path d=\"M0 95 Q40 80 80 95 T160 95 T240 95 T320 95\" stroke=\"#E8542B\" stroke-width=\"2\" fill=\"none\" opacity=\".7\"/><path d=\"M0 105 Q40 90 80 105 T160 105 T240 105 T320 105\" stroke=\"#C99A3E\" stroke-width=\"1.5\" fill=\"none\" opacity=\".5\"/></svg>", "mansion": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#0F2038\"/><path d=\"M100 90 V55 L150 30 L200 55 V90 Z\" fill=\"none\" stroke=\"#F4EDE1\" stroke-width=\"2.5\"/><rect x=\"140\" y=\"65\" width=\"20\" height=\"25\" fill=\"#C99A3E\" opacity=\".7\"/><path d=\"M60 90 V45 M60 45 Q52 45 52 55 M60 45 Q68 45 68 55\" stroke=\"#7FA6C9\" stroke-width=\"3\" fill=\"none\" opacity=\".7\"/></svg>", "festival": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#E8542B\"/><path d=\"M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90\" stroke=\"#F4EDE1\" stroke-width=\"2\" opacity=\".8\"/><rect x=\"50\" y=\"40\" width=\"20\" height=\"26\" rx=\"10\" fill=\"#C99A3E\"/><rect x=\"100\" y=\"35\" width=\"20\" height=\"26\" rx=\"10\" fill=\"#F4EDE1\" opacity=\".85\"/><rect x=\"150\" y=\"40\" width=\"20\" height=\"26\" rx=\"10\" fill=\"#C99A3E\"/><rect x=\"200\" y=\"35\" width=\"20\" height=\"26\" rx=\"10\" fill=\"#F4EDE1\" opacity=\".85\"/></svg>", "portrait": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#16233A\"/><circle cx=\"150\" cy=\"42\" r=\"18\" fill=\"#F4EDE1\" opacity=\".9\"/><path d=\"M116 92 Q150 58 184 92\" stroke=\"#F4EDE1\" stroke-width=\"2.5\" fill=\"none\" opacity=\".75\"/><circle cx=\"230\" cy=\"30\" r=\"10\" fill=\"#C99A3E\" opacity=\".7\"/></svg>", "marina": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#1D3557\"/><path d=\"M150 90 V25\" stroke=\"#F4EDE1\" stroke-width=\"2.5\"/><path d=\"M150 30 L195 70 L150 70 Z\" fill=\"#F4EDE1\" opacity=\".85\"/><path d=\"M0 95 Q40 80 80 95 T160 95 T240 95 T320 95\" stroke=\"#7FA6C9\" stroke-width=\"2\" fill=\"none\" opacity=\".6\"/><path d=\"M100 95 L120 80 L140 95 Z\" fill=\"#C99A3E\" opacity=\".7\"/></svg>", "cinema": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#0F2038\"/><rect x=\"90\" y=\"30\" width=\"120\" height=\"45\" fill=\"#F4EDE1\" opacity=\".12\" stroke=\"#F4EDE1\" stroke-width=\"2\"/><circle cx=\"60\" cy=\"55\" r=\"14\" fill=\"none\" stroke=\"#C99A3E\" stroke-width=\"3\"/><circle cx=\"240\" cy=\"55\" r=\"14\" fill=\"none\" stroke=\"#E8542B\" stroke-width=\"3\"/></svg>", "street": "<svg viewBox=\"0 0 300 120\" preserveAspectRatio=\"none\" width=\"100%\" height=\"100%\"><rect width=\"300\" height=\"120\" fill=\"#33424F\"/><path d=\"M40 90 V50 L70 35 L100 50 V90 Z\" fill=\"none\" stroke=\"#F4EDE1\" stroke-width=\"2\"/><path d=\"M150 90 V45 L185 28 L220 45 V90 Z\" fill=\"none\" stroke=\"#C99A3E\" stroke-width=\"2\" opacity=\".8\"/><path d=\"M0 95 H300\" stroke=\"#7FA6C9\" stroke-width=\"1.5\" opacity=\".5\"/></svg>"};
+const CATEGORY_HERO_VISUALS = {"t": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-t\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#BFE3F0\"/>\n          <stop offset=\"100%\" stop-color=\"#EAF6F2\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-t\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#3E8FB0\"/>\n          <stop offset=\"100%\" stop-color=\"#1D6E8C\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-t)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#F6D186\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-t)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#1D6E8C\" opacity=\".55\"/>\n      <path d=\"M340 195 Q380 150 420 160 Q450 168 470 195 Z\" fill=\"#4A7A8C\" opacity=\".8\"/><path d=\"M0 260 Q60 245 120 260 T240 260 T360 260 T480 260 T600 260\" stroke=\"#fff\" stroke-width=\"3\" fill=\"none\" opacity=\".6\"/>\n    </svg>", "g": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-g\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#FBE3CE\"/>\n          <stop offset=\"100%\" stop-color=\"#FCEFE1\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-g\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#E2A272\"/>\n          <stop offset=\"100%\" stop-color=\"#C97A44\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-g)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#F2C879\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-g)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#C97A44\" opacity=\".55\"/>\n      <rect x=\"60\" y=\"150\" width=\"90\" height=\"45\" fill=\"#8B5E34\" opacity=\".85\"/><rect x=\"170\" y=\"165\" width=\"70\" height=\"30\" fill=\"#A6743E\" opacity=\".85\"/><rect x=\"90\" y=\"130\" width=\"20\" height=\"20\" fill=\"#FCEFE1\" opacity=\".7\"/>\n    </svg>", "b": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-b\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#F4DCDD\"/>\n          <stop offset=\"100%\" stop-color=\"#F8ECE3\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-b\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#C97A6E\"/>\n          <stop offset=\"100%\" stop-color=\"#A6431E\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-b)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#E9B48A\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-b)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#A6431E\" opacity=\".55\"/>\n      <rect x=\"80\" y=\"140\" width=\"60\" height=\"55\" fill=\"#A6431E\" opacity=\".85\"/><rect x=\"150\" y=\"120\" width=\"45\" height=\"75\" fill=\"#8B5E34\" opacity=\".8\"/><rect x=\"205\" y=\"150\" width=\"55\" height=\"45\" fill=\"#B5495B\" opacity=\".75\"/>\n    </svg>", "e": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-e\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#D9EEDD\"/>\n          <stop offset=\"100%\" stop-color=\"#EFF7EF\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-e\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#5FA37A\"/>\n          <stop offset=\"100%\" stop-color=\"#357A4A\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-e)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#F2D06B\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-e)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#357A4A\" opacity=\".55\"/>\n      <path d=\"M120 195 L120 140 L160 155 L120 170 Z\" fill=\"#357A4A\" opacity=\".85\"/><path d=\"M420 195 L420 150 L455 163 L420 176 Z\" fill=\"#5FA37A\" opacity=\".85\"/>\n    </svg>", "c": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-c\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#E7DCEF\"/>\n          <stop offset=\"100%\" stop-color=\"#F3EEF7\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-c\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#7C6A9E\"/>\n          <stop offset=\"100%\" stop-color=\"#6E4A96\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-c)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#D8B979\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-c)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#6E4A96\" opacity=\".55\"/>\n      <path d=\"M270 195 V145 M330 195 V145 M255 150 H345 M260 135 H340\" stroke=\"#6E4A96\" stroke-width=\"7\" opacity=\".85\" stroke-linecap=\"round\"/>\n    </svg>", "l": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-l\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#FBEFD3\"/>\n          <stop offset=\"100%\" stop-color=\"#FCF6E4\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-l\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#D9B36C\"/>\n          <stop offset=\"100%\" stop-color=\"#A67A1E\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-l)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#F0C878\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-l)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#A67A1E\" opacity=\".55\"/>\n      <path d=\"M90 160 L130 130 L170 160 V195 H90 Z\" fill=\"#A67A1E\" opacity=\".85\"/><path d=\"M210 170 L240 148 L270 170 V195 H210 Z\" fill=\"#C99A4C\" opacity=\".8\"/>\n    </svg>", "p": "<svg viewBox=\"0 0 600 320\" preserveAspectRatio=\"xMidYMid slice\" width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\">\n      <defs>\n        <linearGradient id=\"sky-p\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#DCE3F1\"/>\n          <stop offset=\"100%\" stop-color=\"#EFF2F8\"/>\n        </linearGradient>\n        <linearGradient id=\"sea-p\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#6F87B8\"/>\n          <stop offset=\"100%\" stop-color=\"#3B5998\"/>\n        </linearGradient>\n      </defs>\n      <rect width=\"600\" height=\"190\" fill=\"url(#sky-p)\"/>\n      <circle cx=\"480\" cy=\"70\" r=\"34\" fill=\"#F0DDA0\" opacity=\".9\"/>\n      <rect y=\"190\" width=\"600\" height=\"130\" fill=\"url(#sea-p)\"/>\n      <path d=\"M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z\" fill=\"#3B5998\" opacity=\".55\"/>\n      <circle cx=\"300\" cy=\"168\" r=\"10\" fill=\"#16233A\" opacity=\".85\"/><path d=\"M300 178 V210 M290 195 L300 205 L310 195\" stroke=\"#16233A\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\" opacity=\".85\"/>\n    </svg>"};
+const CAT_EN_FOR_PICKUP = {"t": "tourism", "b": "business", "g": "gourmet", "p": "people", "c": "culture", "e": "event", "l": "life"};
 (function(){
   const N = PICKUP_ITEMS.length;
   if (!N) return;
@@ -558,15 +515,17 @@ const PICKUP_SCENES = {"shrine": "<svg viewBox=\"0 0 300 120\" preserveAspectRat
     const a = document.createElement('a');
     a.className = 'pickup-card';
     a.href = '/articles/' + item.slug + '/';
+    const dateFormatted = (item.date || '').split('-').join('.');
+    const imgSrc = '/assets/images/categories/' + CAT_EN_FOR_PICKUP[item.cat] + '.svg';
     a.innerHTML = `
-      <div class="pickup-card-img">${PICKUP_SCENES[item.scene]}</div>
+      <div class="pickup-card-img">
+        <img src="${imgSrc}" width="800" height="420" alt="${CATS_FOR_PICKUP[item.cat].label}のイメージ" loading="lazy" decoding="async">
+        <span class="pickup-tag" style="background:${CATS_FOR_PICKUP[item.cat].bg}">${CATS_FOR_PICKUP[item.cat].label}</span>
+      </div>
       <div class="pickup-card-body">
-        <div class="pickup-taglist">
-          <span class="pickup-tag" style="background:${CATS_FOR_PICKUP[item.cat].bg}">${CATS_FOR_PICKUP[item.cat].label}</span>
-          <span class="pickup-area">${item.area}</span>
-        </div>
         <div class="pickup-card-title serif">${item.title}</div>
         <div class="pickup-card-dek">${item.dek}</div>
+        <div class="pickup-card-meta"><span class="pickup-area">${item.area}</span><span class="pickup-date">${dateFormatted}</span></div>
       </div>`;
     return a;
   }

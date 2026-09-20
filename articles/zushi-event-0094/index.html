@@ -43,40 +43,66 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
-<main>
+<main class="article-main">
   <div class="article-page-wrap">
     <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <a href="/area/zushi/">逗子</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕</span></nav>
     <div class="modal article-modal-static">
-      <div class="modal-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="#C99A3E" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="#7FA6C9" stroke-width="1.5" opacity=".5"/></svg></div>
+      <div class="modal-art">
+        <img src="/assets/images/categories/event.svg" width="1200" height="630" alt="イベントのイメージ" fetchpriority="high">
+        <span class="modal-art-badge" style="background:#E8542B">イベント</span>
+      </div>
       <div class="modal-body">
-        <div class="modal-eyebrow">イベント<span style="color:var(--ink-faint); font-weight:400;">／ 逗子</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">2026.09.20</span></div>
+        <div class="modal-eyebrow">
+          <span class="modal-eyebrow-date">2026.09.20</span>
+          <span class="modal-eyebrow-badge" style="background:#E8542B">イベント</span>
+          <span class="modal-eyebrow-badge modal-eyebrow-area">逗子</span>
+        </div>
         
         <h1 class="modal-title serif">街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕</h1>
         <p class="modal-dek">14回目にして3年に一度の特別開催年。逗子在住の写真家・森山大道らが参加し、旧本多邸や池子の森など市内各所を舞台に、展示・音楽・市民参加プロジェクトが繰り広げられる。</p>
+        <div class="share-row">
+      <a class="share-btn share-btn-x" href="https://twitter.com/intent/tweet?url=https%3A//www.shonandoors.com/articles/zushi-event-0094/&text=%E8%A1%97%E5%85%A8%E4%BD%93%E3%81%8C%E3%82%A2%E3%83%BC%E3%83%88%E3%81%AB%E3%81%AA%E3%82%8B23%E6%97%A5%E9%96%93%E2%80%94%E2%80%94%E3%80%8C%E9%80%97%E5%AD%90%E3%82%A2%E3%83%BC%E3%83%88%E3%83%95%E3%82%A7%E3%82%B9%E3%83%86%E3%82%A3%E3%83%90%E3%83%AB2026%E3%80%8D%E3%80%8110%E6%9C%883%E6%97%A5%E3%81%8B%E3%82%89%E9%96%8B%E5%B9%95" target="_blank" rel="noopener" aria-label="Xでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//www.shonandoors.com/articles/zushi-event-0094/" target="_blank" rel="noopener" aria-label="Facebookでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-line" href="https://social-plugins.line.me/lineit/share?url=https%3A//www.shonandoors.com/articles/zushi-event-0094/" target="_blank" rel="noopener" aria-label="LINEでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.1 8.3 7.8.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1 .9.6 1-.4 5.6-3.3 7.6-5.6 1.4-1.5 2.4-3 2.4-5.3C22 6.6 17.5 3 12 3z" fill="currentColor"/></svg>
+      </a>
+      <button type="button" class="share-btn share-btn-copy" data-copy-url="https://www.shonandoors.com/articles/zushi-event-0094/" aria-label="リンクをコピー">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 9V6a2 2 0 012-2h7a2 2 0 012 2v7a2 2 0 01-2 2h-3M6 9h7a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
         <div class="modal-text">秋の逗子が、街ごとアートに染まる季節がやってくる。「逗子アートフェスティバル 2026（ZAF2026）」が、2026年10月3日（土）から25日（日）までの23日間にわたって開催される。テーマは「はじまりの未来、はじまりの場。」——海と山に囲まれ、多様な文化や人々が交差するこの街で、市民有志の熱意から生まれたフェスティバルが14回目を迎える。
 
 今年は3年に一度の特別開催年（トリエンナーレ）として、例年以上に豪華なラインナップが揃った。メイン会場となるのは、建築家・久米権九郎が設計した登録有形文化財「旧本多邸」。ノスタルジックな佇まいを持つこの歴史的建造物を核に、逗子文化プラザホール、池子の森自然公園、沼間地区など市内各所に会場が広がる。参加アーティストには逗子在住の写真家・森山大道や、鎌倉とロサンゼルスを拠点に活動するフランシス真悟らが名を連ねる。また、思想家・バックミンスター・フラーによる大型石版画絵本の特別展示なども予定され、多彩な表現が街を彩る。
@@ -84,7 +110,7 @@
 入場料は基本的に無料（一部の展示、ライブ、ワークショップ等は有料）。会期前から市民参加型のまちづくりプロジェクト「ZAFまなびば」として、映像制作や朗読、能講座など学びのプログラムや、フェスティバルを支えるボランティア活動も展開されている。世代や立場を超えた多様な企画が、逗子というまちのあちこちで息づいている。
 
 逗子アートフェスティバルは、単なるアートイベントにとどまらず「アートを通じた地域づくり」を掲げ、移住促進や持続可能なまちづくりへとつながることを目指している。古都鎌倉の隣町でありながら、独自の文化的土壌を育んできた逗子。その街全体を舞台に繰り広げられる23日間は、アートに詳しくない人でも気軽に参加できる入口が随所に用意されている。秋晴れの逗子を歩きながら、思いがけない出会いと対話を楽しんでみたい。</div>
-        <div class="modal-infobox"><div class="modal-info-row"><span class="modal-info-label">住所</span><span>旧本多邸・逗子文化プラザホール・池子の森自然公園・沼間地区ほか逗子市内各所</span></div><div class="modal-info-row"><span class="modal-info-label">アクセス</span><span>JR逗子駅・東逗子駅／京急逗子・葉山駅・神武寺駅より徒歩またはバス（企画により会場が異なるため公式サイト参照）</span></div><div class="modal-info-row"><span class="modal-info-label">営業時間</span><span>企画により異なる（詳細は公式サイト参照）</span></div><div class="modal-info-row"><span class="modal-info-label">SNS</span><span class="modal-sns-row"><a class="modal-sns-chip" style="background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)" href="https://www.instagram.com/zushi_artfes/" target="_blank" rel="noopener">Instagram</a><a class="modal-sns-chip" style="background:#000" href="https://x.com/zushi_artfes" target="_blank" rel="noopener">X</a></span></div></div>
+        <div class="modal-infobox"><div class="modal-info-row"><span class="modal-info-label">住所</span><span>旧本多邸・逗子文化プラザホール・池子の森自然公園・沼間地区ほか逗子市内各所</span></div><div class="modal-info-row"><span class="modal-info-label">アクセス</span><span>JR逗子駅・東逗子駅／京急逗子・葉山駅・神武寺駅より徒歩またはバス（企画により会場が異なるため公式サイト参照）</span></div><div class="modal-info-row"><span class="modal-info-label">営業時間</span><span>企画により異なる（詳細は公式サイト参照）</span></div><div class="modal-info-row"><span class="modal-info-label">SNS</span><span class="modal-sns-row"><a class="modal-sns-chip" style="background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)" href="https://www.instagram.com/zushi_artfes/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z"/></svg></a><a class="modal-sns-chip" style="background:#000" href="https://x.com/zushi_artfes" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z"/></svg></a></span></div></div>
         <iframe class="modal-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=%E6%97%A7%E6%9C%AC%E5%A4%9A%E9%82%B8%E3%83%BB%E9%80%97%E5%AD%90%E6%96%87%E5%8C%96%E3%83%97%E3%83%A9%E3%82%B6%E3%83%9B%E3%83%BC%E3%83%AB%E3%83%BB%E6%B1%A0%E5%AD%90%E3%81%AE%E6%A3%AE%E8%87%AA%E7%84%B6%E5%85%AC%E5%9C%92%E3%83%BB%E6%B2%BC%E9%96%93%E5%9C%B0%E5%8C%BA%E3%81%BB%E3%81%8B%E9%80%97%E5%AD%90%E5%B8%82%E5%86%85%E5%90%84%E6%89%80&output=embed"></iframe>
         <a class="modal-linkbtn" href="https://www.zushi-art.com/" target="_blank" rel="noopener">さらに詳しい情報を見る ↗</a>
         <div class="modal-tags"><span class="tag-pill">#逗子アートフェスティバル</span><span class="tag-pill">#ZAF2026</span><span class="tag-pill">#アート</span><span class="tag-pill">#森山大道</span><span class="tag-pill">#旧本多邸</span><span class="tag-pill">#逗子</span><span class="tag-pill">#イベント</span><span class="tag-pill">#文化</span><span class="tag-pill">#秋</span></div>
@@ -93,42 +119,67 @@
     </div>
     <div class="related-articles">
       <div class="related-articles-title">この記事に関連する話題</div>
-      <div class="related-articles-grid">
-      <a class="related-card" href="/articles/zushi-event-0084/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><ellipse cx="130" cy="75" rx="28" ry="20" fill="#F4EDE1" opacity=".9"/><path d="M158 75 V25" stroke="#F4EDE1" stroke-width="4"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#E8542B" stroke-width="2" fill="none" opacity=".7"/><path d="M0 105 Q40 90 80 105 T160 105 T240 105 T320 105" stroke="#C99A3E" stroke-width="1.5" fill="none" opacity=".5"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 逗子</div>
-            <div class="related-card-title serif">落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日</div>
+      <div class="article-list">
+      <a class="list-item" href="/articles/zushi-event-0084/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/zushi-event-0040/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 逗子</div>
-            <div class="related-card-title serif">10万人が集まる、初夏の海と花火</div>
+          <div class="list-item-title serif">落語と講談が一堂に——三遊亭小遊三と人間国宝・神田松鯉が逗子に集う、9月27日</div>
+          <div class="list-item-date">2026.09.19</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/zushi-event-0040/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/zushi-event-0039/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="90" y="30" width="120" height="45" fill="#F4EDE1" opacity=".12" stroke="#F4EDE1" stroke-width="2"/><circle cx="60" cy="55" r="14" fill="none" stroke="#C99A3E" stroke-width="3"/><circle cx="240" cy="55" r="14" fill="none" stroke="#E8542B" stroke-width="3"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 逗子</div>
-            <div class="related-card-title serif">砂浜に現れる、13日間だけの映画館</div>
+          <div class="list-item-title serif">10万人が集まる、初夏の海と花火</div>
+          <div class="list-item-date">2026.08.31</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/zushi-event-0039/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/kamakura-event-0083/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 鎌倉</div>
-            <div class="related-card-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
+          <div class="list-item-title serif">砂浜に現れる、13日間だけの映画館</div>
+          <div class="list-item-date">2026.08.27</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/kamakura-event-0083/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/fujisawa-event-0079/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 藤沢</div>
-            <div class="related-card-title serif">秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催</div>
+          <div class="list-item-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
+          <div class="list-item-date">2026.09.19</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/fujisawa-event-0079/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
-        </a>
+          <div class="list-item-title serif">秋の里山を3km歩く——「第19回小出川彼岸花まつり」、9月26日に開催</div>
+          <div class="list-item-date">2026.09.15</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
       </div>
     </div>
     <a class="back-to-top" href="/">← 湘南Doors トップへ戻る</a>
@@ -136,7 +187,15 @@
 </main>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "湘南Doors トップ", "item": "https://www.shonandoors.com/"}, {"@type": "ListItem", "position": 2, "name": "逗子", "item": "https://www.shonandoors.com/area/zushi/"}, {"@type": "ListItem", "position": 3, "name": "街全体がアートになる23日間——「逗子アートフェスティバル2026」、10月3日から開幕"}]}</script>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。

@@ -10,22 +10,24 @@ const overlay = document.getElementById('overlay');
 const modal = document.getElementById('modal');
 
 /* ---------- SNS follow icons ----------
-   下記の href="#" を、実際にSNSアカウントを開設した時点で
-   本物のURL（例: https://www.instagram.com/shonan_doors ）に置き換えてください。
+   湘南Doors公式SNSアカウント一覧(Header/Footer共通、単一の管理箇所)。
+   LINEは湘南Doors公式アカウントがまだ存在しないため、この一覧には含めない
+   (記事の「LINEでシェア」機能や、記事内店舗情報のLINEリンクとは別物であり、
+   それらは変更していない)。
 */
 const SNS_ICONS = [
-  {name:'Instagram', href:'#', bg:'linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)', path:'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z'},
-  {name:'TikTok', href:'#', bg:'#000000', path:'M14 3h2.2a4.6 4.6 0 0 0 3.8 3.9V9a7 7 0 0 1-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.2 0 .4 0 .6.03v2.2a3.3 3.3 0 1 0 2.3 3.15V3z'},
-  {name:'X', href:'#', bg:'#000000', path:'M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z'},
-  {name:'Facebook', href:'#', bg:'#1877F2', path:'M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z'},
-  {name:'YouTube', href:'#', bg:'#FF0000', path:'M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 5 12 5 12 5s-6 0-7.7.3A2.7 2.7 0 0 0 2.4 7.2 28 28 0 0 0 2 12a28 28 0 0 0 .4 4.8 2.7 2.7 0 0 0 1.9 1.9C6 19 12 19 12 19s6 0 7.7-.3a2.7 2.7 0 0 0 1.9-1.9A28 28 0 0 0 22 12a28 28 0 0 0-.4-4.8zM10 15V9l5.2 3z'},
-  {name:'LINE', href:'#', bg:'#06C755', path:'M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.1 8.3 7.8.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1 .9.6 1-.4 5.6-3.3 7.6-5.6 1.4-1.5 2.4-3 2.4-5.3C22 6.6 17.5 3 12 3zM8.2 13.4H6.7c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.2h.7c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4zm2.1 0h-.4c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.6c0 .2-.2.4-.4.4zm4.3 0h-.4c-.1 0-.2 0-.3-.1l-1.6-2.2v1.9c0 .2-.2.4-.4.4h-.4c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h.4c.1 0 .2.1.3.2l1.6 2.2V9.4c0-.2.2-.4.4-.4h.4c.2 0 .4.2.4.4v3.6c0 .2-.2.4-.4.4zm3.6-3.2h-1.5v.6h1.5c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4h-1.5v.6h1.5c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4h-2.3c-.2 0-.4-.2-.4-.4V9.4c0-.2.2-.4.4-.4h2.3c.2 0 .4.2.4.4v.4c0 .2-.2.4-.4.4z'},
+  {name:'Instagram', href:'https://www.instagram.com/shonan.doors/', bg:'linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)', path:'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z'},
+  {name:'TikTok', href:'https://www.tiktok.com/@shonan.doors', bg:'#000000', path:'M14 3h2.2a4.6 4.6 0 0 0 3.8 3.9V9a7 7 0 0 1-3.8-1.1v6.6a5.5 5.5 0 1 1-5.5-5.5c.2 0 .4 0 .6.03v2.2a3.3 3.3 0 1 0 2.3 3.15V3z'},
+  {name:'X', href:'https://x.com/shonan_doors', bg:'#000000', path:'M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z'},
+  {name:'Facebook', href:'https://www.facebook.com/shonan.doors', bg:'#1877F2', path:'M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z'},
+  {name:'YouTube', href:'https://www.youtube.com/channel/UCeXme0CHzBJo3j4lcOMX8kA', bg:'#FF0000', path:'M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 5 12 5 12 5s-6 0-7.7.3A2.7 2.7 0 0 0 2.4 7.2 28 28 0 0 0 2 12a28 28 0 0 0 .4 4.8 2.7 2.7 0 0 0 1.9 1.9C6 19 12 19 12 19s6 0 7.7-.3a2.7 2.7 0 0 0 1.9-1.9A28 28 0 0 0 22 12a28 28 0 0 0-.4-4.8zM10 15V9l5.2 3z'},
 ];
 const snsRow = document.getElementById('snsRow');
 if (snsRow) {
   SNS_ICONS.forEach(s=>{
     const a = document.createElement('a');
-    a.className='sns-icon'; a.href=s.href; a.title=s.name; a.target='_blank'; a.rel='noopener';
+    a.className='sns-icon'; a.href=s.href; a.title=s.name; a.target='_blank'; a.rel='noopener noreferrer';
+    a.setAttribute('aria-label', 'Shonan Doors ' + s.name);
     a.style.background = s.bg;
     a.innerHTML = `<svg viewBox="0 0 24 24" fill="#fff"><path d="${s.path}"/></svg>`;
     snsRow.appendChild(a);
@@ -92,4 +94,37 @@ if (overlay) {
 ['footPrivacy','footContact','footOperator'].forEach(id=>{
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal(id.replace('foot','').toLowerCase()); });
+});
+
+/* ---------- ヘッダーのハンバーガーメニュー ----------
+   既存のカテゴリー/エリアハブへのリンク一覧(nav-menu-panel)の開閉のみを行う。
+   新しい機能・URLは追加しない。 */
+(function(){
+  const toggle = document.getElementById('navMenuToggle');
+  const panel = document.getElementById('navMenuPanel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', () => {
+    const isOpen = !panel.hidden;
+    panel.hidden = isOpen;
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+})();
+
+/* ---------- 記事ページの「リンクをコピー」ボタン ---------- */
+document.querySelectorAll('.share-btn-copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const url = btn.getAttribute('data-copy-url');
+    try {
+      await navigator.clipboard.writeText(url);
+      const original = btn.getAttribute('aria-label');
+      btn.classList.add('share-btn-copied');
+      btn.setAttribute('aria-label', 'コピーしました');
+      setTimeout(() => {
+        btn.classList.remove('share-btn-copied');
+        btn.setAttribute('aria-label', original);
+      }, 1500);
+    } catch (e) {
+      /* クリップボードAPIが使えない環境では何もしない(既存機能を壊さないための安全側の失敗) */
+    }
+  });
 });

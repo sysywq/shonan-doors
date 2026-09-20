@@ -28,29 +28,34 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
 <main>
   <div class="hub-page-wrap">
@@ -64,7 +69,15 @@
   </div>
 </main>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
