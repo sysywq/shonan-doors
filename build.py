@@ -206,13 +206,10 @@ CAT_EN_TO_JA = {v: k for k, v in CAT_EN.items()}
 
 HUB_PAGE_SIZE = 24  # 一覧系ページ(トップ/地域/カテゴリ)1ページあたりの表示件数
 
-FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E"
-           "%3Ccircle cx='30' cy='30' r='30' fill='%23F4F5F1'/%3E%3Ccircle cx='30' cy='30' r='27' "
-           "fill='none' stroke='%2316233A' stroke-width='2'/%3E%3Cpath d='M14 34 Q22 24 30 34 T46 34' "
-           "fill='none' stroke='%231D3557' stroke-width='3'/%3E%3Cpath d='M14 42 Q22 32 30 42 T46 42' "
-           "fill='none' stroke='%23E8542B' stroke-width='2.5' opacity='.85'/%3E%3Ccircle cx='30' cy='16' "
-           "r='5.5' fill='%23C99A3E'/%3E%3C/svg%3E")
-
+# favicon一式は generate_favicons.py で新ロゴ(白背景版)から生成し、
+# リポジトリ直下(/favicon.ico 等)に静的ファイルとして配置している。
+# HEAD_COMMON(全ページ共通)から一箇所だけ参照することで、
+# ページごとの重複記述を避けている。
 GA4_SNIPPET = """<script async src="https://www.googletagmanager.com/gtag/js?id=G-PB4LBKENHT"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -223,7 +220,12 @@ GA4_SNIPPET = """<script async src="https://www.googletagmanager.com/gtag/js?id=
 
 HEAD_COMMON = f"""<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="{FAVICON}">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -532,7 +534,7 @@ def build_structured_data(item, canonical_url):
         "publisher": {
             "@type": "Organization",
             "name": "湘南Doors",
-            "logo": {"@type": "ImageObject", "url": f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"},
+            "logo": {"@type": "ImageObject", "url": f"{SITE_DOMAIN}/android-chrome-512x512.png", "width": 512, "height": 512},
         },
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
     }
@@ -915,7 +917,22 @@ def render_index(articles, scenes):
         "name": "湘南Doors",
         "url": f"{SITE_DOMAIN}/",
         "description": site_description,
-        "publisher": {"@type": "Organization", "name": "湘南Doors運営事務局", "url": f"{SITE_DOMAIN}/"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "湘南Doors運営事務局",
+            "url": f"{SITE_DOMAIN}/",
+            "logo": {"@type": "ImageObject", "url": f"{SITE_DOMAIN}/android-chrome-512x512.png", "width": 512, "height": 512},
+        },
+    }
+    # GoogleがOrganization/サイトのロゴ(検索結果・ナレッジパネル等)を正しく認識できるよう、
+    # トップページに独立したOrganization構造化データも用意する(WebSite.publisher内の
+    # Organizationとは別に、Google公式のLogoガイドラインが推奨する単体のOrganizationエンティティ)。
+    organization_ld = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "湘南Doors",
+        "url": f"{SITE_DOMAIN}/",
+        "logo": f"{SITE_DOMAIN}/android-chrome-512x512.png",
     }
 
     return f"""<!DOCTYPE html>
@@ -938,6 +955,7 @@ def render_index(articles, scenes):
 <meta name="twitter:description" content="{esc(site_description)}">
 <meta name="twitter:image" content="{SITE_DOMAIN}/assets/ogp/beach.png">
 <script type="application/ld+json">{json.dumps(website_ld, ensure_ascii=False)}</script>
+<script type="application/ld+json">{json.dumps(organization_ld, ensure_ascii=False)}</script>
 {HEAD_COMMON}
 </head>
 <body>
@@ -1375,6 +1393,21 @@ Sitemap: {SITE_DOMAIN}/sitemap.xml
 """
 
 
+def render_webmanifest():
+    manifest = {
+        "name": "湘南Doors",
+        "short_name": "湘南Doors",
+        "icons": [
+            {"src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png"},
+        ],
+        "theme_color": "#ffffff",
+        "background_color": "#ffffff",
+        "display": "standalone",
+    }
+    return json.dumps(manifest, ensure_ascii=False, indent=2)
+
+
 def main():
     articles = load_json("data/articles.json")
     scenes = load_json("data/scenes.json")
@@ -1433,10 +1466,12 @@ def main():
         new_sitemap_xml = render_sitemap(articles)
         new_robots_txt = render_robots_txt()
         new_404_html = render_404_page()
+        new_webmanifest = render_webmanifest()
         write("index.html", new_index_html)
         write("sitemap.xml", new_sitemap_xml)
         write("robots.txt", new_robots_txt)
         write("404.html", new_404_html)
+        write("site.webmanifest", new_webmanifest)
 
         # ここまで例外なく到達できた場合のみ、本番ディレクトリを置き換える。
         # articles/ area/ category/ page/ はビルド生成物のみが置かれるディレクトリ
@@ -1450,7 +1485,7 @@ def main():
             if os.path.isdir(staged_dir):
                 shutil.move(staged_dir, final_dir)
 
-        for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html"):
+        for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html", "site.webmanifest"):
             tmp_path = os.path.join(ROOT, filename + ".tmp")
             shutil.move(os.path.join(staging_dir, filename), tmp_path)
             os.replace(tmp_path, os.path.join(ROOT, filename))
@@ -1463,7 +1498,7 @@ def main():
             shutil.rmtree(staging_dir)
 
     print(f"ビルド完了: 記事ページ {len(articles)} 件 + 地域ハブ{len(by_area)} + "
-          f"カテゴリハブ{len(by_cat)} + トップページ + sitemap.xml + robots.txt + 404.html")
+          f"カテゴリハブ{len(by_cat)} + トップページ + sitemap.xml + robots.txt + 404.html + site.webmanifest")
 
 
 if __name__ == "__main__":
