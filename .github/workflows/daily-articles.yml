@@ -18,6 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      # 本日生成に成功し、実際にcommit/pushまで完了した記事のID一覧(カンマ区切り文字列)。
+      # X投稿ジョブはこの出力だけを頼りに対象記事を特定する(articles.json全体を
+      # 毎回スキャンしたり、日付だけで「今日の記事」を推測したりしない)。
+      article_ids: ${{ steps.export_ids.outputs.article_ids }}
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
@@ -69,3 +74,70 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git diff --cached --quiet || git commit -m "chore: 本日分の記事を自動追加 ($(date +'%Y-%m-%d'))"
           git push
+
+      # 6) commit/pushまで成功した記事のIDだけを、X投稿ジョブへ引き渡す。
+      #    (このステップより前のいずれかが失敗していれば、ジョブ自体が
+      #    途中で停止しているため、ここには到達しない=article_idsは空のまま)
+      - name: 本日投稿された記事IDを書き出す(X投稿ジョブ向け)
+        id: export_ids
+        run: |
+          python3 -c "
+          import json
+          with open('/tmp/shonan_doors_run_report.json', encoding='utf-8') as f:
+              report = json.load(f)
+          ids = report.get('accepted_ids', [])
+          print('article_ids=' + ','.join(str(i) for i in ids))
+          " >> "$GITHUB_OUTPUT"
+
+  # X(Twitter)への自動投稿。generateジョブが成功した場合のみ実行されるが、
+  # あくまで別ジョブとして疎結合にしてあるため、このジョブが失敗しても
+  # 記事生成・build・GitHub Pagesへのデプロイ(=generateジョブの成否)には
+  # 一切影響しない。
+  post_to_x:
+    needs: generate
+    if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: リポジトリをチェックアウト(最新mainを取得)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install tweepy
+
+      # generateジョブのpushからGitHub Pagesへ実際に反映されるまでには
+      # タイムラグがあるため、公開前のURLをXへ投稿してしまわないよう少し待つ。
+      - name: GitHub Pagesへの反映を待つ
+        run: sleep 90
+
+      # DRY_RUNは既定で有効(true)。リポジトリのActions variables(Secretsではない)で
+      # X_POST_DRY_RUN=false を設定すると本番投稿に切り替わる。
+      # 本番投稿にはX_API_KEY等のSecretsが必要(未設定の間はDRY_RUNのままにしておくこと)。
+      - name: Xへ投稿
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ vars.X_POST_DRY_RUN || 'true' }}
+        run: python post_to_x.py --article-ids "${{ needs.generate.outputs.article_ids }}"
+
+      # 本番投稿(DRY_RUNでない場合)で投稿済みログが更新された時だけコミットする。
+      - name: 投稿済みログをコミット・プッシュ
+        run: |
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/x_post_log.json
+          if ! git diff --cached --quiet; then
+            git pull --rebase origin main
+            git commit -m "chore: X投稿済みログを更新"
+            git push
+          fi
