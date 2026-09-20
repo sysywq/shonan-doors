@@ -43,40 +43,66 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
-<main>
+<main class="article-main">
   <div class="article-page-wrap">
     <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <a href="/area/chigasaki/">茅ヶ崎</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">写真家・瀧本幹也の国内公立美術館初の大規模個展が茅ヶ崎市美術館で開幕。海と月が紡ぐ「朔望」の世界</span></nav>
     <div class="modal article-modal-static">
-      <div class="modal-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><circle cx="245" cy="30" r="18" fill="#C99A3E"/><path d="M0 92 Q40 72 80 92 T160 92 T240 92 T320 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><path d="M0 104 Q40 88 80 104 T160 104 T240 104 T320 104" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/><path d="M60 92 L60 40 L100 55 L60 70" fill="#E8542B" opacity=".85"/></svg></div>
+      <div class="modal-art">
+        <img src="/assets/images/categories/culture.svg" width="1200" height="630" alt="文化のイメージ" fetchpriority="high">
+        <span class="modal-art-badge" style="background:#0F2038">文化</span>
+      </div>
       <div class="modal-body">
-        <div class="modal-eyebrow">文化<span style="color:var(--ink-faint); font-weight:400;">／ 茅ヶ崎</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">2026.09.14</span></div>
+        <div class="modal-eyebrow">
+          <span class="modal-eyebrow-date">2026.09.14</span>
+          <span class="modal-eyebrow-badge" style="background:#0F2038">文化</span>
+          <span class="modal-eyebrow-badge modal-eyebrow-area">茅ヶ崎</span>
+        </div>
         
         <h1 class="modal-title serif">写真家・瀧本幹也の国内公立美術館初の大規模個展が茅ヶ崎市美術館で開幕。海と月が紡ぐ「朔望」の世界</h1>
         <p class="modal-dek">9月2日、茅ヶ崎市美術館で「瀧本幹也 LUNATION 朔望―海から天体を読む」が開幕した。新月と満月が生み出す潮の満ち引きをテーマに、海辺の街・茅ヶ崎で新たに撮影された新作も初公開されている。会期は11月8日まで。</p>
+        <div class="share-row">
+      <a class="share-btn share-btn-x" href="https://twitter.com/intent/tweet?url=https%3A//www.shonandoors.com/articles/chigasaki-culture-0072/&text=%E5%86%99%E7%9C%9F%E5%AE%B6%E3%83%BB%E7%80%A7%E6%9C%AC%E5%B9%B9%E4%B9%9F%E3%81%AE%E5%9B%BD%E5%86%85%E5%85%AC%E7%AB%8B%E7%BE%8E%E8%A1%93%E9%A4%A8%E5%88%9D%E3%81%AE%E5%A4%A7%E8%A6%8F%E6%A8%A1%E5%80%8B%E5%B1%95%E3%81%8C%E8%8C%85%E3%83%B6%E5%B4%8E%E5%B8%82%E7%BE%8E%E8%A1%93%E9%A4%A8%E3%81%A7%E9%96%8B%E5%B9%95%E3%80%82%E6%B5%B7%E3%81%A8%E6%9C%88%E3%81%8C%E7%B4%A1%E3%81%90%E3%80%8C%E6%9C%94%E6%9C%9B%E3%80%8D%E3%81%AE%E4%B8%96%E7%95%8C" target="_blank" rel="noopener" aria-label="Xでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//www.shonandoors.com/articles/chigasaki-culture-0072/" target="_blank" rel="noopener" aria-label="Facebookでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-line" href="https://social-plugins.line.me/lineit/share?url=https%3A//www.shonandoors.com/articles/chigasaki-culture-0072/" target="_blank" rel="noopener" aria-label="LINEでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.1 8.3 7.8.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1 .9.6 1-.4 5.6-3.3 7.6-5.6 1.4-1.5 2.4-3 2.4-5.3C22 6.6 17.5 3 12 3z" fill="currentColor"/></svg>
+      </a>
+      <button type="button" class="share-btn share-btn-copy" data-copy-url="https://www.shonandoors.com/articles/chigasaki-culture-0072/" aria-label="リンクをコピー">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 9V6a2 2 0 012-2h7a2 2 0 012 2v7a2 2 0 01-2 2h-3M6 9h7a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
         <div class="modal-text">広告写真・コマーシャルフィルム・映画など多分野の第一線で活躍し続ける写真家・瀧本幹也（1974年生まれ）の、国内公立美術館初となる大規模個展「LUNATION 朔望―海から天体を読む」が、9月2日（水）から茅ヶ崎市美術館で開催されている。会期は2026年11月8日（日）まで。海辺の街にある茅ヶ崎市美術館というロケーションをいかし、新月と満月がもたらす「朔望（さくぼう）」を軸に構成された本展は、今この瞬間に見るべき展覧会として多くの注目を集めている。
 
 瀧本は幼少期から天体観測に親しみ、宇宙と自分とがひとつながりであるという感覚を写真表現の根幹に据えてきた写真家だ。『MONGOLIAN TRIBE』（1997年）や多様な海面の表情を捉えた『GRAIN OF LIGHT』（2014年）など、世界各地を舞台に独自の視点で作品を発表してきた。今回の個展では、茅ヶ崎の海で新たに撮影された新作シリーズ『LUNATION 朔望』が初公開される。満月の光が水面に映し出す生命を彷彿とさせるイメージが展示室を満たし、海の表情と天体の運動、水面に注ぐ微光から人類の生命へと思いを馳せる壮大な写真世界が体感できる。茅ヶ崎市美術館公式Xアカウントも「本展のために茅ヶ崎で新たに撮影された新作も初公開」と伝えており、この場所でしか成立しない展覧会といえる。
@@ -93,42 +119,67 @@
     </div>
     <div class="related-articles">
       <div class="related-articles-title">この記事に関連する話題</div>
-      <div class="related-articles-grid">
-      <a class="related-card" href="/articles/chigasaki-culture-0068/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M150 90 V25" stroke="#F4EDE1" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="#C99A3E" opacity=".7"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">文化 ／ 茅ヶ崎</div>
-            <div class="related-card-title serif">海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕</div>
+      <div class="article-list">
+      <a class="list-item" href="/articles/chigasaki-culture-0068/">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/chigasaki-culture-0019/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><ellipse cx="130" cy="75" rx="28" ry="20" fill="#F4EDE1" opacity=".9"/><path d="M158 75 V25" stroke="#F4EDE1" stroke-width="4"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#E8542B" stroke-width="2" fill="none" opacity=".7"/><path d="M0 105 Q40 90 80 105 T160 105 T240 105 T320 105" stroke="#C99A3E" stroke-width="1.5" fill="none" opacity=".5"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">文化 ／ 茅ヶ崎</div>
-            <div class="related-card-title serif">「勝手にシンドバッド」が生まれた海の街</div>
+          <div class="list-item-title serif">海と月と光が交差する——瀧本幹也の初大規模個展が茅ヶ崎で開幕</div>
+          <div class="list-item-date">2026.09.14</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/chigasaki-culture-0019/">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/chigasaki-culture-0069/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><circle cx="230" cy="80" r="20" fill="none" stroke="#E8542B" stroke-width="2"/><path d="M60 30 V90 M40 45 H90 M45 65 Q65 80 85 65" stroke="#F4EDE1" stroke-width="3" fill="none"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">文化 ／ 茅ヶ崎</div>
-            <div class="related-card-title serif">震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中</div>
+          <div class="list-item-title serif">「勝手にシンドバッド」が生まれた海の街</div>
+          <div class="list-item-date">2026.08.24</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/chigasaki-culture-0069/">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/chigasaki-culture-0067/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><circle cx="230" cy="80" r="20" fill="none" stroke="#E8542B" stroke-width="2"/><path d="M60 30 V90 M40 45 H90 M45 65 Q65 80 85 65" stroke="#F4EDE1" stroke-width="3" fill="none"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">文化 ／ 茅ヶ崎</div>
-            <div class="related-card-title serif">国史跡指定100年——「古相模川」をたどる企画展が茅ヶ崎市博物館で開催中</div>
+          <div class="list-item-title serif">震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中</div>
+          <div class="list-item-date">2026.09.14</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/chigasaki-culture-0067/">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/chigasaki-event-0093/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 茅ヶ崎</div>
-            <div class="related-card-title serif">タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催</div>
+          <div class="list-item-title serif">国史跡指定100年——「古相模川」をたどる企画展が茅ヶ崎市博物館で開催中</div>
+          <div class="list-item-date">2026.09.13</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/chigasaki-event-0093/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
-        </a>
+          <div class="list-item-title serif">タイの夜市が茅ヶ崎に出現——「タイランドフェスティバル湘南2026」、9月19日から5日間開催</div>
+          <div class="list-item-date">2026.09.20</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
       </div>
     </div>
     <a class="back-to-top" href="/">← 湘南Doors トップへ戻る</a>
@@ -136,7 +187,15 @@
 </main>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "湘南Doors トップ", "item": "https://www.shonandoors.com/"}, {"@type": "ListItem", "position": 2, "name": "茅ヶ崎", "item": "https://www.shonandoors.com/area/chigasaki/"}, {"@type": "ListItem", "position": 3, "name": "写真家・瀧本幹也の国内公立美術館初の大規模個展が茅ヶ崎市美術館で開幕。海と月が紡ぐ「朔望」の世界"}]}</script>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。

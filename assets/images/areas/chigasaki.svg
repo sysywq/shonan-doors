@@ -1,0 +1,17 @@
+<svg viewBox="0 0 600 320" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky-chigasaki" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#D9EEDD"/>
+          <stop offset="100%" stop-color="#EFF7EF"/>
+        </linearGradient>
+        <linearGradient id="sea-chigasaki" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5FA37A"/>
+          <stop offset="100%" stop-color="#357A4A"/>
+        </linearGradient>
+      </defs>
+      <rect width="600" height="190" fill="url(#sky-chigasaki)"/>
+      <circle cx="480" cy="70" r="34" fill="#F2D06B" opacity=".9"/>
+      <rect y="190" width="600" height="130" fill="url(#sea-chigasaki)"/>
+      <path d="M0 195 Q60 182 120 195 T240 195 T360 195 T480 195 T600 195 V320 H0 Z" fill="#357A4A" opacity=".55"/>
+      <path d="M120 195 L120 140 L160 155 L120 170 Z" fill="#357A4A" opacity=".85"/>
+    </svg>

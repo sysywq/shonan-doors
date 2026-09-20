@@ -38,402 +38,346 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
-<main>
-  <div class="hub-page-wrap">
+<main class="hub-main">
+  <div class="hub-page-wrap hub-page-wrap-top">
     <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">3ページ目</span></nav>
+  </div>
+  
+  <div class="hub-page-wrap hub-page-wrap-bottom">
     <h1 class="hub-title serif">記事一覧</h1>
     <p class="hub-subtitle">3ページ目</p>
-    <div class="grid">
-      <a class="card" href="/articles/hayama-people-0044/" data-cat="p" data-area="葉山" data-search="青春時代を過ごした、石原裕次郎と葉山の海初主演作の舞台にもなった、昭和の大スターゆかりの地。石原裕次郎葉山歴史人物">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><circle cx="150" cy="42" r="18" fill="#F4EDE1" opacity=".9"/><path d="M116 92 Q150 58 184 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><circle cx="230" cy="30" r="10" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>葉山</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.02</div>
-          <div class="card-title serif">青春時代を過ごした、石原裕次郎と葉山の海</div>
-          <div class="card-dek">初主演作の舞台にもなった、昭和の大スターゆかりの地。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">葉山</span>
+    <div class="article-list">
+      <a class="list-item" href="/articles/hayama-people-0044/" data-cat="p" data-area="葉山" data-search="青春時代を過ごした、石原裕次郎と葉山の海初主演作の舞台にもなった、昭和の大スターゆかりの地。石原裕次郎葉山歴史人物">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">葉山</span>
           </div>
+          <div class="list-item-title serif">青春時代を過ごした、石原裕次郎と葉山の海</div>
+          <div class="list-item-date">2026.09.02</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-life-0045/" data-cat="l" data-area="逗子" data-search="御用邸の隣町として育まれた、逗子の暮らし葉山への玄関口として発展してきた、落ち着いた住宅地。逗子暮らし別荘地">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><path d="M40 90 V50 L70 35 L100 50 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2"/><path d="M150 90 V45 L185 28 L220 45 V90 Z" fill="none" stroke="#C99A3E" stroke-width="2" opacity=".8"/><path d="M0 95 H300" stroke="#7FA6C9" stroke-width="1.5" opacity=".5"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.02</div>
-          <div class="card-title serif">御用邸の隣町として育まれた、逗子の暮らし</div>
-          <div class="card-dek">葉山への玄関口として発展してきた、落ち着いた住宅地。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-life-0045/" data-cat="l" data-area="逗子" data-search="御用邸の隣町として育まれた、逗子の暮らし葉山への玄関口として発展してきた、落ち着いた住宅地。逗子暮らし別荘地">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">御用邸の隣町として育まれた、逗子の暮らし</div>
+          <div class="list-item-date">2026.09.02</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-business-0046/" data-cat="b" data-area="逗子" data-search="映画祭を生んだ、逗子のシネマカフェクリエイターたちが集った一軒のカフェから、地域の文化は育っていった。cinema amigo逗子カフェ">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="90" y="30" width="120" height="45" fill="#F4EDE1" opacity=".12" stroke="#F4EDE1" stroke-width="2"/><circle cx="60" cy="55" r="14" fill="none" stroke="#C99A3E" stroke-width="3"/><circle cx="240" cy="55" r="14" fill="none" stroke="#E8542B" stroke-width="3"/></svg>
-          <div class="card-eyebrow">企業・店舗<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.02</div>
-          <div class="card-title serif">映画祭を生んだ、逗子のシネマカフェ</div>
-          <div class="card-dek">クリエイターたちが集った一軒のカフェから、地域の文化は育っていった。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-business-0046/" data-cat="b" data-area="逗子" data-search="映画祭を生んだ、逗子のシネマカフェクリエイターたちが集った一軒のカフェから、地域の文化は育っていった。cinema amigo逗子カフェ">
+        <img class="list-item-thumb" src="/assets/images/categories/business.svg" width="60" height="60" alt="企業・店舗のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">映画祭を生んだ、逗子のシネマカフェ</div>
+          <div class="list-item-date">2026.09.02</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hayama-tourism-0041/" data-cat="t" data-area="葉山" data-search="富士山と江の島を望む、ヨットとウィンドサーフィンの聖地森戸海岸は葉山を代表する景勝地であり、マリンスポーツの中心地。森戸海岸葉山森戸神社">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M150 90 V25" stroke="#F4EDE1" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>葉山</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.01</div>
-          <div class="card-title serif">富士山と江の島を望む、ヨットとウィンドサーフィンの聖地</div>
-          <div class="card-dek">森戸海岸は葉山を代表する景勝地であり、マリンスポーツの中心地。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">葉山</span>
+      <a class="list-item" href="/articles/hayama-tourism-0041/" data-cat="t" data-area="葉山" data-search="富士山と江の島を望む、ヨットとウィンドサーフィンの聖地森戸海岸は葉山を代表する景勝地であり、マリンスポーツの中心地。森戸海岸葉山森戸神社">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">葉山</span>
           </div>
+          <div class="list-item-title serif">富士山と江の島を望む、ヨットとウィンドサーフィンの聖地</div>
+          <div class="list-item-date">2026.09.01</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hayama-culture-0042/" data-cat="c" data-area="葉山" data-search="日本のヨットは、葉山からはじまった1882年、ひとりの青年がこの海で日本初のヨットを走らせた。葉山マリーナヨット葉山">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M150 90 V25" stroke="#F4EDE1" stroke-width="2.5"/><path d="M150 30 L195 70 L150 70 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M100 95 L120 80 L140 95 Z" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>葉山</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.01</div>
-          <div class="card-title serif">日本のヨットは、葉山からはじまった</div>
-          <div class="card-dek">1882年、ひとりの青年がこの海で日本初のヨットを走らせた。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">葉山</span>
+      <a class="list-item" href="/articles/hayama-culture-0042/" data-cat="c" data-area="葉山" data-search="日本のヨットは、葉山からはじまった1882年、ひとりの青年がこの海で日本初のヨットを走らせた。葉山マリーナヨット葉山">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">葉山</span>
           </div>
+          <div class="list-item-title serif">日本のヨットは、葉山からはじまった</div>
+          <div class="list-item-date">2026.09.01</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hayama-culture-0043/" data-cat="c" data-area="葉山" data-search="皇室の保養地に選ばれた、葉山という土地の魅力明治政府に招かれたドイツ人医師が、逗子・葉山を保養地として推した。葉山御用邸ベルツ博士葉山">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><path d="M100 90 V55 L150 30 L200 55 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2.5"/><rect x="140" y="65" width="20" height="25" fill="#C99A3E" opacity=".7"/><path d="M60 90 V45 M60 45 Q52 45 52 55 M60 45 Q68 45 68 55" stroke="#7FA6C9" stroke-width="3" fill="none" opacity=".7"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>葉山</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.09.01</div>
-          <div class="card-title serif">皇室の保養地に選ばれた、葉山という土地の魅力</div>
-          <div class="card-dek">明治政府に招かれたドイツ人医師が、逗子・葉山を保養地として推した。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">葉山</span>
+      <a class="list-item" href="/articles/hayama-culture-0043/" data-cat="c" data-area="葉山" data-search="皇室の保養地に選ばれた、葉山という土地の魅力明治政府に招かれたドイツ人医師が、逗子・葉山を保養地として推した。葉山御用邸ベルツ博士葉山">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">葉山</span>
           </div>
+          <div class="list-item-title serif">皇室の保養地に選ばれた、葉山という土地の魅力</div>
+          <div class="list-item-date">2026.09.01</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-tourism-0038/" data-cat="t" data-area="大磯" data-search="焼失から8年、よみがえった宰相の邸宅2009年の火災を乗り越え、2017年に再建・公開された旧吉田茂邸。旧吉田茂邸大磯歴史建築">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><path d="M100 90 V55 L150 30 L200 55 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2.5"/><rect x="140" y="65" width="20" height="25" fill="#C99A3E" opacity=".7"/><path d="M60 90 V45 M60 45 Q52 45 52 55 M60 45 Q68 45 68 55" stroke="#7FA6C9" stroke-width="3" fill="none" opacity=".7"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.31</div>
-          <div class="card-title serif">焼失から8年、よみがえった宰相の邸宅</div>
-          <div class="card-dek">2009年の火災を乗り越え、2017年に再建・公開された旧吉田茂邸。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-tourism-0038/" data-cat="t" data-area="大磯" data-search="焼失から8年、よみがえった宰相の邸宅2009年の火災を乗り越え、2017年に再建・公開された旧吉田茂邸。旧吉田茂邸大磯歴史建築">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">焼失から8年、よみがえった宰相の邸宅</div>
+          <div class="list-item-date">2026.08.31</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-event-0040/" data-cat="e" data-area="逗子" data-search="10万人が集まる、初夏の海と花火20年以上にわたり地元企業が支え続けてきた逗子最大級のイベント。逗子海岸花火大会逗子">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.31</div>
-          <div class="card-title serif">10万人が集まる、初夏の海と花火</div>
-          <div class="card-dek">20年以上にわたり地元企業が支え続けてきた逗子最大級のイベント。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-event-0040/" data-cat="e" data-area="逗子" data-search="10万人が集まる、初夏の海と花火20年以上にわたり地元企業が支え続けてきた逗子最大級のイベント。逗子海岸花火大会逗子">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">10万人が集まる、初夏の海と花火</div>
+          <div class="list-item-date">2026.08.31</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/ninomiya-life-0035/" data-cat="l" data-area="二宮" data-search="落花生とオリーブに囲まれた、二宮という小さな町温暖な気候と海山の自然が育む、二宮ならではの日常。二宮移住田舎暮らし">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.30</div>
-          <div class="card-title serif">落花生とオリーブに囲まれた、二宮という小さな町</div>
-          <div class="card-dek">温暖な気候と海山の自然が育む、二宮ならではの日常。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+      <a class="list-item" href="/articles/ninomiya-life-0035/" data-cat="l" data-area="二宮" data-search="落花生とオリーブに囲まれた、二宮という小さな町温暖な気候と海山の自然が育む、二宮ならではの日常。二宮移住田舎暮らし">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">落花生とオリーブに囲まれた、二宮という小さな町</div>
+          <div class="list-item-date">2026.08.30</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/kamakura-life-0036/" data-cat="l" data-area="鎌倉" data-search="電車が生活道路と重なる、江ノ電沿線に暮らすということ観光客が写真を撮る風景が、住民にとっては通勤路でもある。江ノ電暮らし">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><rect x="0" y="70" width="300" height="4" fill="#F4EDE1" opacity=".6"/><path d="M120 40 L180 40 L180 70 L120 70 Z" fill="#E8542B" opacity=".9"/><circle cx="130" cy="50" r="4" fill="#F4EDE1"/><circle cx="170" cy="50" r="4" fill="#F4EDE1"/><path d="M0 95 Q60 80 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/><path d="M40 55 L40 90 M40 55 L20 62 M40 55 L60 62" stroke="#C99A3E" stroke-width="3"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>鎌倉</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.30</div>
-          <div class="card-title serif">電車が生活道路と重なる、江ノ電沿線に暮らすということ</div>
-          <div class="card-dek">観光客が写真を撮る風景が、住民にとっては通勤路でもある。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">鎌倉</span>
+      <a class="list-item" href="/articles/kamakura-life-0036/" data-cat="l" data-area="鎌倉" data-search="電車が生活道路と重なる、江ノ電沿線に暮らすということ観光客が写真を撮る風景が、住民にとっては通勤路でもある。江ノ電暮らし">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
+          <div class="list-item-title serif">電車が生活道路と重なる、江ノ電沿線に暮らすということ</div>
+          <div class="list-item-date">2026.08.30</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/ninomiya-people-0032/" data-cat="p" data-area="二宮" data-search="横浜で種を手に入れた、ふたりの先駆者渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。落花生歴史人物">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.29</div>
-          <div class="card-title serif">横浜で種を手に入れた、ふたりの先駆者</div>
-          <div class="card-dek">渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+      <a class="list-item" href="/articles/ninomiya-people-0032/" data-cat="p" data-area="二宮" data-search="横浜で種を手に入れた、ふたりの先駆者渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。落花生歴史人物">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">横浜で種を手に入れた、ふたりの先駆者</div>
+          <div class="list-item-date">2026.08.29</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-life-0033/" data-cat="l" data-area="藤沢" data-search="サーフィンも、都心通勤も。辻堂という選択海まで徒歩10分、都心へも近い。二拠点欲張りな暮らし方。辻堂暮らし移住">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M110 95 Q150 30 190 95 Z" fill="#F4EDE1" opacity=".85"/><path d="M0 100 Q40 84 80 100 T160 100 T240 100 T320 100" stroke="#E8542B" stroke-width="2.5" fill="none" opacity=".8"/><path d="M0 112 Q40 96 80 112 T160 112 T240 112 T320 112" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".5"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.29</div>
-          <div class="card-title serif">サーフィンも、都心通勤も。辻堂という選択</div>
-          <div class="card-dek">海まで徒歩10分、都心へも近い。二拠点欲張りな暮らし方。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-life-0033/" data-cat="l" data-area="藤沢" data-search="サーフィンも、都心通勤も。辻堂という選択海まで徒歩10分、都心へも近い。二拠点欲張りな暮らし方。辻堂暮らし移住">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">サーフィンも、都心通勤も。辻堂という選択</div>
+          <div class="list-item-date">2026.08.29</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-life-0034/" data-cat="l" data-area="大磯" data-search="賑わいから少し離れた、大磯の暮らしのリズム別荘地としての落ち着きが、今も町のかたちに残っている。大磯暮らし別荘地">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><path d="M100 90 V55 L150 30 L200 55 V90 Z" fill="none" stroke="#F4EDE1" stroke-width="2.5"/><rect x="140" y="65" width="20" height="25" fill="#C99A3E" opacity=".7"/><path d="M60 90 V45 M60 45 Q52 45 52 55 M60 45 Q68 45 68 55" stroke="#7FA6C9" stroke-width="3" fill="none" opacity=".7"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.29</div>
-          <div class="card-title serif">賑わいから少し離れた、大磯の暮らしのリズム</div>
-          <div class="card-dek">別荘地としての落ち着きが、今も町のかたちに残っている。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-life-0034/" data-cat="l" data-area="大磯" data-search="賑わいから少し離れた、大磯の暮らしのリズム別荘地としての落ち着きが、今も町のかたちに残っている。大磯暮らし別荘地">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">賑わいから少し離れた、大磯の暮らしのリズム</div>
+          <div class="list-item-date">2026.08.29</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-people-0029/" data-cat="p" data-area="茅ヶ崎" data-search="自転車で走った少年時代の街サザンオールスターズのリーダーにとって、茅ヶ崎は今も原風景であり続ける。桑田佳祐茅ヶ崎">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><circle cx="150" cy="42" r="18" fill="#F4EDE1" opacity=".9"/><path d="M116 92 Q150 58 184 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><circle cx="230" cy="30" r="10" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.28</div>
-          <div class="card-title serif">自転車で走った少年時代の街</div>
-          <div class="card-dek">サザンオールスターズのリーダーにとって、茅ヶ崎は今も原風景であり続ける。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-people-0029/" data-cat="p" data-area="茅ヶ崎" data-search="自転車で走った少年時代の街サザンオールスターズのリーダーにとって、茅ヶ崎は今も原風景であり続ける。桑田佳祐茅ヶ崎">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">自転車で走った少年時代の街</div>
+          <div class="list-item-date">2026.08.28</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-people-0030/" data-cat="p" data-area="藤沢" data-search="横浜の貿易商が、江の島に遺した庭1845年アイルランド生まれの貿易商が、明治の江の島に植物園を築いた。サムエル・コッキング江の島歴史人物">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><circle cx="150" cy="42" r="18" fill="#F4EDE1" opacity=".9"/><path d="M116 92 Q150 58 184 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><circle cx="230" cy="30" r="10" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.28</div>
-          <div class="card-title serif">横浜の貿易商が、江の島に遺した庭</div>
-          <div class="card-dek">1845年アイルランド生まれの貿易商が、明治の江の島に植物園を築いた。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-people-0030/" data-cat="p" data-area="藤沢" data-search="横浜の貿易商が、江の島に遺した庭1845年アイルランド生まれの貿易商が、明治の江の島に植物園を築いた。サムエル・コッキング江の島歴史人物">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">横浜の貿易商が、江の島に遺した庭</div>
+          <div class="list-item-date">2026.08.28</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-people-0031/" data-cat="p" data-area="大磯" data-search="軍医が漁師を説得してつくった、日本初の海水浴場「療養」としての海水浴を広めた、明治の軍医の情熱。松本順大磯歴史人物">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><circle cx="150" cy="42" r="18" fill="#F4EDE1" opacity=".9"/><path d="M116 92 Q150 58 184 92" stroke="#F4EDE1" stroke-width="2.5" fill="none" opacity=".75"/><circle cx="230" cy="30" r="10" fill="#C99A3E" opacity=".7"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.28</div>
-          <div class="card-title serif">軍医が漁師を説得してつくった、日本初の海水浴場</div>
-          <div class="card-dek">「療養」としての海水浴を広めた、明治の軍医の情熱。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-people-0031/" data-cat="p" data-area="大磯" data-search="軍医が漁師を説得してつくった、日本初の海水浴場「療養」としての海水浴を広めた、明治の軍医の情熱。松本順大磯歴史人物">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">軍医が漁師を説得してつくった、日本初の海水浴場</div>
+          <div class="list-item-date">2026.08.28</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/chigasaki-event-0026/" data-cat="e" data-area="茅ヶ崎" data-search="地元でしか成立しない、特別な一夜2000年から3度だけ開催されてきた、地元凱旋公演。茅ヶ崎ライブサザンオールスターズ">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#16233A"/><ellipse cx="130" cy="75" rx="28" ry="20" fill="#F4EDE1" opacity=".9"/><path d="M158 75 V25" stroke="#F4EDE1" stroke-width="4"/><path d="M0 95 Q40 80 80 95 T160 95 T240 95 T320 95" stroke="#E8542B" stroke-width="2" fill="none" opacity=".7"/><path d="M0 105 Q40 90 80 105 T160 105 T240 105 T320 105" stroke="#C99A3E" stroke-width="1.5" fill="none" opacity=".5"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>茅ヶ崎</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.27</div>
-          <div class="card-title serif">地元でしか成立しない、特別な一夜</div>
-          <div class="card-dek">2000年から3度だけ開催されてきた、地元凱旋公演。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">茅ヶ崎</span>
+      <a class="list-item" href="/articles/chigasaki-event-0026/" data-cat="e" data-area="茅ヶ崎" data-search="地元でしか成立しない、特別な一夜2000年から3度だけ開催されてきた、地元凱旋公演。茅ヶ崎ライブサザンオールスターズ">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">茅ヶ崎</span>
           </div>
+          <div class="list-item-title serif">地元でしか成立しない、特別な一夜</div>
+          <div class="list-item-date">2026.08.27</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-event-0027/" data-cat="e" data-area="大磯" data-search="正月の海岸を照らす、小さな火祭り海岸で正月飾りを燃やし、一年の無病息災を祈る伝統行事。大磯正月行事伝統">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.27</div>
-          <div class="card-title serif">正月の海岸を照らす、小さな火祭り</div>
-          <div class="card-dek">海岸で正月飾りを燃やし、一年の無病息災を祈る伝統行事。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-event-0027/" data-cat="e" data-area="大磯" data-search="正月の海岸を照らす、小さな火祭り海岸で正月飾りを燃やし、一年の無病息災を祈る伝統行事。大磯正月行事伝統">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">正月の海岸を照らす、小さな火祭り</div>
+          <div class="list-item-date">2026.08.27</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/zushi-event-0039/" data-cat="e" data-area="逗子" data-search="砂浜に現れる、13日間だけの映画館2009年から続く、逗子海岸を舞台にした野外映画祭。逗子海岸映画祭逗子野外イベント">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="90" y="30" width="120" height="45" fill="#F4EDE1" opacity=".12" stroke="#F4EDE1" stroke-width="2"/><circle cx="60" cy="55" r="14" fill="none" stroke="#C99A3E" stroke-width="3"/><circle cx="240" cy="55" r="14" fill="none" stroke="#E8542B" stroke-width="3"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>逗子</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.27</div>
-          <div class="card-title serif">砂浜に現れる、13日間だけの映画館</div>
-          <div class="card-dek">2009年から続く、逗子海岸を舞台にした野外映画祭。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">逗子</span>
+      <a class="list-item" href="/articles/zushi-event-0039/" data-cat="e" data-area="逗子" data-search="砂浜に現れる、13日間だけの映画館2009年から続く、逗子海岸を舞台にした野外映画祭。逗子海岸映画祭逗子野外イベント">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">逗子</span>
           </div>
+          <div class="list-item-title serif">砂浜に現れる、13日間だけの映画館</div>
+          <div class="list-item-date">2026.08.27</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hiratsuka-event-0023/" data-cat="e" data-area="平塚" data-search="空を埋め尽くす、日本有数の七夕飾り昭和26年から続く、関東三大七夕まつりのひとつ。七夕まつり平塚夏祭り">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>平塚</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.26</div>
-          <div class="card-title serif">空を埋め尽くす、日本有数の七夕飾り</div>
-          <div class="card-dek">昭和26年から続く、関東三大七夕まつりのひとつ。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">平塚</span>
+      <a class="list-item" href="/articles/hiratsuka-event-0023/" data-cat="e" data-area="平塚" data-search="空を埋め尽くす、日本有数の七夕飾り昭和26年から続く、関東三大七夕まつりのひとつ。七夕まつり平塚夏祭り">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">平塚</span>
           </div>
+          <div class="list-item-title serif">空を埋め尽くす、日本有数の七夕飾り</div>
+          <div class="list-item-date">2026.08.26</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/hiratsuka-event-0024/" data-cat="e" data-area="平塚" data-search="相模川の河口を彩る、夏の締めくくり七夕まつりと並ぶ、平塚の夏を代表するもうひとつの風物詩。花火大会平塚">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>平塚</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.26</div>
-          <div class="card-title serif">相模川の河口を彩る、夏の締めくくり</div>
-          <div class="card-dek">七夕まつりと並ぶ、平塚の夏を代表するもうひとつの風物詩。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">平塚</span>
+      <a class="list-item" href="/articles/hiratsuka-event-0024/" data-cat="e" data-area="平塚" data-search="相模川の河口を彩る、夏の締めくくり七夕まつりと並ぶ、平塚の夏を代表するもうひとつの風物詩。花火大会平塚">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">平塚</span>
           </div>
+          <div class="list-item-title serif">相模川の河口を彩る、夏の締めくくり</div>
+          <div class="list-item-date">2026.08.26</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-event-0025/" data-cat="e" data-area="藤沢" data-search="温室遺構が公開される、江の島の春の特別な時間普段は見られないレンガ造りの温室遺構が、この時期だけ公開される。江の島フラワーフェスタ">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="150" y="30" width="8" height="60" fill="#F4EDE1"/><circle cx="154" cy="24" r="10" fill="#E8542B"/><path d="M60 90 Q80 70 100 90" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M200 90 Q220 65 240 90" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><circle cx="40" cy="60" r="14" fill="#C99A3E" opacity=".5"/></svg>
-          <div class="card-eyebrow">イベント<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.26</div>
-          <div class="card-title serif">温室遺構が公開される、江の島の春の特別な時間</div>
-          <div class="card-dek">普段は見られないレンガ造りの温室遺構が、この時期だけ公開される。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-event-0025/" data-cat="e" data-area="藤沢" data-search="温室遺構が公開される、江の島の春の特別な時間普段は見られないレンガ造りの温室遺構が、この時期だけ公開される。江の島フラワーフェスタ">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">温室遺構が公開される、江の島の春の特別な時間</div>
+          <div class="list-item-date">2026.08.26</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/fujisawa-tourism-0037/" data-cat="t" data-area="藤沢" data-search="&quot;えのすい&quot;の愛称で親しまれる、日本のイルカショー発祥の水族館クラゲの幻想的な展示から相模湾の生き物まで、江の島の定番スポット。新江ノ島水族館江の島">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#0F2038"/><rect x="150" y="30" width="8" height="60" fill="#F4EDE1"/><circle cx="154" cy="24" r="10" fill="#E8542B"/><path d="M60 90 Q80 70 100 90" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><path d="M200 90 Q220 65 240 90" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/><circle cx="40" cy="60" r="14" fill="#C99A3E" opacity=".5"/></svg>
-          <div class="card-eyebrow">観光<span class="dot"></span>藤沢</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.26</div>
-          <div class="card-title serif">&quot;えのすい&quot;の愛称で親しまれる、日本のイルカショー発祥の水族館</div>
-          <div class="card-dek">クラゲの幻想的な展示から相模湾の生き物まで、江の島の定番スポット。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">藤沢</span>
+      <a class="list-item" href="/articles/fujisawa-tourism-0037/" data-cat="t" data-area="藤沢" data-search="&quot;えのすい&quot;の愛称で親しまれる、日本のイルカショー発祥の水族館クラゲの幻想的な展示から相模湾の生き物まで、江の島の定番スポット。新江ノ島水族館江の島">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">藤沢</span>
           </div>
+          <div class="list-item-title serif">&quot;えのすい&quot;の愛称で親しまれる、日本のイルカショー発祥の水族館</div>
+          <div class="list-item-date">2026.08.26</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/oiso-culture-0020/" data-cat="c" data-area="大磯" data-search="日本の落花生栽培は、大磯からはじまった横浜港で手に入れた種から、100年以上続く産地文化が生まれた。落花生大磯歴史">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">文化<span class="dot"></span>大磯</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.25</div>
-          <div class="card-title serif">日本の落花生栽培は、大磯からはじまった</div>
-          <div class="card-dek">横浜港で手に入れた種から、100年以上続く産地文化が生まれた。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">大磯</span>
+      <a class="list-item" href="/articles/oiso-culture-0020/" data-cat="c" data-area="大磯" data-search="日本の落花生栽培は、大磯からはじまった横浜港で手に入れた種から、100年以上続く産地文化が生まれた。落花生大磯歴史">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">大磯</span>
           </div>
+          <div class="list-item-title serif">日本の落花生栽培は、大磯からはじまった</div>
+          <div class="list-item-date">2026.08.25</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
     </div>
     <nav class="pagination" aria-label="ページネーション"><a class="pagination-link" href="/page/2/">‹ 前へ</a><a class="pagination-link" href="/">1</a><a class="pagination-link" href="/page/2/">2</a><span class="pagination-link active">3</span><a class="pagination-link" href="/page/4/">4</a><a class="pagination-link" href="/page/4/">次へ ›</a></nav>
   </div>
 </main>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。

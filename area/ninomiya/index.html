@@ -38,102 +38,106 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
-<main>
-  <div class="hub-page-wrap">
+<main class="hub-main">
+  <div class="hub-page-wrap hub-page-wrap-top">
     <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">二宮</span></nav>
+  </div>
+  <img class="hub-hero" src="/assets/images/areas/ninomiya.svg" width="1200" height="480" alt="二宮のイメージ">
+  <div class="hub-page-wrap hub-page-wrap-bottom">
     <h1 class="hub-title serif">二宮の記事</h1>
     <p class="hub-subtitle">二宮に関する記事を4件掲載しています。</p>
-    <div class="grid">
-      <a class="card" href="/articles/ninomiya-life-0035/" data-cat="l" data-area="二宮" data-search="落花生とオリーブに囲まれた、二宮という小さな町温暖な気候と海山の自然が育む、二宮ならではの日常。二宮移住田舎暮らし">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">暮らし<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.30</div>
-          <div class="card-title serif">落花生とオリーブに囲まれた、二宮という小さな町</div>
-          <div class="card-dek">温暖な気候と海山の自然が育む、二宮ならではの日常。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+    <div class="article-list">
+      <a class="list-item" href="/articles/ninomiya-life-0035/" data-cat="l" data-area="二宮" data-search="落花生とオリーブに囲まれた、二宮という小さな町温暖な気候と海山の自然が育む、二宮ならではの日常。二宮移住田舎暮らし">
+        <img class="list-item-thumb" src="/assets/images/categories/life.svg" width="60" height="60" alt="暮らしのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#33424F">暮らし</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">落花生とオリーブに囲まれた、二宮という小さな町</div>
+          <div class="list-item-date">2026.08.30</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/ninomiya-people-0032/" data-cat="p" data-area="二宮" data-search="横浜で種を手に入れた、ふたりの先駆者渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。落花生歴史人物">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">人<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.29</div>
-          <div class="card-title serif">横浜で種を手に入れた、ふたりの先駆者</div>
-          <div class="card-dek">渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+      <a class="list-item" href="/articles/ninomiya-people-0032/" data-cat="p" data-area="二宮" data-search="横浜で種を手に入れた、ふたりの先駆者渡辺慶次郎と二見庄兵衛、日本の落花生栽培を切り拓いた人物たち。落花生歴史人物">
+        <img class="list-item-thumb" src="/assets/images/categories/people.svg" width="60" height="60" alt="人のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#16233A">人</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">横浜で種を手に入れた、ふたりの先駆者</div>
+          <div class="list-item-date">2026.08.29</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/ninomiya-gourmet-0015/" data-cat="g" data-area="二宮" data-search="機械を使わず、ひとつずつ手むきする落花生明治期から続く二宮の落花生文化を、今に伝える専門店。二宮落花生専門店">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">グルメ<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.23</div>
-          <div class="card-title serif">機械を使わず、ひとつずつ手むきする落花生</div>
-          <div class="card-dek">明治期から続く二宮の落花生文化を、今に伝える専門店。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+      <a class="list-item" href="/articles/ninomiya-gourmet-0015/" data-cat="g" data-area="二宮" data-search="機械を使わず、ひとつずつ手むきする落花生明治期から続く二宮の落花生文化を、今に伝える専門店。二宮落花生専門店">
+        <img class="list-item-thumb" src="/assets/images/categories/gourmet.svg" width="60" height="60" alt="グルメのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">機械を使わず、ひとつずつ手むきする落花生</div>
+          <div class="list-item-date">2026.08.23</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
-      <a class="card" href="/articles/ninomiya-gourmet-0016/" data-cat="g" data-area="二宮" data-search="湘南オリーブと、二宮の農がひとつになる場所町のアンテナショップで出会う、二宮産オリーブオイルとみかん。にの屋二宮オリーブ">
-        <div class="card-art" style="position:relative;">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#33424F"/><circle cx="245" cy="30" r="16" fill="#C99A3E"/><path d="M40 90 V60 M60 90 V55 M80 90 V62 M100 90 V58 M120 90 V64" stroke="#F4EDE1" stroke-width="3" opacity=".8"/><path d="M40 60 Q45 50 50 60 M60 55 Q65 45 70 55 M80 62 Q85 52 90 62" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg>
-          <div class="card-eyebrow">グルメ<span class="dot"></span>二宮</div>
-        </div>
-        <div class="card-body">
-          <div class="card-date">2026.08.23</div>
-          <div class="card-title serif">湘南オリーブと、二宮の農がひとつになる場所</div>
-          <div class="card-dek">町のアンテナショップで出会う、二宮産オリーブオイルとみかん。</div>
-          <div class="card-foot">
-            <span class="read-more">続きを読む →</span>
-            <span class="area-tag">二宮</span>
+      <a class="list-item" href="/articles/ninomiya-gourmet-0016/" data-cat="g" data-area="二宮" data-search="湘南オリーブと、二宮の農がひとつになる場所町のアンテナショップで出会う、二宮産オリーブオイルとみかん。にの屋二宮オリーブ">
+        <img class="list-item-thumb" src="/assets/images/categories/gourmet.svg" width="60" height="60" alt="グルメのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
+            <span class="list-item-area">二宮</span>
           </div>
+          <div class="list-item-title serif">湘南オリーブと、二宮の農がひとつになる場所</div>
+          <div class="list-item-date">2026.08.23</div>
         </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
     </div>
     
   </div>
 </main>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。

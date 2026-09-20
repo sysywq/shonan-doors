@@ -43,40 +43,66 @@
   <div class="head-inner">
     <div class="brand-block">
       <a href="/" class="brand-link">
-      <svg class="brand-mark" viewBox="0 0 60 60">
-        <circle cx="30" cy="30" r="29" fill="none" stroke="#16233A" stroke-width="1.2"/>
-        <path d="M14 34 Q22 24 30 34 T46 34" fill="none" stroke="#1D3557" stroke-width="2"/>
-        <path d="M14 41 Q22 31 30 41 T46 41" fill="none" stroke="#E8542B" stroke-width="1.6" opacity=".85"/>
-        <circle cx="30" cy="18" r="4.5" fill="#C99A3E"/>
-      </svg>
+      <img class="brand-mark" src="/assets/images/brand/shonan-doors-logo.webp" width="240" height="240" alt="Shonan Doors">
       <div class="brand-text">
         <div class="brand-name serif">湘南Doors</div>
-        <div class="brand-tagline">SHONAN DOORS — 湘南と、人をつなぐ地域メディア</div>
+        <div class="brand-tagline">湘南と、人をつなぐ地域メディア</div>
       </div>
       </a>
-      <div class="sns-row" id="snsRow"></div>
+      <div class="head-actions">
+        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+        <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
-  <div class="mission-strip">
-    <div class="mission-inner">
-      <p class="mission-tagline serif">湘南を、もっと知りたくなる。</p>
-      <p class="mission-text">
-        湘南Doorsは、ニュース、グルメ、イベント、観光、暮らしなど、湘南の「今」と魅力を届ける地域メディアです。
-      </p>
+  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+    <div class="nav-menu-inner">
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">カテゴリー</div>
+        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+      </div>
+      <div class="nav-menu-group">
+        <div class="nav-menu-label">エリア</div>
+        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+      </div>
     </div>
-  </div>
-  <div style="max-width:1160px;margin:0 auto;height:22px;"></div>
+  </nav>
 </header>
-<main>
+<main class="article-main">
   <div class="article-page-wrap">
     <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <a href="/area/kamakura/">鎌倉</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催</span></nav>
     <div class="modal article-modal-static">
-      <div class="modal-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#A6431E"/><rect x="120" y="45" width="40" height="45" rx="6" fill="#F4EDE1" opacity=".9"/><rect x="128" y="30" width="24" height="15" fill="#F4EDE1" opacity=".9"/><path d="M60 90 Q65 60 60 40" stroke="#C99A3E" stroke-width="3" fill="none"/><path d="M230 90 Q235 60 230 40" stroke="#C99A3E" stroke-width="3" fill="none"/><circle cx="60" cy="34" r="4" fill="#C99A3E"/><circle cx="230" cy="34" r="4" fill="#C99A3E"/></svg></div>
+      <div class="modal-art">
+        <img src="/assets/images/categories/event.svg" width="1200" height="630" alt="イベントのイメージ" fetchpriority="high">
+        <span class="modal-art-badge" style="background:#E8542B">イベント</span>
+      </div>
       <div class="modal-body">
-        <div class="modal-eyebrow">イベント<span style="color:var(--ink-faint); font-weight:400;">／ 鎌倉</span><span style="color:var(--ink-faint); font-weight:400; margin-left:auto;">2026.09.19</span></div>
+        <div class="modal-eyebrow">
+          <span class="modal-eyebrow-date">2026.09.19</span>
+          <span class="modal-eyebrow-badge" style="background:#E8542B">イベント</span>
+          <span class="modal-eyebrow-badge modal-eyebrow-area">鎌倉</span>
+        </div>
         
         <h1 class="modal-title serif">古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催</h1>
         <p class="modal-dek">鎌倉商工会議所青年部が主催するビールの祭典が今年も帰ってくる。神奈川・全国からブルワリーが集結し、ステージ、フード、子ども向けブースまで2日間にわたって楽しめる。</p>
+        <div class="share-row">
+      <a class="share-btn share-btn-x" href="https://twitter.com/intent/tweet?url=https%3A//www.shonandoors.com/articles/kamakura-event-0088/&text=%E5%8F%A4%E9%83%BD%E3%81%AE%E7%A7%8B%E3%82%92%E3%80%81%E3%83%93%E3%83%BC%E3%83%AB%E3%81%A7%E4%B9%BE%E6%9D%AF%E2%80%94%E2%80%94%E3%80%8C%E3%82%AA%E3%82%AF%E3%83%88%E3%83%BC%E3%83%90%E3%83%BC%E3%83%95%E3%82%A7%E3%82%B9%E3%83%88%E9%8E%8C%E5%80%892026%E3%80%8D%E3%80%8110%E6%9C%883%E3%83%BB4%E6%97%A5%E3%81%AB%E5%B8%82%E5%BD%B9%E6%89%80%E9%A7%90%E8%BB%8A%E5%A0%B4%E3%81%A7%E9%96%8B%E5%82%AC" target="_blank" rel="noopener" aria-label="Xでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 4l7 8.5L4.5 20H7l5-5.8L16 20h4l-7.3-8.9L19.5 4H17l-4.6 5.3L8 4H4z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//www.shonandoors.com/articles/kamakura-event-0088/" target="_blank" rel="noopener" aria-label="Facebookでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+      </a>
+      <a class="share-btn share-btn-line" href="https://social-plugins.line.me/lineit/share?url=https%3A//www.shonandoors.com/articles/kamakura-event-0088/" target="_blank" rel="noopener" aria-label="LINEでシェア">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.1 8.3 7.8.3.1.8.2.9.5.1.3.1.7 0 1l-.1 1c0 .3-.2 1 .9.6 1-.4 5.6-3.3 7.6-5.6 1.4-1.5 2.4-3 2.4-5.3C22 6.6 17.5 3 12 3z" fill="currentColor"/></svg>
+      </a>
+      <button type="button" class="share-btn share-btn-copy" data-copy-url="https://www.shonandoors.com/articles/kamakura-event-0088/" aria-label="リンクをコピー">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M9 9V6a2 2 0 012-2h7a2 2 0 012 2v7a2 2 0 01-2 2h-3M6 9h7a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
         <div class="modal-text">秋風が海から古都に流れ込む季節、鎌倉市役所駐車場がひとときビアガーデンに変わる。2026年10月3日（土）・4日（日）の2日間、「オクトーバーフェスト鎌倉2026」が開催される。鎌倉商工会議所青年部（YEG）が主催するこのイベントは、2023年に4年ぶりに復活して以来、毎年秋の恒例行事として地域に定着しつつある。
 
 オクトーバーフェストとは、ドイツ・バイエルン州の州都ミュンヘンで毎年9月中旬から10月にかけて開催される世界最大規模のビールの祭典。鎌倉版では、神奈川県内はもちろん全国からブルワリーが集い、クラフトビールから定番の地ビールまで多彩な銘柄が並ぶ。ビールに合う鎌倉・湘南の飲食店によるフードブースも充実しており、チキン、焼き鳥、お好み焼きといった定番おつまみのほか、個性豊かな一品まで幅広いラインナップが期待される。
@@ -84,7 +110,7 @@
 会場内ではダンスや音楽のステージパフォーマンスも予定されており、お酒を飲まない人でも十分に楽しめる構成だ。子ども向けのブースも設けられるため、家族連れでの来場も歓迎されている。なお、カップ販売の収益は鎌倉の未来を担う子どもたちへの支援として寄付される仕組みになっており、地域還元型のイベントとしての側面も持つ。入場は無料で、ビールはカップ購入制。
 
 会場となる鎌倉市役所駐車場は、JR鎌倉駅西口から徒歩約5分とアクセスも良好だ。鎌倉の街を歩き、社寺を巡り、夕方には乾杯——そんな秋の鎌倉の過ごし方として、このイベントはまさにうってつけ。最新情報は公式Instagram（@kamakura_oktoberfest）でチェックを。</div>
-        <div class="modal-infobox"><div class="modal-info-row"><span class="modal-info-label">SNS</span><span class="modal-sns-row"><a class="modal-sns-chip" style="background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)" href="https://www.instagram.com/kamakura_oktoberfest/" target="_blank" rel="noopener">Instagram</a><a class="modal-sns-chip" style="background:#1877F2" href="https://www.facebook.com/OktoberFest.kamakura/" target="_blank" rel="noopener">Facebook</a></span></div></div>
+        <div class="modal-infobox"><div class="modal-info-row"><span class="modal-info-label">SNS</span><span class="modal-sns-row"><a class="modal-sns-chip" style="background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5)" href="https://www.instagram.com/kamakura_oktoberfest/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zM17.8 6.2a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1z"/></svg></a><a class="modal-sns-chip" style="background:#1877F2" href="https://www.facebook.com/OktoberFest.kamakura/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a></span></div></div>
         
         <a class="modal-linkbtn" href="https://www.instagram.com/kamakura_oktoberfest/" target="_blank" rel="noopener">さらに詳しい情報を見る ↗</a>
         <div class="modal-tags"><span class="tag-pill">#オクトーバーフェスト</span><span class="tag-pill">#鎌倉</span><span class="tag-pill">#ビール</span><span class="tag-pill">#クラフトビール</span><span class="tag-pill">#秋イベント</span><span class="tag-pill">#フェスティバル</span><span class="tag-pill">#鎌倉商工会議所</span></div>
@@ -93,42 +119,67 @@
     </div>
     <div class="related-articles">
       <div class="related-articles-title">この記事に関連する話題</div>
-      <div class="related-articles-grid">
-      <a class="related-card" href="/articles/kamakura-event-0083/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#E8542B"/><path d="M60 30 V90 M110 25 V90 M160 30 V90 M210 25 V90 M260 30 V90" stroke="#F4EDE1" stroke-width="2" opacity=".8"/><rect x="50" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="100" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/><rect x="150" y="40" width="20" height="26" rx="10" fill="#C99A3E"/><rect x="200" y="35" width="20" height="26" rx="10" fill="#F4EDE1" opacity=".85"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 鎌倉</div>
-            <div class="related-card-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
+      <div class="article-list">
+      <a class="list-item" href="/articles/kamakura-event-0083/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/kamakura-event-0071/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 鎌倉</div>
-            <div class="related-card-title serif">鶴岡八幡宮例大祭2026、9月14日〜16日に開催。流鏑馬神事など800年の伝統が鎌倉に蘇る</div>
+          <div class="list-item-title serif">ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「Endless Summer 2026」、9月26日開催</div>
+          <div class="list-item-date">2026.09.19</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/kamakura-event-0071/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/kamakura-event-0062/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">イベント ／ 鎌倉</div>
-            <div class="related-card-title serif">三日間続く鎌倉の秋の大祭、鶴岡八幡宮例大祭</div>
+          <div class="list-item-title serif">鶴岡八幡宮例大祭2026、9月14日〜16日に開催。流鏑馬神事など800年の伝統が鎌倉に蘇る</div>
+          <div class="list-item-date">2026.09.14</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/kamakura-event-0062/">
+        <img class="list-item-thumb" src="/assets/images/categories/event.svg" width="60" height="60" alt="イベントのサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#E8542B">イベント</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/kamakura-tourism-0096/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">観光 ／ 鎌倉</div>
-            <div class="related-card-title serif">鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート</div>
+          <div class="list-item-title serif">三日間続く鎌倉の秋の大祭、鶴岡八幡宮例大祭</div>
+          <div class="list-item-date">2026.09.07</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/kamakura-tourism-0096/">
+        <img class="list-item-thumb" src="/assets/images/categories/tourism.svg" width="60" height="60" alt="観光のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#1D3557">観光</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
-      <a class="related-card" href="/articles/kamakura-culture-0080/">
-          <div class="related-card-art"><svg viewBox="0 0 300 120" preserveAspectRatio="none" width="100%" height="100%"><rect width="300" height="120" fill="#1D3557"/><path d="M60 90 V50 M60 50 L40 50 M60 50 L80 50 M35 42 H85 M32 34 H88" stroke="#F4EDE1" stroke-width="3" fill="none"/><circle cx="230" cy="35" r="16" fill="#C99A3E" opacity=".8"/><path d="M0 95 Q60 78 120 95 T240 95 T360 95" stroke="#7FA6C9" stroke-width="2" fill="none" opacity=".6"/></svg></div>
-          <div class="related-card-body">
-            <div class="related-card-eyebrow">文化 ／ 鎌倉</div>
-            <div class="related-card-title serif">江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる</div>
+          <div class="list-item-title serif">鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート</div>
+          <div class="list-item-date">2026.09.20</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
+      <a class="list-item" href="/articles/kamakura-culture-0080/">
+        <img class="list-item-thumb" src="/assets/images/categories/culture.svg" width="60" height="60" alt="文化のサムネイル" loading="lazy" decoding="async">
+        <div class="list-item-body">
+          <div class="list-item-meta">
+            <span class="list-item-badge" style="background:#0F2038">文化</span>
+            <span class="list-item-area">鎌倉</span>
           </div>
-        </a>
+          <div class="list-item-title serif">江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる</div>
+          <div class="list-item-date">2026.09.19</div>
+        </div>
+        <span class="list-item-chevron" aria-hidden="true">›</span>
+      </a>
       </div>
     </div>
     <a class="back-to-top" href="/">← 湘南Doors トップへ戻る</a>
@@ -136,7 +187,15 @@
 </main>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "湘南Doors トップ", "item": "https://www.shonandoors.com/"}, {"@type": "ListItem", "position": 2, "name": "鎌倉", "item": "https://www.shonandoors.com/area/kamakura/"}, {"@type": "ListItem", "position": 3, "name": "古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催"}]}</script>
 <footer>
+  <svg class="wave-deco foot-wave" viewBox="0 0 300 60" fill="none" preserveAspectRatio="none">
+    <path d="M0 30 Q40 5 80 30 T160 30 T240 30 T320 30" stroke="#1D3557" stroke-width="2" opacity=".18"/>
+    <path d="M0 42 Q40 17 80 42 T160 42 T240 42 T320 42" stroke="#4A90A4" stroke-width="2" opacity=".22"/>
+  </svg>
   <div class="foot-inner">
+    <div class="foot-closing">
+      <p class="foot-closing-text serif">湘南の「今」が、<br>もっと身近になる。</p>
+      <div class="sns-row" id="snsRow"></div>
+    </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
