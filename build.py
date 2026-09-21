@@ -181,19 +181,26 @@ TOP_HERO_IMAGE_HEIGHT = 941
 
 
 def resolve_article_hero_image(item):
-    """記事詳細ページのHero画像を解決する。
+    """記事詳細ページ(および記事Heroと同じ画像を使うカルーセル)のHero画像を解決する。
+    優先順位:
+      1. 記事固有の実写真(item["heroImage"]) — 将来、記事ごとに個別写真を
+         持たせる場合はこのフィールドを設定するだけで自動的に優先される。
+      2. カテゴリ別写真(assets/images/category-photos/)。今回アップロードされた
+         7枚の実写真で、トップページ上部のカテゴリロゴ/イラスト(assets/images/categories/)
+         とは別物。カルーセル/記事Heroの現時点でのfallback先。
     戻り値: (src, alt)"""
     if item.get("heroImage"):
         return item["heroImage"], f"{esc(item['title'])}のイメージ"
     cat_en = CAT_EN[item["cat"]]
-    return f"{IMAGES_BASE_URL}/categories/{cat_en}.svg", f"{esc(CATS[item['cat']]['label'])}のイメージ"
+    return f"{IMAGES_BASE_URL}/category-photos/{cat_en}.webp", f"{esc(CATS[item['cat']]['label'])}のイメージ"
 
 
 def resolve_thumbnail_image(item):
     """記事一覧(list-item)のサムネイル画像を解決する。
+    トップ新着記事・カテゴリ/エリアハブ・関連記事など、一覧系のカードは
+    記事固有画像を使わず、常にカテゴリ共通のロゴ/イラストを表示する
+    (記事固有画像はcarousel/記事ヒーローのみで使う、という役割分担のため)。
     戻り値: (src, alt)"""
-    if item.get("thumbnailImage"):
-        return item["thumbnailImage"], f"{esc(item['title'])}のサムネイル"
     cat_en = CAT_EN[item["cat"]]
     return f"{IMAGES_BASE_URL}/categories/{cat_en}.svg", f"{esc(CATS[item['cat']]['label'])}のサムネイル"
 
@@ -887,14 +894,15 @@ def render_index(articles, scenes):
     featured_articles = select_pickup_articles(articles, count=5)
     pickup_items = [
         {"id": a["id"], "slug": a["slug"], "cat": a["cat"], "area": a["area"],
-         "title": a["title"], "dek": a["dek"], "scene": a["scene"], "date": a["date"]}
+         "title": a["title"], "dek": a["dek"], "scene": a["scene"], "date": a["date"],
+         # カルーセルの画像は記事ページのHero画像と全く同じ解決ロジック
+         # (resolve_article_hero_image)を使う。記事固有画像(heroImage)が
+         # 設定されていればそれを、無ければカテゴリ共通イラストにfallbackする。
+         "heroImageSrc": resolve_article_hero_image(a)[0], "heroImageAlt": resolve_article_hero_image(a)[1]}
         for a in featured_articles
     ]
     pickup_items_json = json.dumps(pickup_items, ensure_ascii=False)
     cats_label_bg_json = json.dumps({k: {"label": v["label"], "bg": v["bg"]} for k, v in CATS.items()}, ensure_ascii=False)
-    cat_en_json = json.dumps(CAT_EN, ensure_ascii=False)
-    scenes_json = json.dumps(scenes, ensure_ascii=False)
-    category_hero_json = json.dumps(CATEGORY_HERO_VISUALS, ensure_ascii=False)
 
     hero_html = f"""<section class="hero">
   <img class="hero-visual" src="{TOP_HERO_IMAGE}" width="{TOP_HERO_IMAGE_WIDTH}" height="{TOP_HERO_IMAGE_HEIGHT}" alt="湘南の海岸から望む富士山と江の島" fetchpriority="high" decoding="async">
@@ -1047,9 +1055,6 @@ function trackEvent(name, params){{
    Phase 1でのリンク化に伴い、カードは<a href>による該当記事ページへの通常遷移に変更しています。 */
 const PICKUP_ITEMS = {pickup_items_json};
 const CATS_FOR_PICKUP = {cats_label_bg_json};
-const PICKUP_SCENES = {scenes_json};
-const CATEGORY_HERO_VISUALS = {category_hero_json};
-const CAT_EN_FOR_PICKUP = {cat_en_json};
 (function(){{
   const N = PICKUP_ITEMS.length;
   if (!N) return;
@@ -1062,10 +1067,9 @@ const CAT_EN_FOR_PICKUP = {cat_en_json};
     a.className = 'pickup-card';
     a.href = '/articles/' + item.slug + '/';
     const dateFormatted = (item.date || '').split('-').join('.');
-    const imgSrc = '/assets/images/categories/' + CAT_EN_FOR_PICKUP[item.cat] + '.svg';
     a.innerHTML = `
       <div class="pickup-card-img">
-        <img src="${{imgSrc}}" width="800" height="420" alt="${{CATS_FOR_PICKUP[item.cat].label}}のイメージ" loading="lazy" decoding="async">
+        <img src="${{item.heroImageSrc}}" width="800" height="420" alt="${{item.heroImageAlt}}" loading="lazy" decoding="async">
         <span class="pickup-tag" style="background:${{CATS_FOR_PICKUP[item.cat].bg}}">${{CATS_FOR_PICKUP[item.cat].label}}</span>
       </div>
       <div class="pickup-card-body">
