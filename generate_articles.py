@@ -73,6 +73,11 @@ CAT_EN = {
 NEWS_ARTICLES_PER_DAY = int(os.environ.get("NEWS_ARTICLES_PER_DAY", "3"))
 STOCK_ARTICLES_PER_DAY = int(os.environ.get("STOCK_ARTICLES_PER_DAY", "2"))
 
+# newsの重複/スキーマ不正で採用数がNEWS_ARTICLES_PER_DAYに満たない場合、
+# 不足分だけを追加生成して補充する(refill)回数の上限。無限ループ防止。
+# 例: 3件中1件reject → 1件だけ追加生成(1回目のrefillで届けば2回目以降は行わない)。
+NEWS_REFILL_MAX_ATTEMPTS = int(os.environ.get("NEWS_REFILL_MAX_ATTEMPTS", "3"))
+
 # ---------- ストック系: API呼び出し・台帳サイズの上限(暴走防止) ----------
 STOCK_TOPIC_REFILL_THRESHOLD = int(os.environ.get("STOCK_TOPIC_REFILL_THRESHOLD", "6"))
 MAX_NEW_STOCK_TOPICS_PER_REFILL = int(os.environ.get("MAX_NEW_STOCK_TOPICS_PER_REFILL", "8"))
@@ -133,7 +138,8 @@ NEWS_ARTICLE_TOOL = {
 }
 
 
-def build_news_system_prompt(recent_titles, event_series=None):
+def build_news_system_prompt(recent_titles, event_series=None, count=None):
+    count = count or NEWS_ARTICLES_PER_DAY
     recent_block = ""
     if recent_titles:
         joined = "\n".join(f"- {t}" for t in recent_titles)
@@ -180,7 +186,7 @@ eventSeriesKeyを考えてください(例: "enoshima-toro")。catが'e'以外�
 カテゴリは次のいずれかを使ってください: {json.dumps(CATS, ensure_ascii=False)}
 {recent_block}
 Web検索を使って、直近2週間以内に実際にあった湘南エリアのニュース、または
-これから開催が確定している実在のイベント情報を{NEWS_ARTICLES_PER_DAY}件調べてください。
+これから開催が確定している実在のイベント情報を{count}件調べてください。
 架空の情報は絶対に作らないこと。
 
 【情報源・データの出典について（必須・例外なし）】
@@ -219,7 +225,7 @@ articlesは必ずJSON配列(Python側ではlistとして解釈される構造)�
 - 配列全体、または配列を含む値全体を引用符で囲まない
 - articlesの値として自然言語の説明文やMarkdownを入れない(記事オブジェクトのみを並べる)
 - NEWS_ARTICLE_TOOLのスキーマに完全準拠すること
-- {NEWS_ARTICLES_PER_DAY}記事は、articles配列内の{NEWS_ARTICLES_PER_DAY}個のオブジェクトとして提出する
+- {count}記事は、articles配列内の{count}個のオブジェクトとして提出する
 
 正しい例:
 "articles": [
@@ -231,17 +237,18 @@ articlesは必ずJSON配列(Python側ではlistとして解釈される構造)�
 誤った例(これは絶対にしないこと):
 "articles": "[{{...}}, {{...}}, {{...}}]"
 
-調査・執筆が終わったら、必ず submit_articles ツールを使って{NEWS_ARTICLES_PER_DAY}件まとめて提出してください。
+調査・執筆が終わったら、必ず submit_articles ツールを使って{count}件まとめて提出してください。
 """
 
 
-def call_claude_news(recent_titles, event_series=None):
+def call_claude_news(recent_titles, event_series=None, count=None):
+    count = count or NEWS_ARTICLES_PER_DAY
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    system_prompt = build_news_system_prompt(recent_titles, event_series)
+    system_prompt = build_news_system_prompt(recent_titles, event_series, count=count)
 
     messages = [{
         "role": "user",
-        "content": f"本日分の{NEWS_ARTICLES_PER_DAY}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。",
+        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。",
     }]
     tools = [
         {"type": "web_search_20250305", "name": "web_search"},
@@ -284,77 +291,143 @@ def call_claude_news(recent_titles, event_series=None):
     raise RuntimeError("10ターン以内にsubmit_articlesが呼ばれませんでした。")
 
 
+def build_news_entry(item, today, article_id="today-run-pending-id"):
+    """API側から返ってきた1件分の生データ(item)を、articles.jsonのスキーマに
+    沿ったエントリへ変換する。article_id未指定の間は「まだIDが確定していない
+    (=採用が最終決定していない)」状態を表し、id/slugは仮の値のままにする
+    (working_setに積んだ際、is_duplicate等のログに「id:today-run-pending-id」
+    と出ることで、既存記事ではなく今回のrun内で採用済みの記事だと分かるようにする)。
+    IDが決まった時点でfinalize_news_entry_id()を呼んで確定させる。"""
+    return {
+        "id": article_id,
+        "articleType": "news",
+        "cat": item["cat"],
+        "area": item["area"],
+        "scene": item["scene"],
+        "title": item["title"],
+        "dek": item["dek"],
+        "link": item.get("link") or "",
+        "date": today,
+        "eventStartDate": item.get("eventStartDate") or "",
+        "eventEndDate": item.get("eventEndDate") or "",
+        "eventSeriesKey": item.get("eventSeriesKey") or "",
+        "address": item.get("address") or "",
+        "access": item.get("access") or "",
+        "hours": item.get("hours") or "",
+        "closedDays": item.get("closedDays") or "",
+        "snsLinks": {
+            "instagram": item.get("instagram") or "",
+            "facebook": item.get("facebook") or "",
+            "x": item.get("x") or "",
+            "tiktok": item.get("tiktok") or "",
+        },
+        "body": item["body"],
+        "tags": item.get("tags", []),
+        "slug": "",
+    }
+
+
+def finalize_news_entry_id(entry, article_id):
+    """採用が確定したエントリにだけ、実際のarticle ID/slugを書き込む。
+    reject/refillのために生成しただけの候補にはこの関数を一切呼ばないため、
+    articles.jsonに保存される記事だけが連番のIDを持つことになる。"""
+    entry["id"] = article_id
+    entry["slug"] = f"{AREA_EN[entry['area']]}-{CAT_EN[entry['cat']]}-{article_id:04d}"
+    return entry
+
+
 def run_news_generation(existing_articles, today, event_series=None):
     """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines, event_series)
     致命的なエラー(API呼び出し失敗・レスポンス形状異常)はそのまま例外を送出する
-    (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。"""
+    (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。
+
+    重複・スキーマ不正でrejectされた候補が出てNEWS_ARTICLES_PER_DAYに満たない場合、
+    不足分だけを追加生成するrefillを最大NEWS_REFILL_MAX_ATTEMPTS回まで試みる
+    (件数チェック自体は緩めない。閾値未満のまま採用したり、記事を減らして
+    公開したりはしない。最終判定は呼び出し元のmain()が行う)。
+
+    article IDは「最終的に採用が確定した記事」にのみ、この関数の最後で
+    まとめて発行する(reserve_ids)。reject/refillで捨てられた候補のために
+    IDが消費されることはない。"""
     log_lines = []
     event_series = list(event_series or [])
     cutoff = (datetime.now(ZoneInfo("Asia/Tokyo")) - timedelta(days=90)).strftime("%Y-%m-%d")
     recent_titles = [a["title"] for a in existing_articles if a.get("date", "") >= cutoff]
 
-    raw_items = call_claude_news(recent_titles, event_series)
-    raw_items = validate_response_shape(raw_items, label="news")
+    accepted = []             # 採用確定(ただしID未発行)のエントリ
+    working_set = list(existing_articles)  # 重複チェック対象(既存記事+今回採用済み分)
 
+    def process_batch(raw_items):
+        """1回分のAPIレスポンスを検証し、通った候補をaccepted/working_setに積む。"""
+        for item in raw_items:
+            if len(accepted) >= NEWS_ARTICLES_PER_DAY:
+                break  # 想定より多く返ってきても、必要数を超えて採用はしない
+            reason = validate_item(item)
+            if reason:
+                title_for_log = item.get("title", "(タイトル不明)") if isinstance(item, dict) else f"(dict以外: {type(item).__name__})"
+                log_lines.append(f"スキップ(news): 「{title_for_log}」— スキーマ不正: {reason}")
+                continue
+            dup_reason = is_duplicate(item, working_set, days=90)
+            if dup_reason:
+                log_lines.append(f"スキップ(news): 「{item['title']}」— 重複疑い: {dup_reason}")
+                continue
+            series_dup_reason = check_series_year_duplicate(item, working_set)
+            if series_dup_reason:
+                log_lines.append(f"スキップ(news): 「{item['title']}」— {series_dup_reason}")
+                continue
+
+            entry = build_news_entry(item, today)
+            accepted.append(entry)
+            working_set.append(entry)  # 同一run内での重複(今回採用済み分との重複)も以後ここで検出される
+
+    # ---- 初回生成 ----
+    log_lines.append(f"news: 初回{NEWS_ARTICLES_PER_DAY}件生成を試みます")
+    raw_items = call_claude_news(recent_titles, event_series, count=NEWS_ARTICLES_PER_DAY)
+    raw_items = validate_response_shape(raw_items, label="news")
     if len(raw_items) != NEWS_ARTICLES_PER_DAY:
         log_lines.append(f"警告(news): 期待した{NEWS_ARTICLES_PER_DAY}件ではなく{len(raw_items)}件が返されました")
+    process_batch(raw_items)
+    log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用")
 
-    reserved_ids = reserve_ids(max(len(raw_items), NEWS_ARTICLES_PER_DAY))
+    # ---- 不足分だけをrefill(最大NEWS_REFILL_MAX_ATTEMPTS回) ----
+    attempt = 0
+    while len(accepted) < NEWS_ARTICLES_PER_DAY and attempt < NEWS_REFILL_MAX_ATTEMPTS:
+        attempt += 1
+        shortfall = NEWS_ARTICLES_PER_DAY - len(accepted)
+        log_lines.append(f"news: {shortfall}件不足 → refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS}")
+        # 「今回のrunで既に採用済みの記事」も重複防止リストに含めることで、
+        # refillが直前に採用した記事と同じ話題を提案してくる確率を下げる。
+        refill_recent_titles = recent_titles + [a["title"] for a in accepted]
+        refill_raw_items = call_claude_news(refill_recent_titles, event_series, count=shortfall)
+        refill_raw_items = validate_response_shape(refill_raw_items, label="news_refill")
+        log_lines.append(f"news: 追加で{len(refill_raw_items)}件生成しました(refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS})")
+        process_batch(refill_raw_items)
+        log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用")
 
-    accepted = []
-    working_set = list(existing_articles)
+    if len(accepted) >= NEWS_ARTICLES_PER_DAY:
+        log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用完了")
+    else:
+        log_lines.append(
+            f"news: retry上限({NEWS_REFILL_MAX_ATTEMPTS}回)に達しても"
+            f"{NEWS_ARTICLES_PER_DAY}件に届きませんでした(最終 {len(accepted)}件)。"
+            "articles.json / id_counterへは一切書き込みません。"
+        )
+        # ここでは例外を出さず、呼び出し元(main)の既存の件数チェックに判定を委ねる
+        # (現在の仕様どおり、部分的な成功でもworkflow全体を失敗させるのはmain側の責務)。
+        return [], log_lines, event_series
 
-    for i, item in enumerate(raw_items):
-        reason = validate_item(item)
-        if reason:
-            title_for_log = item.get("title", "(タイトル不明)") if isinstance(item, dict) else f"(dict以外: {type(item).__name__})"
-            log_lines.append(f"スキップ(news): 「{title_for_log}」— スキーマ不正: {reason}")
-            continue
-        dup_reason = is_duplicate(item, working_set, days=90)
-        if dup_reason:
-            log_lines.append(f"スキップ(news): 「{item['title']}」— 重複疑い: {dup_reason}")
-            continue
-        series_dup_reason = check_series_year_duplicate(item, working_set)
-        if series_dup_reason:
-            log_lines.append(f"スキップ(news): 「{item['title']}」— {series_dup_reason}")
-            continue
-
-        new_id = reserved_ids[i]
-        entry = {
-            "id": new_id,
-            "articleType": "news",
-            "cat": item["cat"],
-            "area": item["area"],
-            "scene": item["scene"],
-            "title": item["title"],
-            "dek": item["dek"],
-            "link": item.get("link") or "",
-            "date": today,
-            "eventStartDate": item.get("eventStartDate") or "",
-            "eventEndDate": item.get("eventEndDate") or "",
-            "eventSeriesKey": item.get("eventSeriesKey") or "",
-            "address": item.get("address") or "",
-            "access": item.get("access") or "",
-            "hours": item.get("hours") or "",
-            "closedDays": item.get("closedDays") or "",
-            "snsLinks": {
-                "instagram": item.get("instagram") or "",
-                "facebook": item.get("facebook") or "",
-                "x": item.get("x") or "",
-                "tiktok": item.get("tiktok") or "",
-            },
-            "body": item["body"],
-            "tags": item.get("tags", []),
-            "slug": f"{AREA_EN[item['area']]}-{CAT_EN[item['cat']]}-{new_id:04d}",
-        }
-        accepted.append(entry)
-        working_set.append(entry)
+    # ---- 採用が確定した分だけ、まとめてIDを発行する ----
+    # reject/refillで捨てられた候補はここに含まれないため、IDが無駄に消費されたり
+    # 欠番が生じたりしない。articles.jsonに保存される記事だけが連番IDを持つ。
+    reserved_ids = reserve_ids(len(accepted))
+    for entry, new_id in zip(accepted, reserved_ids):
+        finalize_news_entry_id(entry, new_id)
         event_series, added = register_event_series_if_new(entry, event_series)
         if added:
             log_lines.append(f"news: 新規イベントシリーズ「{entry['eventSeriesKey']}」を台帳に追加しました")
 
     log_lines.append(
-        f"news: {len(accepted)}/{len(raw_items)}件を採用しました (id:{[a['id'] for a in accepted]})"
+        f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件を採用しました (id:{[a['id'] for a in accepted]})"
     )
     return accepted, log_lines, event_series
 
