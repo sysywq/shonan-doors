@@ -27,6 +27,11 @@ from datetime import date as _date
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_DOMAIN = "https://www.shonandoors.com"  # CNAMEファイルに準拠(wwwあり)
+
+# Google AdSense。Publisher IDはGoogle AdSense管理画面(サイトの所有権確認)で
+# 発行された正式な値をそのまま使用する(推測値は使用していない)。
+ADSENSE_PUBLISHER_ID = "ca-pub-2458583563727225"
+ADS_TXT_PUBLISHER_ID = "pub-2458583563727225"  # ads.txtはca-pub-ではなくpub-表記が仕様
 SITE_TITLE = "湘南Doors｜湘南の人・企業・文化・体験をつなぐメディア"
 
 CATS = {
@@ -226,6 +231,7 @@ HEAD_COMMON = f"""<meta charset="UTF-8">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#ffffff">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={ADSENSE_PUBLISHER_ID}" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -304,9 +310,9 @@ FOOTER_HTML = f"""<footer>
       掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
       広告掲載プランをご用意しています（松：ページ最上部プレミアム枠 ／ 竹：カテゴリ内スポンサー枠 ／ 梅：記事内タイアップ枠）。詳しくはお問い合わせください。<br><br>
       <span class="foot-links">
-        <a href="#" id="footPrivacy">プライバシーポリシー</a>
-        <a href="#" id="footContact">お問い合わせ</a>
-        <a href="#" id="footOperator">運営者情報</a>
+        <a href="/privacy/" id="footPrivacy">プライバシーポリシー</a>
+        <a href="/contact/" id="footContact">お問い合わせ</a>
+        <a href="/about/" id="footOperator">運営者情報</a>
       </span><br><br>
       © 湘南Doors運営事務局
     </div>
@@ -1313,6 +1319,76 @@ def render_top_pagination_pages(articles, scenes):
     return pages
 
 
+# ===== プライバシーポリシー・運営者情報・お問い合わせ(独立ページ版) =====
+# Header/Footerのモーダル(assets/common.js の STATIC_PAGES)と内容の趣旨は揃えつつ、
+# こちらはGoogle等のクローラーが直接読める独立URL(/privacy/ /about/ /contact/)として
+# 生成する。モーダルは既存のまま維持し、削除しない。
+PRIVACY_POLICY_HTML = """
+<h2>個人情報の取り扱いについて</h2>
+<p>湘南Doors運営事務局(以下「当サイト」)は、本サイトのご利用にあたり取得する情報について、以下の通りプライバシーポリシーを定めます。</p>
+<h2>アクセス解析ツールについて</h2>
+<p>当サイトでは、サイトの利用状況を把握するためにGoogleアナリティクスを利用しています。Googleアナリティクスは、Cookieを使用してトラフィックデータを収集しますが、これには個人を特定する情報は含まれません。この機能はCookieを無効にすることで収集を拒否することが可能ですので、お使いのブラウザの設定をご確認ください。この規約に関して、詳しくは<a href="https://marketingplatform.google.com/about/analytics/terms/jp/" target="_blank" rel="noopener">Googleアナリティクス利用規約のページ</a>や<a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" rel="noopener">Googleポリシーと規約ページ</a>をご覧ください。</p>
+<h2>広告配信について(Google AdSense)</h2>
+<p>当サイトは、第三者配信の広告サービス(Google AdSenseを含む)を利用する場合があります。これら広告配信事業者は、ユーザーの興味に応じた広告を表示するために、当サイトや他サイトへのアクセスに関する情報を利用するCookie(匿名IDを含む)を使用することがあります。ユーザーは<a href="https://adssettings.google.com/authenticated" target="_blank" rel="noopener">広告設定ページ</a>で、パーソナライズ広告を無効にすることができます。</p>
+<h2>お問い合わせ先で取得する情報について</h2>
+<p>お問い合わせフォームやメールにてご提供いただいたお名前・メールアドレス等の個人情報は、お問い合わせへの対応、および必要な情報をお伝えする目的にのみ使用し、ご本人の同意なく第三者に提供することはありません。</p>
+<h2>プライバシーポリシーの変更について</h2>
+<p>当サイトは、必要に応じて本ポリシーの内容を変更することがあります。変更後のプライバシーポリシーは、本ページに掲載した時点から効力を生じるものとします。</p>
+<p style="color:var(--ink-faint); font-size:12px;">制定日：2026年9月13日</p>
+"""
+
+ABOUT_HTML = """
+<h2>運営者情報</h2>
+<p>運営：湘南Doors運営事務局</p>
+<p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
+<p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+"""
+
+CONTACT_HTML = """
+<h2>お問い合わせ</h2>
+<p>取材のご依頼、掲載情報の誤りのご指摘、広告掲載(松・竹・梅プラン)に関するお問い合わせなど、下記のメールアドレスまでお気軽にご連絡ください。</p>
+<p style="font-size:16px; font-weight:700;"><a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
+<p>内容を確認の上、担当より折り返しご連絡いたします。返信までお時間をいただく場合がございますので、あらかじめご了承ください。</p>
+"""
+
+
+def render_trust_page(title, url_path, body_html):
+    """プライバシーポリシー・運営者情報・お問い合わせの独立ページを生成する共通関数。
+    既存のhub-page-wrap/static-modal-bodyのデザインをそのまま再利用する。"""
+    canonical_url = f"{SITE_DOMAIN}{url_path}"
+    breadcrumb_html, breadcrumb_ld = render_breadcrumb([
+        ("湘南Doors トップ", "/"),
+        (title, None),
+    ])
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<title>{esc(title)}｜湘南Doors</title>
+<meta name="description" content="湘南Doorsの{esc(title)}についてご案内します。">
+<link rel="canonical" href="{canonical_url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="湘南Doors">
+<meta property="og:title" content="{esc(title)}｜湘南Doors">
+<meta property="og:url" content="{canonical_url}">
+{breadcrumb_ld}
+{HEAD_COMMON}
+</head>
+<body>
+{HEADER_HTML}
+<main>
+  <div class="hub-page-wrap">
+    {breadcrumb_html}
+    <h1 class="hub-title serif">{esc(title)}</h1>
+    <div class="static-modal-body" style="padding:0; margin-top:16px;">{body_html}</div>
+  </div>
+</main>
+{FOOTER_HTML}
+<script src="/assets/common.js" defer></script>
+</body>
+</html>
+"""
+
+
 def render_404_page():
     """GitHub Pages用のカスタム404ページ。
     - canonical・structured data・sitemapへの掲載は行わない(実在しないURL用のため)
@@ -1356,6 +1432,11 @@ def render_sitemap(articles):
     today = date.today().isoformat()
     urls = [{"loc": f"{SITE_DOMAIN}/", "lastmod": today, "priority": "1.0"}]
 
+    # プライバシーポリシー・運営者情報・お問い合わせ(独立ページ)。
+    # 更新頻度が低い固定ページのため、priorityは低めにしている。
+    for path in ("/privacy/", "/about/", "/contact/"):
+        urls.append({"loc": f"{SITE_DOMAIN}{path}", "lastmod": today, "priority": "0.3"})
+
     # 地域ハブ・カテゴリハブ(各ハブの1ページ目のみ。2ページ目以降はページネーション
     # リンクを辿ればクロールできるため、sitemapの肥大化を避ける目的で含めない)
     used_areas = sorted({a["area"] for a in articles}, key=lambda x: AREA_ORDER.index(x) if x in AREA_ORDER else 99)
@@ -1391,6 +1472,12 @@ Allow: /
 
 Sitemap: {SITE_DOMAIN}/sitemap.xml
 """
+
+
+def render_ads_txt():
+    # Google AdSense標準フォーマット。f08c47fec0942fa0はGoogle自身のセラーID
+    # (Google AdSense向けads.txtで共通して使われる固定値で、サイトごとに変わらない)。
+    return f"google.com, {ADS_TXT_PUBLISHER_ID}, DIRECT, f08c47fec0942fa0\n"
 
 
 def render_webmanifest():
@@ -1467,17 +1554,28 @@ def main():
         new_robots_txt = render_robots_txt()
         new_404_html = render_404_page()
         new_webmanifest = render_webmanifest()
+        new_ads_txt = render_ads_txt()
+        new_privacy_html = render_trust_page(
+            title="プライバシーポリシー", url_path="/privacy/", body_html=PRIVACY_POLICY_HTML)
+        new_about_html = render_trust_page(
+            title="運営者情報", url_path="/about/", body_html=ABOUT_HTML)
+        new_contact_html = render_trust_page(
+            title="お問い合わせ", url_path="/contact/", body_html=CONTACT_HTML)
         write("index.html", new_index_html)
         write("sitemap.xml", new_sitemap_xml)
         write("robots.txt", new_robots_txt)
         write("404.html", new_404_html)
         write("site.webmanifest", new_webmanifest)
+        write("ads.txt", new_ads_txt)
+        write("privacy/index.html", new_privacy_html)
+        write("about/index.html", new_about_html)
+        write("contact/index.html", new_contact_html)
 
         # ここまで例外なく到達できた場合のみ、本番ディレクトリを置き換える。
         # articles/ area/ category/ page/ はビルド生成物のみが置かれるディレクトリ
         # なので、生成物ごと丸ごと入れ替える(articles.jsonから消えた記事の
         # ページ等が残り続けることを防ぐ)。
-        for dirname in ("articles", "area", "category", "page"):
+        for dirname in ("articles", "area", "category", "page", "privacy", "about", "contact"):
             final_dir = os.path.join(ROOT, dirname)
             staged_dir = os.path.join(staging_dir, dirname)
             if os.path.isdir(final_dir):
@@ -1485,7 +1583,7 @@ def main():
             if os.path.isdir(staged_dir):
                 shutil.move(staged_dir, final_dir)
 
-        for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html", "site.webmanifest"):
+        for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html", "site.webmanifest", "ads.txt"):
             tmp_path = os.path.join(ROOT, filename + ".tmp")
             shutil.move(os.path.join(staging_dir, filename), tmp_path)
             os.replace(tmp_path, os.path.join(ROOT, filename))
