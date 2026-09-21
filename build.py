@@ -300,7 +300,7 @@ FOOTER_HTML = f"""<footer>
     </div>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
-      湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく独立した地域メディアです。特定のサービスやEC、求人といった事業には属さず、あくまで「湘南を知る入口」であることを目的に運営しています。
+      湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
       <div class="foot-area-links">
         <span class="foot-area-links-label">エリアから探す</span>
         {FOOTER_AREA_LINKS}
@@ -308,7 +308,7 @@ FOOTER_HTML = f"""<footer>
     </div>
     <div class="foot-note">
       掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
-      広告掲載プランをご用意しています（松：ページ最上部プレミアム枠 ／ 竹：カテゴリ内スポンサー枠 ／ 梅：記事内タイアップ枠）。詳しくはお問い合わせください。<br><br>
+      広告掲載プランをご用意しています。詳しくはinfo@shonandoors.comまでお問い合わせください。<br><br>
       <span class="foot-links">
         <a href="/privacy/" id="footPrivacy">プライバシーポリシー</a>
         <a href="/contact/" id="footContact">お問い合わせ</a>
