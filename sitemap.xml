@@ -37,12 +37,12 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/hiratsuka/</loc>
-    <lastmod>2026-09-19</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/oiso/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -52,12 +52,12 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/zushi/</loc>
-    <lastmod>2026-09-21</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/hayama/</loc>
-    <lastmod>2026-09-19</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -72,7 +72,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/gourmet/</loc>
-    <lastmod>2026-09-21</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -87,13 +87,33 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/event/</loc>
-    <lastmod>2026-09-21</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
-    <lastmod>2026-09-19</lastmod>
+    <lastmod>2026-09-22</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/hiratsuka-life-0103/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/zushi-event-0104/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/oiso-event-0105/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/hayama-gourmet-0106/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/fujisawa-gourmet-0098/</loc>
