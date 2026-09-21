@@ -153,7 +153,11 @@
     text-decoration:none; color:inherit; border-bottom:1px solid var(--line-soft);
   }
   .list-item:first-child{padding-top:2px;}
-  .list-item-thumb{width:60px; height:60px; flex-shrink:0; border-radius:5px; object-fit:cover; background:var(--bg-deep); display:block;}
+  .list-item-icon{
+    width:60px; height:60px; flex-shrink:0; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .list-item-icon svg{width:26px; height:26px;}
   .list-item-body{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px;}
   .list-item-meta{display:flex; align-items:center; gap:6px;}
   .list-item-badge{color:#fff; font-size:9.5px; font-weight:700; padding:1px 7px; border-radius:3px; letter-spacing:.02em; white-space:nowrap;}
@@ -480,7 +484,8 @@ a.card{text-decoration:none; color:inherit;}
   .pickup-card-img{height:210px;}
 
   /* Article list: サムネイルをモバイルより少し大きく */
-  .list-item-thumb{width:72px; height:72px;}
+  .list-item-icon{width:72px; height:72px;}
+  .list-item-icon svg{width:30px; height:30px;}
   .list-item-title{font-size:14.5px;}
 
   /* コンテンツ幅: Desktopの1300px/1160pxよりTabletに合わせて少し狭く */

@@ -195,14 +195,7 @@ def resolve_article_hero_image(item):
     return f"{IMAGES_BASE_URL}/category-photos/{cat_en}.webp", f"{esc(CATS[item['cat']]['label'])}のイメージ"
 
 
-def resolve_thumbnail_image(item):
-    """記事一覧(list-item)のサムネイル画像を解決する。
-    トップ新着記事・カテゴリ/エリアハブ・関連記事など、一覧系のカードは
-    記事固有画像を使わず、常にカテゴリ共通のロゴ/イラストを表示する
-    (記事固有画像はcarousel/記事ヒーローのみで使う、という役割分担のため)。
-    戻り値: (src, alt)"""
-    cat_en = CAT_EN[item["cat"]]
-    return f"{IMAGES_BASE_URL}/categories/{cat_en}.svg", f"{esc(CATS[item['cat']]['label'])}のサムネイル"
+
 
 
 def resolve_area_hero_image(area_ja):
@@ -674,14 +667,18 @@ def render_list_item(item, scenes, with_search_attrs=False):
     [thumbnail] [category badge + headline + date] [>] という構成で、
     トップページの新着記事一覧・地域/カテゴリハブ・pagination・関連記事の
     すべてで共通のデザインシステムとして使う(1画面に複数記事を表示できる
-    密度を優先し、大きなカードUIは使わない)。"""
+    密度を優先し、大きなカードUIは使わない)。
+    サムネイル部分は、トップページ上部のカテゴリーナビゲーションと全く同じ
+    CATEGORY_NAV_STYLE(bg/fg/icon)をSingle Source of Truthとして再利用し、
+    同じカテゴリーなら常に同じアイコンデザインになるようにしている
+    (assets/images/categories/*.svg という別の画像ファイルは使わない)。"""
     search_attrs = ""
     if with_search_attrs:
         search_hay = esc((item["title"] + item["dek"] + "".join(item.get("tags", []))).lower())
         search_attrs = f' data-cat="{item["cat"]}" data-area="{esc(item["area"])}" data-search="{search_hay}"'
-    thumb_src, thumb_alt = resolve_thumbnail_image(item)
+    nav_style = CATEGORY_NAV_STYLE[item["cat"]]
     return f"""<a class="list-item" href="/articles/{item['slug']}/"{search_attrs}>
-        <img class="list-item-thumb" src="{thumb_src}" width="60" height="60" alt="{thumb_alt}" loading="lazy" decoding="async">
+        <span class="list-item-icon" style="background:{nav_style['bg']}; color:{nav_style['fg']}" aria-hidden="true">{nav_style['icon']}</span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:{CATS[item['cat']]['bg']}">{esc(CATS[item['cat']]['label'])}</span>
