@@ -117,18 +117,6 @@
 
   @media (max-width:760px){ .brand-name{font-size:27px;} }
 
-  /* ===== SNS latest feed ===== */
-  .sidebar-card{background:var(--card); border:1px solid var(--line-soft); border-radius:5px; padding:16px; margin-bottom:20px;}
-  .sidebar-card-title{font-size:13px; font-weight:700; color:var(--ink); margin-bottom:12px;}
-  .insta-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:12px;}
-  .insta-grid-item{aspect-ratio:1/1; overflow:hidden; border-radius:2px; cursor:pointer;}
-  .insta-grid-item svg{width:100%; height:100%; display:block;}
-  .insta-follow-btn{
-    display:block; text-align:center; text-decoration:none;
-    background:linear-gradient(45deg,#FEDA75,#FA7E1E,#D62976,#962FBF,#4F5BD5);
-    color:#fff; font-size:12.5px; font-weight:700; padding:10px; border-radius:4px;
-  }
-
   /* ===== FILTER BAR(エリア検索・キーワード絞り込みのみ。カテゴリーは上部のcat-navへ集約) ===== */
   .filterbar{background:rgba(244,245,241,.94); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
   .filter-inner{max-width:1160px; margin:0 auto; padding:10px var(--space-page-x); display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
@@ -150,11 +138,7 @@
      問題が起きず、Category/Areaだけ余白が広く見える原因になっていた)。
      全breakpoint共通でmain側を0にし、.hub-page-wrap側だけを唯一の余白源にする。 */
   .hub-main{padding-left:0; padding-right:0;}
-  .content-layout{display:grid; grid-template-columns:1fr 300px; gap:32px; align-items:start;}
-  .content-sidebar{}
-  @media (max-width:980px){
-    .content-layout{grid-template-columns:1fr;}
-  }
+  .content-layout{display:block;}
   .section-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px; flex-wrap:wrap;}
   .section-title{font-size:18px; margin:0;}
   #resultCount{font-size:12px; color:var(--ink-faint); margin:0; letter-spacing:.03em;}
@@ -335,11 +319,6 @@
     .hero-visual{height:220px; object-position:center 42%;}
     .hero-tagline{font-size:23px;}
     .hero-sub{font-size:12.5px;}
-
-    /* サイドバー(Instagram/Xウィジェット)は添付デザインに存在しないため、
-       モバイルでは非表示にして情報密度を上げる(デスクトップでは表示を維持)。
-       DOM自体は残すため、SEO上のコンテンツ量には影響しない。 */
-    .content-sidebar{display:none;}
 
     /* 記事カード(.modal)をviewportに対してほぼ全幅にする。
        article-page-wrap自体の左右paddingは無くし、その代わりに

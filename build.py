@@ -884,13 +884,6 @@ def render_index(articles, scenes):
     id_to_slug = {a["id"]: a["slug"] for a in articles}
     redirect_map_json = json.dumps(id_to_slug, ensure_ascii=False)
 
-    insta_tile_ids = [8, 1, 23, 56, 19, 39]
-    insta_map = {a["id"]: a for a in articles}
-    insta_items = [insta_map[i] for i in insta_tile_ids if i in insta_map]
-    insta_html = "".join(
-        f'<a class="insta-grid-item" href="/articles/{a["slug"]}/">{scenes[a["scene"]]}</a>' for a in insta_items
-    )
-
     featured_articles = select_pickup_articles(articles, count=5)
     pickup_items = [
         {"id": a["id"], "slug": a["slug"], "cat": a["cat"], "area": a["area"],
@@ -1003,18 +996,6 @@ def render_index(articles, scenes):
       </div>
       {pagination_html}
     </div>
-    <aside class="content-sidebar">
-      <div class="sidebar-card">
-        <div class="sidebar-card-title">Instagramの最新投稿</div>
-        <div class="insta-grid" id="instaGrid">{insta_html}</div>
-        <a class="insta-follow-btn" href="#" target="_blank" rel="noopener">📷 Instagramでフォロー</a>
-      </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-title">X（旧Twitter）の最新投稿</div>
-        <a class="twitter-timeline" data-height="420" data-theme="light" href="https://twitter.com/shonan_doors?ref_src=twsrc%5Etfw">Tweets by shonan_doors</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-      </div>
-    </aside>
   </div>
 </main>
 

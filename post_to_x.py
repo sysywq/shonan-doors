@@ -57,6 +57,20 @@ AREA_EN = {
     "大磯": "oiso", "二宮": "ninomiya", "逗子": "zushi", "葉山": "hayama",
 }
 
+# カテゴリー表示名・絵文字・ハッシュタグ用の単語。
+# build.py の CATS(表示名)・CAT_EN(英語slug)と値の対応を揃えている
+# (post_to_x.py は他ファイルに依存せず単体で動かせる設計のため、値を複製している)。
+# 表示名はbuild.py側の既存定義(CATS[key]["label"])をそのまま踏襲する。
+CATEGORY_INFO = {
+    "t": {"label": "観光", "emoji": "🌊", "hashtag_word": "観光"},
+    "b": {"label": "企業・店舗", "emoji": "💼", "hashtag_word": "企業店舗"},  # "・"はハッシュタグに使わない
+    "g": {"label": "グルメ", "emoji": "🍽️", "hashtag_word": "グルメ"},
+    "p": {"label": "人", "emoji": "👤", "hashtag_word": "人"},
+    "c": {"label": "文化", "emoji": "🎨", "hashtag_word": "文化"},
+    "e": {"label": "イベント", "emoji": "🎉", "hashtag_word": "イベント"},
+    "l": {"label": "暮らし", "emoji": "🏠", "hashtag_word": "暮らし"},
+}
+
 DRY_RUN = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
 
 X_MAX_WEIGHTED_LENGTH = 280
@@ -131,16 +145,65 @@ def effective_weight(text, url):
 
 
 def build_tweet_text(article):
-    """投稿文を生成する。articles.jsonの正式なタイトルとURLだけを使い、
-    要約生成・エリア表記・定型文・ハッシュタグは付けない
-    (投稿内容と記事内容の不一致を無くし、処理をシンプル・安定にするため)。
-    タイトルがXの文字数制限を超える場合のみ、安全に短縮する。"""
+    """投稿文を生成する。
+
+    フォーマット:
+        {タイトル}
+
+        📍{エリア}
+        {カテゴリ絵文字} {カテゴリ名}
+
+        {ハッシュタグ(3〜4個)}
+
+        {URL}
+
+    タイトルはarticles.jsonの正式なタイトルをそのまま使う(AI再生成はしない)。
+    エリア・カテゴリ表示名はbuild.py側の既存マッピングと値を揃えた
+    AREA_EN/CATEGORY_INFOを使う。未知のカテゴリコードが来た場合は、
+    絵文字なし・カテゴリコードそのままの表示に安全にfallbackする。
+
+    280文字(weighted)を超える場合の優先順位:
+      1. URLは必ず残す
+      2. エリア表示を残す
+      3. カテゴリ表示を残す
+      4. ハッシュタグを残す
+      5. タイトルを安全に短縮する
+      6. それでも超える場合はハッシュタグを後ろから減らす
+    """
     url = f"{SITE_DOMAIN}/articles/{article['slug']}/"
     title = article["title"]
+    area = article["area"]
+    cat_code = article.get("cat", "")
+    cat_info = CATEGORY_INFO.get(cat_code)
+    if cat_info:
+        cat_label = cat_info["label"]
+        cat_emoji = cat_info["emoji"]
+        cat_hashtag_word = cat_info["hashtag_word"]
+    else:
+        # 未知のカテゴリコード: 絵文字なしでコードをそのまま表示する安全fallback
+        cat_label = cat_code
+        cat_emoji = ""
+        cat_hashtag_word = cat_code
 
-    # URLは実際の文字数に関わらず固定23として計算される。
-    # タイトルとURLの間の改行(2文字分)も差し引いた残りがタイトルの予算。
-    budget_for_title = X_MAX_WEIGHTED_LENGTH - X_URL_WEIGHT - weighted_length("\n\n") - 5  # 安全マージン5
+    area_line = f"📍{area}"
+    cat_line = f"{cat_emoji} {cat_label}".strip()
+
+    hashtags = ["#湘南", f"#{area}", f"#湘南{cat_hashtag_word}", "#ShonanDoors"]
+
+    def compose(title_text, hashtag_list):
+        hashtag_line = " ".join(hashtag_list)
+        parts = [title_text, f"{area_line}\n{cat_line}"]
+        if hashtag_line:
+            parts.append(hashtag_line)
+        parts.append(url)
+        return "\n\n".join(parts)
+
+    # 1〜4(URL・エリア・カテゴリ・ハッシュタグ)を固定した状態で、
+    # タイトルに使える予算を計算する。
+    fixed_text = compose("", hashtags)
+    fixed_weight = effective_weight(fixed_text, url) - weighted_length("\n\n")  # タイトル分の空行1つを後で足す
+    budget_for_title = X_MAX_WEIGHTED_LENGTH - fixed_weight - 5  # 安全マージン5
+
     title_trimmed = title
     if weighted_length(title_trimmed) > budget_for_title:
         approx_chars = max(0, budget_for_title // 2 - 1)
@@ -149,12 +212,18 @@ def build_tweet_text(article):
             title_trimmed = title_trimmed[:-1]
         title_trimmed = title_trimmed + "…" if title_trimmed else title[:1]
 
-    text = f"{title_trimmed}\n\n{url}"
+    text = compose(title_trimmed, hashtags)
 
-    # 最終安全チェック(想定外のケースでも280を超えて投稿しないようにする)。
-    # 実際のURL文字列の長さではなく、X側の仕様通りt.co短縮後の固定23として評価する。
+    # 5でも収まらない場合(タイトルを最小限まで削ってもまだ超える場合)は、
+    # ハッシュタグを後ろから減らして再構成する。URL・エリア・カテゴリは最後まで残す。
+    remaining_hashtags = list(hashtags)
+    while effective_weight(text, url) > X_MAX_WEIGHTED_LENGTH and len(remaining_hashtags) > 0:
+        remaining_hashtags = remaining_hashtags[:-1]
+        text = compose(title_trimmed, remaining_hashtags)
+
+    # 最終安全チェック(それでも超える想定外のケース)
     if effective_weight(text, url) > X_MAX_WEIGHTED_LENGTH:
-        text = f"{title[:1]}…\n\n{url}"
+        text = compose(f"{title[:1]}…", [])
 
     return text
 
