@@ -1,0 +1,65 @@
+name: X Backfill (Past Articles)
+
+# 既に公開済みの過去記事のうち、data/x_post_log.jsonにまだ記録が無いものを
+# 古い記事から順にXへ投稿するための専用workflow。
+# 通常の毎日の記事生成workflow(daily-articles.yml)や、単体テスト用の
+# post-to-x.ymlとは完全に独立している。記事生成・build・GitHub Pagesへの
+# デプロイには一切関与しない。
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true=実際には投稿せず、対象記事と投稿予定内容だけ確認する'
+        required: true
+        type: boolean
+        default: true
+      limit:
+        description: '対象にする件数(古い記事から)。0を指定すると未投稿の全記事が対象になる'
+        required: true
+        type: string
+        default: '10'
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install tweepy
+
+      # 短時間に大量投稿しないよう、1件ごとに間隔を空ける
+      # (既定45秒。変更したい場合はこの環境変数の値を調整する)。
+      # DRY_RUN=trueの場合、この待機自体もpost_to_x.py側で自動的にスキップされる。
+      - name: Backfill実行
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          X_BACKFILL_INTERVAL_SECONDS: '45'
+        run: python post_to_x.py --backfill --limit "${{ inputs.limit }}"
+
+      # 1件でも成功していればx_post_log.jsonが更新されているはずなので、
+      # その場合だけコミットする。add→commit→pull --rebase→pushの順を守る
+      # (ステージ済みの変更がある状態でpull --rebaseすると拒否されるため)。
+      - name: 投稿済みログをコミット・プッシュ
+        run: |
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/x_post_log.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: X Backfill投稿済みログを更新"
+            git pull --rebase origin main
+            git push
+          fi
