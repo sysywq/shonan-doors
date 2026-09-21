@@ -123,49 +123,38 @@ def wait_for_url_published(url):
         time.sleep(URL_CHECK_INTERVAL_SEC)
 
 
+def effective_weight(text, url):
+    """実際にX上でカウントされる重みを計算する。text内のURL部分は
+    t.co短縮後の固定23として扱い、実URLの文字数の影響を受けないようにする。"""
+    text_without_url = text.replace(url, "")
+    return weighted_length(text_without_url) + X_URL_WEIGHT
+
+
 def build_tweet_text(article):
-    """記事内容に応じて投稿文を生成する。固定文ではなく、
-    title(読みたくなる1文目)・dek(短い要約)・area・URLを組み合わせ、
-    X(Twitter)の280文字(weighted)制限に収まるよう本文を調整する。"""
-    area = article["area"]
+    """投稿文を生成する。articles.jsonの正式なタイトルとURLだけを使い、
+    要約生成・エリア表記・定型文・ハッシュタグは付けない
+    (投稿内容と記事内容の不一致を無くし、処理をシンプル・安定にするため)。
+    タイトルがXの文字数制限を超える場合のみ、安全に短縮する。"""
     url = f"{SITE_DOMAIN}/articles/{article['slug']}/"
-
-    hashtags = ["#湘南", f"#{area}", "#ShonanDoors"]
-    hashtag_line = " ".join(hashtags)
-
     title = article["title"]
-    dek = article.get("dek", "")
 
-    fixed_parts = [
-        title,
-        f"📍{area}",
-        url,
-        hashtag_line,
-    ]
-    fixed_weight = sum(weighted_length(p) for p in fixed_parts)
-    newline_overhead = weighted_length("\n\n") * (len(fixed_parts) + 1)
-    url_actual_weight = weighted_length(url)
-    fixed_weight = fixed_weight - url_actual_weight + X_URL_WEIGHT
+    # URLは実際の文字数に関わらず固定23として計算される。
+    # タイトルとURLの間の改行(2文字分)も差し引いた残りがタイトルの予算。
+    budget_for_title = X_MAX_WEIGHTED_LENGTH - X_URL_WEIGHT - weighted_length("\n\n") - 5  # 安全マージン5
+    title_trimmed = title
+    if weighted_length(title_trimmed) > budget_for_title:
+        approx_chars = max(0, budget_for_title // 2 - 1)
+        title_trimmed = title[:approx_chars]
+        while weighted_length(title_trimmed + "…") > budget_for_title and len(title_trimmed) > 0:
+            title_trimmed = title_trimmed[:-1]
+        title_trimmed = title_trimmed + "…" if title_trimmed else title[:1]
 
-    budget_for_dek = X_MAX_WEIGHTED_LENGTH - fixed_weight - newline_overhead - 10
-    dek_trimmed = dek
-    if weighted_length(dek_trimmed) > budget_for_dek:
-        approx_chars = max(0, budget_for_dek // 2 - 1)
-        dek_trimmed = dek[:approx_chars]
-        while weighted_length(dek_trimmed + "…") > budget_for_dek and len(dek_trimmed) > 0:
-            dek_trimmed = dek_trimmed[:-1]
-        dek_trimmed = dek_trimmed + "…" if dek_trimmed else ""
+    text = f"{title_trimmed}\n\n{url}"
 
-    lines = [title]
-    if dek_trimmed:
-        lines.append(dek_trimmed)
-    lines.append(f"📍{area}\n🔗 記事はこちら\n{url}")
-    lines.append(hashtag_line)
-    text = "\n\n".join(lines)
-
-    if weighted_length(text) > X_MAX_WEIGHTED_LENGTH:
-        lines = [title, f"📍{area}\n🔗 記事はこちら\n{url}", hashtag_line]
-        text = "\n\n".join(lines)
+    # 最終安全チェック(想定外のケースでも280を超えて投稿しないようにする)。
+    # 実際のURL文字列の長さではなく、X側の仕様通りt.co短縮後の固定23として評価する。
+    if effective_weight(text, url) > X_MAX_WEIGHTED_LENGTH:
+        text = f"{title[:1]}…\n\n{url}"
 
     return text
 
@@ -190,45 +179,33 @@ def post_tweet(text):
     return response.data["id"]
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--article-ids", required=True,
-                         help="カンマ区切りの記事ID(例: 93,94,95)。単体テストなら1件だけでもよい。")
-    parser.add_argument("--skip-url-check", action="store_true",
-                         help="URL公開待ちを省略する(手元での動作確認等、DRY_RUN以外で待機したくない場合)")
-    args = parser.parse_args()
-
-    target_ids = [int(x) for x in args.article_ids.split(",") if x.strip()]
-    if not target_ids:
-        print("投稿対象の記事IDが指定されていません。何もせず終了します。")
-        return
-
-    articles = load_json(ARTICLES_JSON_PATH, [])
-    articles_by_id = {a["id"]: a for a in articles}
-    posted_ids, records = load_post_log()
-
-    print(f"{'[DRY RUN] ' if DRY_RUN else ''}対象記事ID: {target_ids}")
-    print(f"投稿済みログ件数(累計): {len(posted_ids)}")
-
+def process_articles(target_ids, articles_by_id, posted_ids, records, skip_url_check=False, interval_sec=0):
+    """記事IDのリストを順番に処理する共通ロジック。
+    通常の日次投稿・単体テスト・Backfillのいずれからも呼ばれる。
+    interval_secを指定すると、投稿(またはDRY RUN確認)ごとにその秒数だけ待機する
+    (Backfillで短時間に大量投稿しないようにするため。通常投稿では0のまま)。"""
     success_count = 0
     failure_count = 0
     timeout_count = 0
+    skipped_count = 0
 
-    for article_id in target_ids:
+    for i, article_id in enumerate(target_ids):
         article = articles_by_id.get(article_id)
         if article is None:
             print(f"  id={article_id}: articles.jsonに見つからないためスキップします。")
+            skipped_count += 1
             continue
 
         if article_id in posted_ids:
             print(f"  id={article_id} ({article['slug']}): 投稿済みのためスキップします。")
+            skipped_count += 1
             continue
 
         text = build_tweet_text(article)
-        weight = weighted_length(text)
         url = f"{SITE_DOMAIN}/articles/{article['slug']}/"
+        weight = effective_weight(text, url)
 
-        print(f"\n  --- id={article_id} ({article['slug']}) ---")
+        print(f"\n  --- id={article_id} ({article['slug']}) [{i + 1}/{len(target_ids)}] ---")
         print(f"  記事タイトル: {article['title']}")
         print(f"  記事URL: {url}")
         print(f"  投稿文({weight}/{X_MAX_WEIGHTED_LENGTH} weighted chars):")
@@ -239,7 +216,7 @@ def main():
             success_count += 1
             continue
 
-        if not args.skip_url_check:
+        if not skip_url_check:
             print(f"  記事URLが公開されるまで待機します(最大{URL_CHECK_TIMEOUT_SEC}秒、{URL_CHECK_INTERVAL_SEC}秒間隔)...")
             if not wait_for_url_published(url):
                 print(f"  id={article_id}: URLが公開されないためこの記事の投稿をスキップします。")
@@ -252,15 +229,73 @@ def main():
             print(f"  投稿成功: tweet_id={tweet_id} posted_at={posted_at}")
             records.append({"article_id": article_id, "tweet_id": str(tweet_id), "posted_at": posted_at})
             posted_ids.add(article_id)
-            save_post_log(records)
+            save_post_log(records)  # 1件成功するごとに都度保存(途中失敗時も再開できるようにするため)
             success_count += 1
         except Exception as e:
             print(f"  投稿失敗: {e}", file=sys.stderr)
             failure_count += 1
 
+        if interval_sec > 0 and i < len(target_ids) - 1:
+            print(f"  次の投稿まで{interval_sec}秒待機します...")
+            time.sleep(interval_sec)
+
+    return success_count, failure_count, timeout_count, skipped_count
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--article-ids",
+                         help="カンマ区切りの記事ID(例: 93,94,95)。単体テストなら1件だけでもよい。"
+                              "--backfillと同時には指定できない。")
+    parser.add_argument("--backfill", action="store_true",
+                         help="articles.jsonの全記事のうち、x_post_log.jsonにまだ記録が無いものを"
+                              "古い記事から順に対象にする(過去記事の一括投稿用)。")
+    parser.add_argument("--limit", type=int, default=0,
+                         help="--backfillと併用。0は無制限(未投稿の全記事が対象)。"
+                              "正の値を指定すると、古い記事からその件数だけに絞る。")
+    parser.add_argument("--skip-url-check", action="store_true",
+                         help="URL公開待ちを省略する(手元での動作確認等、DRY_RUN以外で待機したくない場合)")
+    args = parser.parse_args()
+
+    if args.backfill and args.article_ids:
+        print("--backfill と --article-ids は同時に指定できません。", file=sys.stderr)
+        sys.exit(2)
+    if not args.backfill and not args.article_ids:
+        print("--article-ids または --backfill のいずれかを指定してください。", file=sys.stderr)
+        sys.exit(2)
+
+    articles = load_json(ARTICLES_JSON_PATH, [])
+    articles_by_id = {a["id"]: a for a in articles}
+    posted_ids, records = load_post_log()
+
+    interval_sec = 0
+    if args.backfill:
+        # 古い記事から順に、まだx_post_log.jsonに記録の無いものだけを対象にする。
+        unposted = [a for a in articles if a["id"] not in posted_ids]
+        unposted.sort(key=lambda a: (a["date"], a["id"]))  # 日付が同じ場合はID順で安定させる
+        if args.limit > 0:
+            unposted = unposted[: args.limit]
+        target_ids = [a["id"] for a in unposted]
+        interval_sec = int(os.environ.get("X_BACKFILL_INTERVAL_SECONDS", "45"))
+        print(f"{'[DRY RUN] ' if DRY_RUN else ''}[BACKFILL] 未投稿記事{len(target_ids)}件が対象です"
+              f"(limit={args.limit or '無制限'}, 投稿間隔={interval_sec}秒)")
+    else:
+        target_ids = [int(x) for x in args.article_ids.split(",") if x.strip()]
+        if not target_ids:
+            print("投稿対象の記事IDが指定されていません。何もせず終了します。")
+            return
+
+    print(f"{'[DRY RUN] ' if DRY_RUN else ''}対象記事ID: {target_ids}")
+    print(f"投稿済みログ件数(累計): {len(posted_ids)}")
+
+    success_count, failure_count, timeout_count, skipped_count = process_articles(
+        target_ids, articles_by_id, posted_ids, records,
+        skip_url_check=args.skip_url_check, interval_sec=interval_sec,
+    )
+
     print(f"\n{'[DRY RUN] ' if DRY_RUN else ''}完了: 成功{success_count}件 / 失敗{failure_count}件 "
           f"/ URL未公開でスキップ{timeout_count}件 "
-          f"/ その他対象外(既投稿・データ不整合等){len(target_ids) - success_count - failure_count - timeout_count}件")
+          f"/ その他対象外(既投稿・データ不整合等){skipped_count}件")
 
     if not DRY_RUN and (failure_count > 0 or timeout_count > 0):
         sys.exit(1)
