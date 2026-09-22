@@ -230,7 +230,17 @@ def build_tweet_text(article):
 
 def post_tweet(text):
     """実際にXへ投稿する。tweepy(OAuth 1.0a User Context)を使用する。
-    DRY_RUN時はこの関数自体を呼ばない。"""
+    DRY_RUN時はこの関数自体を呼ばない。
+
+    失敗時(非2xxレスポンス)は、X Developer Forumでの403調査依頼に対応するため、
+    x-transaction-idレスポンスヘッダーと、JSON(不可の場合はテキスト)の
+    レスポンスボディだけを診断ログとして出力する。API Key/API Secret/
+    Access Token/Access Token Secret/Authorization/Cookie等の認証情報は
+    一切出力しない(出力対象はレスポンス側の特定ヘッダー・ボディのみで、
+    認証情報が含まれるリクエスト側の情報には触れていない)。
+    成功時の戻り値・呼び出し元の投稿フォーマット/weighted length/
+    x_post_log.json等の仕様には一切影響しない(失敗時に診断ログを追加で
+    出力したうえで、これまで通り例外を再送出するだけ)。"""
     import tweepy
 
     api_key = os.environ["X_API_KEY"]
@@ -244,8 +254,35 @@ def post_tweet(text):
         access_token=access_token,
         access_token_secret=access_token_secret,
     )
-    response = client.create_tweet(text=text)
-    return response.data["id"]
+    try:
+        response = client.create_tweet(text=text)
+        return response.data["id"]
+    except Exception as e:
+        _log_x_api_error_diagnostics(e)
+        raise
+
+
+def _log_x_api_error_diagnostics(exc):
+    """POST /2/tweets が非2xxで失敗した場合の診断ログ(403調査用)。
+    出力するのはレスポンスの x-transaction-id ヘッダーと、
+    JSON(不可の場合はテキスト)のレスポンスボディのみ。
+    リクエストヘッダー(Authorization等)や認証情報は一切参照・出力しない。"""
+    resp = getattr(exc, "response", None)
+    if resp is None:
+        return
+    try:
+        tx_id = resp.headers.get("x-transaction-id", "(x-transaction-idヘッダーなし)")
+        status = getattr(resp, "status_code", "不明")
+        print(f"  [診断] HTTP status: {status}", file=sys.stderr)
+        print(f"  [診断] x-transaction-id: {tx_id}", file=sys.stderr)
+        try:
+            body = resp.json()
+            print(f"  [診断] response JSON body: {json.dumps(body, ensure_ascii=False)}", file=sys.stderr)
+        except Exception:
+            text = getattr(resp, "text", "(レスポンス本文を取得できませんでした)")
+            print(f"  [診断] response text: {text}", file=sys.stderr)
+    except Exception as log_err:
+        print(f"  [診断] 診断ログの出力自体に失敗しました: {log_err}", file=sys.stderr)
 
 
 def process_articles(target_ids, articles_by_id, posted_ids, records, skip_url_check=False, interval_sec=0):
