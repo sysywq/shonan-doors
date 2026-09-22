@@ -141,3 +141,32 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
+  # Bing等のIndexNow対応検索エンジンへ、本日新規公開した記事URLを通知する。
+  # generateジョブが成功した場合のみ実行されるが、あくまで別ジョブとして
+  # 疎結合にしてあるため、このジョブが失敗しても記事生成・build・
+  # GitHub Pagesへのデプロイ(=generateジョブの成否)やX投稿には一切影響しない。
+  # IndexNowはGoogle Search Console/sitemap.xml等の既存SEO実装とは独立した、
+  # 補助的な即時クロール依頼の仕組みであり、それらには一切手を加えていない。
+  indexnow_submit:
+    needs: generate
+    if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト(最新mainを取得)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # IndexNowのkeyはその性質上「公開ファイルとして配信される」ことが
+      # 仕様上前提のため秘密情報ではなく、GitHub Secretsは使用しない
+      # (X_API_KEY等のcredentialとは明確に別枠。indexnow_submit.py内に
+      # 直接定義済みで、標準ライブラリのみで動作するため追加パッケージの
+      # インストールも不要)。
+      - name: IndexNowへ本日公開したURLを通知
+        run: python indexnow_submit.py --article-ids "${{ needs.generate.outputs.article_ids }}"
