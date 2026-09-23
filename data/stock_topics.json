@@ -557,5 +557,57 @@
     "generatedAt": "2026-09-23 05:16",
     "skipReason": null,
     "createdAt": "2026-09-23"
+  },
+  {
+    "id": "t0044",
+    "query": "鎌倉 早朝 観光 スポット",
+    "titleIdea": "混雑ゼロの古都をひとり占め——鎌倉を早朝に訪れるための完全ガイド",
+    "area": "鎌倉",
+    "category": "t",
+    "searchIntent": "鎌倉の観光混雑を避けるために早朝に訪れたいと考えており、何時から開いているスポット・早朝ならではの風景・朝の動線を具体的に知りたい",
+    "status": "generated",
+    "generatedArticleId": 115,
+    "generatedAt": "2026-09-24 05:17",
+    "skipReason": null,
+    "createdAt": "2026-09-24"
+  },
+  {
+    "id": "t0045",
+    "query": "大磯 観光 スポット おすすめ",
+    "titleIdea": "明治・大正・昭和の記憶が残る町——大磯の観光スポットをまとめて歩く",
+    "area": "大磯",
+    "category": "t",
+    "searchIntent": "大磯観光を計画しており、旧吉田茂邸や海水浴場発祥の地など歴史スポットを中心に、訪れる価値のある場所の全体像を知りたい",
+    "status": "generated",
+    "generatedArticleId": 116,
+    "generatedAt": "2026-09-24 05:17",
+    "skipReason": null,
+    "createdAt": "2026-09-24"
+  },
+  {
+    "id": "t0046",
+    "query": "藤沢 サイクリング コース 湘南",
+    "titleIdea": "片瀬海岸から辻堂まで——湘南・藤沢を自転車で走るコースガイド",
+    "area": "藤沢",
+    "category": "t",
+    "searchIntent": "藤沢・湘南エリアをサイクリングしたい人が、海沿いや江の島周辺など走りやすいルート・距離・レンタサイクル情報を探している",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "t0018（藤沢サイクリングコース）がすでにskipped済みだが、検索意図は完全に一致している。また既存ストック記事群に直接の重複はないものの、t0018と同一クエリ・同一意図であり、テーマ台帳上でskip扱いとなった理由と同じ問題を抱えているため採用しない。",
+    "createdAt": "2026-09-24"
+  },
+  {
+    "id": "t0047",
+    "query": "二宮 観光 スポット おすすめ",
+    "titleIdea": "落花生とオリーブと菜の花の町——二宮を訪れる理由と見どころまとめ",
+    "area": "二宮",
+    "category": "t",
+    "searchIntent": "二宮がどんな観光スポットを持つ町なのか全体像を知りたい。吾妻山公園以外の見どころや、季節ごとの楽しみ方も把握したい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "t0026（二宮観光スポット）が既にskipped済みで検索意図が一致する。また吾妻山公園（t0040生成済み）・落花生（人物・グルメ記事複数あり）・オリーブ（グルメ記事あり）・移住（暮らし記事あり）と既存コンテンツとのカニバリが高く、総合観光ガイドとして新たな独自価値を出しにくいと判断。",
+    "createdAt": "2026-09-24"
   }
 ]
