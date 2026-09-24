@@ -292,5 +292,52 @@ class FullModeUnaffectedTest(unittest.TestCase):
         self.assertNotIn("web_search", json.dumps(client.calls[0]["tools"]))
 
 
+class ResultConsistencyTest(unittest.TestCase):
+    """API の result と理由・両立フラグの不整合(id:14 で発生)を補正する"""
+
+    def api_result(self, item):
+        prev = dict(PREV_FULL, claims=[claim("レンバイは朝8時から営業している", "contradicted",
+                                             av="早朝から昼過ぎにかけて営業",
+                                             pv="朝8時頃までには販売準備が整う")])
+        art = dict(ARTICLE, body="レンバイは朝8時から営業している。野菜が売り切れ次第終わる。")
+        client = FakeClient(lambda kw: {"results": [dict(item, index=0)]})
+        (results, _, _), _ = run([art], [prev], client)
+        self.assertEqual(len(client.calls), 1)
+        return results[0]["claims"][0]
+
+    def test_still_contradicted_but_compatible_flag_true_becomes_resolved(self):
+        c = self.api_result({"result": "still_contradicted", "logicallyCompatible": True,
+                             "reason": "「8時から」と「8時頃までに準備が整う」はほぼ両立する"})
+        self.assertEqual(c["verifyResult"], "resolved")
+
+    def test_still_contradicted_with_compatible_reason_and_no_flag_is_review_required(self):
+        # 今回の id:14 の再現: 理由は「ほぼ両立する」なのに still_contradicted
+        c = self.api_result({"result": "still_contradicted",
+                             "reason": "表現はやや異なるが、ほぼ両立する"})
+        self.assertEqual(c["verifyResult"], "review_required")
+        self.assertIn("矛盾", c["verifyReason"])
+
+    def test_still_contradicted_with_incompatible_reason_is_kept(self):
+        c = self.api_result({"result": "still_contradicted", "logicallyCompatible": False,
+                             "reason": "開店時刻が一次情報と両立しない"})
+        self.assertEqual(c["verifyResult"], "still_contradicted")
+
+    def test_negated_compatibility_phrase_is_not_treated_as_compatible(self):
+        c = self.api_result({"result": "still_contradicted", "reason": "ほぼ一致に見えるが、時刻が両立しない"})
+        self.assertEqual(c["verifyResult"], "still_contradicted")
+
+    def test_resolved_but_flag_false_is_review_required(self):
+        c = self.api_result({"result": "resolved", "logicallyCompatible": False, "reason": "修正済み"})
+        self.assertEqual(c["verifyResult"], "review_required")
+
+    def test_string_flag_is_accepted(self):
+        c = self.api_result({"result": "still_contradicted", "logicallyCompatible": "true", "reason": "両立する"})
+        self.assertEqual(c["verifyResult"], "resolved")
+
+    def test_schema_requires_compatibility_flag(self):
+        item = fv.VERIFY_TOOL["input_schema"]["properties"]["results"]["items"]
+        self.assertIn("logicallyCompatible", item["required"])
+
+
 if __name__ == "__main__":
     unittest.main()

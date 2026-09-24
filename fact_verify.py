@@ -49,9 +49,13 @@ VERIFY_TOOL = {
                     "properties": {
                         "index": {"type": "integer", "description": "claim の番号(入力の [n])"},
                         "result": {"type": "string", "enum": list(VERIFY_RESULTS)},
+                        "logicallyCompatible": {
+                            "type": "boolean",
+                            "description": "修正後の記述と一次情報の記述が、表現の違いを除いて意味として両立するか",
+                        },
                         "reason": {"type": "string", "description": "判定理由を1文で"},
                     },
-                    "required": ["index", "result", "reason"],
+                    "required": ["index", "result", "logicallyCompatible", "reason"],
                 },
             },
         },
@@ -66,8 +70,10 @@ VERIFY_SYSTEM_PROMPT = """あなたは地域メディア「湘南Doors」の校�
 各 claim について、渡された「修正後の該当箇所」と「一次情報の抜粋」だけを根拠に判定してください。
 - resolved: 修正後の記述が一次情報と両立する(概数・言い換え・包含関係で両立するものも含む)、
             または誤っていた記述が削除されている
-- still_contradicted: 修正後も一次情報と明確に両立しない記述が残っている
+- still_contradicted: 修正後も一次情報と明確に両立しない記述が残っている(両立しうる場合は使わない)
 - review_required: 渡された情報だけでは判断できない
+logicallyCompatible には、修正後の記述と一次情報が意味として両立するかを true/false で答えてください。
+「ほぼ両立する」「表現が異なるだけ」と判断した場合は、result は resolved、logicallyCompatible は true です。
 最後に必ず submit_verification で全 claim の結果を提出してください。"""
 
 
@@ -305,6 +311,33 @@ def call_verify_api(client, article, items, model=None):
     return raw, stats
 
 
+# 判定理由に「両立する」旨が書かれているかの簡易判定(否定形は除く)
+COMPATIBLE_PHRASES = ("両立する", "両立している", "ほぼ両立", "概ね両立", "おおむね両立", "矛盾しない",
+                      "矛盾はない", "表現の違い", "表現が異なるだけ", "同じ意味", "実質的に同じ", "ほぼ一致")
+INCOMPATIBLE_PHRASES = ("両立しない", "両立せず", "両立しておらず", "矛盾する", "矛盾している", "食い違")
+
+
+def reason_suggests_compatible(reason):
+    r = reason or ""
+    return any(p in r for p in COMPATIBLE_PHRASES) and not any(p in r for p in INCOMPATIBLE_PHRASES)
+
+
+def reconcile_result(res, compatible, reason):
+    """API の result と、両立フラグ・判定理由の整合を取る。
+    - still_contradicted なのに logicallyCompatible=true → resolved(表現差として許容。Fact Audit v2 の
+      wording_difference と同じ扱い)
+    - still_contradicted なのにフラグが無く、理由が「両立する」旨 → review_required(自己矛盾のため人が確認)
+    - resolved なのに logicallyCompatible=false → review_required"""
+    if res == "still_contradicted":
+        if compatible is True:
+            return "resolved", (reason + " [自動: 両立すると判断されているため resolved]").strip()
+        if compatible is None and reason_suggests_compatible(reason):
+            return "review_required", (reason + " [自動: 理由と判定が矛盾するため要確認]").strip()
+    if res == "resolved" and compatible is False:
+        return "review_required", (reason + " [自動: 両立しないと判断されているため要確認]").strip()
+    return res, reason
+
+
 def normalize_verify_response(raw, n_items):
     """API 応答を index → (result, reason) に変換する。崩れていても落ちない。"""
     out = {}
@@ -325,7 +358,13 @@ def normalize_verify_response(raw, n_items):
         if res not in VERIFY_RESULTS:
             anomalies.append(f"result が不正: {fa._snippet(res)}")
             res = "review_required"
-        out[idx] = (res, str(r.get("reason") or ""))
+        compatible = r.get("logicallyCompatible")
+        if isinstance(compatible, str):
+            compatible = {"true": True, "false": False}.get(compatible.strip().lower())
+        elif not isinstance(compatible, bool):
+            compatible = None
+        reason = str(r.get("reason") or "")
+        out[idx] = reconcile_result(res, compatible, reason)
     return out, anomalies
 
 
