@@ -21,7 +21,11 @@ on:
         required: false
         default: ''
       resume_run_id:
-        description: '引き継ぐ過去の実行のRun ID(URLの /actions/runs/<ここ>)。空なら引き継がない'
+        description: '引き継ぐ過去の実行のRun ID(URLの /actions/runs/<ここ>)。同じ判定ルールの結果だけ引き継ぐ'
+        required: false
+        default: ''
+      compare_run_id:
+        description: '比較対象(旧結果)の実行のRun ID。指定すると新旧の件数比較をSummaryに出す'
         required: false
         default: ''
 
@@ -48,6 +52,15 @@ jobs:
           path: previous_reports/
           run-id: ${{ inputs.resume_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 比較用の旧結果を取得(compare_run_id指定時のみ)
+        if: ${{ inputs.compare_run_id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: fact-audit-report
+          path: compare_old/
+          run-id: ${{ inputs.compare_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 一次情報照合
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -58,6 +71,13 @@ jobs:
           [ -n "${{ inputs.end }}" ] && ARGS="$ARGS --end ${{ inputs.end }}"
           [ -d previous_reports ] && ARGS="$ARGS --resume previous_reports"
           python fact_audit.py $ARGS
+      - name: 新旧比較
+        if: ${{ always() && inputs.compare_run_id != '' }}
+        continue-on-error: true
+        run: |
+          [ -d compare_old ] || { echo "旧結果を取得できませんでした"; exit 0; }
+          python compare_audits.py compare_old audit_reports --out audit_reports/compare.md
+          cat audit_reports/compare.md >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -31,6 +31,7 @@ web_search / web_fetch の blocked_domains で機械的に遮断しているた�
 """
 import argparse
 import json
+import re
 import os
 import sys
 import time
@@ -48,6 +49,20 @@ MODEL = os.environ.get("FACT_AUDIT_MODEL", "claude-sonnet-4-6")
 MAX_TURNS = 12
 OUT_DIR = os.path.join(g.ROOT, "audit_reports")
 
+# 判定ルールのバージョン。判定基準を変えたら上げる。
+# --resume は同じバージョンの結果だけを引き継ぐ(旧基準の判定を持ち越さないため)。
+RULES_VERSION = 2
+
+CLAIM_STATUSES = (
+    "confirmed",             # 一次情報・公的情報・一般に確立した事実・単純計算で確認できた
+    "wording_difference",    # 表現や概数の違いはあるが、一次情報と両立する
+    "not_found_in_primary",  # 情報源は確認できたが、その記述は見つからなかった(未確認・要確認)
+    "source_unavailable",    # 情報源そのものを確認できなかった(JS依存・アクセス制限・取得エラー等)
+    "contradicted",          # 一次情報と明確に両立しない
+)
+CLAIM_ROLES = ("title", "dek", "central", "detail")  # 記事の骨格=title/dek/central
+CORE_ROLES = ("title", "dek", "central")
+
 AUDIT_TOOL = {
     "name": "submit_audit",
     "description": "1記事分の一次情報照合結果を提出する。",
@@ -64,53 +79,103 @@ AUDIT_TOOL = {
                     "type": "object",
                     "properties": {
                         "claim": {"type": "string", "description": "記事中の事実の記述(要約)"},
-                        "status": {
-                            "type": "string",
-                            "enum": ["confirmed", "not_found_in_primary", "contradicted"],
-                            "description": "confirmed=一次情報で確認できた / not_found_in_primary=一次情報に記載なし(他メディア由来の疑い) / contradicted=一次情報と食い違う",
+                        "role": {
+                            "type": "string", "enum": list(CLAIM_ROLES),
+                            "description": "title=タイトルの主張 / dek=リードの主張 / central=記事の中心となる主張 / detail=それ以外の細部",
                         },
-                        "primaryUrl": {"type": "string", "description": "確認できた一次情報のURL。無ければ空文字"},
-                        "note": {"type": "string", "description": "補足(食い違いの内容など)"},
+                        "status": {"type": "string", "enum": list(CLAIM_STATUSES)},
+                        "basis": {
+                            "type": "string",
+                            "enum": ["primary_page", "official_record", "established_fact", "calculation", "none"],
+                            "description": "confirmed/wording_difference の根拠の種類。primary_page=対象の公式ページ / official_record=自治体・公的機関・運営会社などの公式情報 / established_fact=一般に確立した事実 / calculation=単純計算 / none=それ以外",
+                        },
+                        "articleValue": {"type": "string", "description": "記事側の値・表現(例: 駐車場800台規模)"},
+                        "primaryValue": {"type": "string", "description": "一次情報側の値・表現(例: 826台)。無ければ空文字"},
+                        "logicallyCompatible": {
+                            "type": "boolean",
+                            "description": "記事の記述と一次情報の記述が、論理的に両立しうるか(概数・言い換え・包含関係なら true)",
+                        },
+                        "primaryUrl": {"type": "string", "description": "確認に使った一次情報のURL。無ければ空文字"},
+                        "note": {"type": "string", "description": "補足(食い違いの内容、取得できなかった理由など)"},
                     },
-                    "required": ["claim", "status", "primaryUrl", "note"],
+                    "required": ["claim", "role", "status", "basis", "articleValue", "primaryValue",
+                                 "logicallyCompatible", "primaryUrl", "note"],
                 },
             },
             "hasQuotedComment": {
                 "type": "boolean",
-                "description": "人物の発言を「」で引用している、または取材コメントを地の文で使っているか",
+                "description": "他メディアの取材コメントと思われる人物の発言を使っているか",
+            },
+            "needsHuman": {
+                "type": "boolean",
+                "description": "一次情報同士が食い違う、AIでは判断が難しいなど、人の確認が必要な事情があるか",
             },
             "verdict": {
-                "type": "string",
-                "enum": ["ok", "fix", "rewrite"],
-                "description": "ok=問題なし / fix=該当箇所の削除・修正で足りる / rewrite=一次情報で書き直しが必要",
+                "type": "string", "enum": ["confirmed", "fix", "rewrite", "review_required"],
+                "description": "参考として提出する記事単位の判定(最終判定はシステムが判定基準に沿って決める)",
             },
             "summary": {"type": "string", "description": "判定理由を1〜2文で"},
         },
-        "required": ["primarySources", "claims", "hasQuotedComment", "verdict", "summary"],
+        "required": ["primarySources", "claims", "hasQuotedComment", "needsHuman", "verdict", "summary"],
     },
 }
 
 SYSTEM_PROMPT = """あなたは地域メディア「湘南Doors」の校閲担当です。
-渡された記事の事実の記述を、一次情報だけで照合してください。
+渡された記事の事実の記述を照合してください。
 
-【一次情報の定義】
-その店舗・企業・団体・主催者・自治体自身が出している公式サイト、公式SNS、
-本人が発表したプレスリリースのみ。新聞・ニュースサイト・地域まとめメディア・
-ブログ・口コミサイト・Wikipedia等の他メディアは、たとえ内容が正しくても
-根拠として扱わないこと(ツール側でも遮断されています)。
+【この校閲の目的】
+一次情報ポリシーの目的は「他メディアの記事を根拠なく転載しないこと」と
+「事実誤認を見つけること」です。「すべての文章が1つの公式ページに逐語的に
+載っていなければならない」という意味ではありません。
+新聞・ニュースサイト・地域まとめメディア・ブログ・口コミサイト・Wikipedia等の
+他メディアは根拠にしないでください(ツール側でも遮断されています)。
 
 【手順】
-1. 本文・dek・店舗情報欄から、確認が必要な事実の記述をすべて抜き出す
-   (日付、場所、住所、営業時間、定休日、価格、席数、メニュー数、数値、
-    沿革・経歴、設備や立地の説明、人物の発言、評判の記述など)。
-   一般的な地理・歴史の常識や、編集部の主観的な感想は対象外。
-2. 記事のlinkがあればまずそれを開き、足りなければweb_searchで公式の情報源を探して開く。
-3. 各記述を confirmed / not_found_in_primary / contradicted に分類する。
-   一次情報に書かれていない記述は、他メディア由来の疑いがあるので
-   not_found_in_primary とすること(推測で confirmed にしない)。
-4. 人物の発言の引用・取材コメントがあれば hasQuotedComment=true。
-5. verdict: 全て confirmed かつ引用なし → ok / 一部削除・修正で済む → fix /
-   記事の骨格が他メディア由来 → rewrite。
+1. 本文・dek・タイトル・店舗情報欄から、確認が必要な事実の記述を抜き出す
+   (日付、場所、住所、営業時間、価格、台数・席数などの数値、沿革、立地、
+    公開状況、人物の経歴・年齢、発言など)。編集部の主観的な感想は対象外。
+   各記述に role を付ける: タイトルの主張=title、リードの主張=dek、
+   記事の中心テーマとなる主張=central、それ以外=detail。
+2. 記事のlinkがあればまず開き、足りなければweb_searchで公式の情報源を探して開く。
+3. 各記述を次の5つに分類する。
+
+   confirmed: 次のいずれかで確認できた。
+     - 対象の公式ページ(basis=primary_page)
+     - 自治体・公的機関・運営会社・鉄道会社などの公式情報(official_record)
+     - 一般に確立した事実(established_fact)
+       例: 源実朝は鎌倉幕府第3代将軍。対象ページに書いていなくても confirmed。
+     - 単純な計算や位置関係の導出(calculation)
+       例: 生年と来日年からの年齢計算、路線図上の駅の並び、駅数。
+     「そのページに書いていない」という理由だけで not_found_in_primary にしないこと。
+
+   wording_difference: 表現・概数は違うが、一次情報と両立する。
+     例: 記事「駐車場800台規模」/公式「826台」→ 概数として妥当。
+     例: 記事「最古級」/公式「現存する唯一」→ 論理的に両立しうる。
+
+   not_found_in_primary: 情報源は開けたが、その記述が見つからず、上記の公的情報・
+     確立した事実・計算でも確認できなかった(=未確認。誤りとは限らない)。
+
+   source_unavailable: 情報源そのものを確認できなかった
+     (JavaScript依存で本文が取れない、アクセス制限、取得エラー等)。
+     「確認できなかった」と「確認したが載っていなかった」を必ず区別すること。
+
+   contradicted: 一次情報と明確に両立しない場合のみ。
+     例: 記事「辻堂駅北口から徒歩数分」/公式「辻堂駅からタクシー約10分」
+     例: 記事「明治期から続く」/公式「昭和4年創業」
+     例: 記事「普段は非公開」/公式「通常公開」
+     例: 記事「1845年生まれ、1869年来日時27歳」→ 計算上24歳
+     概数・言い換え・包含関係で両立しうるものは contradicted にしないこと。
+     contradicted にする場合は articleValue と primaryValue を必ず書き、
+     logicallyCompatible=false とすること。
+
+4. 他メディアの取材コメントと思われる人物の発言があれば hasQuotedComment=true。
+5. 一次情報同士が食い違う、判断が難しいなど人の確認が必要なら needsHuman=true。
+6. 記事単位の判定は次の基準で参考値を出す(最終判定はシステムが行う)。
+   confirmed: 重要な事実に明確な矛盾がない(軽微な未確認情報のみ)。
+   fix: 明確な contradicted があるが、局所修正で記事の価値を保てる。
+   rewrite: タイトル・dek・中心テーマに複数の明確な事実誤認がある。
+            not_found_in_primary がいくら多くても、それだけで rewrite にしない。
+   review_required: 情報源にアクセスできない、情報源同士が食い違う、判断困難。
 最後に必ず submit_audit ツールで提出すること。"""
 
 
@@ -161,7 +226,6 @@ def blocked_domains():
 # 集計・レポート処理はすべて normalize_result() を通した結果だけを扱う。
 
 VERDICTS = ("confirmed", "fix", "rewrite", "review_required")
-CLAIM_STATUSES = ("confirmed", "not_found_in_primary", "contradicted")
 COMPLETED_VERDICTS = ("confirmed", "fix", "rewrite")  # 再開時にスキップしてよい判定
 SNIPPET_LEN = 300
 
@@ -206,6 +270,7 @@ def normalize_result(raw, article_id):
         return ({
             "verdict": "review_required", "summary": "監査応答が想定外の形式のため要確認",
             "claims": [], "primarySources": [], "hasQuotedComment": False, "anomalies": anomalies,
+            "rulesVersion": RULES_VERSION,
         }, anomalies)
 
     # claims
@@ -226,9 +291,22 @@ def normalize_result(raw, article_id):
             if status not in CLAIM_STATUSES:
                 note(f"claims[{idx}].status", status, "statusが欠損または想定外の値")
                 status = "unparsed"
+            role = c.get("role")
+            if role not in CLAIM_ROLES:
+                role = "detail"  # 欠損時は骨格扱いしない(過剰判定を避ける)
+            compat = c.get("logicallyCompatible")
+            if isinstance(compat, str):
+                compat = compat.strip().lower() == "true"
+            elif not isinstance(compat, bool):
+                compat = None
             claims.append({
                 "claim": str(c.get("claim") or ""),
+                "role": role,
                 "status": status,
+                "basis": str(c.get("basis") or ""),
+                "articleValue": str(c.get("articleValue") or ""),
+                "primaryValue": str(c.get("primaryValue") or ""),
+                "logicallyCompatible": compat,
                 "primaryUrl": str(c.get("primaryUrl") or ""),
                 "note": str(c.get("note") or ""),
             })
@@ -251,23 +329,92 @@ def normalize_result(raw, article_id):
             note("hasQuotedComment", quoted, "booleanではない")
         quoted = False
 
-    # verdict(モデル側の "ok" は "confirmed" として扱う)
-    verdict = raw.get("verdict")
-    if verdict == "ok":
-        verdict = "confirmed"
-    if verdict not in VERDICTS:
-        note("verdict", verdict, "verdictが欠損または想定外の値")
-        verdict = "review_required"
+    # needsHuman
+    needs_human = raw.get("needsHuman")
+    if isinstance(needs_human, str):
+        needs_human = needs_human.strip().lower() == "true"
+    elif not isinstance(needs_human, bool):
+        needs_human = False
+
+    # モデルの判定は参考値として保存するだけ。最終判定は decide_verdict() で決める。
+    model_verdict = raw.get("verdict")
+    if model_verdict == "ok":
+        model_verdict = "confirmed"
+    if model_verdict not in VERDICTS:
+        model_verdict = None
 
     summary = raw.get("summary")
     summary = summary if isinstance(summary, str) else ("" if summary is None else _snippet(summary))
 
-    if anomalies:
-        verdict = "review_required"
+    claims = [apply_tolerance(c) for c in claims]
+    verdict, reasons = decide_verdict(claims, needs_human, anomalies)
     return ({
-        "verdict": verdict, "summary": summary, "claims": claims,
-        "primarySources": sources, "hasQuotedComment": quoted, "anomalies": anomalies,
+        "verdict": verdict, "verdictReasons": reasons, "modelVerdict": model_verdict,
+        "summary": summary, "claims": claims, "primarySources": sources,
+        "hasQuotedComment": quoted, "needsHuman": needs_human,
+        "anomalies": anomalies, "rulesVersion": RULES_VERSION,
     }, anomalies)
+
+
+# ---------- 判定ルール(RULES_VERSION 2) ----------
+APPROX_WORDS = ("約", "およそ", "規模", "程度", "前後", "近く", "超", "余り", "以上", "級", "ほど", "強", "弱")
+APPROX_TOLERANCE = 0.10  # 概数表現なら±10%までは両立とみなす
+
+
+def _first_number(text):
+    m = re.search(r"\d[\d,]*(?:\.\d+)?", text or "")
+    if not m:
+        return None
+    try:
+        return float(m.group(0).replace(",", ""))
+    except ValueError:
+        return None
+
+
+def apply_tolerance(c):
+    """contradicted のうち、両立しうるものを wording_difference に戻す(過剰判定の抑止)。
+    1) モデル自身が logicallyCompatible=true と答えている
+    2) 記事側が概数表現で、数値の差が±10%以内(例: 800台規模 / 826台)"""
+    if c.get("status") != "contradicted":
+        return c
+    if c.get("logicallyCompatible") is True:
+        return dict(c, status="wording_difference", note=(c.get("note", "") + " [自動: 両立しうるため wording_difference]").strip())
+    av, pv = c.get("articleValue", ""), c.get("primaryValue", "")
+    a_num, p_num = _first_number(av), _first_number(pv)
+    if a_num and p_num and any(w in av for w in APPROX_WORDS):
+        if abs(a_num - p_num) / p_num <= APPROX_TOLERANCE:
+            return dict(c, status="wording_difference",
+                        note=(c.get("note", "") + " [自動: 概数として許容範囲]").strip())
+    return c
+
+
+def decide_verdict(claims, needs_human=False, anomalies=None):
+    """記事単位の最終判定。
+    - 応答形式の異常 → review_required
+    - 骨格(title/dek/central)に明確なcontradictedが2件以上 → rewrite
+    - 明確なcontradictedが1件以上 → fix
+    - 骨格の情報が未確認(not_found)・確認不能(source_unavailable)、または needsHuman → review_required
+    - それ以外(detailの未確認のみを含む)→ confirmed
+    not_found_in_primary は件数がいくら多くても rewrite/fix の理由にしない。"""
+    reasons = []
+    if anomalies:
+        return "review_required", ["応答形式の異常"]
+    contradicted = [c for c in claims if c.get("status") == "contradicted"]
+    core_contradicted = [c for c in contradicted if c.get("role") in CORE_ROLES]
+    core_unverified = [c for c in claims if c.get("role") in CORE_ROLES
+                       and c.get("status") in ("not_found_in_primary", "source_unavailable")]
+    if len(core_contradicted) >= 2:
+        return "rewrite", [f"骨格の明確な誤り{len(core_contradicted)}件"]
+    if contradicted:
+        reasons.append(f"明確な誤り{len(contradicted)}件")
+        if core_unverified or needs_human:
+            reasons.append("骨格の未確認・要人確認あり")
+        return "fix", reasons
+    if core_unverified:
+        return "review_required", [f"骨格の情報が未確認・確認不能{len(core_unverified)}件"]
+    if needs_human:
+        return "review_required", ["AIでは判断困難・情報源の食い違い"]
+    return "confirmed", reasons
 
 
 def log_anomalies(article_id, anomalies):
@@ -321,42 +468,68 @@ def load_previous_results(paths):
 
 # ---------- レポート ----------
 
+STATUS_LABELS = {
+    "contradicted": "明確な誤り",
+    "source_unavailable": "情報源を確認できず",
+    "not_found_in_primary": "未確認(誤りとは限らない)",
+    "wording_difference": "表現・概数の違い(許容)",
+    "unparsed": "形式異常",
+}
+
+
+def count_results(results):
+    """記事単位と記述単位の件数を数える。想定外の値があっても落ちない。"""
+    counts = {v: 0 for v in VERDICTS}
+    claim_counts = {k: 0 for k in CLAIM_STATUSES}
+    claim_counts["unparsed"] = 0
+    for r in results:
+        if not isinstance(r, dict):
+            counts["review_required"] += 1
+            continue
+        v = r.get("verdict")
+        v = "confirmed" if v == "ok" else v
+        counts[v if v in counts else "review_required"] += 1
+        claims = r.get("claims")
+        for c in claims if isinstance(claims, list) else []:
+            st = c.get("status") if isinstance(c, dict) else "unparsed"
+            st = st if st in claim_counts else "unparsed"
+            claim_counts[st] += 1
+    return counts, claim_counts
+
+
 def build_report(results, stamp):
     """正規化済みの結果からMarkdownレポートを作る。想定外の値があっても落ちない。"""
     order = {"rewrite": 0, "fix": 1, "review_required": 2, "confirmed": 3}
-    counts = {v: 0 for v in VERDICTS}
-    claim_counts = {}
-    for r in results:
-        v = r.get("verdict") if isinstance(r, dict) else None
-        v = v if v in counts else "review_required"
-        counts[v] += 1
-        for c in (r.get("claims") or []) if isinstance(r, dict) else []:
-            st = c.get("status") if isinstance(c, dict) else "unparsed"
-            claim_counts[st] = claim_counts.get(st, 0) + 1
-
-    lines = [f"# 一次情報照合レポート({stamp})", "",
+    counts, claim_counts = count_results(results)
+    lines = [f"# 一次情報照合レポート({stamp} / 判定ルール v{RULES_VERSION})", "",
              f"対象 {len(results)} 件",
-             "判定: " + " / ".join(f"{k}: {counts[k]}件" for k in VERDICTS),
-             "記述単位: " + (" / ".join(f"{k}: {v}件" for k, v in sorted(claim_counts.items())) or "なし"),
+             "記事単位: " + " / ".join(f"{k}: {counts[k]}件" for k in VERDICTS),
+             "記述単位: " + " / ".join(f"{k}: {v}件" for k, v in claim_counts.items()),
              ""]
-    for r in sorted(results, key=lambda r: (order.get(r.get("verdict"), 2), r.get("id", 0))):
-        if r.get("verdict") == "confirmed":
+    status_order = list(STATUS_LABELS)
+    for r in sorted([r for r in results if isinstance(r, dict)],
+                    key=lambda r: (order.get(r.get("verdict"), 2), r.get("id", 0))):
+        claims = [c for c in (r.get("claims") or []) if isinstance(c, dict)] if isinstance(r.get("claims"), list) else []
+        notable = [c for c in claims if c.get("status") not in ("confirmed", "wording_difference")]
+        if r.get("verdict") == "confirmed" and not notable:
             continue
         lines.append(f"## [{r.get('verdict')}] id:{r.get('id')} {r.get('title', '')}")
+        if r.get("verdictReasons"):
+            lines.append(f"- 判定理由: {' / '.join(r['verdictReasons'])}")
         if r.get("summary"):
-            lines.append(f"- 理由: {r['summary']}")
+            lines.append(f"- 校閲メモ: {r['summary']}")
         if r.get("hasQuotedComment"):
             lines.append("- 人物の発言・取材コメントあり")
         for an in r.get("anomalies") or []:
             if isinstance(an, dict):
                 lines.append(f"- 想定外の応答: {an.get('field')} (型:{an.get('type')}) {an.get('reason')} / {an.get('snippet')}")
-        for c in r.get("claims") or []:
-            if not isinstance(c, dict):
-                lines.append(f"- unparsed: {_snippet(c)}")
-                continue
-            if c.get("status") != "confirmed":
-                extra = f"({c['note']})" if c.get("note") else ""
-                lines.append(f"- {c.get('status', 'unparsed')}: {c.get('claim', '')}{extra}")
+        for c in sorted(notable, key=lambda c: status_order.index(c["status"]) if c.get("status") in status_order else 99):
+            role = "【骨格】" if c.get("role") in CORE_ROLES else ""
+            vals = ""
+            if c.get("status") == "contradicted" and (c.get("articleValue") or c.get("primaryValue")):
+                vals = f" 記事「{c.get('articleValue', '')}」/ 一次情報「{c.get('primaryValue', '')}」"
+            extra = f"({c['note']})" if c.get("note") else ""
+            lines.append(f"- {STATUS_LABELS.get(c.get('status'), c.get('status'))}{role}: {c.get('claim', '')}{vals}{extra}")
         lines.append("")
     return "\n".join(lines), counts
 
@@ -396,7 +569,8 @@ def main(argv=None, client=None, articles_override=None, sleep_sec=2):
     todo = []
     for a in articles:
         p = prev.get(a["id"])
-        if isinstance(p, dict) and p.get("verdict") in COMPLETED_VERDICTS:
+        if (isinstance(p, dict) and p.get("verdict") in COMPLETED_VERDICTS
+                and p.get("rulesVersion") == RULES_VERSION):
             p = dict(p, resumed=True)
             results.append(p)
             append_checkpoint(ckpt_path, p)
@@ -419,6 +593,7 @@ def main(argv=None, client=None, articles_override=None, sleep_sec=2):
             print(f"[anomaly] id:{a['id']} 監査処理で例外: {type(e).__name__}: {_snippet(str(e))}", flush=True)
             r = {"verdict": "review_required", "summary": f"監査処理で例外: {type(e).__name__}: {e}",
                  "claims": [], "primarySources": [], "hasQuotedComment": False,
+                 "rulesVersion": RULES_VERSION,
                  "anomalies": [{"field": "(exception)", "type": type(e).__name__,
                                 "reason": "監査処理で例外", "snippet": _snippet(str(e))}]}
         r.update({"id": a["id"], "slug": a.get("slug", ""), "title": a.get("title", "")})
