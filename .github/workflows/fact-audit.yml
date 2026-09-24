@@ -2,6 +2,9 @@ name: Fact Audit (primary sources)
 
 # 既存記事を一次情報だけで照合する監査。手動実行のみ。
 # articles.json は一切変更せず、レポートをArtifactとして保存する。
+# 1記事ごとに audit_reports/*.jsonl へ追記するため、途中で失敗しても
+# 処理済みの結果はArtifactに残る。resume_run_id を指定すると、その実行の結果の
+# うち confirmed / fix / rewrite 済みの記事は再監査せずに引き継ぐ。
 on:
   workflow_dispatch:
     inputs:
@@ -17,6 +20,14 @@ on:
         description: '終了ID(分割実行用)'
         required: false
         default: ''
+      resume_run_id:
+        description: '引き継ぐ過去の実行のRun ID(URLの /actions/runs/<ここ>)。空なら引き継がない'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   audit:
@@ -28,6 +39,15 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install anthropic
+      - name: 過去の監査結果を取得(resume_run_id指定時のみ)
+        if: ${{ inputs.resume_run_id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: fact-audit-report
+          path: previous_reports/
+          run-id: ${{ inputs.resume_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 一次情報照合
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -36,9 +56,11 @@ jobs:
           [ -n "${{ inputs.ids }}" ] && ARGS="$ARGS --ids ${{ inputs.ids }}"
           [ -n "${{ inputs.start }}" ] && ARGS="$ARGS --start ${{ inputs.start }}"
           [ -n "${{ inputs.end }}" ] && ARGS="$ARGS --end ${{ inputs.end }}"
+          [ -d previous_reports ] && ARGS="$ARGS --resume previous_reports"
           python fact_audit.py $ARGS
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: fact-audit-report
           path: audit_reports/
+          if-no-files-found: warn

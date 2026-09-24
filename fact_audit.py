@@ -17,8 +17,17 @@ web_search / web_fetch の blocked_domains で機械的に遮断しているた�
   python fact_audit.py --start 1 --end 40   # ID範囲(分割実行用)
 
 出力:
+  audit_reports/fact_audit_<日時>.jsonl … 1記事ごとに追記する途中経過(クラッシュしても残る)
   audit_reports/fact_audit_<日時>.json  … 記事ごとの判定詳細
   audit_reports/fact_audit_<日時>.md    … 要修正記事の一覧(人が読む用)
+
+判定: confirmed(問題なし) / fix / rewrite / review_required(応答が想定外の形式・
+例外などで自動判定できず、人の確認が必要)
+
+再開:
+  python fact_audit.py --start 1 --end 40 --resume audit_reports/
+  … 過去結果で confirmed/fix/rewrite 済みの記事は再監査せず引き継ぎ、
+    review_required と未処理の記事だけを監査する
 """
 import argparse
 import json
@@ -146,14 +155,228 @@ def blocked_domains():
     return sorted(set(out))
 
 
-def main():
+# ---------- 応答の正規化(想定外の形式でも落ちないようにする) ----------
+# LLMのツール入力は、まれに配列が「JSON文字列」のまま返る・要素がdictではなく
+# 文字列になる・フィールドが欠ける、といった形で崩れることがある。
+# 集計・レポート処理はすべて normalize_result() を通した結果だけを扱う。
+
+VERDICTS = ("confirmed", "fix", "rewrite", "review_required")
+CLAIM_STATUSES = ("confirmed", "not_found_in_primary", "contradicted")
+COMPLETED_VERDICTS = ("confirmed", "fix", "rewrite")  # 再開時にスキップしてよい判定
+SNIPPET_LEN = 300
+
+
+def _snippet(value):
+    try:
+        text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, default=str)
+    except Exception:
+        text = repr(value)
+    return text[:SNIPPET_LEN] + ("…" if len(text) > SNIPPET_LEN else "")
+
+
+def _maybe_json(value):
+    """JSON文字列ならデコードして返す。デコードできなければ元の値を返す。"""
+    if isinstance(value, str):
+        t = value.strip()
+        if t[:1] in ("{", "["):
+            try:
+                return json.loads(t)
+            except (ValueError, TypeError):
+                return value
+    return value
+
+
+def normalize_result(raw, article_id):
+    """監査ツールの応答を、集計可能な正規形に変換する。
+    戻り値: (result, anomalies)
+      result   … 必ず dict。verdict は VERDICTS のいずれか。claims は dict のリスト。
+      anomalies… 想定外形式の記録(空なら正常)。1件でもあれば verdict=review_required。
+    """
+    anomalies = []
+
+    def note(field, value, reason):
+        anomalies.append({
+            "field": field, "type": type(value).__name__,
+            "reason": reason, "snippet": _snippet(value),
+        })
+
+    raw = _maybe_json(raw)
+    if not isinstance(raw, dict):
+        note("(response)", raw, "応答がdictではない")
+        return ({
+            "verdict": "review_required", "summary": "監査応答が想定外の形式のため要確認",
+            "claims": [], "primarySources": [], "hasQuotedComment": False, "anomalies": anomalies,
+        }, anomalies)
+
+    # claims
+    claims_raw = _maybe_json(raw.get("claims"))
+    claims = []
+    if claims_raw is None:
+        note("claims", claims_raw, "claimsが欠損")
+    elif not isinstance(claims_raw, list):
+        note("claims", claims_raw, "claimsがリストではない")
+    else:
+        for idx, c in enumerate(claims_raw):
+            c = _maybe_json(c)
+            if not isinstance(c, dict):
+                note(f"claims[{idx}]", c, "要素がdictではない")
+                claims.append({"claim": _snippet(c), "status": "unparsed", "primaryUrl": "", "note": "想定外形式の要素"})
+                continue
+            status = c.get("status")
+            if status not in CLAIM_STATUSES:
+                note(f"claims[{idx}].status", status, "statusが欠損または想定外の値")
+                status = "unparsed"
+            claims.append({
+                "claim": str(c.get("claim") or ""),
+                "status": status,
+                "primaryUrl": str(c.get("primaryUrl") or ""),
+                "note": str(c.get("note") or ""),
+            })
+
+    # primarySources
+    sources_raw = _maybe_json(raw.get("primarySources"))
+    if isinstance(sources_raw, list):
+        sources = [str(u) for u in sources_raw if isinstance(u, (str, int, float))]
+    else:
+        if sources_raw is not None:
+            note("primarySources", sources_raw, "primarySourcesがリストではない")
+        sources = []
+
+    # hasQuotedComment
+    quoted = raw.get("hasQuotedComment")
+    if isinstance(quoted, str):
+        quoted = quoted.strip().lower() == "true"
+    elif not isinstance(quoted, bool):
+        if quoted is not None:
+            note("hasQuotedComment", quoted, "booleanではない")
+        quoted = False
+
+    # verdict(モデル側の "ok" は "confirmed" として扱う)
+    verdict = raw.get("verdict")
+    if verdict == "ok":
+        verdict = "confirmed"
+    if verdict not in VERDICTS:
+        note("verdict", verdict, "verdictが欠損または想定外の値")
+        verdict = "review_required"
+
+    summary = raw.get("summary")
+    summary = summary if isinstance(summary, str) else ("" if summary is None else _snippet(summary))
+
+    if anomalies:
+        verdict = "review_required"
+    return ({
+        "verdict": verdict, "summary": summary, "claims": claims,
+        "primarySources": sources, "hasQuotedComment": quoted, "anomalies": anomalies,
+    }, anomalies)
+
+
+def log_anomalies(article_id, anomalies):
+    for an in anomalies:
+        print(f"[anomaly] id:{article_id} field={an['field']} type={an['type']} "
+              f"reason={an['reason']} snippet={an['snippet']}", flush=True)
+
+
+# ---------- 途中結果の保存と再開 ----------
+
+def append_checkpoint(path, result):
+    """1記事終わるごとにJSONLへ追記する。途中でクラッシュしても処理済みの結果は残る。"""
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(result, ensure_ascii=False) + "\n")
+        f.flush()
+        os.fsync(f.fileno())
+
+
+def load_previous_results(paths):
+    """過去の監査結果(.jsonl / .json / それらを含むディレクトリ)を読み込み、
+    記事IDごとに最新の結果を返す。壊れた行は読み飛ばす。"""
+    files = []
+    for p in paths:
+        if os.path.isdir(p):
+            for root, _dirs, names in os.walk(p):
+                files += [os.path.join(root, n) for n in names if n.endswith((".jsonl", ".json"))]
+        elif os.path.isfile(p):
+            files.append(p)
+    prev = {}
+    for fp in sorted(files):
+        try:
+            with open(fp, encoding="utf-8") as f:
+                if fp.endswith(".jsonl"):
+                    items = []
+                    for line in f:
+                        try:
+                            items.append(json.loads(line))
+                        except ValueError:
+                            continue
+                else:
+                    data = json.load(f)
+                    items = data if isinstance(data, list) else []
+        except (OSError, ValueError):
+            print(f"[resume] 読み込めないファイルをスキップ: {fp}", flush=True)
+            continue
+        for it in items:
+            if isinstance(it, dict) and isinstance(it.get("id"), int):
+                prev[it["id"]] = it
+    return prev
+
+
+# ---------- レポート ----------
+
+def build_report(results, stamp):
+    """正規化済みの結果からMarkdownレポートを作る。想定外の値があっても落ちない。"""
+    order = {"rewrite": 0, "fix": 1, "review_required": 2, "confirmed": 3}
+    counts = {v: 0 for v in VERDICTS}
+    claim_counts = {}
+    for r in results:
+        v = r.get("verdict") if isinstance(r, dict) else None
+        v = v if v in counts else "review_required"
+        counts[v] += 1
+        for c in (r.get("claims") or []) if isinstance(r, dict) else []:
+            st = c.get("status") if isinstance(c, dict) else "unparsed"
+            claim_counts[st] = claim_counts.get(st, 0) + 1
+
+    lines = [f"# 一次情報照合レポート({stamp})", "",
+             f"対象 {len(results)} 件",
+             "判定: " + " / ".join(f"{k}: {counts[k]}件" for k in VERDICTS),
+             "記述単位: " + (" / ".join(f"{k}: {v}件" for k, v in sorted(claim_counts.items())) or "なし"),
+             ""]
+    for r in sorted(results, key=lambda r: (order.get(r.get("verdict"), 2), r.get("id", 0))):
+        if r.get("verdict") == "confirmed":
+            continue
+        lines.append(f"## [{r.get('verdict')}] id:{r.get('id')} {r.get('title', '')}")
+        if r.get("summary"):
+            lines.append(f"- 理由: {r['summary']}")
+        if r.get("hasQuotedComment"):
+            lines.append("- 人物の発言・取材コメントあり")
+        for an in r.get("anomalies") or []:
+            if isinstance(an, dict):
+                lines.append(f"- 想定外の応答: {an.get('field')} (型:{an.get('type')}) {an.get('reason')} / {an.get('snippet')}")
+        for c in r.get("claims") or []:
+            if not isinstance(c, dict):
+                lines.append(f"- unparsed: {_snippet(c)}")
+                continue
+            if c.get("status") != "confirmed":
+                extra = f"({c['note']})" if c.get("note") else ""
+                lines.append(f"- {c.get('status', 'unparsed')}: {c.get('claim', '')}{extra}")
+        lines.append("")
+    return "\n".join(lines), counts
+
+
+def make_client():
+    return anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+
+def main(argv=None, client=None, articles_override=None, sleep_sec=2):
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", default="")
     ap.add_argument("--start", type=int, default=None)
     ap.add_argument("--end", type=int, default=None)
-    args = ap.parse_args()
+    ap.add_argument("--resume", action="append", default=[],
+                    help="過去の監査結果(.jsonl/.json/ディレクトリ)。confirmed/fix/rewrite済みの記事は再監査しない")
+    ap.add_argument("--out-dir", default=OUT_DIR)
+    args = ap.parse_args(argv)
 
-    articles = sorted([a for a in g.load_json(g.ARTICLES_JSON_PATH) if not a.get("mergedInto")], key=lambda a: a["id"])
+    source = articles_override if articles_override is not None else g.load_json(g.ARTICLES_JSON_PATH)
+    articles = sorted([a for a in source if not a.get("mergedInto")], key=lambda a: a["id"])
     if args.ids:
         want = {int(x) for x in args.ids.split(",") if x.strip()}
         articles = [a for a in articles if a["id"] in want]
@@ -162,52 +385,61 @@ def main():
     if args.end is not None:
         articles = [a for a in articles if a["id"] <= args.end]
 
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    blocked = blocked_domains()
+    os.makedirs(args.out_dir, exist_ok=True)
+    stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M%S")
+    ckpt_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.jsonl")
+    json_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.json")
+    md_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.md")
+
+    prev = load_previous_results(args.resume) if args.resume else {}
     results = []
+    todo = []
     for a in articles:
+        p = prev.get(a["id"])
+        if isinstance(p, dict) and p.get("verdict") in COMPLETED_VERDICTS:
+            p = dict(p, resumed=True)
+            results.append(p)
+            append_checkpoint(ckpt_path, p)
+        else:
+            todo.append(a)
+    if prev:
+        print(f"[resume] 過去結果から{len(results)}件を引き継ぎ、{len(todo)}件を監査します", flush=True)
+
+    if todo and client is None:
+        client = make_client()
+    blocked = blocked_domains()
+    for a in todo:
         print(f"[audit] id:{a['id']} {a['title']}", flush=True)
         try:
-            r = audit_one(client, a, blocked)
+            raw = audit_one(client, a, blocked)
+            r, anomalies = normalize_result(raw, a["id"])
+            if anomalies:
+                log_anomalies(a["id"], anomalies)
         except Exception as e:  # 1記事の失敗で全体を止めない
-            r = {"verdict": "error", "summary": f"監査失敗: {e}", "claims": [], "primarySources": [], "hasQuotedComment": False}
-        r.update({"id": a["id"], "slug": a["slug"], "title": a["title"]})
+            print(f"[anomaly] id:{a['id']} 監査処理で例外: {type(e).__name__}: {_snippet(str(e))}", flush=True)
+            r = {"verdict": "review_required", "summary": f"監査処理で例外: {type(e).__name__}: {e}",
+                 "claims": [], "primarySources": [], "hasQuotedComment": False,
+                 "anomalies": [{"field": "(exception)", "type": type(e).__name__,
+                                "reason": "監査処理で例外", "snippet": _snippet(str(e))}]}
+        r.update({"id": a["id"], "slug": a.get("slug", ""), "title": a.get("title", "")})
         results.append(r)
-        time.sleep(2)
+        append_checkpoint(ckpt_path, r)
+        if sleep_sec:
+            time.sleep(sleep_sec)
 
-    os.makedirs(OUT_DIR, exist_ok=True)
-    stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M")
-    json_path = os.path.join(OUT_DIR, f"fact_audit_{stamp}.json")
-    md_path = os.path.join(OUT_DIR, f"fact_audit_{stamp}.md")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=1)
-
-    order = {"rewrite": 0, "fix": 1, "error": 2, "ok": 3}
-    lines = [f"# 一次情報照合レポート({stamp})", ""]
-    counts = {}
-    for r in results:
-        counts[r["verdict"]] = counts.get(r["verdict"], 0) + 1
-    lines.append("判定: " + " / ".join(f"{k}: {v}件" for k, v in sorted(counts.items(), key=lambda x: order.get(x[0], 9))))
-    lines.append("")
-    for r in sorted(results, key=lambda r: (order.get(r["verdict"], 9), r["id"])):
-        if r["verdict"] == "ok":
-            continue
-        lines.append(f"## [{r['verdict']}] id:{r['id']} {r['title']}")
-        lines.append(f"- 理由: {r.get('summary','')}")
-        if r.get("hasQuotedComment"):
-            lines.append("- 人物の発言・取材コメントあり")
-        for c in r.get("claims", []):
-            if c.get("status") != "confirmed":
-                lines.append(f"- {c['status']}: {c['claim']}" + (f"({c['note']})" if c.get("note") else ""))
-        lines.append("")
+    report, counts = build_report(results, stamp)
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-
+        f.write(report)
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path:
         with open(summary_path, "a", encoding="utf-8") as f:
-            f.write("\n".join(lines))
-    print(f"完了: {json_path}")
+            f.write(report)
+    print("集計: " + " / ".join(f"{k}: {v}" for k, v in counts.items()), flush=True)
+    print(f"完了: {json_path}", flush=True)
+    # review_required は「要確認」であり異常終了ではないため、終了コードは0とする
+    return 0
 
 
 if __name__ == "__main__":
