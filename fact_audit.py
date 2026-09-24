@@ -24,6 +24,12 @@ web_search / web_fetch の blocked_domains で機械的に遮断しているた�
 判定: confirmed(問題なし) / fix / rewrite / review_required(応答が想定外の形式・
 例外などで自動判定できず、人の確認が必要)
 
+モード:
+  full   (既定) 新規記事・初回監査。記事全体から claim を抽出して一次情報と照合する。
+  verify 修正後の確認。前回 contradicted の claim だけを再判定する(記事全文は送らない)。
+         python fact_audit.py --mode verify --ids 1,2,3 --previous previous_reports/
+         詳細は fact_verify.py を参照。
+
 再開:
   python fact_audit.py --start 1 --end 40 --resume audit_reports/
   … 過去結果で confirmed/fix/rewrite 済みの記事は再監査せず引き継ぎ、
@@ -461,7 +467,8 @@ def load_previous_results(paths):
             print(f"[resume] 読み込めないファイルをスキップ: {fp}", flush=True)
             continue
         for it in items:
-            if isinstance(it, dict) and isinstance(it.get("id"), int):
+            # verify モードの結果は claim の一部しか持たないため、full の再開・比較には使わない
+            if isinstance(it, dict) and isinstance(it.get("id"), int) and it.get("mode") != "verify":
                 prev[it["id"]] = it
     return prev
 
@@ -538,7 +545,7 @@ def make_client():
     return anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 
-def main(argv=None, client=None, articles_override=None, sleep_sec=2):
+def main(argv=None, client=None, articles_override=None, sleep_sec=2, fetcher=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", default="")
     ap.add_argument("--start", type=int, default=None)
@@ -546,6 +553,10 @@ def main(argv=None, client=None, articles_override=None, sleep_sec=2):
     ap.add_argument("--resume", action="append", default=[],
                     help="過去の監査結果(.jsonl/.json/ディレクトリ)。confirmed/fix/rewrite済みの記事は再監査しない")
     ap.add_argument("--out-dir", default=OUT_DIR)
+    ap.add_argument("--mode", choices=["full", "verify"], default="full",
+                    help="full=記事全体を監査(新規・初回) / verify=前回contradictedのclaimだけ再確認(修正後)")
+    ap.add_argument("--previous", action="append", default=[],
+                    help="verify用: 前回の監査結果(.jsonl/.json/ディレクトリ)")
     args = ap.parse_args(argv)
 
     source = articles_override if articles_override is not None else g.load_json(g.ARTICLES_JSON_PATH)
@@ -560,6 +571,17 @@ def main(argv=None, client=None, articles_override=None, sleep_sec=2):
 
     os.makedirs(args.out_dir, exist_ok=True)
     stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M%S")
+
+    if args.mode == "verify":
+        # 修正後の再確認: 前回 contradicted の claim だけを、コード判定→記事単位の一括APIで確認する。
+        # 記事全文の再監査は行わない。
+        import fact_verify
+        if not args.previous:
+            print("verify モードには --previous(前回の監査結果)が必要です", flush=True)
+            return 2
+        fact_verify.run_verify(articles, args.previous, args.out_dir, stamp,
+                               client=client, fetcher=fetcher, sleep_sec=sleep_sec)
+        return 0
     ckpt_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.jsonl")
     json_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.json")
     md_path = os.path.join(args.out_dir, f"fact_audit_{stamp}.md")

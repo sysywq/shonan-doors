@@ -8,6 +8,18 @@ name: Fact Audit (primary sources)
 on:
   workflow_dispatch:
     inputs:
+      mode:
+        description: 'full=記事全体を監査(新規・初回) / verify=前回contradictedだけ再確認(修正後)'
+        required: true
+        type: choice
+        options:
+          - full
+          - verify
+        default: full
+      previous_run_id:
+        description: 'verify用: 前回の監査(fullまたはverify)のRun ID。verifyでは必須'
+        required: false
+        default: ''
       ids:
         description: '対象記事ID(カンマ区切り。空なら範囲指定または全件)'
         required: false
@@ -44,13 +56,21 @@ jobs:
           python-version: '3.11'
       - run: pip install anthropic
       - name: 過去の監査結果を取得(resume_run_id指定時のみ)
-        if: ${{ inputs.resume_run_id != '' }}
+        if: ${{ inputs.mode == 'full' && inputs.resume_run_id != '' }}
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: fact-audit-report
           path: previous_reports/
           run-id: ${{ inputs.resume_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: verify用の前回結果を取得
+        if: ${{ inputs.mode == 'verify' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: fact-audit-report
+          path: previous_reports/
+          run-id: ${{ inputs.previous_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 比較用の旧結果を取得(compare_run_id指定時のみ)
         if: ${{ inputs.compare_run_id != '' }}
@@ -65,11 +85,18 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          ARGS=""
+          if [ "${{ inputs.mode }}" = "verify" ] && [ -z "${{ inputs.previous_run_id }}" ]; then
+            echo "::error::verify モードでは previous_run_id が必須です"; exit 1
+          fi
+          ARGS="--mode ${{ inputs.mode }}"
           [ -n "${{ inputs.ids }}" ] && ARGS="$ARGS --ids ${{ inputs.ids }}"
           [ -n "${{ inputs.start }}" ] && ARGS="$ARGS --start ${{ inputs.start }}"
           [ -n "${{ inputs.end }}" ] && ARGS="$ARGS --end ${{ inputs.end }}"
-          [ -d previous_reports ] && ARGS="$ARGS --resume previous_reports"
+          if [ "${{ inputs.mode }}" = "verify" ]; then
+            ARGS="$ARGS --previous previous_reports"
+          elif [ -d previous_reports ]; then
+            ARGS="$ARGS --resume previous_reports"
+          fi
           python fact_audit.py $ARGS
       - name: 新旧比較
         if: ${{ always() && inputs.compare_run_id != '' }}
