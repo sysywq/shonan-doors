@@ -1,0 +1,44 @@
+name: Fact Audit (primary sources)
+
+# 既存記事を一次情報だけで照合する監査。手動実行のみ。
+# articles.json は一切変更せず、レポートをArtifactとして保存する。
+on:
+  workflow_dispatch:
+    inputs:
+      ids:
+        description: '対象記事ID(カンマ区切り。空なら範囲指定または全件)'
+        required: false
+        default: ''
+      start:
+        description: '開始ID(分割実行用)'
+        required: false
+        default: ''
+      end:
+        description: '終了ID(分割実行用)'
+        required: false
+        default: ''
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install anthropic
+      - name: 一次情報照合
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=""
+          [ -n "${{ inputs.ids }}" ] && ARGS="$ARGS --ids ${{ inputs.ids }}"
+          [ -n "${{ inputs.start }}" ] && ARGS="$ARGS --start ${{ inputs.start }}"
+          [ -n "${{ inputs.end }}" ] && ARGS="$ARGS --end ${{ inputs.end }}"
+          python fact_audit.py $ARGS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fact-audit-report
+          path: audit_reports/

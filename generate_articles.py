@@ -16,6 +16,14 @@
 - 生成された記事はスキーマ検証を通ったものだけを追記する。
 - articles.json への書き込みはtmpファイル+os.replaceによる原子的な置換で行う。
 - 重複記事チェック(直近90日、タイトル完全一致/タグ重複率)。
+- 同一対象チェック(全期間): 同じ一次情報URL、同じ対象(店舗・施設・イベント・人物)の
+  名称、本文の高類似度のいずれかに該当すれば、別記事として追加しない。
+  「1つの対象につき記事は1本」が原則(イベントは開催年度が違う場合のみ別記事可)。
+- 情報源ポリシー: 事実は一次情報(公式サイト・公式SNS・本人/主催者の発表・行政)のみ。
+  他メディア(新聞・ニュースサイト・地域まとめメディア・ブログ・口コミサイト等)は
+  ネタ探しのきっかけにだけ使ってよく、事実確認・表現の参考には使わない。
+  sourcesに他メディアのURLが含まれる記事、
+  人物の発言を引用している記事は機械的にrejectする。
 - APIレスポンスの型検証(listでない・件数異常・dict以外混在を検出して安全停止)。
 
 ストック系(今回追加)の安全設計:
@@ -69,6 +77,60 @@ CAT_EN = {
     "p": "people", "c": "culture", "e": "event", "l": "life",
 }
 
+# ---------- 情報源ポリシー(一次情報のみ) ----------
+# 他メディアのドメイン。sources/linkにこれらが含まれる記事はrejectする。
+# (一次情報=店舗・団体・主催者・行政の公式サイト/公式SNS/本人が出したプレスリリース。
+#  PR TIMES等の配信サービス上の「本人が出したプレスリリース」は一次情報として扱う)
+SECONDARY_MEDIA_DOMAINS = [
+    "goguynet.jp", "jimohack-shonan.jp", "townnews.co.jp", "keizai.biz", "minkei.net",
+    "news.yahoo.co.jp", "news.goo.ne.jp", "news.livedoor.com", "excite.co.jp", "msn.com",
+    "shonanjin.com", "shonan-chilltime.com", "kanaloco.jp", "nikkei.com", "asahi.com",
+    "yomiuri.co.jp", "mainichi.jp", "sankei.com", "tokyo-np.co.jp", "nhk.or.jp",
+    "jcast.com", "itmedia.co.jp", "fashion-press.net", "walkerplus.com", "retrip.jp",
+    "ameblo.jp", "note.com", "hatenablog.com", "livedoor.blog", "fc2.com",
+    "tabelog.com", "retty.me", "hotpepper.jp", "gnavi.co.jp", "tripadvisor",
+    "wikipedia.org", "jalan.net", "iko-yo.net", "enjoytokyo.jp",
+]
+# 人物の発言の引用(=他メディアの取材コメントの流用リスク)を検出するパターン。
+QUOTE_ATTRIBUTION_PATTERNS = [
+    r"」と(話す|話した|語る|語った|語っている|コメント|述べ|明かす|明かした|笑う|笑顔)",
+    r"(店長|代表(?!する|的|作|格)|社長|オーナー|担当者|館長|会長|理事長|実行委員長)[^。\n]{0,12}「",
+]
+
+SOURCE_POLICY_BLOCK = """
+【情報源ポリシー(最重要・例外なし)】
+- 記事に書く事実(日付・場所・住所・営業時間・価格・席数・メニュー数・経歴・数値・
+  店舗の設備や立地の説明など)は、すべて一次情報で確認できたものだけを使うこと。
+  一次情報 = その店舗・企業・団体・主催者・自治体自身が出している公式サイト、
+  公式SNS、本人が発表したプレスリリース。
+- 新聞、ニュースサイト、地域まとめメディア(タウンニュース、号外NET、ジモハック、
+  みんなの経済新聞/各地の経済新聞、湘南人 等)、Yahoo!ニュース等の転載、ブログ、
+  口コミ・グルメサイト、Wikipediaは「他メディア」とみなす。他メディアは
+  「ネタ(話題)を見つけるきっかけ」としてのみ使ってよい。事実確認や、構成・
+  言い回し・切り口の参考には一切使わないこと。ネタを見つけたら、必ず公式の
+  一次情報を探し、そこに書かれている内容だけで記事を組み立てること。
+- 他メディアにしか載っていない情報(取材で得た席数・価格・店長のコメント等)は、
+  たとえ事実でも書かないこと。
+- 人物の発言を「」で引用しないこと(一次情報に本人の言葉が載っていても、要約して
+  地の文で書く)。
+- 一次情報で確認できない項目は空文字にし、本文でも触れないこと。推測で埋めない。
+- sources には、記事の事実確認に実際に使った一次情報のURLをすべて入れること
+  (他メディアのURLを入れた記事はシステムにより自動で不採用になる)。
+"""
+
+SUBJECT_POLICY_BLOCK = """
+【1つの対象につき記事は1本(重複禁止・最重要)】
+- 記事が扱う主な対象(店舗・施設・企業・イベント・展覧会・人物)が、既存記事一覧の
+  いずれかと同じであれば、切り口やタイトルを変えても新しい記事にしないこと。
+  名称の表記ゆれ(英字/カタカナ/略称/正式名称、例:「SHONAN TEA Luv.」と
+  「湘南ティーラブ」)は同一の対象として扱うこと。
+- 例外は、毎年開催されるイベントの「別の年度の回」だけ。同じ年度の同じイベントを
+  2本書くことは禁止(告知・開幕・開催中などの段階違いも同一とみなす)。
+- subjectNames には、主な対象の名称を表記ゆれも含めてすべて入れること
+  (正式名称、英字表記、カタカナ/ひらがな読み、略称)。一般名詞(「カフェ」
+  「彼岸花」など)は入れないこと。
+"""
+
 # ---------- 生成数設定(環境変数で上書き可能) ----------
 NEWS_ARTICLES_PER_DAY = int(os.environ.get("NEWS_ARTICLES_PER_DAY", "3"))
 STOCK_ARTICLES_PER_DAY = int(os.environ.get("STOCK_ARTICLES_PER_DAY", "2"))
@@ -111,6 +173,8 @@ NEWS_ARTICLE_TOOL = {
                         "dek": {"type": "string"},
                         "body": {"type": "string"},
                         "tags": {"type": "array", "items": {"type": "string"}},
+                        "subjectNames": {"type": "array", "items": {"type": "string"}, "description": "記事の主な対象(店舗・施設・イベント・人物等)の名称。英字/カナ/略称など表記ゆれもすべて"},
+                        "sources": {"type": "array", "items": {"type": "string"}, "description": "事実確認に使った一次情報のURL(公式サイト・公式SNS・本人のプレスリリース・自治体)。他メディアは禁止"},
                         "link": {"type": "string", "description": "一次情報源のURL。見つからなければ空文字"},
                         "eventStartDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 開催日をYYYY-MM-DD形式で。複数日開催の場合は初日。不明な場合は空文字"},
                         "eventEndDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 複数日開催の場合の最終日をYYYY-MM-DD形式で。単日開催または不明な場合は空文字"},
@@ -126,6 +190,7 @@ NEWS_ARTICLE_TOOL = {
                     },
                     "required": [
                         "cat", "area", "scene", "title", "dek", "body", "tags", "link",
+                        "subjectNames", "sources",
                         "eventStartDate", "eventEndDate", "eventSeriesKey",
                         "address", "access", "hours", "closedDays",
                         "instagram", "facebook", "x", "tiktok",
@@ -144,11 +209,9 @@ def build_news_system_prompt(recent_titles, event_series=None, count=None):
     if recent_titles:
         joined = "\n".join(f"- {t}" for t in recent_titles)
         recent_block = f"""
-【重複防止(必須)】
-直近90日以内に、湘南Doorsではすでに以下のタイトルの記事を公開しています。
-これらと同じ話題・同じ切り口の記事は書かないでください。少しでも似た話題を
-扱う場合は、必ず異なる切り口・異なる情報(未紹介の店舗、今回のみの新情報など)
-を選んでください。
+【既存記事一覧(重複防止・必須)】
+湘南Doorsではすでに以下の記事を公開しています(全期間)。ここに含まれる対象
+(店舗・施設・イベント・人物)は、切り口を変えても新しい記事にしないでください。
 {joined}
 """
 
@@ -189,16 +252,9 @@ Web検索を使って、直近2週間以内に実際にあった湘南エリア�
 これから開催が確定している実在のイベント情報を{count}件調べてください。
 架空の情報は絶対に作らないこと。
 
-【情報源・データの出典について（必須・例外なし）】
-タウンニュースや号外NETのような二次的なまとめメディアの記事は、ネタを見つける
-きっかけとして使うのは構いませんが、記事に実際に書く日付・住所・営業時間・
-SNSアカウント等の具体的な情報は、必ずその一次情報源（該当する店舗・団体・
-自治体の公式サイト、または公式SNSアカウント本体）まで辿って確認してから
-書いてください。二次メディアに書かれている内容をそのまま転記することは
-禁止します。一次情報源にたどり着けなかった項目は、無理に埋めず空文字("")に
-してください。
-"link"には、必ずその一次情報源のURLを入れてください（二次メディアのURLを
-入れることは禁止します。一次情報源が見つからない場合は空文字にしてください）。
+{SOURCE_POLICY_BLOCK}
+{SUBJECT_POLICY_BLOCK}
+"link"には、一次情報源のURLを入れること(見つからない場合は空文字)。
 
 【店舗・企業を紹介する記事の場合】
 カテゴリが b（企業・店舗）または g（グルメ）の記事では、上記の一次情報源から
@@ -215,7 +271,7 @@ eventStartDateを空文字にしてください(この場合、検索結果で�
 {series_block}
 本文(body)は4段落程度・合計1000文字以上とし、段落の区切りは\\n\\nで表現してください。
 事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。
-他サイトの文章の丸写しは禁止、必ず自分の言葉で書き直すこと。
+一次情報の文章も丸写しは禁止、必ず自分の言葉で書き直すこと。
 
 【submit_articlesの提出形式について(必須・厳守)】
 articlesは必ずJSON配列(Python側ではlistとして解釈される構造)として渡してください。
@@ -307,6 +363,8 @@ def build_news_entry(item, today, article_id="today-run-pending-id"):
         "title": item["title"],
         "dek": item["dek"],
         "link": item.get("link") or "",
+        "subjectNames": item.get("subjectNames") or [],
+        "sources": item.get("sources") or [],
         "date": today,
         "eventStartDate": item.get("eventStartDate") or "",
         "eventEndDate": item.get("eventEndDate") or "",
@@ -352,7 +410,9 @@ def run_news_generation(existing_articles, today, event_series=None):
     log_lines = []
     event_series = list(event_series or [])
     cutoff = (datetime.now(ZoneInfo("Asia/Tokyo")) - timedelta(days=90)).strftime("%Y-%m-%d")
-    recent_titles = [a["title"] for a in existing_articles if a.get("date", "") >= cutoff]
+    # 重複防止用の既存記事リストは90日で切らず全期間を渡す(タイトルだけでは
+    # 表記ゆれで同一対象を見落とすため、対象名とURLも併記する)。
+    recent_titles = [article_digest(a) for a in existing_articles]
 
     accepted = []             # 採用確定(ただしID未発行)のエントリ
     working_set = list(existing_articles)  # 重複チェック対象(既存記事+今回採用済み分)
@@ -374,6 +434,10 @@ def run_news_generation(existing_articles, today, event_series=None):
             series_dup_reason = check_series_year_duplicate(item, working_set)
             if series_dup_reason:
                 log_lines.append(f"スキップ(news): 「{item['title']}」— {series_dup_reason}")
+                continue
+            subject_dup_reason = find_same_subject(item, working_set)
+            if subject_dup_reason:
+                log_lines.append(f"スキップ(news): 「{item['title']}」— 同一対象の既存記事あり: {subject_dup_reason}")
                 continue
 
             entry = build_news_entry(item, today)
@@ -397,7 +461,7 @@ def run_news_generation(existing_articles, today, event_series=None):
         log_lines.append(f"news: {shortfall}件不足 → refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS}")
         # 「今回のrunで既に採用済みの記事」も重複防止リストに含めることで、
         # refillが直前に採用した記事と同じ話題を提案してくる確率を下げる。
-        refill_recent_titles = recent_titles + [a["title"] for a in accepted]
+        refill_recent_titles = recent_titles + [article_digest(a) for a in accepted]
         refill_raw_items = call_claude_news(refill_recent_titles, event_series, count=shortfall)
         refill_raw_items = validate_response_shape(refill_raw_items, label="news_refill")
         log_lines.append(f"news: 追加で{len(refill_raw_items)}件生成しました(refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS})")
@@ -496,6 +560,8 @@ STOCK_DECISION_TOOL = {
                                 "body": {"type": "string"},
                                 "tags": {"type": "array", "items": {"type": "string"}},
                                 "link": {"type": "string"},
+                                "subjectNames": {"type": "array", "items": {"type": "string"}},
+                                "sources": {"type": "array", "items": {"type": "string"}},
                                 "address": {"type": "string"},
                                 "access": {"type": "string"},
                                 "hours": {"type": "string"},
@@ -507,6 +573,7 @@ STOCK_DECISION_TOOL = {
                             },
                             "required": [
                                 "cat", "area", "scene", "title", "dek", "body", "tags", "link",
+                                "subjectNames", "sources",
                                 "address", "access", "hours", "closedDays",
                                 "instagram", "facebook", "x", "tiktok",
                             ],
@@ -533,7 +600,7 @@ def build_cannibalization_context(existing_articles, stock_topics):
     設けず全期間を対象にする。"""
     article_lines = [
         f"- [{a.get('articleType','?')}/{a['area']}/{CATS.get(a['cat'],a['cat'])}] "
-        f"{a['title']} (tags: {', '.join(a.get('tags', []))})"
+        f"{article_digest(a)} (tags: {', '.join(a.get('tags', []))})"
         for a in existing_articles
     ]
     topic_lines = [
@@ -716,8 +783,9 @@ skipReasonに理由を書いてください。良い候補が1件しか無けれ
 \\n\\nで表現すること。特定の日付に依存する内容(「9月X日開催」等)は書かないこと
 (evergreenなストック記事のため)。カテゴリがb(企業・店舗)またはg(グルメ)の場合は
 住所・アクセス・営業時間・定休日・公式SNSも一次情報源から確認して埋めてください
-(確認できない項目は空文字で構いません)。他サイトの文章の丸写しは禁止です。
-
+(確認できない項目は空文字で構いません)。一次情報の文章も丸写しは禁止です。
+{SOURCE_POLICY_BLOCK}
+{SUBJECT_POLICY_BLOCK}
 【submit_stock_decisionsの提出形式について(必須・厳守)】
 decisionsは必ずJSON配列(Python側ではlistとして解釈される構造)として渡してください。
 配列をJSON文字列としてエンコードしない、配列全体を引用符で囲まない、
@@ -831,6 +899,12 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines):
         if dup_reason:
             log_lines.append(f"stock: 「{topic['query']}」— 重複疑いのため見送り: {dup_reason}")
             continue
+        subject_dup_reason = find_same_subject(article, working_set)
+        if subject_dup_reason:
+            topic["status"] = "skipped"
+            topic["skipReason"] = f"同一対象の既存記事あり: {subject_dup_reason}"
+            log_lines.append(f"stock: 「{topic['query']}」— 同一対象の既存記事ありのため見送り: {subject_dup_reason}")
+            continue
 
         # ここまでの検証(write判定・スキーマ・重複チェック)をすべて通過し、
         # articles.jsonへ実際に追加することが確定した記事についてのみ、
@@ -847,6 +921,8 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines):
             "title": article["title"],
             "dek": article["dek"],
             "link": article.get("link") or "",
+            "subjectNames": article.get("subjectNames") or [],
+            "sources": article.get("sources") or [],
             "date": today,
             "eventStartDate": "",
             "eventEndDate": "",
@@ -939,11 +1015,108 @@ def validate_item(item, require_event_fields=True):
         return "bodyが空または短すぎる(200文字未満)"
     if not isinstance(item.get("tags"), list):
         return "tagsが配列でない"
+    src_reason = check_source_policy(item)
+    if src_reason:
+        return src_reason
     if require_event_fields:
         for key in ("eventStartDate", "eventEndDate"):
             val = item.get(key) or ""
             if val and not re.match(r"^\d{4}-\d{2}-\d{2}$", val):
                 return f"{key}の形式が不正(YYYY-MM-DD形式である必要): {val}"
+    return None
+
+
+# ---------- 情報源ポリシーのチェック ----------
+
+def _domain(url):
+    m = re.match(r"^[a-z]+://([^/?#]+)", (url or "").strip().lower())
+    return m.group(1) if m else ""
+
+
+def is_secondary_media(url):
+    d = _domain(url)
+    return bool(d) and any(d == m or d.endswith("." + m) or m in d for m in SECONDARY_MEDIA_DOMAINS)
+
+
+def check_source_policy(item):
+    """一次情報のみを使っているかを機械的に検証する。違反なら理由を返す。"""
+    sources = item.get("sources")
+    if not isinstance(sources, list) or not [u for u in sources if isinstance(u, str) and u.strip()]:
+        return "sources(一次情報URL)が空"
+    for u in sources + [item.get("link") or ""]:
+        if is_secondary_media(u):
+            return f"他メディアのURLが情報源に含まれている: {u}"
+    body = item.get("body") or ""
+    for pat in QUOTE_ATTRIBUTION_PATTERNS:
+        m = re.search(pat, body)
+        if m:
+            return f"人物の発言の引用を含む(他メディアの取材コメント流用防止): 「{m.group(0)}」"
+    names = item.get("subjectNames")
+    if not isinstance(names, list) or not [n for n in names if isinstance(n, str) and n.strip()]:
+        return "subjectNames(記事の対象名)が空"
+    return None
+
+
+# ---------- 同一対象チェック(全期間) ----------
+BODY_SIM_THRESHOLD = 0.35        # 同エリア記事との本文類似度(文字bigram Jaccard)
+MIN_SUBJECT_NAME_LEN = 3         # これより短い対象名は一般語と衝突しやすいので照合しない
+
+
+def normalize_name(s):
+    s = (s or "").lower()
+    return re.sub(r'[\s\u3000・.,、。!！?？"“”「」『』()（）\-–—_/|｜:：]', '', s)
+
+
+def normalize_url(u):
+    u = (u or "").strip().lower()
+    u = re.sub(r"^https?://", "", u)
+    u = re.sub(r"^www\.", "", u)
+    u = re.sub(r"[?#].*$", "", u)
+    return u.rstrip("/")
+
+
+def article_digest(a):
+    """プロンプトに渡す既存記事1行分(タイトル+対象名+一次情報URL)。"""
+    names = "/".join(a.get("subjectNames") or [])
+    parts = [a.get("title", "")]
+    if names:
+        parts.append(f"対象: {names}")
+    if a.get("link"):
+        parts.append(f"URL: {a['link']}")
+    return " | ".join(parts)
+
+
+def _same_event_other_year(item, existing):
+    """毎年開催イベントの別年度の回なら、同一対象でも別記事として許容する。"""
+    return item.get("cat") == "e" and existing.get("cat") == "e" and year_of(item) != year_of(existing)
+
+
+def find_same_subject(item, existing_articles):
+    """「1つの対象につき記事は1本」を機械的に担保する。期間は絞らない(全期間)。
+    次のいずれかに該当する既存記事があれば理由文字列を返す。
+      1) 一次情報URL(link)が同じ
+      2) 記事の対象名(subjectNamesの表記ゆれ含む)が、既存記事のsubjectNames・
+         タイトル・リードのいずれかに含まれる
+      3) 同エリアで本文の類似度がBODY_SIM_THRESHOLD以上
+    """
+    new_link = normalize_url(item.get("link"))
+    new_names = {normalize_name(n) for n in (item.get("subjectNames") or [])}
+    new_names = {n for n in new_names if len(n) >= MIN_SUBJECT_NAME_LEN}
+    for ex in existing_articles:
+        if _same_event_other_year(item, ex):
+            continue
+        ex_id = ex.get("id")
+        if new_link and new_link == normalize_url(ex.get("link")):
+            return f"一次情報URLが同じ(既存記事id:{ex_id})"
+        ex_names = {normalize_name(n) for n in (ex.get("subjectNames") or [])}
+        ex_text = normalize_name(ex.get("title", "") + ex.get("dek", ""))
+        for n in new_names:
+            if n in ex_names or n in ex_text:
+                return f"対象名「{n}」が既存記事id:{ex_id}と一致"
+        if ex.get("area") == item.get("area"):
+            sim = _text_similarity(item.get("body", ""), ex.get("body", ""))
+            if sim >= BODY_SIM_THRESHOLD:
+                return f"本文の類似度が高い(既存記事id:{ex_id}, 類似度{sim:.2f})"
     return None
 
 

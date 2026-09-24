@@ -536,7 +536,7 @@ def build_structured_data(item, canonical_url):
         "headline": item["title"],
         "description": item["dek"],
         "datePublished": item["date"],
-        "dateModified": item["date"],
+        "dateModified": item.get("updated") or item["date"],
         "image": [image_url],
         "author": {"@type": "Organization", "name": "湘南Doors運営事務局"},
         "publisher": {
@@ -768,6 +768,10 @@ def render_article_main(item, scenes, all_articles):
     link_html = ""
     if item.get("link"):
         link_html = f'<a class="modal-linkbtn" href="{esc(item["link"])}" target="_blank" rel="noopener">さらに詳しい情報を見る ↗</a>'
+    # 補助リンク(例: 公式メニュー表PDF)。一次情報へのリンクのみを想定。
+    for extra in item.get("extraLinks") or []:
+        if extra.get("url") and extra.get("label"):
+            link_html += f'<a class="modal-linkbtn" href="{esc(extra["url"])}" target="_blank" rel="noopener">{esc(extra["label"])} ↗</a>'
     estate_html = ""
     if item.get("estateLink"):
         estate_html = (f'<div class="related-estate"><div class="related-estate-label">{esc(item["area"])}の物件をさがす</div>'
@@ -798,7 +802,7 @@ def render_article_main(item, scenes, all_articles):
       </div>
       <div class="modal-body">
         <div class="modal-eyebrow">
-          <span class="modal-eyebrow-date">{format_date(item["date"])}</span>
+          <span class="modal-eyebrow-date">{format_date(item["date"])}{(" (更新 " + format_date(item["updated"]) + ")") if item.get("updated") else ""}</span>
           <span class="modal-eyebrow-badge" style="background:{CATS[item["cat"]]["bg"]}">{esc(CATS[item["cat"]]["label"])}</span>
           <span class="modal-eyebrow-badge modal-eyebrow-area">{esc(item["area"])}</span>
         </div>
@@ -859,6 +863,28 @@ def render_article_page(item, scenes, all_articles):
 {render_article_main(item, scenes, all_articles)}
 {FOOTER_HTML}
 <script src="/assets/common.js" defer></script>
+</body>
+</html>
+"""
+
+
+def render_merged_redirect_page(item, target):
+    """統合済み(mergedInto)記事のURL用ページ。GitHub Pagesは301を使えないため、
+    canonical(統合先)+ noindex + meta refresh + JSリダイレクトで統合先へ誘導する。
+    URL自体は残すので、既存の被リンク・検索結果からのアクセスが404にならない。"""
+    target_url = f"{SITE_DOMAIN}/articles/{target['slug']}/"
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>{esc(target["title"])} - 湘南Doors</title>
+<link rel="canonical" href="{target_url}">
+<meta name="robots" content="noindex,follow">
+<meta http-equiv="refresh" content="0; url={target_url}">
+<script>location.replace({json.dumps(target_url)});</script>
+</head>
+<body>
+<p>この記事は統合されました。<a href="{target_url}">{esc(target["title"])}</a>へ移動します。</p>
 </body>
 </html>
 """
@@ -1436,7 +1462,7 @@ def render_sitemap(articles):
     for a in sorted(articles, key=lambda x: x["date"], reverse=True):
         urls.append({
             "loc": f"{SITE_DOMAIN}/articles/{a['slug']}/",
-            "lastmod": a["date"],
+            "lastmod": a.get("updated") or a["date"],
             "priority": "0.7",
         })
     entries = "\n".join(
@@ -1508,9 +1534,22 @@ def main():
         with open(full, "w", encoding="utf-8") as f:
             f.write(content)
 
+    # 統合済み記事(mergedInto=統合先slug)は、URLだけ残して統合先へ誘導し、
+    # 一覧・関連記事・sitemap・トップには一切出さない。
+    by_slug = {a["slug"]: a for a in articles}
+    merged = [a for a in articles if a.get("mergedInto")]
+    for m in merged:
+        target = by_slug.get(m["mergedInto"])
+        if target is None or target.get("mergedInto"):
+            raise SystemExit(f"mergedIntoの統合先が不正です(id:{m['id']} → {m['mergedInto']})。ビルドを中止します。")
+    all_articles = articles
+    articles = [a for a in all_articles if not a.get("mergedInto")]
+
     try:
         for item in articles:
             write(f"articles/{item['slug']}/index.html", render_article_page(item, scenes, articles))
+        for m in merged:
+            write(f"articles/{m['slug']}/index.html", render_merged_redirect_page(m, by_slug[m["mergedInto"]]))
 
         by_area = {}
         for a in articles:
