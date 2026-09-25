@@ -25,6 +25,11 @@
   sourcesに他メディアのURLが含まれる記事、
   人物の発言を引用している記事は機械的にrejectする。
 - APIレスポンスの型検証(listでない・件数異常・dict以外混在を検出して安全停止)。
+- 公開前監査(publish_gate.py): ドラフトは生成しただけでは公開しない。上記の検証を
+  通った候補を、IDを発行する前にFact Audit(fact_audit.pyと同じ判定ルール)にかけ、
+  合格した記事だけをarticles.jsonに書き込む。不合格記事は実行レポートの
+  gate_rejectedに理由とclaimを残し、report_gate_rejections.pyがIssue化する。
+  X投稿・IndexNowは従来どおりaccepted_ids(=公開が確定した記事)だけを対象にする。
 
 ストック系(今回追加)の安全設計:
 - ニュース系が失敗しても影響を受けない/その逆も同様(それぞれ独立したtry節)。
@@ -394,7 +399,7 @@ def finalize_news_entry_id(entry, article_id):
     return entry
 
 
-def run_news_generation(existing_articles, today, event_series=None):
+def run_news_generation(existing_articles, today, event_series=None, gate_rejections=None):
     """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines, event_series)
     致命的なエラー(API呼び出し失敗・レスポンス形状異常)はそのまま例外を送出する
     (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。
@@ -406,8 +411,16 @@ def run_news_generation(existing_articles, today, event_series=None):
 
     article IDは「最終的に採用が確定した記事」にのみ、この関数の最後で
     まとめて発行する(reserve_ids)。reject/refillで捨てられた候補のために
-    IDが消費されることはない。"""
+    IDが消費されることはない。
+
+    各候補は採用前に公開前監査(run_publish_gate)にかけ、不合格なら採用せず
+    gate_rejections に記録する(不合格分もrefillの対象になる)。refillしても
+    件数に届かなかった原因に公開前監査の不合格が含まれる場合だけは、合格した
+    記事を公開するため、届かなかった分を欠いたまま採用分を返す。"""
     log_lines = []
+    if gate_rejections is None:
+        gate_rejections = []
+    gate_rejected_before = len(gate_rejections)
     event_series = list(event_series or [])
     cutoff = (datetime.now(ZoneInfo("Asia/Tokyo")) - timedelta(days=90)).strftime("%Y-%m-%d")
     # 重複防止用の既存記事リストは90日で切らず全期間を渡す(タイトルだけでは
@@ -440,7 +453,9 @@ def run_news_generation(existing_articles, today, event_series=None):
                 log_lines.append(f"スキップ(news): 「{item['title']}」— 同一対象の既存記事あり: {subject_dup_reason}")
                 continue
 
-            entry = build_news_entry(item, today)
+            entry = run_publish_gate(build_news_entry(item, today), "news", gate_rejections, log_lines)
+            if entry is None:
+                continue
             accepted.append(entry)
             working_set.append(entry)  # 同一run内での重複(今回採用済み分との重複)も以後ここで検出される
 
@@ -470,6 +485,13 @@ def run_news_generation(existing_articles, today, event_series=None):
 
     if len(accepted) >= NEWS_ARTICLES_PER_DAY:
         log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用完了")
+    elif len(gate_rejections) > gate_rejected_before:
+        # 不足の原因に公開前監査の不合格が含まれる。不合格記事を公開しないことが
+        # 目的なので、合格した記事だけを公開する(件数合わせのために基準は緩めない)。
+        log_lines.append(
+            f"警告(news): 公開前監査の不合格があり、retry上限({NEWS_REFILL_MAX_ATTEMPTS}回)後も"
+            f"{NEWS_ARTICLES_PER_DAY}件に届きませんでした。合格した{len(accepted)}件だけを公開します。"
+        )
     else:
         log_lines.append(
             f"news: retry上限({NEWS_REFILL_MAX_ATTEMPTS}回)に達しても"
@@ -847,12 +869,14 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics):
     raise RuntimeError(f"{MAX_STOCK_SELECTION_TURNS}ターン以内にsubmit_stock_decisionsが呼ばれませんでした。")
 
 
-def run_stock_generation(existing_articles, stock_topics, today, log_lines):
+def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate_rejections=None):
     """ストックSEO型記事を生成する。戻り値: (accepted_entries, updated_stock_topics)
 
     ニュース生成とは異なり、この関数内のあらゆる失敗(API呼び出し失敗・
     レスポンス形状異常など)は呼び出し元で捕捉され、『今日はstockを0件』
     として扱われる(newsの正常な生成・commitを妨げないため)。"""
+    if gate_rejections is None:
+        gate_rejections = []
     stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
 
     candidates = [t for t in stock_topics if t["status"] == "candidate"][:MAX_STOCK_CANDIDATES_IN_PROMPT]
@@ -906,14 +930,8 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines):
             log_lines.append(f"stock: 「{topic['query']}」— 同一対象の既存記事ありのため見送り: {subject_dup_reason}")
             continue
 
-        # ここまでの検証(write判定・スキーマ・重複チェック)をすべて通過し、
-        # articles.jsonへ実際に追加することが確定した記事についてのみ、
-        # その場でID を1件予約する。上限2件を予約してから絞り込む方式だと、
-        # 1件しか採用されない日・0件の日に不要な欠番が積み上がってしまうため、
-        # 「確定した分だけ消費する」設計に変更している。
-        new_id = reserve_ids(1)[0]
         entry = {
-            "id": new_id,
+            "id": "today-run-pending-id",
             "articleType": "stock",
             "cat": article["cat"],
             "area": article["area"],
@@ -938,8 +956,25 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines):
             },
             "body": article["body"],
             "tags": article.get("tags", []),
-            "slug": f"{AREA_EN[article['area']]}-{CAT_EN[article['cat']]}-{new_id:04d}",
+            "slug": "",
         }
+
+        # 公開前監査。不合格の記事は公開せず、同じテーマを毎日選び直さないよう
+        # テーマ台帳ではskipped扱いにする(理由はskipReasonに残す)。
+        entry = run_publish_gate(entry, "stock", gate_rejections, log_lines)
+        if entry is None:
+            topic["status"] = "skipped"
+            topic["skipReason"] = "公開前監査で不合格: " + " / ".join(gate_rejections[-1]["reasons"])
+            continue
+
+        # ここまでの検証(write判定・スキーマ・重複チェック・公開前監査)をすべて通過し、
+        # articles.jsonへ実際に追加することが確定した記事についてのみ、
+        # その場でID を1件予約する。上限2件を予約してから絞り込む方式だと、
+        # 1件しか採用されない日・0件の日に不要な欠番が積み上がってしまうため、
+        # 「確定した分だけ消費する」設計に変更している。
+        new_id = reserve_ids(1)[0]
+        entry["id"] = new_id
+        entry["slug"] = f"{AREA_EN[article['area']]}-{CAT_EN[article['cat']]}-{new_id:04d}"
         accepted.append(entry)
         working_set.append(entry)
         write_count += 1
@@ -1248,6 +1283,58 @@ def register_event_series_if_new(item, event_series):
 
 
 
+# ---------- 公開前監査ゲート ----------
+
+_gate_client = None
+
+
+def run_publish_gate(entry, article_type, gate_rejections, log_lines):
+    """ドラフトを公開前監査(publish_gate.check_draft)にかける。
+    合格なら公開してよいentry(自動修正した場合は修正後)を、不合格ならNoneを返し、
+    理由とclaimをgate_rejectionsに記録する。監査自体に失敗した記事も不合格(公開しない)。"""
+    global _gate_client
+    import publish_gate  # fact_auditがこのモジュールをimportするため、循環しないよう遅延import
+
+    if not publish_gate.enabled():
+        return entry
+    if _gate_client is None:
+        _gate_client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    gate = publish_gate.check_draft(entry, client=_gate_client)
+    title = entry.get("title", "")
+    if gate["passed"]:
+        if gate.get("autofix"):
+            changes = ", ".join(f"「{f['from']}」→「{f['to']}」" for f in gate["autofix"])
+            log_lines.append(f"{article_type}: 公開前監査で自動修正し、再監査で合格: 「{title}」({changes})")
+        else:
+            log_lines.append(f"{article_type}: 公開前監査に合格: 「{title}」")
+        return gate["entry"]
+    gate_rejections.append(publish_gate.rejection_record(entry, gate, article_type))
+    log_lines.append(f"スキップ({article_type}): 「{title}」— 公開前監査で不合格: {' / '.join(gate['reasons'])}")
+    return None
+
+
+def write_gate_summary(gate_rejections):
+    """不合格記事をActionsのジョブサマリーと警告に出す(Issue化されなくてもログで追えるようにする)。"""
+    for r in gate_rejections:
+        print(f"::warning::公開前監査で不合格のため公開しません: 「{r['title']}」— {' / '.join(r['reasons'])}")
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path or not gate_rejections:
+        return
+    lines = [f"## 公開前監査で不合格の記事({len(gate_rejections)}件・公開していません)", ""]
+    for r in gate_rejections:
+        lines.append(f"### [{r['articleType']}] {r['title']}")
+        lines.append(f"- 判定: {r.get('verdict')} / 理由: {' / '.join(r['reasons'])}")
+        for c in r.get("claims", []):
+            lines.append(f"- {c.get('status')}({c.get('role')}): {c.get('claim')} "
+                         f"記事「{c.get('articleValue')}」/ 一次情報「{c.get('primaryValue')}」 {c.get('primaryUrl')}")
+        lines.append("")
+    try:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+    except OSError as e:
+        print(f"警告: ジョブサマリーの書き込みに失敗しました: {e}", file=sys.stderr)
+
+
 # ---------- 実行結果レポート ----------
 
 def write_run_report(**fields):
@@ -1335,6 +1422,10 @@ def main():
     event_series = load_event_series()
 
     log_lines = []
+    # 公開前監査で不合格になった記事(公開しない)。実行レポートの gate_rejected に残し、
+    # report_gate_rejections.py がこれを読んでIssue化する。
+    news_gate_rejections = []
+    stock_gate_rejections = []
 
     # ---- A) ニュース/イベント型(失敗したら全体を失敗させる) ----
     # NEWS_ARTICLES_PER_DAY=0 は「ニュース生成を意図的に停止する」設定として
@@ -1342,20 +1433,30 @@ def main():
     # 採用件数が期待値と一致しない場合、過去のサイレント障害(Successなのに
     # 実際は記事が公開されていない)を二度と起こさないため、ここで確実に
     # 失敗させる(articles.jsonへは一切書き込まない)。
+    # ただし不足の原因に公開前監査の不合格が含まれる場合は、合格した記事だけを公開する
+    # (不合格記事を公開しないことが目的のため。不合格分はIssue化される)。
     if NEWS_ARTICLES_PER_DAY == 0:
         accepted_news = []
         log_lines.append("news: NEWS_ARTICLES_PER_DAY=0 のため、ニュース生成は意図的にスキップしました")
     else:
         try:
-            accepted_news, news_log, event_series = run_news_generation(existing_articles, today, event_series)
+            accepted_news, news_log, event_series = run_news_generation(
+                existing_articles, today, event_series, gate_rejections=news_gate_rejections)
             log_lines.extend(news_log)
         except Exception as e:
             print(f"エラー: ニュース記事の生成に失敗しました。articles.jsonは変更していません。詳細: {e}", file=sys.stderr)
+            write_gate_summary(news_gate_rejections)
             write_run_report(status="error", stage="news_generation", error=str(e),
-                              accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[])
+                              accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
+                              gate_rejected=news_gate_rejections)
             raise
 
-        if len(accepted_news) != NEWS_ARTICLES_PER_DAY:
+        if len(accepted_news) != NEWS_ARTICLES_PER_DAY and news_gate_rejections:
+            log_lines.append(
+                f"警告(news): 公開前監査の不合格{len(news_gate_rejections)}件のため、"
+                f"news は{len(accepted_news)}/{NEWS_ARTICLES_PER_DAY}件の公開になります"
+            )
+        elif len(accepted_news) != NEWS_ARTICLES_PER_DAY:
             error_msg = (
                 f"news採用件数が期待値と一致しません(期待:{NEWS_ARTICLES_PER_DAY}件, "
                 f"実際:{len(accepted_news)}件)。ニュース記事はgithub Pagesに"
@@ -1377,7 +1478,8 @@ def main():
     stock_topics = load_stock_topics()
     try:
         accepted_stock, stock_topics = run_stock_generation(
-            existing_articles + accepted_news, stock_topics, today, log_lines
+            existing_articles + accepted_news, stock_topics, today, log_lines,
+            gate_rejections=stock_gate_rejections,
         )
     except Exception as e:
         log_lines.append(f"stock: エラーのため本日は0件としました。詳細: {e}")
@@ -1388,13 +1490,19 @@ def main():
         print(line, file=sys.stderr if is_warn else sys.stdout)
 
     accepted_all = accepted_news + accepted_stock
+    gate_rejected = news_gate_rejections + stock_gate_rejections
+    write_gate_summary(gate_rejected)
 
     if not accepted_all:
         print("採用できる記事が1件もありませんでした(news/stockともに0件)。articles.jsonは変更していません。", file=sys.stderr)
+        # 全件が公開前監査で不合格だった場合は、不合格記事を公開しないという正常な結果なので
+        # 失敗扱いにしない(後続のIssue化・台帳の保存を進める)。それ以外は従来どおり失敗させる。
+        all_rejected_by_gate = bool(gate_rejected)
         write_run_report(
-            status="no_articles_accepted",
+            status="no_articles_passed_gate" if all_rejected_by_gate else "no_articles_accepted",
             accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
             news_count=0, stock_count=0, total_count=0,
+            gate_rejected=gate_rejected,
         )
         # ストック台帳・イベントシリーズ台帳の状態(候補追加・skip反映)だけは
         # 保存しておく価値があるため書き込む
@@ -1402,6 +1510,8 @@ def main():
             atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
         if event_series:
             atomic_write_json(EVENT_SERIES_PATH, event_series)
+        if all_rejected_by_gate:
+            return
         sys.exit(1)
 
     new_articles = existing_articles + accepted_all
@@ -1431,6 +1541,7 @@ def main():
         stock_count=len(accepted_stock),
         total_count=len(accepted_all),
         date=today,
+        gate_rejected=gate_rejected,
     )
 
 
