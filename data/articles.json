@@ -113,6 +113,10 @@
     "eventStartDate": "",
     "eventEndDate": "",
     "articleType": "news",
+    "subjectNames": [
+      "小出川彼岸花まつり",
+      "第19回小出川彼岸花まつり"
+    ],
     "sources": [
       "https://www.city.fujisawa.kanagawa.jp/endou-c/higanbana.html",
       "https://www.fujisawa-kanko.jp/event/higanbanamaturi2026.html",
@@ -149,6 +153,7 @@
     "eventStartDate": "",
     "eventEndDate": "",
     "articleType": "news",
+    "mergedInto": "chigasaki-culture-0072",
     "subjectNames": [
       "瀧本幹也 LUNATION 朔望",
       "LUNATION 朔望―海から天体を読む"
@@ -217,6 +222,7 @@
     "eventStartDate": "",
     "eventEndDate": "",
     "articleType": "news",
+    "mergedInto": "fujisawa-event-0079",
     "sources": [
       "https://www.city.fujisawa.kanagawa.jp/endou-c/higanbana.html",
       "https://www.fujisawa-kanko.jp/event/higanbanamaturi2026.html",
@@ -267,14 +273,14 @@
     "dek": "9月2日、茅ヶ崎市美術館で「瀧本幹也 LUNATION 朔望―海から天体を読む」が開幕した。新月と満月がもたらす「朔望」を軸に、海の表情と天体の運動をとらえた新作『LUNATION 朔望』が展開されている。会期は11月8日まで。",
     "link": "https://www.chigasaki-museum.jp/exhibition/10257/",
     "date": "2026-09-14",
-    "address": "",
-    "access": "",
-    "hours": "",
-    "closedDays": "",
+    "address": "神奈川県茅ヶ崎市東海岸北1-4-45",
+    "access": "JR茅ケ崎駅南口より徒歩約8分、またはコミュニティバス「図書館前」下車",
+    "hours": "10:00〜17:00（入館は16:30まで）",
+    "closedDays": "月曜日（9月21日、10月12日は開館）、9月24日（木）、10月13日（火）",
     "snsLinks": {
-      "instagram": "",
+      "instagram": "https://www.instagram.com/chigasakimuseum",
       "facebook": "",
-      "x": "",
+      "x": "https://x.com/chigasakimuseum",
       "tiktok": ""
     },
     "body": "広告写真・コマーシャルフィルム・映画など多分野の第一線で活躍し続ける写真家・瀧本幹也（1974年生まれ）の、国内美術館初となる大規模個展「LUNATION 朔望―海から天体を読む」が、9月2日（水）から茅ヶ崎市美術館で開催されている。会期は2026年11月8日（日）まで。海辺の街にある茅ヶ崎市美術館というロケーションをいかし、新月と満月がもたらす「朔望（さくぼう）」を軸に構成された本展は、今この瞬間に見るべき展覧会として多くの注目を集めている。\n\n瀧本は幼少期から天体観測に親しみ、宇宙と自分とがひとつながりであるという感覚を写真表現の根幹に据えてきた写真家だ。『MONGOLIAN TRIBE』（1997年）や多様な海面の表情を捉えた『GRAIN OF LIGHT』（2014年）など、世界各地を舞台に独自の視点で作品を発表してきた。今回の個展では、海辺の街にある茅ヶ崎市美術館の特性を活かし、新月と満月がもたらす朔望を軸に、海の表情と天体の運動、水面に注ぐ微光から人類の生命へと思いを馳せる新作『LUNATION 朔望』が展開される。海辺の美術館という立地があってこそ成立する展覧会といえる。\n\n会期中は関連イベントも充実している。9月19日（土）と11月1日（日）各日午後3時からはアーティストトーク（要観覧券、申込不要）が予定されており、瀧本幹也本人が自身の言葉で作品世界を語る。9月27日（日）と10月25日（日）には各日午後2時から担当学芸員によるギャラリートークも開催される。さらに9月26日（土）には写真ワークショップ「ポスターカレンダー作り」も行われる予定だ。観覧料は一般1,200円、大学生1,000円、市内在住65歳以上600円（前売券・20名以上の団体はそれぞれ1,100円、900円、500円）で、高校生以下、障がい者およびその介護者は無料。\n\n美術館は茅ヶ崎駅南口から徒歩約8分、高砂緑地内に位置している。開館時間は10時〜17時で、休館日は月曜日（9月21日・10月12日は開館）と9月24日（木）、10月13日（火）。NHK「日曜美術館 アートシーン」でも紹介された本展は、海をテーマにした作品が中心だけに、海辺の美術館で茅ヶ崎の海を感じながら鑑賞する体験は格別なものになるはずだ。秋の湘南を訪れる際はぜひ足を運んでほしい。",
@@ -291,6 +297,10 @@
     "eventStartDate": "",
     "eventEndDate": "",
     "articleType": "news",
+    "subjectNames": [
+      "瀧本幹也 LUNATION 朔望",
+      "LUNATION 朔望―海から天体を読む"
+    ],
     "sources": [
       "https://www.chigasaki-museum.jp/exhibition/10257/",
       "https://www.chigasaki-museum.jp/information/",
@@ -465,6 +475,7 @@
     "eventStartDate": "",
     "eventEndDate": "",
     "articleType": "news",
+    "mergedInto": "fujisawa-event-0079",
     "subjectNames": [
       "小出川彼岸花まつり"
     ],
