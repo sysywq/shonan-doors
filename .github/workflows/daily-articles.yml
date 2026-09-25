@@ -46,7 +46,10 @@ jobs:
 
       # 公開前監査で不合格になった記事を、1件につき1つのGitHub Issueにする。
       # 実行レポートの gate_rejected を読むだけで、articles.json等は変更しない。
+      # Issue化は補助的な通知なので、GitHub APIや通信の一時障害で失敗しても
+      # 合格記事のbuild/commit/push・X投稿・IndexNowは止めない。
       - name: 公開前監査の不合格記事をIssue化
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python report_gate_rejections.py
