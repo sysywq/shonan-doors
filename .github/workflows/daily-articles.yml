@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
     outputs:
       # 本日生成に成功し、実際にcommit/pushまで完了した記事のID一覧(カンマ区切り文字列)。
       # X投稿ジョブはこの出力だけを頼りに対象記事を特定する(articles.json全体を
@@ -42,6 +43,13 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python generate_articles.py
+
+      # 公開前監査で不合格になった記事を、1件につき1つのGitHub Issueにする。
+      # 実行レポートの gate_rejected を読むだけで、articles.json等は変更しない。
+      - name: 公開前監査の不合格記事をIssue化
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python report_gate_rejections.py
 
       # 2) articles.json(Single Source of Truth)から静的ページを再生成する。
       #    記事ページ・地域ハブ・カテゴリハブ・ページネーション・トップページ・
