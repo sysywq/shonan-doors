@@ -34,6 +34,17 @@ ADSENSE_PUBLISHER_ID = "ca-pub-2458583563727225"
 ADS_TXT_PUBLISHER_ID = "pub-2458583563727225"  # ads.txtはca-pub-ではなくpub-表記が仕様
 SITE_TITLE = "湘南Doors｜湘南の人・企業・文化・体験をつなぐメディア"
 
+# ビルド基準日の環境変数。未設定なら実行日(date.today())を使う。
+# CIではコミット済みsitemap.xmlのlastmodをここに渡し、実行日が変わっても
+# 同じ入力から同じ生成物になるか(生成物の再生成漏れが無いか)を検証する。
+BUILD_DATE_ENV = "SHONAN_DOORS_BUILD_DATE"
+
+
+def build_today():
+    value = os.environ.get(BUILD_DATE_ENV, "").strip()
+    return _date.fromisoformat(value) if value else _date.today()
+
+
 CATS = {
     "t": {"label": "観光", "bg": "#1D3557"},
     "b": {"label": "企業・店舗", "bg": "#A6431E"},
@@ -355,7 +366,7 @@ def event_lifecycle_status(item, today=None):
       (日付を推測しないため)。
     """
     if today is None:
-        today = _date.today()
+        today = build_today()
     start = item.get("eventStartDate") or ""
     if not start:
         return "unknown"
@@ -1438,8 +1449,7 @@ def render_404_page():
 
 
 def render_sitemap(articles):
-    from datetime import date
-    today = date.today().isoformat()
+    today = build_today().isoformat()
     urls = [{"loc": f"{SITE_DOMAIN}/", "lastmod": today, "priority": "1.0"}]
 
     # プライバシーポリシー・運営者情報・お問い合わせ(独立ページ)。
