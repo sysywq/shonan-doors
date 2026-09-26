@@ -1,0 +1,66 @@
+name: Post Single Article to X (Manual Test)
+
+# 記事生成を一切行わず、既存の1記事だけを対象にX投稿をテストするための
+# 専用workflow。毎日の自動投稿workflow(daily-articles.yml)とは完全に独立している。
+# これにより、X投稿の動作確認のたびにAnthropic APIで新しい記事が
+# 生成されてしまう問題を避けられる。
+
+on:
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: '投稿対象の記事ID(data/articles.jsonに実在するIDを指定)'
+        required: true
+        type: string
+      dry_run:
+        description: 'true=実際には投稿せず内容だけ確認、false=実際にXへ投稿する'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  post_single_article:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # 投稿済みログを更新する処理(daily-publish.yml / x-backfill.yml を含む)を同時に動かさない
+    concurrency:
+      group: x-post-log
+      cancel-in-progress: false
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install tweepy
+
+      # 投稿済みログの最新は専用branch(x-post-log)にある。取り込んでから投稿する(重複投稿防止)
+      - name: X投稿済みログを取得
+        run: python x_post_log_store.py pull
+
+      # 手動テストでは、指定した既存記事(=既に公開済みのはず)を対象にするため、
+      # URL公開待ちのリトライは基本的に即座にHTTP 200を返すはずだが、
+      # 念のため通常の待機ロジックはそのまま使う(DRY_RUN=trueの場合は
+      # post_to_x.py側の設計により待機自体が自動的にスキップされる)。
+      - name: Xへ投稿(単体テスト)
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python post_to_x.py --article-ids "${{ inputs.article_id }}"
+
+      # 投稿済みログは main に直接pushせず、専用branch(x-post-log)に保存する。
+      # main の data/x_post_log.json は、次の Daily Articles の当日PRで同期される。
+      - name: 投稿済みログを専用branchに保存
+        if: success() || failure()
+        env:
+          ARTICLE_ID: ${{ inputs.article_id }}
+        run: |
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新(手動テスト id=$ARTICLE_ID)"
