@@ -21,8 +21,11 @@ on:
 jobs:
   post_single_article:
     runs-on: ubuntu-latest
+    concurrency:
+      group: x-post
+      cancel-in-progress: false
     permissions:
-      contents: write
+      contents: write   # データbranch bot/x-post-log へのpushのみ(mainは変更しない)
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
@@ -34,6 +37,10 @@ jobs:
 
       - name: 依存パッケージをインストール
         run: pip install tweepy
+
+      # mainとデータbranchのどちらかに記録がある記事は投稿済みとして扱う(二重投稿防止)
+      - name: X投稿済みログを取り込む
+        run: python x_post_log_store.py pull
 
       # 手動テストでは、指定した既存記事(=既に公開済みのはず)を対象にするため、
       # URL公開待ちのリトライは基本的に即座にHTTP 200を返すはずだが、
@@ -48,14 +55,9 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
         run: python post_to_x.py --article-ids "${{ inputs.article_id }}"
 
-      # 投稿済みログが更新された(=本番投稿が成功した)時だけコミットする。
-      - name: 投稿済みログをコミット・プッシュ
+      # 投稿済みログは main へ直接pushせず、データbranch(bot/x-post-log)にだけ保存する。
+      # mainのログは Daily Articles の当日PRで追いつく(x_post_log_store.py pull)。
+      - name: 投稿済みログをデータbranchに保存
+        if: always()
         run: |
-          git config user.name "shonan-doors-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/x_post_log.json
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: X投稿済みログを更新(手動テスト id=${{ inputs.article_id }})"
-            git pull --rebase origin main
-            git push
-          fi
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新(手動テスト)"

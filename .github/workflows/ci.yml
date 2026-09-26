@@ -3,11 +3,15 @@ name: CI
 # main向けPRとmainへのpushで、テストとビルドを検証する。
 # 記事生成・Fact Audit・X投稿などの既存workflowとは独立しており、
 # リポジトリへの書き込みやSecretsの利用は一切行わない。
+# Daily Articles の当日PRは GITHUB_TOKEN で作るため pull_request では起動しない。
+# そのため Daily Articles(daily_pr.py ci)が当日branchを指定して workflow_dispatch で起動する
+# (同じコミットに対する同じチェックとして記録される)。
 on:
   pull_request:
     branches: [main]
   push:
     branches: [main]
+  workflow_dispatch: {}
 
 permissions:
   contents: read
