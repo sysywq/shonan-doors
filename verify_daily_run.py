@@ -37,6 +37,26 @@ def fail(msg):
     sys.exit(1)
 
 
+LEDGER_FILES = (
+    "data/articles.json", "data/id_counter.json", "data/stock_topics.json",
+    "data/event_series.json", "data/x_post_log.json",
+)
+
+
+def unstaged_ledgers(runner=subprocess.run):
+    """台帳ファイルのうち、作業ツリーに変更があるのにステージされていないもの(未追跡を含む)。"""
+    result = runner(["git", "status", "--porcelain", "--", *LEDGER_FILES],
+                    cwd=ROOT, capture_output=True, text=True)
+    if result.returncode != 0:
+        fail(f"git statusの実行に失敗しました: {result.stderr}")
+    out = []
+    for line in result.stdout.splitlines():
+        # porcelain v1: 1文字目=ステージ、2文字目=作業ツリー。2文字目が空白以外なら未ステージの変更
+        if len(line) > 3 and line[1] != " ":
+            out.append(line[3:])
+    return out
+
+
 def main():
     if not os.path.exists(RUN_REPORT_PATH):
         fail(
@@ -57,6 +77,13 @@ def main():
 
     if status == "error":
         fail(f"generate_articles.pyがエラーを報告しています: {report.get('error')}")
+
+    # 0) 台帳ファイル(ID採番・ストックテーマ・イベントシリーズ・X投稿済みログ)の変更が
+    #    git add から漏れていないか。記事の有無にかかわらず毎回確認する
+    #    (過去に data/event_series.json が git add の対象から漏れ、台帳が保存されていなかった)。
+    unstaged = unstaged_ledgers()
+    if unstaged:
+        fail(f"台帳ファイルの変更が git add されていません: {unstaged}。ワークフローのgit addの対象パスを確認してください。")
 
     print(f"[内訳] news: {news_count}件 (id:{news_ids}), stock: {stock_count}件 (id:{stock_ids}), "
           f"合計: {len(accepted_ids)}件")

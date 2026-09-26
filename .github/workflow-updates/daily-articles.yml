@@ -1,0 +1,256 @@
+name: Daily Shonan Doors Articles
+
+# 毎朝の記事生成。main へは直接pushせず、当日専用branch(daily/<JSTの日付>)から main 向けPRを作り、
+# Fact Audit(full)・tests・build・永続化検証・CI がすべて合格したときだけ自動マージする
+# (CLAUDE.md の「Daily Articles 自動運用」の例外。通常タスクのマージはオーナー確認後のみ)。
+# X投稿・IndexNow は、マージ後に本番URLの公開を確認できた記事だけを対象にする(daily-publish.yml)。
+#
+# 同じ日付のbranch/PRは重複して作らない(daily_pr.py plan):
+#   マージ済み → 公開確認・X投稿・IndexNowだけ / open → マージ段階から再開 /
+#   未マージでclose → 何もしない / branchだけ → PRを作ってマージ段階から再開 / 無し → 生成
+on:
+  schedule:
+    # UTC 20:00 = JST 05:00（日本時間 毎朝5時）
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '対象日(YYYY-MM-DD、JST)。空なら今日。既存の当日branch/PRがあれば生成せずに続きから処理する'
+        required: false
+        default: ''
+
+# Scheduled RunとworkflowDispatch(手動実行)等が重なった場合に、
+# Daily Article Automationが同時実行されないようにする。
+# 実行中のrunをキャンセルはせず、後から来たrunを待機させる。
+concurrency:
+  group: daily-articles
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # 当日branch/PRの状態を確認し、この実行で何をするか(mode)を決める。
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      date: ${{ steps.plan.outputs.date }}
+      branch: ${{ steps.plan.outputs.branch }}
+      mode: ${{ steps.plan.outputs.mode }}
+      merge_sha: ${{ steps.plan.outputs.merge_sha }}
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 当日branch/PRの状態を確認
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          INPUT_DATE: ${{ inputs.date }}
+        run: python daily_pr.py plan --date "$INPUT_DATE"
+
+  generate:
+    needs: plan
+    if: needs.plan.outputs.mode == 'generate'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    env:
+      # 追跡対象の __pycache__/*.pyc を書き換えて生成物の差分チェックを誤検知させないため
+      PYTHONDONTWRITEBYTECODE: '1'
+      BRANCH: ${{ needs.plan.outputs.branch }}
+      RUN_DATE: ${{ needs.plan.outputs.date }}
+    outputs:
+      committed: ${{ steps.commit.outputs.committed }}
+      auto_merge: ${{ steps.audit.outputs.auto_merge }}
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+    steps:
+      # 1) 最新mainから当日専用branchを作る
+      - name: リポジトリをチェックアウト(最新main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 当日branchを作成
+        run: git switch -c "$BRANCH"
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install anthropic
+
+      # 2) 記事を生成し、data/articles.json に追記する(公開前監査ゲートを含む)。
+      #    generate_articles.py は実行結果を /tmp/shonan_doors_run_report.json にも書き出す。
+      - name: 記事を生成してarticles.jsonに追記
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python generate_articles.py
+
+      # 3) 公開前監査で不合格になった記事を、1件につき1つのGitHub Issueにする(既存処理)。
+      #    Issue化は補助的な通知なので、一時障害で失敗しても後続は止めない。
+      - name: 公開前監査の不合格記事をIssue化
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python report_gate_rejections.py
+
+      # 4)5) accepted_ids だけを Fact Audit(mode=full)にかけ、機械判定する。
+      #    一次情報で一意に直せる誤りは自動修正し、verify で再確認する。
+      #    confirmed 以外が1件でも残れば auto_merge=false(PRは作るが自動マージしない)。
+      - name: Fact Audit(full)で accepted_ids を監査・判定
+        id: audit
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python daily_fact_audit.py audit
+
+      # Fact Audit workflow と同じArtifact名で保存する(verify の previous_run_id にこのRun IDを使える)
+      - name: Fact Audit のレポートを保存
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fact-audit-report
+          path: /tmp/daily_fact_audit/
+          if-no-files-found: ignore
+
+      # X投稿済みログは main に直接pushせず専用branchに保存している。当日PRに取り込んで main の控えも更新する。
+      - name: X投稿済みログを当日PRに取り込む
+        run: python x_post_log_store.py pull
+
+      # 7) tests
+      - name: ユニットテスト
+        run: python3 -m unittest discover -s tests -v
+
+      # 8) articles.json(Single Source of Truth)から静的ページを再生成する。
+      - name: 静的ページをビルド
+        run: python build.py
+
+      # コミット対象をステージする。build.pyが更新しうる範囲と台帳を明示的に指定し、
+      # 無関係なファイルが誤って巻き込まれないようにする(data/event_series.json も台帳として保存する)。
+      - name: 変更をgit add
+        run: |
+          git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json \
+                  data/x_post_log.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
+
+      # 9) 「生成したと報告された記事」と台帳の変更が、git add後のステージ内容に実際に含まれているかを検証する。
+      - name: 永続化を検証(サイレント障害防止)
+        run: python verify_daily_run.py
+
+      # 10) 当日branchへcommitする。commitメッセージ末尾に判定結果(trailer)を残し、
+      #     マージ段階・再実行時はこの記録だけを根拠に自動マージの可否を判断する。
+      - name: 変更をコミット
+        id: commit
+        run: |
+          if git diff --cached --quiet; then
+            echo "変更がないため、当日branch/PRは作りません。"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+          ids=$(python3 -c "import json; print(','.join(str(i) for i in json.load(open('/tmp/shonan_doors_run_report.json')).get('accepted_ids', [])))")
+          {
+            echo "chore: 本日分の記事を自動追加 ($RUN_DATE)"
+            echo
+            python daily_pr.py trailers --date "$RUN_DATE" --accepted-ids "$ids" \
+              --decision /tmp/shonan_doors_fact_audit_decision.json
+          } > /tmp/daily_commit_message.txt
+          git commit -F /tmp/daily_commit_message.txt
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # CI(ci.yml)と同じ条件で、コミット済みの生成物に未コミットの差分が無いことを確認する。
+      - name: 生成物に未コミットの差分が無いか確認(CI相当)
+        if: steps.commit.outputs.committed == 'true'
+        run: |
+          build_date=$(python3 - <<'EOF'
+          import xml.etree.ElementTree as ET
+          ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          for url in ET.parse("sitemap.xml").getroot().findall("s:url", ns):
+              if url.findtext("s:loc", namespaces=ns) == "https://www.shonandoors.com/":
+                  print(url.findtext("s:lastmod", namespaces=ns))
+                  break
+          EOF
+          )
+          SHONAN_DOORS_BUILD_DATE="$build_date" python3 build.py
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::build.py 再実行後に未コミットの差分があります"
+            git status --porcelain
+            exit 1
+          fi
+          echo "差分なし"
+
+      - name: 当日branchへpush
+        if: steps.commit.outputs.committed == 'true'
+        run: git push origin "HEAD:refs/heads/$BRANCH"
+
+      # 11) main向けPRを作る(同じbranchの open なPRがあれば再利用する)
+      - name: main向けPRを作成
+        id: pr
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py open-pr --branch "$BRANCH" --decision /tmp/shonan_doors_fact_audit_decision.json
+
+      # 6) confirmed 以外の記事は、記事ごとに Approve / Reject の2択のIssueにする
+      - name: Fact Audit で保留になった記事をIssue化
+        if: steps.commit.outputs.committed == 'true' && steps.audit.outputs.auto_merge != 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_fact_audit.py issues --pr-url "${{ steps.pr.outputs.pr_url }}" --branch "$BRANCH"
+
+  # 12)13) CI を当日branchで実行して結果を確認し、すべて合格した場合だけPRをマージする。
+  #        (GITHUB_TOKEN が作ったPRでは pull_request のCIが起動しないため workflow_dispatch で起動する)
+  merge:
+    needs: [plan, generate]
+    if: >-
+      always() && (
+        (needs.plan.outputs.mode == 'generate' && needs.generate.result == 'success' && needs.generate.outputs.committed == 'true') ||
+        needs.plan.outputs.mode == 'resume_open' || needs.plan.outputs.mode == 'resume_branch'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    outputs:
+      merged: ${{ steps.merge.outputs.merged }}
+      merge_sha: ${{ steps.merge.outputs.merge_sha }}
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: CI確認と自動マージ(全チェック合格時のみ)
+        id: merge
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BRANCH: ${{ needs.plan.outputs.branch }}
+        run: python daily_pr.py merge-stage --branch "$BRANCH"
+
+  # 14) main への反映後、本番URLの公開を確認できた記事だけを対象に X投稿・IndexNow を行う。
+  publish:
+    needs: [plan, merge]
+    if: >-
+      always() && (needs.merge.outputs.merged == 'true' || needs.plan.outputs.mode == 'published')
+    permissions:
+      contents: write
+    uses: ./.github/workflows/daily-publish.yml
+    with:
+      merge_sha: ${{ needs.merge.outputs.merge_sha || needs.plan.outputs.merge_sha }}
+    secrets: inherit

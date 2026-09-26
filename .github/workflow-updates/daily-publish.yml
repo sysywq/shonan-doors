@@ -1,0 +1,140 @@
+name: Daily Articles Publish (公開確認・X投稿・IndexNow)
+
+# Daily Articles の当日PRが main にマージされた後に、
+#   1. マージで main に入った記事(=公開確定した accepted_ids)を特定し
+#   2. 本番URLが HTTP 200 になったことを確認できた記事だけを対象に
+#   3. X投稿と IndexNow 通知を行う。
+# 起動のしかた:
+#   - daily-articles.yml が自動マージした後に workflow_call で呼ぶ
+#     (GITHUB_TOKEN によるマージでは pull_request イベントが起動しないため、二重実行にはならない)
+#   - 保留になった当日PRをオーナーがマージしたとき(pull_request closed。daily/ のbranchだけ)
+#   - 手動(workflow_dispatch。merge_sha または article_ids を指定)
+# X投稿済みログは main に直接pushせず、専用branch(x-post-log)に保存する(x_post_log_store.py)。
+on:
+  workflow_call:
+    inputs:
+      merge_sha:
+        type: string
+        required: false
+        default: ''
+      article_ids:
+        type: string
+        required: false
+        default: ''
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      merge_sha:
+        description: '当日PRのマージcommitのSHA(このマージで main に入った記事が対象)'
+        required: false
+        default: ''
+      article_ids:
+        description: '対象記事ID(カンマ区切り。merge_sha が空のときだけ使う。main に実在する記事だけが対象)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  confirm:
+    if: >-
+      github.event_name != 'pull_request' ||
+      (github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'daily/'))
+    runs-on: ubuntu-latest
+    outputs:
+      article_ids: ${{ steps.published.outputs.article_ids }}
+    env:
+      MERGE_SHA: ${{ inputs.merge_sha || github.event.pull_request.merge_commit_sha }}
+      ARTICLE_IDS: ${{ inputs.article_ids }}
+    steps:
+      - name: リポジトリをチェックアウト(最新main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: マージcommitと直前のmainを取得
+        if: env.MERGE_SHA != ''
+        run: git fetch --depth=2 origin "$MERGE_SHA"
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 公開確定した記事IDを特定
+        id: targets
+        run: python daily_pr.py publish-targets --merge-sha "$MERGE_SHA" --article-ids "$ARTICLE_IDS"
+
+      - name: 本番URLの公開を確認
+        id: published
+        if: steps.targets.outputs.article_ids != ''
+        run: python daily_pr.py wait-published --article-ids "${{ steps.targets.outputs.article_ids }}"
+
+  # X(Twitter)への自動投稿。公開を確認できた記事だけが対象。
+  # 失敗しても記事の公開(mainへのマージ・GitHub Pages)には影響しない。
+  post_to_x:
+    needs: confirm
+    if: needs.confirm.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # 投稿済みログを更新する処理(post-to-x.yml / x-backfill.yml を含む)を同時に動かさない
+    concurrency:
+      group: x-post-log
+      cancel-in-progress: false
+    steps:
+      - name: リポジトリをチェックアウト(最新main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 依存パッケージをインストール
+        run: pip install tweepy
+
+      # main の控えより新しい投稿記録を取り込んでから投稿する(重複投稿防止)
+      - name: X投稿済みログを取得
+        run: python x_post_log_store.py pull
+
+      # DRY_RUNは既定で有効(true)。リポジトリのActions variables(Secretsではない)で
+      # X_POST_DRY_RUN=false を設定すると本番投稿に切り替わる。
+      - name: Xへ投稿
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ vars.X_POST_DRY_RUN || 'true' }}
+        run: python post_to_x.py --article-ids "${{ needs.confirm.outputs.article_ids }}"
+
+      # 投稿に一部失敗しても、成功した分の記録は必ず保存する(main には push しない)
+      - name: X投稿済みログを専用branchに保存
+        if: success() || failure()
+        run: |
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新"
+
+  # Bing等のIndexNow対応検索エンジンへ、公開を確認できた記事URLを通知する。
+  indexnow_submit:
+    needs: confirm
+    if: needs.confirm.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト(最新main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: IndexNowへ公開を確認した記事URLを通知
+        run: python indexnow_submit.py --article-ids "${{ needs.confirm.outputs.article_ids }}"
