@@ -306,6 +306,79 @@ class RulesV2Test(unittest.TestCase):
         self.assertEqual((r["verdict"], r["modelVerdict"]), ("confirmed", "rewrite"))
 
 
+class OfficialImageTest(unittest.TestCase):
+    """公式サイト・公式SNSに掲載された画像内の情報を一次情報として扱う(判定ルール v3)"""
+    PAGE = "https://shonan.terracemall.com/event/detail/?cd=001233"
+    HTML = ('<img src="/assets/images/event/ttl-icon.png"><img src="https://cdn.example.jp/a/poster.jpg">'
+            '<img src="https://cdn.example.jp/a/shops.png"><img src="/assets/images/common/bnr/bnr6.png">'
+            '<img src="https://cdn.example.jp/a/logo.svg">')
+
+    def verdict_of(self, claims):
+        r, an = fa.normalize_result(dict(GOOD, claims=claims), 99)
+        self.assertEqual(an, [])
+        return r
+
+    def image_claim(self, status, role="dek", reading="clear", url=PAGE):
+        return dict(claim("自家焙煎店20軒", status, role=role, av="20軒", pv="出店者一覧20店",
+                          basis="official_image"), imageReading=reading, primaryUrl=url)
+
+    def test_clear_official_image_is_confirmed(self):
+        r = self.verdict_of([claim("10月3日開催", "confirmed", role="central"), self.image_claim("confirmed")])
+        self.assertEqual(r["verdict"], "confirmed")
+        self.assertEqual(r["claims"][1]["imageReading"], "clear")
+
+    def test_ambiguous_core_image_is_review_required(self):
+        r = self.verdict_of([self.image_claim("confirmed", reading="ambiguous")])
+        self.assertEqual(r["claims"][0]["status"], "not_found_in_primary")
+        self.assertEqual(r["verdict"], "review_required")
+        self.assertEqual(len(fa.ambiguous_image_claims(r["claims"])), 1)
+
+    def test_ambiguous_image_does_not_become_contradicted(self):
+        r = self.verdict_of([self.image_claim("contradicted", role="detail", reading="ambiguous")])
+        self.assertEqual(r["claims"][0]["status"], "not_found_in_primary")
+        self.assertEqual(r["verdict"], "confirmed")  # 細部の未確認だけなら公開を止めない
+
+    def test_image_from_secondary_media_or_without_page_is_not_primary(self):
+        for url in ("https://www.townnews.co.jp/x.html", ""):
+            r = self.verdict_of([self.image_claim("confirmed", url=url)])
+            self.assertEqual(r["claims"][0]["status"], "not_found_in_primary", url)
+            self.assertEqual(r["verdict"], "review_required")
+
+    def test_missing_image_reading_defaults(self):
+        c = claim("20軒", "confirmed", role="dek", basis="official_image")
+        self.assertEqual(self.verdict_of([c])["claims"][0]["imageReading"], "clear")
+        self.assertEqual(self.verdict_of([claim("x", "confirmed")])["claims"][0]["imageReading"], "not_applicable")
+
+    def test_official_page_images_skips_site_chrome_and_secondary_pages(self):
+        fetched = []
+
+        def getter(url, limit):
+            fetched.append(url)
+            if url == self.PAGE:
+                return self.HTML.encode("utf-8"), "text/html", "utf-8"
+            if url.endswith("poster.jpg"):
+                return b"\xff\xd8jpeg", "image/jpeg", None
+            if url.endswith("shops.png"):
+                return b"\x89PNG", "image/png", None
+            raise AssertionError(f"取得しないはずのURL: {url}")
+
+        a = {"link": self.PAGE, "sources": ["https://www.townnews.co.jp/x.html", self.PAGE]}
+        images = fa.official_page_images(a, getter=getter)
+        self.assertEqual([im["imageUrl"] for im in images],
+                         ["https://cdn.example.jp/a/poster.jpg", "https://cdn.example.jp/a/shops.png"])
+        self.assertTrue(all(im["pageUrl"] == self.PAGE for im in images))
+        self.assertNotIn("https://www.townnews.co.jp/x.html", fetched)  # 他メディアのページは開かない
+        content = fa.first_message_content({"id": 1, "title": "t", "body": "b"}, images)
+        self.assertEqual([b["type"] for b in content], ["text", "text", "image", "text", "image"])
+        self.assertIn(self.PAGE, content[1]["text"])
+
+    def test_image_fetch_failure_is_ignored(self):
+        def getter(url, limit):
+            raise OSError("timeout")
+        self.assertEqual(fa.official_page_images({"link": self.PAGE}, getter=getter), [])
+        self.assertIsInstance(fa.first_message_content({"id": 1}, []), str)
+
+
 class CompareTest(unittest.TestCase):
     def test_compare_old_and_new(self):
         import compare_audits as ca

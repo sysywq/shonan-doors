@@ -7,6 +7,8 @@
 
   A) ニュース/イベント型(news)  … NEWS_ARTICLES_PER_DAY 件/日 (既定 3)
   B) ストックSEO型(stock)       … STOCK_ARTICLES_PER_DAY 件/日 (既定 2)
+  C) 補充(top-up)               … A+Bが DAILY_TARGET_ARTICLES 件(既定 5)に届かない分を
+                                   別のnews候補で補う(回数・監査件数に上限あり)
 
 このスクリプトはもう index.html を直接編集しない。
 ページの再生成は別ステップで build.py が行う(このスクリプトの責務ではない)。
@@ -27,8 +29,11 @@
 - APIレスポンスの型検証(listでない・件数異常・dict以外混在を検出して安全停止)。
 - 公開前監査(publish_gate.py): ドラフトは生成しただけでは公開しない。上記の検証を
   通った候補を、IDを発行する前にFact Audit(fact_audit.pyと同じ判定ルール)にかけ、
-  合格した記事だけをarticles.jsonに書き込む。不合格記事は実行レポートの
-  gate_rejectedに理由とclaimを残し、report_gate_rejections.pyがIssue化する。
+  合格した記事だけをarticles.jsonに書き込む。一次情報で修正内容が一意に決まる誤りは
+  自動修正→再監査で公開まで進め、人の判断が必要な4ケース(公式情報同士の矛盾・重要claimの
+  未確認・主旨が変わる修正・採用する情報が一意でない)だけをescalationにする。不合格記事は
+  実行レポートのgate_rejectedに理由とclaimを残し、report_gate_rejections.pyが
+  escalationのある記事だけをApprove / Reject形式でIssue化する。
   X投稿・IndexNowは従来どおりaccepted_ids(=公開が確定した記事)だけを対象にする。
 
 ストック系(今回追加)の安全設計:
@@ -108,6 +113,11 @@ SOURCE_POLICY_BLOCK = """
   店舗の設備や立地の説明など)は、すべて一次情報で確認できたものだけを使うこと。
   一次情報 = その店舗・企業・団体・主催者・自治体自身が出している公式サイト、
   公式SNS、本人が発表したプレスリリース。
+- 公式サイト・公式SNS・主催者・自治体が掲載した画像(告知ポスター、出店者一覧、料金表など)
+  の中の文字・数値も一次情報として使ってよい(本文テキストに同じ文言がなくてもよい)。
+  ただし、画像内の文字・数値が明瞭に読め、画像が対象のイベント・店舗・企画に直接
+  紐づいていて、公式の発信元が掲載したもの(切り抜き・第三者の転載ではない)に限る。
+  このとき sources には画像の掲載元ページのURLを入れること。読み取りに自信がない値は書かない。
 - 新聞、ニュースサイト、地域まとめメディア(タウンニュース、号外NET、ジモハック、
   みんなの経済新聞/各地の経済新聞、湘南人 等)、Yahoo!ニュース等の転載、ブログ、
   口コミ・グルメサイト、Wikipediaは「他メディア」とみなす。他メディアは
@@ -144,6 +154,18 @@ STOCK_ARTICLES_PER_DAY = int(os.environ.get("STOCK_ARTICLES_PER_DAY", "2"))
 # 不足分だけを追加生成して補充する(refill)回数の上限。無限ループ防止。
 # 例: 3件中1件reject → 1件だけ追加生成(1回目のrefillで届けば2回目以降は行わない)。
 NEWS_REFILL_MAX_ATTEMPTS = int(os.environ.get("NEWS_REFILL_MAX_ATTEMPTS", "3"))
+
+# 1日の公開件数の目標と最低ライン。news+stockが目標に届かない場合(stockが重複で
+# 全件見送り、公開前監査で不合格など)は、別候補(news)を補充生成して公開前監査に
+# かける(top-up)。品質基準は緩めない。最低ラインに届かなくても不合格記事は公開せず、
+# 理由を実行レポート(shortfall)に残してIssue化する。
+DAILY_TARGET_ARTICLES = int(os.environ.get("DAILY_TARGET_ARTICLES", "5"))
+DAILY_MIN_ARTICLES = int(os.environ.get("DAILY_MIN_ARTICLES", "3"))
+# top-upで別候補を生成する回数の上限(初回を含む)。無限ループ防止。
+DAILY_TOPUP_MAX_ATTEMPTS = int(os.environ.get("DAILY_TOPUP_MAX_ATTEMPTS", "3"))
+# 1回の実行で公開前監査にかけるドラフト数の上限(自動修正後の再監査は数えない)。
+# refill/top-upが重なってもAPI費用が際限なく増えないための歯止め。
+MAX_GATE_DRAFTS_PER_RUN = int(os.environ.get("MAX_GATE_DRAFTS_PER_RUN", "15"))
 
 # ---------- ストック系: API呼び出し・台帳サイズの上限(暴走防止) ----------
 STOCK_TOPIC_REFILL_THRESHOLD = int(os.environ.get("STOCK_TOPIC_REFILL_THRESHOLD", "6"))
@@ -399,15 +421,17 @@ def finalize_news_entry_id(entry, article_id):
     return entry
 
 
-def run_news_generation(existing_articles, today, event_series=None, gate_rejections=None):
+def run_news_generation(existing_articles, today, event_series=None, gate_rejections=None,
+                        count=None, max_refills=None, strict=True, label="news"):
     """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines, event_series)
     致命的なエラー(API呼び出し失敗・レスポンス形状異常)はそのまま例外を送出する
     (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。
 
-    重複・スキーマ不正でrejectされた候補が出てNEWS_ARTICLES_PER_DAYに満たない場合、
-    不足分だけを追加生成するrefillを最大NEWS_REFILL_MAX_ATTEMPTS回まで試みる
-    (件数チェック自体は緩めない。閾値未満のまま採用したり、記事を減らして
-    公開したりはしない。最終判定は呼び出し元のmain()が行う)。
+    重複・スキーマ不正でrejectされた候補が出てcount件(既定NEWS_ARTICLES_PER_DAY)に
+    満たない場合、不足分だけを追加生成するrefillを最大max_refills回
+    (既定NEWS_REFILL_MAX_ATTEMPTS)まで試みる(件数チェック自体は緩めない。
+    閾値未満のまま採用したり、記事を減らして公開したりはしない。最終判定は
+    呼び出し元のmain()が行う)。
 
     article IDは「最終的に採用が確定した記事」にのみ、この関数の最後で
     まとめて発行する(reserve_ids)。reject/refillで捨てられた候補のために
@@ -416,10 +440,15 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
     各候補は採用前に公開前監査(run_publish_gate)にかけ、不合格なら採用せず
     gate_rejections に記録する(不合格分もrefillの対象になる)。refillしても
     件数に届かなかった原因に公開前監査の不合格が含まれる場合だけは、合格した
-    記事を公開するため、届かなかった分を欠いたまま採用分を返す。"""
+    記事を公開するため、届かなかった分を欠いたまま採用分を返す。
+
+    strict=False(目標件数への補充 top-up 用)では、届かなくても合格した分をそのまま返す。
+    公開前監査の件数上限(MAX_GATE_DRAFTS_PER_RUN)に達したら、それ以上は生成しない。"""
     log_lines = []
     if gate_rejections is None:
         gate_rejections = []
+    target = count if count is not None else NEWS_ARTICLES_PER_DAY
+    max_refills = NEWS_REFILL_MAX_ATTEMPTS if max_refills is None else max_refills
     gate_rejected_before = len(gate_rejections)
     event_series = list(event_series or [])
     cutoff = (datetime.now(ZoneInfo("Asia/Tokyo")) - timedelta(days=90)).strftime("%Y-%m-%d")
@@ -433,69 +462,74 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
     def process_batch(raw_items):
         """1回分のAPIレスポンスを検証し、通った候補をaccepted/working_setに積む。"""
         for item in raw_items:
-            if len(accepted) >= NEWS_ARTICLES_PER_DAY:
+            if len(accepted) >= target:
                 break  # 想定より多く返ってきても、必要数を超えて採用はしない
             reason = validate_item(item)
             if reason:
                 title_for_log = item.get("title", "(タイトル不明)") if isinstance(item, dict) else f"(dict以外: {type(item).__name__})"
-                log_lines.append(f"スキップ(news): 「{title_for_log}」— スキーマ不正: {reason}")
+                log_lines.append(f"スキップ({label}): 「{title_for_log}」— スキーマ不正: {reason}")
                 continue
             dup_reason = is_duplicate(item, working_set, days=90)
             if dup_reason:
-                log_lines.append(f"スキップ(news): 「{item['title']}」— 重複疑い: {dup_reason}")
+                log_lines.append(f"スキップ({label}): 「{item['title']}」— 重複疑い: {dup_reason}")
                 continue
             series_dup_reason = check_series_year_duplicate(item, working_set)
             if series_dup_reason:
-                log_lines.append(f"スキップ(news): 「{item['title']}」— {series_dup_reason}")
+                log_lines.append(f"スキップ({label}): 「{item['title']}」— {series_dup_reason}")
                 continue
             subject_dup_reason = find_same_subject(item, working_set)
             if subject_dup_reason:
-                log_lines.append(f"スキップ(news): 「{item['title']}」— 同一対象の既存記事あり: {subject_dup_reason}")
+                log_lines.append(f"スキップ({label}): 「{item['title']}」— 同一対象の既存記事あり: {subject_dup_reason}")
                 continue
 
-            entry = run_publish_gate(build_news_entry(item, today), "news", gate_rejections, log_lines)
+            entry = run_publish_gate(build_news_entry(item, today), label, gate_rejections, log_lines)
             if entry is None:
                 continue
             accepted.append(entry)
             working_set.append(entry)  # 同一run内での重複(今回採用済み分との重複)も以後ここで検出される
 
     # ---- 初回生成 ----
-    log_lines.append(f"news: 初回{NEWS_ARTICLES_PER_DAY}件生成を試みます")
-    raw_items = call_claude_news(recent_titles, event_series, count=NEWS_ARTICLES_PER_DAY)
-    raw_items = validate_response_shape(raw_items, label="news")
-    if len(raw_items) != NEWS_ARTICLES_PER_DAY:
-        log_lines.append(f"警告(news): 期待した{NEWS_ARTICLES_PER_DAY}件ではなく{len(raw_items)}件が返されました")
+    log_lines.append(f"{label}: 初回{target}件生成を試みます")
+    raw_items = call_claude_news(recent_titles, event_series, count=target)
+    raw_items = validate_response_shape(raw_items, label=label)
+    if len(raw_items) != target:
+        log_lines.append(f"警告({label}): 期待した{target}件ではなく{len(raw_items)}件が返されました")
     process_batch(raw_items)
-    log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用")
+    log_lines.append(f"{label}: {len(accepted)}/{target}件採用")
 
-    # ---- 不足分だけをrefill(最大NEWS_REFILL_MAX_ATTEMPTS回) ----
+    # ---- 不足分だけをrefill(最大max_refills回。公開前監査の件数上限でも止める) ----
     attempt = 0
-    while len(accepted) < NEWS_ARTICLES_PER_DAY and attempt < NEWS_REFILL_MAX_ATTEMPTS:
+    while len(accepted) < target and attempt < max_refills:
+        if gate_budget_exhausted():
+            log_lines.append(f"警告({label}): 公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に達したため、補充生成を打ち切ります")
+            break
         attempt += 1
-        shortfall = NEWS_ARTICLES_PER_DAY - len(accepted)
-        log_lines.append(f"news: {shortfall}件不足 → refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS}")
+        shortfall = target - len(accepted)
+        log_lines.append(f"{label}: {shortfall}件不足 → refill attempt {attempt}/{max_refills}")
         # 「今回のrunで既に採用済みの記事」も重複防止リストに含めることで、
         # refillが直前に採用した記事と同じ話題を提案してくる確率を下げる。
         refill_recent_titles = recent_titles + [article_digest(a) for a in accepted]
         refill_raw_items = call_claude_news(refill_recent_titles, event_series, count=shortfall)
-        refill_raw_items = validate_response_shape(refill_raw_items, label="news_refill")
-        log_lines.append(f"news: 追加で{len(refill_raw_items)}件生成しました(refill attempt {attempt}/{NEWS_REFILL_MAX_ATTEMPTS})")
+        refill_raw_items = validate_response_shape(refill_raw_items, label=f"{label}_refill")
+        log_lines.append(f"{label}: 追加で{len(refill_raw_items)}件生成しました(refill attempt {attempt}/{max_refills})")
         process_batch(refill_raw_items)
-        log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用")
+        log_lines.append(f"{label}: {len(accepted)}/{target}件採用")
 
-    if len(accepted) >= NEWS_ARTICLES_PER_DAY:
-        log_lines.append(f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件採用完了")
+    if len(accepted) >= target:
+        log_lines.append(f"{label}: {len(accepted)}/{target}件採用完了")
+    elif not strict:
+        log_lines.append(f"警告({label}): 上限まで補充しても{target}件に届きませんでした。合格した{len(accepted)}件だけを公開します。")
     elif len(gate_rejections) > gate_rejected_before:
         # 不足の原因に公開前監査の不合格が含まれる。不合格記事を公開しないことが
         # 目的なので、合格した記事だけを公開する(件数合わせのために基準は緩めない)。
         log_lines.append(
-            f"警告(news): 公開前監査の不合格があり、retry上限({NEWS_REFILL_MAX_ATTEMPTS}回)後も"
-            f"{NEWS_ARTICLES_PER_DAY}件に届きませんでした。合格した{len(accepted)}件だけを公開します。"
+            f"警告({label}): 公開前監査の不合格があり、retry上限({max_refills}回)後も"
+            f"{target}件に届きませんでした。合格した{len(accepted)}件だけを公開します。"
         )
     else:
         log_lines.append(
-            f"news: retry上限({NEWS_REFILL_MAX_ATTEMPTS}回)に達しても"
-            f"{NEWS_ARTICLES_PER_DAY}件に届きませんでした(最終 {len(accepted)}件)。"
+            f"{label}: retry上限({max_refills}回)に達しても"
+            f"{target}件に届きませんでした(最終 {len(accepted)}件)。"
             "articles.json / id_counterへは一切書き込みません。"
         )
         # ここでは例外を出さず、呼び出し元(main)の既存の件数チェックに判定を委ねる
@@ -510,10 +544,10 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
         finalize_news_entry_id(entry, new_id)
         event_series, added = register_event_series_if_new(entry, event_series)
         if added:
-            log_lines.append(f"news: 新規イベントシリーズ「{entry['eventSeriesKey']}」を台帳に追加しました")
+            log_lines.append(f"{label}: 新規イベントシリーズ「{entry['eventSeriesKey']}」を台帳に追加しました")
 
     log_lines.append(
-        f"news: {len(accepted)}/{NEWS_ARTICLES_PER_DAY}件を採用しました (id:{[a['id'] for a in accepted]})"
+        f"{label}: {len(accepted)}/{target}件を採用しました (id:{[a['id'] for a in accepted]})"
     )
     return accepted, log_lines, event_series
 
@@ -961,6 +995,10 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
 
         # 公開前監査。不合格の記事は公開せず、同じテーマを毎日選び直さないよう
         # テーマ台帳ではskipped扱いにする(理由はskipReasonに残す)。
+        # 監査件数の上限に達していたら、テーマは候補のまま残して翌日以降に回す。
+        if gate_budget_exhausted():
+            log_lines.append(f"stock: 「{topic['query']}」— 公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に達したため見送り(候補のまま残します)")
+            continue
         entry = run_publish_gate(entry, "stock", gate_rejections, log_lines)
         if entry is None:
             topic["status"] = "skipped"
@@ -1286,30 +1324,47 @@ def register_event_series_if_new(item, event_series):
 # ---------- 公開前監査ゲート ----------
 
 _gate_client = None
+_gate_drafts_checked = 0  # この実行で公開前監査にかけたドラフト数(MAX_GATE_DRAFTS_PER_RUN と比べる)
+
+
+def gate_budget_exhausted():
+    """公開前監査の件数上限に達したか。達したら以後のドラフトは生成・監査しない(公開もしない)。"""
+    import publish_gate
+
+    return publish_gate.enabled() and _gate_drafts_checked >= MAX_GATE_DRAFTS_PER_RUN
 
 
 def run_publish_gate(entry, article_type, gate_rejections, log_lines):
     """ドラフトを公開前監査(publish_gate.check_draft)にかける。
     合格なら公開してよいentry(自動修正した場合は修正後)を、不合格ならNoneを返し、
-    理由とclaimをgate_rejectionsに記録する。監査自体に失敗した記事も不合格(公開しない)。"""
-    global _gate_client
+    理由とclaimをgate_rejectionsに記録する。監査自体に失敗した記事も不合格(公開しない)。
+    監査件数の上限に達していたら、監査せずにNoneを返す(品質の不合格ではないので記録しない)。"""
+    global _gate_client, _gate_drafts_checked
     import publish_gate  # fact_auditがこのモジュールをimportするため、循環しないよう遅延import
 
     if not publish_gate.enabled():
         return entry
+    if gate_budget_exhausted():
+        log_lines.append(f"スキップ({article_type}): 「{entry.get('title', '')}」— 公開前監査の件数上限"
+                         f"({MAX_GATE_DRAFTS_PER_RUN}件)に達したため監査せず、公開しません")
+        return None
     if _gate_client is None:
         _gate_client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    _gate_drafts_checked += 1
     gate = publish_gate.check_draft(entry, client=_gate_client)
     title = entry.get("title", "")
     if gate["passed"]:
         if gate.get("autofix"):
-            changes = ", ".join(f"「{f['from']}」→「{f['to']}」" for f in gate["autofix"])
+            changes = ", ".join(f"「{f['from']}」→「{f['to'] or '(削除)'}」" for f in gate["autofix"])
             log_lines.append(f"{article_type}: 公開前監査で自動修正し、再監査で合格: 「{title}」({changes})")
         else:
             log_lines.append(f"{article_type}: 公開前監査に合格: 「{title}」")
         return gate["entry"]
     gate_rejections.append(publish_gate.rejection_record(entry, gate, article_type))
-    log_lines.append(f"スキップ({article_type}): 「{title}」— 公開前監査で不合格: {' / '.join(gate['reasons'])}")
+    esc = gate.get("escalation")
+    next_step = f"要判断({esc['reason']})" if esc else "人の判断は不要のため自動で見送り"
+    log_lines.append(f"スキップ({article_type}): 「{title}」— 公開前監査で不合格: {' / '.join(gate['reasons'])}"
+                     f" → {next_step}")
     return None
 
 
@@ -1323,6 +1378,13 @@ def write_gate_summary(gate_rejections):
     lines = [f"## 公開前監査で不合格の記事({len(gate_rejections)}件・公開していません)", ""]
     for r in gate_rejections:
         lines.append(f"### [{r['articleType']}] {r['title']}")
+        esc = r.get("escalation")
+        if esc:
+            import publish_gate
+            lines += [f"要判断({esc.get('reason', '')})。Issueで Approve / Reject を選んでください。", "",
+                      "```", publish_gate.format_escalation(esc), "```"]
+        else:
+            lines.append("- 人の判断は不要のため自動で見送り(Issueにしない)")
         lines.append(f"- 判定: {r.get('verdict')} / 理由: {' / '.join(r['reasons'])}")
         for c in r.get("claims", []):
             lines.append(f"- {c.get('status')}({c.get('role')}): {c.get('claim')} "
@@ -1331,6 +1393,39 @@ def write_gate_summary(gate_rejections):
     try:
         with open(path, "a", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")
+    except OSError as e:
+        print(f"警告: ジョブサマリーの書き込みに失敗しました: {e}", file=sys.stderr)
+
+
+def shortfall_info(total, stock_count, gate_rejected):
+    """公開件数が最低ライン(DAILY_MIN_ARTICLES)に届かなかった場合の記録。届いていればNone。
+    件数合わせのために不合格記事を公開することはしないので、理由を残して人が判断できるようにする。"""
+    if total >= DAILY_MIN_ARTICLES:
+        return None
+    reasons = []
+    if gate_rejected:
+        reasons.append(f"公開前監査で不合格 {len(gate_rejected)}件(品質基準は緩めずに見送り)")
+    if stock_count == 0:
+        reasons.append("stockは重複判定・見送り・不合格などで0件")
+    if gate_budget_exhausted():
+        reasons.append(f"公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に到達")
+    reasons.append(f"news補充(refill {NEWS_REFILL_MAX_ATTEMPTS}回・top-up {DAILY_TOPUP_MAX_ATTEMPTS}回)の上限まで試行")
+    return {"total": total, "min": DAILY_MIN_ARTICLES, "target": DAILY_TARGET_ARTICLES, "reasons": reasons}
+
+
+def write_shortfall_summary(shortfall, today):
+    """最低件数に届かなかったことを警告とジョブサマリーに出す(Issue化は report_gate_rejections.py)。"""
+    if not shortfall:
+        return
+    msg = (f"{today} の公開は{shortfall['total']}件で、最低{shortfall['min']}件に届きませんでした"
+           f"(目標{shortfall['target']}件)。不合格記事は公開していません。理由: {' / '.join(shortfall['reasons'])}")
+    print(f"::warning::{msg}")
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    try:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(f"## 公開件数が最低ラインに未達\n\n{msg}\n\n")
     except OSError as e:
         print(f"警告: ジョブサマリーの書き込みに失敗しました: {e}", file=sys.stderr)
 
@@ -1485,6 +1580,26 @@ def main():
         log_lines.append(f"stock: エラーのため本日は0件としました。詳細: {e}")
         print(f"警告: ストック記事の生成でエラーが発生しました(newsの結果には影響しません)。詳細: {e}", file=sys.stderr)
 
+    # ---- C) 目標件数への補充(top-up。失敗しても致命的にはしない) ----
+    # news+stockが DAILY_TARGET_ARTICLES に届かない分だけ、別のnews候補を生成して
+    # 同じ公開前監査にかける(基準は緩めない)。生成回数・監査件数とも上限付き。
+    shortfall = DAILY_TARGET_ARTICLES - len(accepted_news) - len(accepted_stock)
+    if shortfall > 0 and NEWS_ARTICLES_PER_DAY > 0 and DAILY_TOPUP_MAX_ATTEMPTS > 0:
+        if gate_budget_exhausted():
+            log_lines.append(f"警告(topup): 公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に達しているため、補充は行いません")
+        else:
+            log_lines.append(f"topup: 目標{DAILY_TARGET_ARTICLES}件に{shortfall}件不足 → 別候補を補充生成して公開前監査にかけます"
+                             f"(最大{DAILY_TOPUP_MAX_ATTEMPTS}回)")
+            try:
+                accepted_topup, topup_log, event_series = run_news_generation(
+                    existing_articles + accepted_news + accepted_stock, today, event_series,
+                    gate_rejections=news_gate_rejections, count=shortfall,
+                    max_refills=DAILY_TOPUP_MAX_ATTEMPTS - 1, strict=False, label="topup")
+                log_lines.extend(topup_log)
+                accepted_news = accepted_news + accepted_topup
+            except Exception as e:
+                log_lines.append(f"topup: エラーのため補充を打ち切りました(合格済みの記事はそのまま公開します)。詳細: {e}")
+
     for line in log_lines:
         is_warn = line.startswith(("スキップ", "警告")) or "スキップ" in line or "エラー" in line
         print(line, file=sys.stderr if is_warn else sys.stdout)
@@ -1492,6 +1607,8 @@ def main():
     accepted_all = accepted_news + accepted_stock
     gate_rejected = news_gate_rejections + stock_gate_rejections
     write_gate_summary(gate_rejected)
+    shortfall = shortfall_info(len(accepted_all), len(accepted_stock), gate_rejected)
+    write_shortfall_summary(shortfall, today)
 
     if not accepted_all:
         print("採用できる記事が1件もありませんでした(news/stockともに0件)。articles.jsonは変更していません。", file=sys.stderr)
@@ -1501,8 +1618,8 @@ def main():
         write_run_report(
             status="no_articles_passed_gate" if all_rejected_by_gate else "no_articles_accepted",
             accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
-            news_count=0, stock_count=0, total_count=0,
-            gate_rejected=gate_rejected,
+            news_count=0, stock_count=0, total_count=0, date=today,
+            gate_rejected=gate_rejected, shortfall=shortfall,
         )
         # ストック台帳・イベントシリーズ台帳の状態(候補追加・skip反映)だけは
         # 保存しておく価値があるため書き込む
@@ -1542,6 +1659,7 @@ def main():
         total_count=len(accepted_all),
         date=today,
         gate_rejected=gate_rejected,
+        shortfall=shortfall,
     )
 
 

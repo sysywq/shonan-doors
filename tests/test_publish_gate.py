@@ -16,7 +16,23 @@ sys.path.insert(0, ROOT)
 sys.modules.setdefault("anthropic", types.ModuleType("anthropic"))
 import generate_articles as g  # noqa: E402
 import publish_gate as pg  # noqa: E402
+import fact_audit as pg_fa  # noqa: E402
 import report_gate_rejections as rgr  # noqa: E402
+import fact_audit as fa  # noqa: E402
+
+_real_http_get = fa._http_get
+
+
+def _no_network(url, limit):
+    raise OSError("テストでは公式ページの画像を取得しない")
+
+
+def setUpModule():
+    fa._http_get = _no_network
+
+
+def tearDownModule():
+    fa._http_get = _real_http_get
 
 
 def claim(text, status, role="detail", av="", pv="", url="https://www.city.example.lg.jp/event.html"):
@@ -56,7 +72,10 @@ class FakeClient:
         self.messages = self
 
     def create(self, **kw):
-        art = json.loads(kw["messages"][0]["content"].split("\n\n", 1)[1])
+        content = kw["messages"][0]["content"]
+        if isinstance(content, list):  # 公式画像を添付したメッセージは、先頭のテキストに記事がある
+            content = content[0]["text"]
+        art = json.JSONDecoder().raw_decode(content.split("\n\n", 1)[1])[0]
         self.calls.append(art["title"])
         v = self.by_title[art["title"]].pop(0)
         if isinstance(v, Exception):
@@ -130,6 +149,43 @@ class AutofixTest(unittest.TestCase):
         text = audit_response([claim("創業", "contradicted", av="明治期から続く", pv="昭和創業")])
         self.assertIsNone(pg.safe_autofix(draft("A", body="明治期から続く店。"), normalized(text))[0])
 
+    # Issue #29 の型: 置き換えでは直せない細部の誤り → その1文だけを削除する
+    FEE = audit_response([claim("料金", "contradicted",
+                                av="映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）",
+                                pv="映画鑑賞料（通常上映）一般1,300円・小中学生650円／展示観覧料（特別展）一般500円・小中学生250円（別立て）")])
+
+    def test_unreplaceable_detail_sentence_is_removed(self):
+        body = "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        fixed, fixes = pg.safe_autofix(draft("A", body=body), normalized(self.FEE))
+        self.assertEqual(fixed["body"], "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。月曜休館。")
+        self.assertEqual(fixes[0]["action"], "remove")
+        self.assertEqual(fixes[0]["to"], "")
+        self.assertEqual(fixed["sources"], draft("A")["sources"])  # 削除では情報源を増やさない
+
+    def test_sentence_not_removed_when_paragraph_would_vanish_or_in_dek(self):
+        lone = "特別展が開かれている。\n\n映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。"
+        self.assertIsNone(pg.safe_autofix(draft("A", body=lone), normalized(self.FEE))[0])
+        body = "開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        in_dek = draft("A", body=body, dek="映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）")
+        self.assertIsNone(pg.safe_autofix(in_dek, normalized(self.FEE))[0])
+
+    def test_removal_limit_and_core_claims_are_respected(self):
+        many = audit_response([claim(f"細部{i}", "contradicted", av=f"誤り{i}の記述", pv=f"正しい記述{i}ではない長い説明" * 3)
+                               for i in range(3)])
+        body = "導入。誤り0の記述がある。誤り1の記述がある。誤り2の記述がある。結び。"
+        self.assertIsNone(pg.safe_autofix(draft("A", body=body), normalized(many))[0])  # 3文目の削除は上限超え
+        mixed = audit_response([claim("料金", "contradicted", av="誤り0の記述", pv="別の長い説明" * 5),
+                                claim("会場", "contradicted", role="central", av="海岸", pv="山")])
+        self.assertIsNone(pg.safe_autofix(draft("A", body=body), normalized(mixed))[0])
+
+    def test_removal_then_reaudit_pass(self):
+        body = "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        client = FakeClient({"料金記事": [self.FEE, PASS]})
+        gate = pg.check_draft(draft("料金記事", body=body), client=client)
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 2)
+        self.assertNotIn("展示観覧料含む", gate["entry"]["body"])
+
 
 class CheckDraftTest(unittest.TestCase):
     def test_pass(self):
@@ -164,6 +220,172 @@ class CheckDraftTest(unittest.TestCase):
     def test_audit_exception_is_rejected(self):
         gate = pg.check_draft(draft("例外記事"), client=FakeClient({"例外記事": [RuntimeError("boom")]}))
         self.assertFalse(gate["passed"])
+        self.assertIsNone(gate["escalation"])  # 監査できなかった記事は人に聞かずに見送る
+
+
+# ---- 自動判断の原則: 一次情報で修正内容が一意に決まるなら、人に聞かずに直して再監査する ----
+CORE_DATE = audit_response([claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日"),
+                            claim("会場は海岸", "confirmed", role="dek")])
+
+
+class AutoDecisionTest(unittest.TestCase):
+    def test_core_value_swap_is_fixed_everywhere_and_event_date_synced(self):
+        d = draft("10月3日開催の海辺まつり", dek="10月3日に海岸で開く", body="まつりは10月3日。10月13日は予備日。",
+                  eventStartDate="2026-10-03")
+        fixed, fixes = pg.safe_autofix(d, normalized(CORE_DATE))
+        self.assertEqual(fixed["title"], "10月10日開催の海辺まつり")
+        self.assertEqual(fixed["dek"], "10月10日に海岸で開く")
+        self.assertEqual(fixed["body"], "まつりは10月10日。10月13日は予備日。")  # 別の日付は触らない
+        self.assertEqual(fixed["eventStartDate"], "2026-10-10")
+        self.assertEqual(fixes[0]["syncedFields"], ["eventStartDate"])
+
+    def test_digit_boundary_is_respected(self):
+        r = normalized(audit_response([claim("初日", "contradicted", av="3日", pv="4日")]))
+        fixed, _ = pg.safe_autofix(draft("A", body="初日は3日。最終日は13日。"), r)
+        self.assertEqual(fixed["body"], "初日は4日。最終日は13日。")
+
+    def test_access_value_is_fixed_even_without_digit_in_article(self):
+        r = normalized(audit_response([claim("アクセス", "contradicted", av="駅から徒歩数分", pv="駅から徒歩15分")]))
+        fixed, _ = pg.safe_autofix(draft("A", body="会場は駅から徒歩数分。"), r)
+        self.assertEqual(fixed["body"], "会場は駅から徒歩15分。")
+
+    def test_core_wording_or_unit_change_is_not_fixed_and_escalated(self):
+        for av, pv in (("海岸", "山"), ("10月3日", "10日間")):
+            r = normalized(audit_response([claim("会場", "contradicted", role="central", av=av, pv=pv)]))
+            d = draft("A", body=f"会場は{av}。ほかの文。")
+            self.assertIsNone(pg.safe_autofix(d, r)[0])
+            self.assertEqual(pg.escalation(d, r)["kind"], "premise_change")
+
+    def test_conflicting_primary_values_are_not_fixed_and_escalated(self):
+        r = normalized(audit_response([claim("料金", "contradicted", av="500円", pv="600円"),
+                                       claim("料金", "contradicted", av="500円", pv="700円",
+                                             url="https://www.city.example.lg.jp/fee.html")]))
+        d = draft("A", body="入場は500円。")
+        self.assertIsNone(pg.safe_autofix(d, r)[0])
+        esc = pg.escalation(d, r)
+        self.assertEqual(esc["kind"], "ambiguous")
+        self.assertIn("600円", esc["official"])
+        self.assertIn("700円", esc["official"])
+
+    def test_core_fix_then_reaudit_pass_needs_no_human(self):
+        d = draft("海辺の祭り", dek="10月3日開催", body="祭りは10月3日。海辺で開く。")
+        gate = pg.check_draft(d, client=FakeClient({"海辺の祭り": [CORE_DATE, PASS]}))
+        self.assertTrue(gate["passed"])
+        self.assertIsNone(gate["escalation"])
+        self.assertEqual(gate["entry"]["dek"], "10月10日開催")
+        self.assertEqual(gate["audits"], 2)
+
+    def test_second_round_fix_is_bounded(self):
+        second = audit_response([claim("料金", "contradicted", av="500円", pv="600円")])
+        body = "開始は10時開始の予定。入場は500円。"
+        gate = pg.check_draft(draft("二段修正", body=body),
+                              client=FakeClient({"二段修正": [FAIL_DETAIL_TIME, second, PASS]}))
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 3)
+        self.assertEqual(gate["entry"]["body"], "開始は11時開始の予定。入場は600円。")
+        # 上限(AUTOFIX_MAX_ROUNDS)を超える修正はしない
+        with mock.patch.object(pg, "AUTOFIX_MAX_ROUNDS", 1):
+            gate = pg.check_draft(draft("二段修正", body=body),
+                                  client=FakeClient({"二段修正": [FAIL_DETAIL_TIME, second, PASS]}))
+        self.assertFalse(gate["passed"])
+        self.assertEqual(gate["audits"], 2)
+        self.assertEqual(gate["escalation"]["kind"], "ambiguous")  # 残りは要判断として通知される
+        self.assertIn("11時開始", gate["candidate"]["body"])  # Approve 時は修正済みの版から続ける
+
+
+class EscalationTest(unittest.TestCase):
+    def test_only_four_kinds_need_a_human(self):
+        d = draft("A")
+        conflict = normalized(dict(PASS, needsHuman=True,
+                                   claims=[claim("料金", "contradicted", av="500円", pv="600円")]))
+        self.assertEqual(pg.escalation(d, conflict)["kind"], "source_conflict")
+        core_nf = normalized(audit_response([claim("20軒が出店", "not_found_in_primary", role="dek", av="20軒")]))
+        esc = pg.escalation(d, core_nf)
+        self.assertEqual(esc["kind"], "core_unverified")
+        self.assertIn("公式情報に記載なし", esc["official"])
+        # 人に聞いても直せない不合格・合格は通知しない
+        self.assertIsNone(pg.escalation(d, normalized(dict(PASS, hasQuotedComment=True))))
+        self.assertIsNone(pg.escalation(d, normalized("壊れた応答")))
+        self.assertIsNone(pg.escalation(d, normalized(PASS)))
+
+    def test_notification_is_five_lines_approve_or_reject(self):
+        r = normalized(audit_response([claim("料金", "contradicted", role="central", av="参加費1,000円", pv="夜間入苑料 大人500円")]))
+        text = pg.format_escalation(pg.escalation(draft("湘南キャンドル"), r))
+        lines = text.split("\n")
+        self.assertEqual([l.split(":")[0] for l in lines], ["対象トピック", "記事内", "公式情報", "Approve", "Reject"])
+        self.assertIn("湘南キャンドル", lines[0])
+        self.assertIn("参加費1,000円", lines[1])
+        self.assertIn("夜間入苑料 大人500円", lines[2])
+        self.assertIn("再監査", lines[3])
+        self.assertIn("見送り", lines[4])
+
+
+def image_claim(text, status, role="dek", av="", pv="", reading="clear",
+                url="https://shonan.terracemall.com/event/detail/?cd=001233"):
+    return dict(claim(text, status, role=role, av=av, pv=pv, url=url), basis="official_image",
+                imageReading=reading, imageUrl="https://shonan-terracemall.pictona.jp/x.png")
+
+
+class OfficialImageTest(unittest.TestCase):
+    """公式サイト・公式SNSの画像内の情報を一次情報として扱う(#30 の型)"""
+
+    def test_clear_official_image_passes_without_human(self):
+        # 本文テキストに無くても、公式ページの画像(出店者一覧)で明瞭に確認できれば合格
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("湘南の珈琲店20店が出店", "confirmed", av="20店", pv="出店者一覧20店")]))
+        passed, reasons, _ = pg.evaluate(r)
+        self.assertTrue(passed, reasons)
+        self.assertIsNone(pg.escalation(draft("湘南海街珈琲祭2026"), r))
+
+    def test_gate_publishes_article_backed_by_official_image(self):
+        resp = audit_response([claim("10月3・4日開催", "confirmed", role="central"),
+                               image_claim("20店が出店", "confirmed", av="20店", pv="出店者一覧20店")])
+        img = {"pageUrl": "https://shonan.terracemall.com/event/detail/?cd=001233",
+               "imageUrl": "https://shonan-terracemall.pictona.jp/x.png", "mediaType": "image/png", "data": "AAAA"}
+        with mock.patch.object(pg_fa, "official_page_images", return_value=[img]):
+            gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}), confirmations=[])
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 1)
+        # 監査に添付していない画像を根拠にした場合は、公式画像で確認したとは扱わない
+        with mock.patch.object(pg_fa, "official_page_images", return_value=[]):
+            gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}), confirmations=[])
+        self.assertFalse(gate["passed"])
+
+    def test_ambiguous_core_image_reading_is_escalated_as_approve_reject(self):
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("自家焙煎店20軒", "confirmed", av="自家焙煎店20軒", pv="出店者20(または26)", reading="ambiguous")]))
+        passed, _, blocking = pg.evaluate(r)
+        self.assertFalse(passed)
+        self.assertEqual(blocking[0]["status"], "not_found_in_primary")
+        esc = pg.escalation(draft("湘南海街珈琲祭2026"), r)
+        self.assertEqual(esc["kind"], "image_reading")
+        lines = pg.format_escalation(esc).split("\n")
+        self.assertEqual([l.split(":")[0].split(" ")[0] for l in lines],
+                         ["対象トピック", "公式画像", "AIが読み取れた候補", "確認してほしい項目", "[Approve]", "[Reject]"])
+        self.assertIn("https://shonan-terracemall.pictona.jp/x.png", lines[1])
+        self.assertIn("出店者20(または26)", lines[2])
+        self.assertIn("「自家焙煎店20軒」で正しいか", lines[3])
+        self.assertIn("見送り", lines[5])
+
+    def test_ambiguous_detail_image_reading_does_not_need_a_human(self):
+        # 細部の読み取りの曖昧さは、ほかの細部の未確認と同じく公開を止めない(人に聞かない)
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("ミニマグの容量", "confirmed", role="detail", av="90ml", pv="90ml?", reading="ambiguous")]))
+        self.assertTrue(pg.evaluate(r)[0])
+
+    def test_image_without_official_source_page_is_not_primary(self):
+        # 掲載元が他メディア(転載)・URL無しの画像は一次情報にならない → 骨格なら未確認
+        for url in ("https://www.townnews.co.jp/0605/2026/09/01/1.html", ""):
+            r = normalized(audit_response([
+                claim("10月3・4日開催", "confirmed", role="central"),
+                image_claim("20店が出店", "confirmed", av="20店", pv="20店", url=url)]))
+            passed, reasons, blocking = pg.evaluate(r)
+            self.assertFalse(passed, url)
+            self.assertIn("掲載元が一次情報と確認できない", blocking[0]["note"])
+            self.assertEqual(pg.escalation(draft("珈琲祭"), r)["kind"], "core_unverified")
 
 
 def news_item(title, body_seed):
@@ -198,6 +420,10 @@ class DailyIntegrationTest(unittest.TestCase):
             mock.patch.object(g, "RUN_REPORT_PATH", self.paths["report"]),
             mock.patch.object(g, "NEWS_ARTICLES_PER_DAY", 2),
             mock.patch.object(g, "NEWS_REFILL_MAX_ATTEMPTS", 1),
+            # 既存テストは news 2件=目標・最低ラインとして動かす(top-up はTopUpTestで確認する)
+            mock.patch.object(g, "DAILY_TARGET_ARTICLES", 2),
+            mock.patch.object(g, "DAILY_MIN_ARTICLES", 1),
+            mock.patch.object(g, "_gate_drafts_checked", 0),
             mock.patch.object(g, "_gate_client", object()),
             mock.patch.object(g, "run_stock_generation", lambda existing, topics, today, log, gate_rejections=None: ([], topics)),
             mock.patch.dict(os.environ, {"PUBLISH_GATE": "on"}),
@@ -225,7 +451,13 @@ class DailyIntegrationTest(unittest.TestCase):
                     "claims": [] if ok else [claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日")],
                     "summary": "", "primarySources": [], "autofix": [], "audits": 1}
 
-        with mock.patch.object(g, "call_claude_news", lambda *a, **kw: next(calls)), \
+        self.news_calls = []
+
+        def fake_news(recent_titles, event_series=None, count=None):
+            self.news_calls.append(count)
+            return next(calls)
+
+        with mock.patch.object(g, "call_claude_news", fake_news), \
                 mock.patch.object(pg, "check_draft", fake_check):
             g.main()
         return self.load("report")
@@ -276,6 +508,61 @@ class DailyIntegrationTest(unittest.TestCase):
                           {"秋の海辺まつり": True, "既存記事": True})
         self.assertEqual(self.load("report")["status"], "error")
 
+    # ---- 目標件数への補充(top-up)・最低ライン・上限 ----
+
+    def test_topup_fills_to_target_with_other_candidates(self):
+        # news 2件 + stock 0件 → 目標4件に2件不足 → 別候補を生成して監査(不合格分はさらに補充)
+        with mock.patch.object(g, "DAILY_TARGET_ARTICLES", 4), mock.patch.object(g, "DAILY_TOPUP_MAX_ATTEMPTS", 2):
+            report = self.run_main(
+                [[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), news_item("山の音楽会", "山の上で催しがある。")],
+                 [news_item("補充で不合格", "川沿いで行事がある。"), news_item("補充で合格", "駅前で市が立つ。")],
+                 [news_item("再補充で合格", "寺で展示がある。")]],
+                {"秋の海辺まつり": True, "山の音楽会": True, "補充で不合格": False, "補充で合格": True, "再補充で合格": True},
+            )
+        self.assertEqual(self.news_calls, [2, 2, 1])
+        self.assertEqual(report["accepted_ids"], [10, 11, 12, 13])
+        self.assertEqual(report["total_count"], 4)
+        self.assertEqual([r["title"] for r in report["gate_rejected"]], ["補充で不合格"])
+        self.assertIsNone(report["shortfall"])
+        self.assertNotIn("補充で不合格", [a["title"] for a in self.load("articles")])
+
+    def test_topup_is_bounded_and_below_minimum_is_reported(self):
+        # 不合格が続いても top-up は上限回数で止まり、最低ライン未達は理由付きで記録される(不合格記事は公開しない)
+        with mock.patch.object(g, "DAILY_TARGET_ARTICLES", 4), mock.patch.object(g, "DAILY_MIN_ARTICLES", 3), \
+                mock.patch.object(g, "DAILY_TOPUP_MAX_ATTEMPTS", 2):
+            report = self.run_main(
+                [[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), news_item("誤りA", "山の上で催しがある。")],
+                 [news_item("誤りB", "川沿いで行事がある。")],
+                 [news_item("誤りC", "駅前で市が立つ。")],
+                 [news_item("誤りD", "寺で展示がある。")],
+                 [news_item("上限後の候補", "港で祭りがある。")]],
+                {"秋の海辺まつり": True, "誤りA": False, "誤りB": False, "誤りC": False, "誤りD": False, "上限後の候補": True},
+            )
+        self.assertEqual(self.news_calls, [2, 1, 3, 3])  # 上限後は生成しない
+        self.assertEqual(report["accepted_ids"], [10])
+        self.assertEqual(report["status"], "ok")
+        self.assertEqual(report["shortfall"]["total"], 1)
+        self.assertEqual(report["shortfall"]["min"], 3)
+        self.assertTrue(any("不合格 4件" in r for r in report["shortfall"]["reasons"]))
+        titles = [a["title"] for a in self.load("articles")]
+        self.assertEqual([t for t in titles if t != "既存記事"], ["秋の海辺まつり"])
+
+    def test_gate_budget_stops_generation(self):
+        with mock.patch.object(g, "MAX_GATE_DRAFTS_PER_RUN", 3), mock.patch.object(g, "DAILY_TARGET_ARTICLES", 5), \
+                mock.patch.object(g, "NEWS_REFILL_MAX_ATTEMPTS", 3):
+            report = self.run_main(
+                [[news_item("誤りA", "海辺のまつりが開かれる。"), news_item("誤りB", "山の上で催しがある。")],
+                 [news_item("誤りC", "川沿いで行事がある。"), news_item("誤りD", "駅前で市が立つ。")],
+                 [news_item("上限後の候補", "寺で展示がある。")]],
+                {"誤りA": False, "誤りB": False, "誤りC": False, "誤りD": True, "上限後の候補": True},
+            )
+        self.assertEqual(self.news_calls, [2, 2])
+        self.assertEqual(g._gate_drafts_checked, 3)
+        # 上限を超えた「誤りD」は監査していないので公開もIssue化もしない
+        self.assertEqual([r["title"] for r in report["gate_rejected"]], ["誤りA", "誤りB", "誤りC"])
+        self.assertEqual(report["accepted_ids"], [])
+        self.assertEqual(report["status"], "no_articles_passed_gate")
+
 
 class StockGateTest(unittest.TestCase):
     def test_rejected_stock_topic_is_skipped_and_consumes_no_id(self):
@@ -322,11 +609,13 @@ class ReportIssuesTest(unittest.TestCase):
                       ensure_ascii=False)
         return path
 
-    def rejected(self, title="誤りのある記事"):
+    def rejected(self, title="誤りのある記事", escalate=True):
+        c = claim("開催日", "contradicted", role="central", av="海の日", pv="山の日")
         return pg.rejection_record(draft(title), {
             "verdict": "fix", "reasons": ["一次情報と矛盾する記述(contradicted)が1件"],
-            "claims": [claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日")],
-            "summary": "開催日が違う", "primarySources": [], "autofix": []}, "news")
+            "claims": [c], "summary": "開催日が違う", "primarySources": [], "autofix": [],
+            "escalation": pg.escalation(draft(title), normalized(audit_response([c]))) if escalate else None},
+            "news")
 
     def test_creates_issue_with_reason_and_claims(self):
         calls = []
@@ -343,8 +632,25 @@ class ReportIssuesTest(unittest.TestCase):
         self.assertEqual(posts[0][1], "/repos/owner/repo/issues")
         self.assertIn("誤りのある記事", posts[0][2]["title"])
         body = posts[0][2]["body"]
-        for s in ("公開していません", "contradicted", "10月3日", "10月10日", "開催日"):
+        self.assertTrue(body.startswith("対象トピック: 誤りのある記事\n記事内: 海の日\n公式情報: 山の日"))
+        for s in ("Approve: ", "Reject: ", "@claude Approve", "@claude Reject", "公開していません",
+                  "contradicted", "開催日", "<details>"):
             self.assertIn(s, body)
+
+    def test_rejection_without_escalation_creates_no_issue(self):
+        calls = []
+
+        def fake_request(method, path, token, payload=None):
+            calls.append((method, payload))
+            return [] if method == "GET" else {}
+
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
+            report = self.write_report(d, [self.rejected("自動見送り", escalate=False), self.rejected("判断待ち")])
+            rgr.main(["--report", report], request=fake_request)
+        posts = [p for m, p in calls if m == "POST"]
+        self.assertEqual(len(posts), 1)  # 人の判断が要る記事だけIssueにする
+        self.assertIn("判断待ち", posts[0]["title"])
 
     def test_skips_existing_open_issue(self):
         title = rgr.issue_title(self.rejected(), "2026-09-25")
@@ -358,6 +664,29 @@ class ReportIssuesTest(unittest.TestCase):
                 mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
             rgr.main(["--report", self.write_report(d, [self.rejected()])], request=fake_request)
         self.assertNotIn("POST", calls)
+
+    def test_shortfall_creates_one_issue_with_reasons(self):
+        calls = []
+
+        def fake_request(method, path, token, payload=None):
+            calls.append((method, payload))
+            return [] if method == "GET" else {}
+
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
+            path = os.path.join(d, "report.json")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"status": "ok", "date": "2026-09-26", "accepted_ids": [10],
+                           "gate_rejected": [self.rejected()],
+                           "shortfall": {"total": 1, "min": 3, "target": 5,
+                                         "reasons": ["公開前監査で不合格 1件(品質基準は緩めずに見送り)"]}},
+                          f, ensure_ascii=False)
+            rgr.main(["--report", path], request=fake_request)
+        posts = [p for m, p in calls if m == "POST"]
+        self.assertEqual(len(posts), 2)  # 不合格記事1件 + 最低件数未達1件
+        self.assertEqual(posts[1]["title"], rgr.shortfall_title("2026-09-26"))
+        for s in ("1件", "最低ライン 3件", "目標 5件", "品質基準", "誤りのある記事"):
+            self.assertIn(s, posts[1]["body"])
 
     def test_no_rejections_and_dry_run_make_no_requests(self):
         def boom(*a, **kw):

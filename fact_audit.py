@@ -11,6 +11,12 @@
 web_search / web_fetch の blocked_domains で機械的に遮断しているため、
 他メディアの記述を根拠に「確認済み」と判定されることはない。
 
+公式ページに掲載された画像(告知ポスター・出店者一覧・料金表など)の中の文字・数値も
+一次情報として扱う(basis=official_image)。画像は記事の link / sources のうち他メディアではない
+公式ページの HTML から取り出して監査に添付する(official_page_images)ため、
+第三者の転載・切り抜き画像が根拠になることはない。読み取りに曖昧さがある場合は
+imageReading=ambiguous とし、骨格の claim なら人の確認(Approve / Reject)に回す。
+
 使い方:
   python fact_audit.py                 # 全記事
   python fact_audit.py --ids 65,74     # 指定IDのみ
@@ -36,12 +42,15 @@ web_search / web_fetch の blocked_domains で機械的に遮断しているた�
     review_required と未処理の記事だけを監査する
 """
 import argparse
+import base64
 import json
 import re
 import os
 import sys
 import time
 import types
+import urllib.parse
+import urllib.request
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -50,6 +59,7 @@ import anthropic
 # generate_articles.py の定数(他メディアのドメイン一覧)を共有する。
 # generate_articles.py 自体は anthropic を import するだけなので、そのまま読み込める。
 import generate_articles as g
+import official_image as oi
 
 MODEL = os.environ.get("FACT_AUDIT_MODEL", "claude-sonnet-4-6")
 MAX_TURNS = 12
@@ -57,7 +67,7 @@ OUT_DIR = os.path.join(g.ROOT, "audit_reports")
 
 # 判定ルールのバージョン。判定基準を変えたら上げる。
 # --resume は同じバージョンの結果だけを引き継ぐ(旧基準の判定を持ち越さないため)。
-RULES_VERSION = 2
+RULES_VERSION = 3
 
 CLAIM_STATUSES = (
     "confirmed",             # 一次情報・公的情報・一般に確立した事実・単純計算で確認できた
@@ -68,6 +78,18 @@ CLAIM_STATUSES = (
 )
 CLAIM_ROLES = ("title", "dek", "central", "detail")  # 記事の骨格=title/dek/central
 CORE_ROLES = ("title", "dek", "central")
+BASES = ("primary_page", "official_record", "official_image", "established_fact", "calculation", "none")
+IMAGE_READINGS = ("clear", "ambiguous", "not_applicable")  # 公式画像の読み取りの明瞭さ
+
+# 公式ページの画像を監査に添付するときの上限(APIコストと応答時間を抑える)
+IMAGE_MAX_PAGES = 3          # 画像を探す公式ページ数(link を先頭に sources から)
+IMAGE_MAX_PER_ARTICLE = 6    # 1記事に添付する画像の数
+IMAGE_MAX_BYTES = 3_500_000  # 1画像の最大サイズ
+IMAGE_MEDIA_TYPES = ("image/jpeg", "image/png", "image/gif", "image/webp")
+# サイト共通のロゴ・アイコン・バナーなど、対象のイベント・店舗に直接紐づかない画像
+IMAGE_SKIP_RE = re.compile(r"(?i)(logo|icon|bnr|banner|btn|button|sprite|footer|header|/common/|\.svg)")
+IMAGE_FETCH_TIMEOUT = 15
+IMAGE_USER_AGENT = "Mozilla/5.0 (compatible; ShonanDoorsFactAudit/1.0)"
 
 AUDIT_TOOL = {
     "name": "submit_audit",
@@ -92,8 +114,12 @@ AUDIT_TOOL = {
                         "status": {"type": "string", "enum": list(CLAIM_STATUSES)},
                         "basis": {
                             "type": "string",
-                            "enum": ["primary_page", "official_record", "established_fact", "calculation", "none"],
-                            "description": "confirmed/wording_difference の根拠の種類。primary_page=対象の公式ページ / official_record=自治体・公的機関・運営会社などの公式情報 / established_fact=一般に確立した事実 / calculation=単純計算 / none=それ以外",
+                            "enum": list(BASES),
+                            "description": "confirmed/wording_difference の根拠の種類。primary_page=対象の公式ページの本文 / official_record=自治体・公的機関・運営会社などの公式情報 / official_image=公式サイト・公式SNSに掲載された画像内の文字・数値 / established_fact=一般に確立した事実 / calculation=単純計算 / none=それ以外",
+                        },
+                        "imageReading": {
+                            "type": "string", "enum": list(IMAGE_READINGS),
+                            "description": "公式画像を根拠にした claim の読み取り。clear=文字・数値が明瞭に読める / ambiguous=解像度・かすれ・重なり等で読み取りに曖昧さがある / not_applicable=画像を根拠にしていない",
                         },
                         "articleValue": {"type": "string", "description": "記事側の値・表現(例: 駐車場800台規模)"},
                         "primaryValue": {"type": "string", "description": "一次情報側の値・表現(例: 826台)。無ければ空文字"},
@@ -102,10 +128,11 @@ AUDIT_TOOL = {
                             "description": "記事の記述と一次情報の記述が、論理的に両立しうるか(概数・言い換え・包含関係なら true)",
                         },
                         "primaryUrl": {"type": "string", "description": "確認に使った一次情報のURL。無ければ空文字"},
+                        "imageUrl": {"type": "string", "description": "basis=official_image または imageReading=ambiguous のとき、根拠(確認対象)の画像のURL"},
                         "note": {"type": "string", "description": "補足(食い違いの内容、取得できなかった理由など)"},
                     },
-                    "required": ["claim", "role", "status", "basis", "articleValue", "primaryValue",
-                                 "logicallyCompatible", "primaryUrl", "note"],
+                    "required": ["claim", "role", "status", "basis", "imageReading", "articleValue",
+                                 "primaryValue", "logicallyCompatible", "primaryUrl", "note"],
                 },
             },
             "hasQuotedComment": {
@@ -148,6 +175,7 @@ SYSTEM_PROMPT = """あなたは地域メディア「湘南Doors」の校閲担�
    confirmed: 次のいずれかで確認できた。
      - 対象の公式ページ(basis=primary_page)
      - 自治体・公的機関・運営会社・鉄道会社などの公式情報(official_record)
+     - 公式サイト・公式SNSに掲載された画像内の文字・数値(official_image。下の【公式画像】を参照)
      - 一般に確立した事実(established_fact)
        例: 源実朝は鎌倉幕府第3代将軍。対象ページに書いていなくても confirmed。
      - 単純な計算や位置関係の導出(calculation)
@@ -174,8 +202,30 @@ SYSTEM_PROMPT = """あなたは地域メディア「湘南Doors」の校閲担�
      contradicted にする場合は articleValue と primaryValue を必ず書き、
      logicallyCompatible=false とすること。
 
+【公式画像】
+公式サイト・公式SNS・主催者・自治体が掲載した画像(告知ポスター、チラシ、出店者一覧、
+料金表など)の中の文字・数値は、本文テキストに同じ文言がなくても一次情報として扱う。
+メッセージに「公式ページに掲載された画像」として添付された画像は、システムがその掲載元
+ページから取り出したもの。次の条件をすべて満たすときだけ basis=official_image として
+confirmed / wording_difference / contradicted の根拠にしてよい。
+  - 掲載元が公式サイト・公式SNS・主催者・自治体などの一次情報である
+    (primaryUrl には画像の掲載元ページのURLを書き、imageUrl に画像のURLを書く)
+  - 画像内の文字・数値が明瞭に読める(imageReading=clear)
+  - 画像の文脈が対象のイベント・店舗・企画に直接紐づいている
+    (サイト共通のバナーや、別のイベントの画像は根拠にしない)
+  - 切り抜きや第三者の転載ではなく、公式の発信元が掲載した画像である
+一覧表の行を数えた件数(例: 出店者一覧が20行 → 20店)も official_image の根拠にしてよい。
+文字がかすれている、解像度が低い、数字が判別しにくいなど読み取りに曖昧さがあるときは、
+推測で確定させず status=not_found_in_primary、imageReading=ambiguous とし、
+articleValue に記事の記述、primaryValue に画像から読み取れた範囲の記述(読み取れた候補)、
+imageUrl に確認してほしい画像のURLを書くこと。
+画像を根拠にしない claim は imageReading=not_applicable とすること。
+入力に ownerImageReadings があれば、オーナーがその公式画像を目視で確認した読取り結果なので、
+同じ画像の読取り補助として使ってよい(item の値が value だと確認済み)。
+
 4. 他メディアの取材コメントと思われる人物の発言があれば hasQuotedComment=true。
 5. 一次情報同士が食い違う、判断が難しいなど人の確認が必要なら needsHuman=true。
+   公式画像の読み取りの曖昧さだけなら needsHuman にせず、imageReading=ambiguous で示す。
 6. 記事単位の判定は次の基準で参考値を出す(最終判定はシステムが行う)。
    confirmed: 重要な事実に明確な矛盾がない(軽微な未確認情報のみ)。
    fix: 明確な contradicted があるが、局所修正で記事の価値を保てる。
@@ -185,23 +235,95 @@ SYSTEM_PROMPT = """あなたは地域メディア「湘南Doors」の校閲担�
 最後に必ず submit_audit ツールで提出すること。"""
 
 
-def article_prompt(a):
+def article_prompt(a, owner_readings=None):
     info = {
         k: a.get(k) for k in (
             "id", "title", "dek", "area", "link", "date", "address", "access",
             "hours", "closedDays", "snsLinks", "eventStartDate", "eventEndDate", "body",
         )
     }
+    if owner_readings:
+        info["ownerImageReadings"] = owner_readings
     return "以下の記事を照合してください。\n\n" + json.dumps(info, ensure_ascii=False, indent=1)
 
 
-def audit_one(client, a, blocked):
+def _image_candidates(html, page_url):
+    """公式ページのHTMLから、記事の対象に紐づきうる画像のURLを掲載順に返す。"""
+    urls = []
+    for m in re.finditer(r"""(?is)<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["']""", html or ""):
+        u = urllib.parse.urljoin(page_url, m.group(1).strip())
+        if u.startswith(("http://", "https://")) and not IMAGE_SKIP_RE.search(u) and u not in urls:
+            urls.append(u)
+    return urls
+
+
+def _http_get(url, limit):
+    req = urllib.request.Request(url, headers={"User-Agent": IMAGE_USER_AGENT})
+    with urllib.request.urlopen(req, timeout=IMAGE_FETCH_TIMEOUT) as r:
+        return r.read(limit + 1), (r.headers.get_content_type() or "").lower(), r.headers.get_content_charset()
+
+
+def official_page_images(a, getter=None):
+    """記事の link / sources のうち、他メディアではない公式ページに掲載された画像を取り出す。
+    戻り値: [{"pageUrl", "imageUrl", "mediaType", "data"(base64)}]。取得に失敗した画像は黙って除く。
+    画像は公式ページのHTMLから直接取り出すので、第三者の転載・切り抜き画像は含まれない。"""
+    getter = getter or _http_get
+    pages = []
+    for u in [a.get("link") or ""] + list(a.get("sources") or []):
+        if isinstance(u, str) and u.startswith(("http://", "https://")) \
+                and not g.is_secondary_media(u) and u not in pages:
+            pages.append(u)
+    images, seen = [], set()
+    for page in pages[:IMAGE_MAX_PAGES]:
+        try:
+            raw, _ctype, charset = getter(page, 2_000_000)
+        except Exception:
+            continue
+        for img in _image_candidates(raw.decode(charset or "utf-8", "ignore"), page):
+            if len(images) >= IMAGE_MAX_PER_ARTICLE:
+                return images
+            if img in seen:
+                continue
+            seen.add(img)
+            try:
+                data, ctype, _ = getter(img, IMAGE_MAX_BYTES)
+            except Exception:
+                continue
+            if ctype not in IMAGE_MEDIA_TYPES or not data or len(data) > IMAGE_MAX_BYTES:
+                continue
+            images.append({"pageUrl": page, "imageUrl": img, "mediaType": ctype,
+                           "data": base64.b64encode(data).decode("ascii")})
+    return images
+
+
+def first_message_content(a, images, owner_readings=None):
+    """監査の最初のメッセージ。公式画像があれば、掲載元ページと画像URLを添えて添付する。"""
+    text = article_prompt(a, owner_readings)
+    if not images:
+        return text
+    content = [{"type": "text", "text": text + "\n\n以下は記事の公式ページに掲載された画像です。"
+                                       "【公式画像】の条件を満たす場合だけ根拠にしてください。"}]
+    for im in images:
+        content.append({"type": "text", "text": f"掲載元ページ: {im['pageUrl']}\n画像URL: {im['imageUrl']}"})
+        content.append({"type": "image", "source": {"type": "base64", "media_type": im["mediaType"],
+                                                    "data": im["data"]}})
+    return content
+
+
+def audit_one(client, a, blocked, images=None, confirmations=None):
+    """images を省略すると、記事の公式ページから画像を取り出して添付する。
+    confirmations … オーナーによる公式画像の目視確認(None なら data/image_confirmations.json)。
+    戻り値が dict なら、添付した画像(_attachedImages)とオーナーの確認(_ownerReadings)を付けて返す
+    (normalize_result が使う)。"""
+    if images is None:
+        images = official_page_images(a)
+    readings = oi.owner_readings_for(a, confirmations)
     tools = [
         {"type": "web_search_20250305", "name": "web_search", "max_uses": 6, "blocked_domains": blocked},
         {"type": "web_fetch_20250910", "name": "web_fetch", "max_uses": 8, "blocked_domains": blocked},
         AUDIT_TOOL,
     ]
-    messages = [{"role": "user", "content": article_prompt(a)}]
+    messages = [{"role": "user", "content": first_message_content(a, images, readings)}]
     for _ in range(MAX_TURNS):
         resp = client.messages.create(
             model=MODEL, max_tokens=8000, system=SYSTEM_PROMPT,
@@ -210,7 +332,12 @@ def audit_one(client, a, blocked):
         )
         for block in resp.content:
             if block.type == "tool_use" and block.name == "submit_audit":
-                return block.input
+                raw = block.input
+                if isinstance(raw, dict):
+                    raw = dict(raw, _ownerReadings=readings,
+                               _attachedImages=[{"pageUrl": im["pageUrl"], "imageUrl": im["imageUrl"]}
+                                                for im in images])
+                return raw
         messages.append({"role": "assistant", "content": resp.content})
         if resp.stop_reason == "pause_turn":
             continue
@@ -300,22 +427,30 @@ def normalize_result(raw, article_id):
             role = c.get("role")
             if role not in CLAIM_ROLES:
                 role = "detail"  # 欠損時は骨格扱いしない(過剰判定を避ける)
+            basis = str(c.get("basis") or "")
+            reading = c.get("imageReading")
+            if reading not in IMAGE_READINGS:
+                reading = "clear" if basis == "official_image" else "not_applicable"
             compat = c.get("logicallyCompatible")
             if isinstance(compat, str):
                 compat = compat.strip().lower() == "true"
             elif not isinstance(compat, bool):
                 compat = None
-            claims.append({
+            item = {
                 "claim": str(c.get("claim") or ""),
                 "role": role,
                 "status": status,
-                "basis": str(c.get("basis") or ""),
+                "basis": basis,
+                "imageReading": reading,
                 "articleValue": str(c.get("articleValue") or ""),
                 "primaryValue": str(c.get("primaryValue") or ""),
                 "logicallyCompatible": compat,
                 "primaryUrl": str(c.get("primaryUrl") or ""),
                 "note": str(c.get("note") or ""),
-            })
+            }
+            if basis == "official_image" or reading == "ambiguous":
+                item["imageUrl"] = str(c.get("imageUrl") or "")
+            claims.append(item)
 
     # primarySources
     sources_raw = _maybe_json(raw.get("primarySources"))
@@ -352,7 +487,12 @@ def normalize_result(raw, article_id):
     summary = raw.get("summary")
     summary = summary if isinstance(summary, str) else ("" if summary is None else _snippet(summary))
 
-    claims = [apply_tolerance(c) for c in claims]
+    # 公式画像: 掲載元・読み取りの明瞭さ → 監査に添付した画像か → オーナーの目視確認(読取り補助)
+    readings = raw.get("_ownerReadings") if isinstance(raw.get("_ownerReadings"), list) else []
+    attached = raw.get("_attachedImages") if isinstance(raw.get("_attachedImages"), list) else None
+    claims = [apply_tolerance(oi.apply_owner_reading(apply_attached_image_rule(apply_image_source_rule(c),
+                                                                                attached, readings), readings))
+              for c in claims]
     verdict, reasons = decide_verdict(claims, needs_human, anomalies)
     return ({
         "verdict": verdict, "verdictReasons": reasons, "modelVerdict": model_verdict,
@@ -362,7 +502,7 @@ def normalize_result(raw, article_id):
     }, anomalies)
 
 
-# ---------- 判定ルール(RULES_VERSION 2) ----------
+# ---------- 判定ルール(RULES_VERSION 3) ----------
 APPROX_WORDS = ("約", "およそ", "規模", "程度", "前後", "近く", "超", "余り", "以上", "級", "ほど", "強", "弱")
 APPROX_TOLERANCE = 0.10  # 概数表現なら±10%までは両立とみなす
 
@@ -375,6 +515,50 @@ def _first_number(text):
         return float(m.group(0).replace(",", ""))
     except ValueError:
         return None
+
+
+def apply_image_source_rule(c):
+    """公式画像(basis=official_image)を根拠にした claim の扱いを決める。
+    - 読み取りに曖昧さがある(imageReading=ambiguous)なら、画像では確認できていないものとして
+      not_found_in_primary にする(推測で確定・否定させない)。骨格なら人の確認に回る。
+    - 掲載元ページのURLが無い・他メディアのURLなら、公式発信の画像と確認できないので
+      not_found_in_primary にする(第三者の転載・切り抜き画像を根拠にしない)。"""
+    if c.get("basis") != "official_image" and c.get("imageReading") != "ambiguous":
+        return c
+    if c.get("status") not in ("confirmed", "wording_difference", "contradicted"):
+        return c
+    if c.get("imageReading") == "ambiguous":
+        return dict(c, status="not_found_in_primary",
+                    note=(c.get("note", "") + " [自動: 公式画像の読み取りに曖昧さ]").strip())
+    url = c.get("primaryUrl") or ""
+    if not url.startswith(("http://", "https://")) or g.is_secondary_media(url):
+        return dict(c, status="not_found_in_primary",
+                    note=(c.get("note", "") + " [自動: 画像の掲載元が一次情報と確認できない]").strip())
+    return c
+
+
+def apply_attached_image_rule(c, attached, readings=()):
+    """公式画像を根拠に確定した claim が、この監査で実際に添付した公式画像(またはその掲載ページ)に
+    基づくかを確かめる。添付していない画像を根拠にしている(=モデルが見ていない)なら not_found_in_primary。
+    オーナーが目視で確認した画像は対象外。attached が None(呼び出し元が記録していない)なら確かめない。"""
+    if attached is None or c.get("basis") != "official_image":
+        return c
+    if c.get("status") not in ("confirmed", "wording_difference", "contradicted"):
+        return c
+    img, page = c.get("imageUrl") or "", c.get("primaryUrl") or ""
+    if any((img and img == a.get("imageUrl")) or (not img and page == a.get("pageUrl")) for a in attached):
+        return c
+    if any(oi._same_image(c, r) for r in readings or ()):
+        return c
+    return dict(c, status="not_found_in_primary",
+                note=(c.get("note", "") + " [自動: 監査に添付した公式画像ではない]").strip())
+
+
+def ambiguous_image_claims(claims):
+    """骨格(title/dek/central)の claim のうち、公式画像の読み取りが曖昧なもの(人の確認に回すもの)。"""
+    return [c for c in claims if isinstance(c, dict) and c.get("role") in CORE_ROLES
+            and c.get("imageReading") == "ambiguous"
+            and c.get("status") in ("not_found_in_primary", "source_unavailable")]
 
 
 def apply_tolerance(c):
