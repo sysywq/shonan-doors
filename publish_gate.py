@@ -19,8 +19,9 @@ Fact Audit(fact_audit.py と同じ判定ルール)にかけ、合格した記事
   - 人物の発言(他メディアの取材コメント流用の疑い)を含まない
   - 監査応答の形式異常・監査処理の例外がない(監査できなかった記事は公開しない)
 
-自動修正は「一次情報側の値で単純に置き換えられる数値・日時の誤り」に限る
-(safe_autofix を参照)。文章の書き換えや削除は自動では行わない。
+自動修正は「一次情報側の値で単純に置き換えられる数値・日時の誤り」の置き換えと、
+置き換えられない細部の誤りを含む1文の削除に限る(safe_autofix を参照)。
+新しい事実の書き足しや、骨格(title / dek / central)の書き換えは自動では行わない。
 
 不合格記事は公開せず、理由と claim を実行レポート(gate_rejected)に記録する。
 Issue 化は report_gate_rejections.py が実行レポートを読んで行う。
@@ -34,7 +35,9 @@ import re
 GATE_ENV = "PUBLISH_GATE"  # "off" のときだけゲートを無効化する(既定は有効)
 
 AUTOFIX_MAX_LEN = 40       # 自動修正で置き換える値の最大文字数
+AUTOFIX_MAX_REMOVALS = 2   # 自動修正で削除してよい文の数(1記事あたり)
 _DIGIT_RE = re.compile(r"[0-9０-９]")
+_SENTENCE_RE = re.compile(r"[^。]*。|[^。]+$")
 
 
 def enabled():
@@ -100,10 +103,43 @@ def _fixable(claim, body):
     return body.count(av) == 1
 
 
+def _sentence_to_remove(claim, entry, body):
+    """置き換えでは直せない detail の contradicted について、その記述を含む1文を削除してよいか。
+    削除してよければ削除する文を、だめなら None を返す。
+    - detail(細部)の contradicted に限る(骨格の誤りは記事の前提が崩れるため直さない)
+    - 記事側の値が本文にちょうど1回だけ現れ、タイトル・リードには現れない
+    - その文(「。」区切り)が段落内で一意に決まり、段落にほかの文が残る
+    - 一次情報URLがあり、他メディアではない
+    誤った細部を消すだけで、新しい事実は書き足さない(書き足すと一次情報の裏付けが要るため)。"""
+    import generate_articles as g
+
+    if claim.get("status") != "contradicted" or claim.get("role") != "detail":
+        return None
+    av, url = claim.get("articleValue") or "", claim.get("primaryUrl") or ""
+    if not av or "。" in av or body.count(av) != 1:
+        return None
+    if av in (entry.get("title") or "") or av in (entry.get("dek") or ""):
+        return None
+    if not url.startswith(("http://", "https://")) or g.is_secondary_media(url):
+        return None
+    i = body.find(av)
+    start = body.rfind("\n", 0, i) + 1
+    end = body.find("\n", i)
+    paragraph = body[start:end if end != -1 else len(body)]
+    sentences = [s for s in _SENTENCE_RE.findall(paragraph) if s.strip()]
+    hits = [s for s in sentences if av in s]
+    if len(hits) != 1 or len(sentences) < 2 or body.count(hits[0]) != 1:
+        return None
+    return hits[0]
+
+
 def safe_autofix(entry, result):
-    """contradicted の claim のうち安全に直せるものだけを一次情報の値へ置き換える。
+    """contradicted の claim のうち安全に直せるものだけを直す。
+    一次情報の値で単純に置き換えられるもの(_fixable)は置き換え、置き換えられない細部は
+    その1文を削除する(_sentence_to_remove。1記事につき AUTOFIX_MAX_REMOVALS 文まで)。
     1件でも直せない contradicted があれば何もしない(部分修正した記事を公開しないため)。
     骨格の未確認・形式異常・人物の発言など、contradicted 以外の不合格理由があっても何もしない。
+    修正した記事は呼び出し元(check_draft)で必ず再監査する。
     戻り値: (修正後のentry または None, 修正内容のリスト)"""
     if not isinstance(result, dict) or result.get("anomalies") or result.get("hasQuotedComment") \
             or result.get("needsHuman"):
@@ -112,18 +148,27 @@ def safe_autofix(entry, result):
     if passed or not blocking:
         return None, []
     body = entry.get("body") or ""
-    if any(c.get("status") != "contradicted" or not _fixable(c, body) for c in blocking):
+    if any(c.get("status") != "contradicted" for c in blocking):
         return None, []
-    fixes = []
+    fixes, removals = [], 0
     for c in blocking:
-        body = body.replace(c["articleValue"], c["primaryValue"], 1)
-        fixes.append({"claim": c.get("claim", ""), "from": c["articleValue"], "to": c["primaryValue"],
-                      "primaryUrl": c.get("primaryUrl", "")})
+        if _fixable(c, body):
+            body = body.replace(c["articleValue"], c["primaryValue"], 1)
+            fixes.append({"claim": c.get("claim", ""), "from": c["articleValue"], "to": c["primaryValue"],
+                          "primaryUrl": c.get("primaryUrl", ""), "action": "replace"})
+            continue
+        sentence = _sentence_to_remove(c, entry, body)
+        if sentence is None or removals >= AUTOFIX_MAX_REMOVALS:
+            return None, []
+        body = body.replace(sentence, "", 1)
+        removals += 1
+        fixes.append({"claim": c.get("claim", ""), "from": sentence, "to": "",
+                      "primaryUrl": c.get("primaryUrl", ""), "action": "remove"})
     fixed = dict(entry, body=body)
-    # 一次情報URLを sources に加える(事実確認に使った情報源として残す)
+    # 置き換えに使った一次情報URLを sources に加える(事実確認に使った情報源として残す)
     sources = list(entry.get("sources") or [])
     for f in fixes:
-        if f["primaryUrl"] not in sources:
+        if f["action"] == "replace" and f["primaryUrl"] not in sources:
             sources.append(f["primaryUrl"])
     fixed["sources"] = sources
     return fixed, fixes

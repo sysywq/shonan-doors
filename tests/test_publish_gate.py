@@ -130,6 +130,43 @@ class AutofixTest(unittest.TestCase):
         text = audit_response([claim("創業", "contradicted", av="明治期から続く", pv="昭和創業")])
         self.assertIsNone(pg.safe_autofix(draft("A", body="明治期から続く店。"), normalized(text))[0])
 
+    # Issue #29 の型: 置き換えでは直せない細部の誤り → その1文だけを削除する
+    FEE = audit_response([claim("料金", "contradicted",
+                                av="映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）",
+                                pv="映画鑑賞料（通常上映）一般1,300円・小中学生650円／展示観覧料（特別展）一般500円・小中学生250円（別立て）")])
+
+    def test_unreplaceable_detail_sentence_is_removed(self):
+        body = "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        fixed, fixes = pg.safe_autofix(draft("A", body=body), normalized(self.FEE))
+        self.assertEqual(fixed["body"], "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。月曜休館。")
+        self.assertEqual(fixes[0]["action"], "remove")
+        self.assertEqual(fixes[0]["to"], "")
+        self.assertEqual(fixed["sources"], draft("A")["sources"])  # 削除では情報源を増やさない
+
+    def test_sentence_not_removed_when_paragraph_would_vanish_or_in_dek(self):
+        lone = "特別展が開かれている。\n\n映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。"
+        self.assertIsNone(pg.safe_autofix(draft("A", body=lone), normalized(self.FEE))[0])
+        body = "開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        in_dek = draft("A", body=body, dek="映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）")
+        self.assertIsNone(pg.safe_autofix(in_dek, normalized(self.FEE))[0])
+
+    def test_removal_limit_and_core_claims_are_respected(self):
+        many = audit_response([claim(f"細部{i}", "contradicted", av=f"誤り{i}の記述", pv=f"正しい記述{i}ではない長い説明" * 3)
+                               for i in range(3)])
+        body = "導入。誤り0の記述がある。誤り1の記述がある。誤り2の記述がある。結び。"
+        self.assertIsNone(pg.safe_autofix(draft("A", body=body), normalized(many))[0])  # 3文目の削除は上限超え
+        mixed = audit_response([claim("料金", "contradicted", av="誤り0の記述", pv="別の長い説明" * 5),
+                                claim("会場", "contradicted", role="central", av="海岸", pv="山")])
+        self.assertIsNone(pg.safe_autofix(draft("A", body=body), normalized(mixed))[0])
+
+    def test_removal_then_reaudit_pass(self):
+        body = "特別展が開かれている。会期は12月13日まで。\n\n開館は9時から。映画観覧料は一般1,300円・小中学生650円（展示観覧料含む）。月曜休館。"
+        client = FakeClient({"料金記事": [self.FEE, PASS]})
+        gate = pg.check_draft(draft("料金記事", body=body), client=client)
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 2)
+        self.assertNotIn("展示観覧料含む", gate["entry"]["body"])
+
 
 class CheckDraftTest(unittest.TestCase):
     def test_pass(self):
@@ -198,6 +235,10 @@ class DailyIntegrationTest(unittest.TestCase):
             mock.patch.object(g, "RUN_REPORT_PATH", self.paths["report"]),
             mock.patch.object(g, "NEWS_ARTICLES_PER_DAY", 2),
             mock.patch.object(g, "NEWS_REFILL_MAX_ATTEMPTS", 1),
+            # 既存テストは news 2件=目標・最低ラインとして動かす(top-up はTopUpTestで確認する)
+            mock.patch.object(g, "DAILY_TARGET_ARTICLES", 2),
+            mock.patch.object(g, "DAILY_MIN_ARTICLES", 1),
+            mock.patch.object(g, "_gate_drafts_checked", 0),
             mock.patch.object(g, "_gate_client", object()),
             mock.patch.object(g, "run_stock_generation", lambda existing, topics, today, log, gate_rejections=None: ([], topics)),
             mock.patch.dict(os.environ, {"PUBLISH_GATE": "on"}),
@@ -225,7 +266,13 @@ class DailyIntegrationTest(unittest.TestCase):
                     "claims": [] if ok else [claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日")],
                     "summary": "", "primarySources": [], "autofix": [], "audits": 1}
 
-        with mock.patch.object(g, "call_claude_news", lambda *a, **kw: next(calls)), \
+        self.news_calls = []
+
+        def fake_news(recent_titles, event_series=None, count=None):
+            self.news_calls.append(count)
+            return next(calls)
+
+        with mock.patch.object(g, "call_claude_news", fake_news), \
                 mock.patch.object(pg, "check_draft", fake_check):
             g.main()
         return self.load("report")
@@ -275,6 +322,61 @@ class DailyIntegrationTest(unittest.TestCase):
             self.run_main([[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), dup], [dup]],
                           {"秋の海辺まつり": True, "既存記事": True})
         self.assertEqual(self.load("report")["status"], "error")
+
+    # ---- 目標件数への補充(top-up)・最低ライン・上限 ----
+
+    def test_topup_fills_to_target_with_other_candidates(self):
+        # news 2件 + stock 0件 → 目標4件に2件不足 → 別候補を生成して監査(不合格分はさらに補充)
+        with mock.patch.object(g, "DAILY_TARGET_ARTICLES", 4), mock.patch.object(g, "DAILY_TOPUP_MAX_ATTEMPTS", 2):
+            report = self.run_main(
+                [[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), news_item("山の音楽会", "山の上で催しがある。")],
+                 [news_item("補充で不合格", "川沿いで行事がある。"), news_item("補充で合格", "駅前で市が立つ。")],
+                 [news_item("再補充で合格", "寺で展示がある。")]],
+                {"秋の海辺まつり": True, "山の音楽会": True, "補充で不合格": False, "補充で合格": True, "再補充で合格": True},
+            )
+        self.assertEqual(self.news_calls, [2, 2, 1])
+        self.assertEqual(report["accepted_ids"], [10, 11, 12, 13])
+        self.assertEqual(report["total_count"], 4)
+        self.assertEqual([r["title"] for r in report["gate_rejected"]], ["補充で不合格"])
+        self.assertIsNone(report["shortfall"])
+        self.assertNotIn("補充で不合格", [a["title"] for a in self.load("articles")])
+
+    def test_topup_is_bounded_and_below_minimum_is_reported(self):
+        # 不合格が続いても top-up は上限回数で止まり、最低ライン未達は理由付きで記録される(不合格記事は公開しない)
+        with mock.patch.object(g, "DAILY_TARGET_ARTICLES", 4), mock.patch.object(g, "DAILY_MIN_ARTICLES", 3), \
+                mock.patch.object(g, "DAILY_TOPUP_MAX_ATTEMPTS", 2):
+            report = self.run_main(
+                [[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), news_item("誤りA", "山の上で催しがある。")],
+                 [news_item("誤りB", "川沿いで行事がある。")],
+                 [news_item("誤りC", "駅前で市が立つ。")],
+                 [news_item("誤りD", "寺で展示がある。")],
+                 [news_item("上限後の候補", "港で祭りがある。")]],
+                {"秋の海辺まつり": True, "誤りA": False, "誤りB": False, "誤りC": False, "誤りD": False, "上限後の候補": True},
+            )
+        self.assertEqual(self.news_calls, [2, 1, 3, 3])  # 上限後は生成しない
+        self.assertEqual(report["accepted_ids"], [10])
+        self.assertEqual(report["status"], "ok")
+        self.assertEqual(report["shortfall"]["total"], 1)
+        self.assertEqual(report["shortfall"]["min"], 3)
+        self.assertTrue(any("不合格 4件" in r for r in report["shortfall"]["reasons"]))
+        titles = [a["title"] for a in self.load("articles")]
+        self.assertEqual([t for t in titles if t != "既存記事"], ["秋の海辺まつり"])
+
+    def test_gate_budget_stops_generation(self):
+        with mock.patch.object(g, "MAX_GATE_DRAFTS_PER_RUN", 3), mock.patch.object(g, "DAILY_TARGET_ARTICLES", 5), \
+                mock.patch.object(g, "NEWS_REFILL_MAX_ATTEMPTS", 3):
+            report = self.run_main(
+                [[news_item("誤りA", "海辺のまつりが開かれる。"), news_item("誤りB", "山の上で催しがある。")],
+                 [news_item("誤りC", "川沿いで行事がある。"), news_item("誤りD", "駅前で市が立つ。")],
+                 [news_item("上限後の候補", "寺で展示がある。")]],
+                {"誤りA": False, "誤りB": False, "誤りC": False, "誤りD": True, "上限後の候補": True},
+            )
+        self.assertEqual(self.news_calls, [2, 2])
+        self.assertEqual(g._gate_drafts_checked, 3)
+        # 上限を超えた「誤りD」は監査していないので公開もIssue化もしない
+        self.assertEqual([r["title"] for r in report["gate_rejected"]], ["誤りA", "誤りB", "誤りC"])
+        self.assertEqual(report["accepted_ids"], [])
+        self.assertEqual(report["status"], "no_articles_passed_gate")
 
 
 class StockGateTest(unittest.TestCase):
@@ -358,6 +460,29 @@ class ReportIssuesTest(unittest.TestCase):
                 mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
             rgr.main(["--report", self.write_report(d, [self.rejected()])], request=fake_request)
         self.assertNotIn("POST", calls)
+
+    def test_shortfall_creates_one_issue_with_reasons(self):
+        calls = []
+
+        def fake_request(method, path, token, payload=None):
+            calls.append((method, payload))
+            return [] if method == "GET" else {}
+
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
+            path = os.path.join(d, "report.json")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump({"status": "ok", "date": "2026-09-26", "accepted_ids": [10],
+                           "gate_rejected": [self.rejected()],
+                           "shortfall": {"total": 1, "min": 3, "target": 5,
+                                         "reasons": ["公開前監査で不合格 1件(品質基準は緩めずに見送り)"]}},
+                          f, ensure_ascii=False)
+            rgr.main(["--report", path], request=fake_request)
+        posts = [p for m, p in calls if m == "POST"]
+        self.assertEqual(len(posts), 2)  # 不合格記事1件 + 最低件数未達1件
+        self.assertEqual(posts[1]["title"], rgr.shortfall_title("2026-09-26"))
+        for s in ("1件", "最低ライン 3件", "目標 5件", "品質基準", "誤りのある記事"):
+            self.assertIn(s, posts[1]["body"])
 
     def test_no_rejections_and_dry_run_make_no_requests(self):
         def boom(*a, **kw):

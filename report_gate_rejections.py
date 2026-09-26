@@ -6,6 +6,7 @@
 generate_articles.py が書き出す実行レポート(RUN_REPORT_PATH)の gate_rejected を読み、
 不合格記事1件につきIssueを1件作る。本文には不合格の理由と、原因になった claim
 (記事側の記述・一次情報側の記述・一次情報URL)を記録する。
+実行レポートに shortfall(公開件数が最低ラインに未達)があれば、その理由もIssueを1件作って残す。
 
 - 同じタイトルのIssueが既に open なら作らない(再実行で重複させない)
 - GITHUB_TOKEN(または GH_TOKEN)と GITHUB_REPOSITORY が必要
@@ -28,6 +29,7 @@ RUN_REPORT_PATH = os.environ.get(
 )
 API = "https://api.github.com"
 TITLE_PREFIX = "[公開前監査] 不合格:"
+SHORTFALL_TITLE_PREFIX = "[Daily Articles] 公開件数が最低ラインに未達"
 
 
 def issue_title(r, date):
@@ -71,6 +73,28 @@ def issue_body(r, date):
     return "\n".join(lines)
 
 
+def shortfall_title(date):
+    return f"{SHORTFALL_TITLE_PREFIX} ({date})"
+
+
+def shortfall_body(s, date, rejected):
+    lines = [
+        f"{date} の Daily Articles で公開できた記事は **{s.get('total')}件** で、"
+        f"最低ライン {s.get('min')}件(目標 {s.get('target')}件)に届きませんでした。",
+        "",
+        "件数を合わせるために品質基準を下げたり、不合格の記事を公開したりはしていません。",
+        "",
+        "### 理由",
+        "",
+    ]
+    lines += [f"- {r}" for r in (s.get("reasons") or [])] or ["- (記録なし)"]
+    if rejected:
+        lines += ["", "### 公開前監査で不合格の記事", ""]
+        lines += [f"- {r.get('title', '')}: {' / '.join(r.get('reasons') or [])}" for r in rejected]
+    lines += ["", "必要なら一次情報で確認した記事を追加するか、Daily Articles の手動実行(workflow_dispatch)を検討してください。"]
+    return "\n".join(lines)
+
+
 def github_request(method, path, token, payload=None):
     req = urllib.request.Request(
         API + path, method=method,
@@ -104,15 +128,20 @@ def main(argv=None, request=github_request):
     with open(args.report, encoding="utf-8") as f:
         report = json.load(f)
     rejected = [r for r in (report.get("gate_rejected") or []) if isinstance(r, dict)]
-    if not rejected:
+    shortfall = report.get("shortfall") if isinstance(report.get("shortfall"), dict) else None
+    if not rejected and not shortfall:
         print("公開前監査で不合格の記事はありません。")
         return 0
     date = report.get("date") or ""
+    # (タイトル, 本文) の一覧。不合格記事1件につき1件、最低件数に未達ならその旨を1件。
+    issues = [(issue_title(r, date), issue_body(r, date)) for r in rejected]
+    if shortfall:
+        issues.append((shortfall_title(date), shortfall_body(shortfall, date, rejected)))
 
     if args.dry_run:
-        for r in rejected:
-            print(f"--- {issue_title(r, date)}\n{issue_body(r, date)}\n")
-        print(f"[dry-run] {len(rejected)}件のIssueを作成する予定です(作成はしていません)。")
+        for title, body in issues:
+            print(f"--- {title}\n{body}\n")
+        print(f"[dry-run] {len(issues)}件のIssueを作成する予定です(作成はしていません)。")
         return 0
 
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
@@ -123,16 +152,16 @@ def main(argv=None, request=github_request):
 
     existing = open_issue_titles(repo, token, request)
     created = 0
-    for r in rejected:
-        title = issue_title(r, date)
+    for title, body in issues:
         if title in existing:
             print(f"同じタイトルのIssueが既にあるためスキップ: {title}")
             continue
-        res = request("POST", f"/repos/{repo}/issues", token, {"title": title, "body": issue_body(r, date)})
+        res = request("POST", f"/repos/{repo}/issues", token, {"title": title, "body": body})
         existing.add(title)
         created += 1
         print(f"Issueを作成しました: {title} {res.get('html_url', '') if isinstance(res, dict) else ''}")
-    print(f"公開前監査の不合格 {len(rejected)}件のうち、{created}件をIssue化しました。")
+    print(f"公開前監査の不合格 {len(rejected)}件"
+          f"{'・最低件数未達 1件' if shortfall else ''}のうち、{created}件をIssue化しました。")
     return 0
 
 
