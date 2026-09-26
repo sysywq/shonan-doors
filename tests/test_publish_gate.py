@@ -201,6 +201,104 @@ class CheckDraftTest(unittest.TestCase):
     def test_audit_exception_is_rejected(self):
         gate = pg.check_draft(draft("例外記事"), client=FakeClient({"例外記事": [RuntimeError("boom")]}))
         self.assertFalse(gate["passed"])
+        self.assertIsNone(gate["escalation"])  # 監査できなかった記事は人に聞かずに見送る
+
+
+# ---- 自動判断の原則: 一次情報で修正内容が一意に決まるなら、人に聞かずに直して再監査する ----
+CORE_DATE = audit_response([claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日"),
+                            claim("会場は海岸", "confirmed", role="dek")])
+
+
+class AutoDecisionTest(unittest.TestCase):
+    def test_core_value_swap_is_fixed_everywhere_and_event_date_synced(self):
+        d = draft("10月3日開催の海辺まつり", dek="10月3日に海岸で開く", body="まつりは10月3日。10月13日は予備日。",
+                  eventStartDate="2026-10-03")
+        fixed, fixes = pg.safe_autofix(d, normalized(CORE_DATE))
+        self.assertEqual(fixed["title"], "10月10日開催の海辺まつり")
+        self.assertEqual(fixed["dek"], "10月10日に海岸で開く")
+        self.assertEqual(fixed["body"], "まつりは10月10日。10月13日は予備日。")  # 別の日付は触らない
+        self.assertEqual(fixed["eventStartDate"], "2026-10-10")
+        self.assertEqual(fixes[0]["syncedFields"], ["eventStartDate"])
+
+    def test_digit_boundary_is_respected(self):
+        r = normalized(audit_response([claim("初日", "contradicted", av="3日", pv="4日")]))
+        fixed, _ = pg.safe_autofix(draft("A", body="初日は3日。最終日は13日。"), r)
+        self.assertEqual(fixed["body"], "初日は4日。最終日は13日。")
+
+    def test_access_value_is_fixed_even_without_digit_in_article(self):
+        r = normalized(audit_response([claim("アクセス", "contradicted", av="駅から徒歩数分", pv="駅から徒歩15分")]))
+        fixed, _ = pg.safe_autofix(draft("A", body="会場は駅から徒歩数分。"), r)
+        self.assertEqual(fixed["body"], "会場は駅から徒歩15分。")
+
+    def test_core_wording_or_unit_change_is_not_fixed_and_escalated(self):
+        for av, pv in (("海岸", "山"), ("10月3日", "10日間")):
+            r = normalized(audit_response([claim("会場", "contradicted", role="central", av=av, pv=pv)]))
+            d = draft("A", body=f"会場は{av}。ほかの文。")
+            self.assertIsNone(pg.safe_autofix(d, r)[0])
+            self.assertEqual(pg.escalation(d, r)["kind"], "premise_change")
+
+    def test_conflicting_primary_values_are_not_fixed_and_escalated(self):
+        r = normalized(audit_response([claim("料金", "contradicted", av="500円", pv="600円"),
+                                       claim("料金", "contradicted", av="500円", pv="700円",
+                                             url="https://www.city.example.lg.jp/fee.html")]))
+        d = draft("A", body="入場は500円。")
+        self.assertIsNone(pg.safe_autofix(d, r)[0])
+        esc = pg.escalation(d, r)
+        self.assertEqual(esc["kind"], "ambiguous")
+        self.assertIn("600円", esc["official"])
+        self.assertIn("700円", esc["official"])
+
+    def test_core_fix_then_reaudit_pass_needs_no_human(self):
+        d = draft("海辺の祭り", dek="10月3日開催", body="祭りは10月3日。海辺で開く。")
+        gate = pg.check_draft(d, client=FakeClient({"海辺の祭り": [CORE_DATE, PASS]}))
+        self.assertTrue(gate["passed"])
+        self.assertIsNone(gate["escalation"])
+        self.assertEqual(gate["entry"]["dek"], "10月10日開催")
+        self.assertEqual(gate["audits"], 2)
+
+    def test_second_round_fix_is_bounded(self):
+        second = audit_response([claim("料金", "contradicted", av="500円", pv="600円")])
+        body = "開始は10時開始の予定。入場は500円。"
+        gate = pg.check_draft(draft("二段修正", body=body),
+                              client=FakeClient({"二段修正": [FAIL_DETAIL_TIME, second, PASS]}))
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 3)
+        self.assertEqual(gate["entry"]["body"], "開始は11時開始の予定。入場は600円。")
+        # 上限(AUTOFIX_MAX_ROUNDS)を超える修正はしない
+        with mock.patch.object(pg, "AUTOFIX_MAX_ROUNDS", 1):
+            gate = pg.check_draft(draft("二段修正", body=body),
+                                  client=FakeClient({"二段修正": [FAIL_DETAIL_TIME, second, PASS]}))
+        self.assertFalse(gate["passed"])
+        self.assertEqual(gate["audits"], 2)
+        self.assertEqual(gate["escalation"]["kind"], "ambiguous")  # 残りは要判断として通知される
+        self.assertIn("11時開始", gate["candidate"]["body"])  # Approve 時は修正済みの版から続ける
+
+
+class EscalationTest(unittest.TestCase):
+    def test_only_four_kinds_need_a_human(self):
+        d = draft("A")
+        conflict = normalized(dict(PASS, needsHuman=True,
+                                   claims=[claim("料金", "contradicted", av="500円", pv="600円")]))
+        self.assertEqual(pg.escalation(d, conflict)["kind"], "source_conflict")
+        core_nf = normalized(audit_response([claim("20軒が出店", "not_found_in_primary", role="dek", av="20軒")]))
+        esc = pg.escalation(d, core_nf)
+        self.assertEqual(esc["kind"], "core_unverified")
+        self.assertIn("公式情報に記載なし", esc["official"])
+        # 人に聞いても直せない不合格・合格は通知しない
+        self.assertIsNone(pg.escalation(d, normalized(dict(PASS, hasQuotedComment=True))))
+        self.assertIsNone(pg.escalation(d, normalized("壊れた応答")))
+        self.assertIsNone(pg.escalation(d, normalized(PASS)))
+
+    def test_notification_is_five_lines_approve_or_reject(self):
+        r = normalized(audit_response([claim("料金", "contradicted", role="central", av="参加費1,000円", pv="夜間入苑料 大人500円")]))
+        text = pg.format_escalation(pg.escalation(draft("湘南キャンドル"), r))
+        lines = text.split("\n")
+        self.assertEqual([l.split(":")[0] for l in lines], ["対象トピック", "記事内", "公式情報", "Approve", "Reject"])
+        self.assertIn("湘南キャンドル", lines[0])
+        self.assertIn("参加費1,000円", lines[1])
+        self.assertIn("夜間入苑料 大人500円", lines[2])
+        self.assertIn("再監査", lines[3])
+        self.assertIn("見送り", lines[4])
 
 
 def news_item(title, body_seed):
@@ -424,11 +522,13 @@ class ReportIssuesTest(unittest.TestCase):
                       ensure_ascii=False)
         return path
 
-    def rejected(self, title="誤りのある記事"):
+    def rejected(self, title="誤りのある記事", escalate=True):
+        c = claim("開催日", "contradicted", role="central", av="海の日", pv="山の日")
         return pg.rejection_record(draft(title), {
             "verdict": "fix", "reasons": ["一次情報と矛盾する記述(contradicted)が1件"],
-            "claims": [claim("開催日", "contradicted", role="central", av="10月3日", pv="10月10日")],
-            "summary": "開催日が違う", "primarySources": [], "autofix": []}, "news")
+            "claims": [c], "summary": "開催日が違う", "primarySources": [], "autofix": [],
+            "escalation": pg.escalation(draft(title), normalized(audit_response([c]))) if escalate else None},
+            "news")
 
     def test_creates_issue_with_reason_and_claims(self):
         calls = []
@@ -445,8 +545,25 @@ class ReportIssuesTest(unittest.TestCase):
         self.assertEqual(posts[0][1], "/repos/owner/repo/issues")
         self.assertIn("誤りのある記事", posts[0][2]["title"])
         body = posts[0][2]["body"]
-        for s in ("公開していません", "contradicted", "10月3日", "10月10日", "開催日"):
+        self.assertTrue(body.startswith("対象トピック: 誤りのある記事\n記事内: 海の日\n公式情報: 山の日"))
+        for s in ("Approve: ", "Reject: ", "@claude Approve", "@claude Reject", "公開していません",
+                  "contradicted", "開催日", "<details>"):
             self.assertIn(s, body)
+
+    def test_rejection_without_escalation_creates_no_issue(self):
+        calls = []
+
+        def fake_request(method, path, token, payload=None):
+            calls.append((method, payload))
+            return [] if method == "GET" else {}
+
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "owner/repo"}):
+            report = self.write_report(d, [self.rejected("自動見送り", escalate=False), self.rejected("判断待ち")])
+            rgr.main(["--report", report], request=fake_request)
+        posts = [p for m, p in calls if m == "POST"]
+        self.assertEqual(len(posts), 1)  # 人の判断が要る記事だけIssueにする
+        self.assertIn("判断待ち", posts[0]["title"])
 
     def test_skips_existing_open_issue(self):
         title = rgr.issue_title(self.rejected(), "2026-09-25")

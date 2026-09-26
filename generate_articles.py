@@ -29,8 +29,11 @@
 - APIレスポンスの型検証(listでない・件数異常・dict以外混在を検出して安全停止)。
 - 公開前監査(publish_gate.py): ドラフトは生成しただけでは公開しない。上記の検証を
   通った候補を、IDを発行する前にFact Audit(fact_audit.pyと同じ判定ルール)にかけ、
-  合格した記事だけをarticles.jsonに書き込む。不合格記事は実行レポートの
-  gate_rejectedに理由とclaimを残し、report_gate_rejections.pyがIssue化する。
+  合格した記事だけをarticles.jsonに書き込む。一次情報で修正内容が一意に決まる誤りは
+  自動修正→再監査で公開まで進め、人の判断が必要な4ケース(公式情報同士の矛盾・重要claimの
+  未確認・主旨が変わる修正・採用する情報が一意でない)だけをescalationにする。不合格記事は
+  実行レポートのgate_rejectedに理由とclaimを残し、report_gate_rejections.pyが
+  escalationのある記事だけをApprove / Reject形式でIssue化する。
   X投稿・IndexNowは従来どおりaccepted_ids(=公開が確定した記事)だけを対象にする。
 
 ストック系(今回追加)の安全設計:
@@ -1353,7 +1356,10 @@ def run_publish_gate(entry, article_type, gate_rejections, log_lines):
             log_lines.append(f"{article_type}: 公開前監査に合格: 「{title}」")
         return gate["entry"]
     gate_rejections.append(publish_gate.rejection_record(entry, gate, article_type))
-    log_lines.append(f"スキップ({article_type}): 「{title}」— 公開前監査で不合格: {' / '.join(gate['reasons'])}")
+    esc = gate.get("escalation")
+    next_step = f"要判断({esc['reason']})" if esc else "人の判断は不要のため自動で見送り"
+    log_lines.append(f"スキップ({article_type}): 「{title}」— 公開前監査で不合格: {' / '.join(gate['reasons'])}"
+                     f" → {next_step}")
     return None
 
 
@@ -1367,6 +1373,13 @@ def write_gate_summary(gate_rejections):
     lines = [f"## 公開前監査で不合格の記事({len(gate_rejections)}件・公開していません)", ""]
     for r in gate_rejections:
         lines.append(f"### [{r['articleType']}] {r['title']}")
+        esc = r.get("escalation")
+        if esc:
+            import publish_gate
+            lines += [f"要判断({esc.get('reason', '')})。Issueで Approve / Reject を選んでください。", "",
+                      "```", publish_gate.format_escalation(esc), "```"]
+        else:
+            lines.append("- 人の判断は不要のため自動で見送り(Issueにしない)")
         lines.append(f"- 判定: {r.get('verdict')} / 理由: {' / '.join(r['reasons'])}")
         for c in r.get("claims", []):
             lines.append(f"- {c.get('status')}({c.get('role')}): {c.get('claim')} "
