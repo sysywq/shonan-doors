@@ -37,6 +37,41 @@ def fail(msg):
     sys.exit(1)
 
 
+LEDGER_FILES = ("data/articles.json", "data/id_counter.json", "data/stock_topics.json",
+                "data/event_series.json", "data/x_post_log.json")
+
+
+def verify_holds_excluded(held):
+    """Fact Audit で保留にした記事が、articles.json・記事ページ・sitemap.xml のどれにも無いことを確認する。"""
+    if not held:
+        return
+    with open(os.path.join(ROOT, "data", "articles.json"), encoding="utf-8") as f:
+        ids = {a.get("id") for a in json.load(f)}
+    with open(os.path.join(ROOT, "sitemap.xml"), encoding="utf-8") as f:
+        sitemap = f.read()
+    for h in held:
+        if h.get("id") in ids:
+            fail(f"保留記事 id={h.get('id')} が data/articles.json に残っています(当日PRに含めてはいけません)。")
+        slug = h.get("slug") or ""
+        if slug and os.path.exists(os.path.join(ROOT, "articles", slug)):
+            fail(f"保留記事のページ articles/{slug}/ が生成されています。")
+        if slug and f"/articles/{slug}/" in sitemap:
+            fail(f"保留記事 {slug} が sitemap.xml に含まれています。")
+    print(f"[OK] 保留記事 {[h.get('id') for h in held]} が articles.json・記事ページ・sitemap.xml に含まれていないことを確認しました。")
+
+
+def verify_ledgers_staged():
+    """元データ(台帳)の変更が git add から漏れていないか(event_series.json 等の保存漏れ防止)。"""
+    result = subprocess.run(["git", "diff", "--name-only", "--", *LEDGER_FILES], cwd=ROOT,
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        fail(f"git diffの実行に失敗しました: {result.stderr}")
+    unstaged = [p for p in result.stdout.split() if p]
+    if unstaged:
+        fail(f"元データの変更がステージされていません(コミットから漏れます): {unstaged}")
+    print("[OK] 元データ(articles / id_counter / stock_topics / event_series / x_post_log)の変更はすべてステージ済みです。")
+
+
 def main():
     if not os.path.exists(RUN_REPORT_PATH):
         fail(
@@ -57,6 +92,11 @@ def main():
 
     if status == "error":
         fail(f"generate_articles.pyがエラーを報告しています: {report.get('error')}")
+
+    # Fact Audit で保留にした記事が当日PRに紛れ込んでいないか、台帳の変更がステージ漏れしていないか
+    # (記事0件の日も台帳の変更はあるため、件数に関係なく最初に確認する)
+    verify_holds_excluded([h for h in report.get("held") or [] if isinstance(h, dict)])
+    verify_ledgers_staged()
 
     print(f"[内訳] news: {news_count}件 (id:{news_ids}), stock: {stock_count}件 (id:{stock_ids}), "
           f"合計: {len(accepted_ids)}件")

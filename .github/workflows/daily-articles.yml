@@ -4,7 +4,7 @@ on:
   schedule:
     # UTC 20:00 = JST 05:00（日本時間 毎朝5時）
     - cron: '0 20 * * *'
-  workflow_dispatch: {}   # 手動実行もできるようにしておく（テスト用）
+  workflow_dispatch: {}   # 手動実行もできるようにしておく（テスト用・再実行用）
 
 # Scheduled RunとworkflowDispatch(手動実行)等が重なった場合に、
 # Daily Article Automationが同時実行されないようにする。
@@ -13,20 +13,32 @@ concurrency:
   group: daily-articles
   cancel-in-progress: false
 
+# mainへは直接pushしない。最新mainから当日branch(daily/YYYY-MM-DD)を作り、main向けPRを経由して公開する。
+# 流れ: 当日branch → 記事生成(公開前ゲート込み) → Fact Audit full(accepted_idsのみ) → confirmed以外は記事単位で保留
+#       → tests → build → 永続化検証 → 当日branchへcommit/push → PR作成 → CI → 全条件合格時のみ自動マージ
+#       → main反映・公開確認 → 公開を確認できた記事だけX投稿・IndexNow
+# 同じ日の再実行では記事を生成し直さず、既存の当日branch/PRを再利用する(daily_pr.py plan)。
 jobs:
   generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 300
     permissions:
-      contents: write
-      issues: write
+      contents: write        # 当日branchへのpush・PRのマージ
+      pull-requests: write   # 当日PRの作成
+      issues: write          # 保留記事・公開前監査・最低件数未達・マージ見送りのIssue
+      actions: write         # CI(ci.yml)の workflow_dispatch と結果の取得
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     outputs:
-      # 本日生成に成功し、実際にcommit/pushまで完了した記事のID一覧(カンマ区切り文字列)。
-      # X投稿ジョブはこの出力だけを頼りに対象記事を特定する(articles.json全体を
-      # 毎回スキャンしたり、日付だけで「今日の記事」を推測したりしない)。
-      article_ids: ${{ steps.export_ids.outputs.article_ids }}
+      # mainへのマージ後、本番URLで公開を確認できた記事のID一覧(カンマ区切り)。
+      # X投稿・IndexNowはこのIDだけを対象にする(保留記事・未公開の記事は含まれない)。
+      article_ids: ${{ steps.published.outputs.article_ids }}
     steps:
-      - name: リポジトリをチェックアウト
+      - name: リポジトリをチェックアウト(最新main)
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Python セットアップ
         uses: actions/setup-python@v5
@@ -36,80 +48,165 @@ jobs:
       - name: 依存パッケージをインストール
         run: pip install anthropic
 
-      # 1) 記事を生成し、data/articles.json に追記する(index.htmlはまだ触らない)。
+      - name: git の設定
+        run: |
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+
+      # 当日branch/PRの状態を確認する。fresh=新規生成 / resume=既存branch・PRの続き / done=マージ済み / closed=人が閉じた
+      - name: 当日branch/PRの状態を確認
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py plan
+
+      - name: 当日branchを作成(最新mainから)
+        if: steps.plan.outputs.mode == 'fresh'
+        run: git switch -c "${{ steps.plan.outputs.branch }}"
+
+      - name: 既存の当日branchに切り替え(再実行)
+        if: steps.plan.outputs.mode == 'resume'
+        run: |
+          git fetch origin "+refs/heads/${{ steps.plan.outputs.branch }}:refs/remotes/origin/${{ steps.plan.outputs.branch }}"
+          git switch -c "${{ steps.plan.outputs.branch }}" "origin/${{ steps.plan.outputs.branch }}"
+
+      # 1) 記事を生成し、公開前ゲートに合格した記事を data/articles.json に追記する。
       #    generate_articles.py は実行結果を /tmp/shonan_doors_run_report.json にも書き出す。
-      #    このステップが失敗した場合、後続のbuild/git add/verify/commitは一切実行されない。
       - name: 記事を生成してarticles.jsonに追記
+        if: steps.plan.outputs.mode == 'fresh'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python generate_articles.py
 
-      # 公開前監査で不合格になった記事を、1件につき1つのGitHub Issueにする。
-      # 実行レポートの gate_rejected を読むだけで、articles.json等は変更しない。
-      # Issue化は補助的な通知なので、GitHub APIや通信の一時障害で失敗しても
-      # 合格記事のbuild/commit/push・X投稿・IndexNowは止めない。
-      - name: 公開前監査の不合格記事をIssue化
+      # 2) accepted_ids を Fact Audit(full。fact_audit.py と同じ監査ロジック)にかける。
+      #    一意に直せる誤りは自動修正→verify。confirmed以外の記事だけを保留にして当日PRから外す
+      #    (articles.json / stock_topics / event_series を整理。confirmed記事は止めない)。
+      - name: Fact Audit(full)と保留記事の分離
+        if: steps.plan.outputs.mode == 'fresh'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python daily_fact_audit.py
+
+      # Fact Audit workflow の verify で previous_run_id にこの Run ID を使えるよう、同じ Artifact 名で保存する
+      - name: Fact Audit の結果を保存
+        if: always() && steps.plan.outputs.mode == 'fresh'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fact-audit-report
+          path: audit_reports/
+          if-no-files-found: ignore
+
+      # 保留記事の内容(Approve後の公開に使う)。Issue本文にも埋め込むが、念のためArtifactにも残す
+      - name: 保留記事のデータを保存
+        if: always() && steps.plan.outputs.mode == 'fresh'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-held-articles
+          path: /tmp/shonan_doors_daily_holds.json
+          if-no-files-found: ignore
+          retention-days: 90
+
+      # 公開前監査で不合格になった記事・最低件数未達(shortfall)をIssue化する。
+      # Issue化は補助的な通知なので、失敗しても合格記事のPR・公開は止めない。
+      - name: 公開前監査の不合格記事・最低件数未達をIssue化
+        if: steps.plan.outputs.mode == 'fresh'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python report_gate_rejections.py
 
-      # 2) articles.json(Single Source of Truth)から静的ページを再生成する。
-      #    記事ページ・地域ハブ・カテゴリハブ・ページネーション・トップページ・
-      #    sitemap.xml・robots.txtをすべてここで再構築する。
-      #    build.pyは失敗時に本番のarticles/・index.html等を一切変更しない設計。
-      #    このステップが失敗した場合、次のgit add/verify/commitは実行されない。
+      # Fact Audit で保留にした記事を、1件につき1つの Approve / Reject Issue にする
+      - name: 保留記事をIssue化
+        if: steps.plan.outputs.mode == 'fresh'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python report_daily_holds.py
+
+      # X投稿済みログ(データbranch bot/x-post-log)を当日PRに取り込み、mainのログを追いつかせる
+      - name: X投稿済みログを取り込む
+        if: steps.plan.outputs.mode == 'fresh'
+        run: python x_post_log_store.py pull
+
+      - name: ユニットテスト
+        if: steps.plan.outputs.mode == 'fresh'
+        run: python -m unittest discover -s tests -v
+
+      # 3) articles.json(Single Source of Truth)から静的ページを再生成する(公開対象の記事だけで build)。
       - name: 静的ページをビルド
+        if: steps.plan.outputs.mode == 'fresh'
         run: python build.py
 
-      # 3) コミット対象をステージする。build.pyが更新しうる範囲を明示的に指定し、
-      #    無関係なファイルが誤って巻き込まれないようにする。
+      # 4) コミット対象をステージする。build.pyが更新しうる範囲と元データを明示的に指定する。
+      #    data/event_series.json(イベントシリーズ台帳)もここで保存する。
       - name: 変更をgit add
+        if: steps.plan.outputs.mode == 'fresh'
         run: |
-          git add data/articles.json data/id_counter.json data/stock_topics.json index.html \
-                  articles/ area/ category/ page/ sitemap.xml robots.txt
+          git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json \
+                  data/x_post_log.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
 
-      # 4) 「生成したと報告された記事」が、git add後のステージ内容に実際に
-      #    含まれているかを検証する。ここで1件でも食い違いがあれば、
-      #    コミットせずワークフロー全体をエラーとして終了する。
-      #    (過去に、この検証が無く「Success」なのに実際は何もpushされていない
-      #    というサイレント障害が発生したことがあるため追加。
-      #    必ずgit add実行後・git commit実行前に呼び出すこと)
+      # 5) 公開対象の記事がステージ内容に含まれ、保留記事が含まれず、台帳の変更が漏れていないことを検証する。
       - name: 永続化を検証(サイレント障害防止)
+        if: steps.plan.outputs.mode == 'fresh'
         run: python verify_daily_run.py
 
-      # 5) 検証を通過した場合のみコミット・プッシュする。
-      - name: 変更をコミット・プッシュ
-        run: |
-          git config user.name "shonan-doors-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git diff --cached --quiet || git commit -m "chore: 本日分の記事を自動追加 ($(date +'%Y-%m-%d'))"
-          git push
+      - name: PR用のメタ情報を記録
+        if: steps.plan.outputs.mode == 'fresh'
+        run: python daily_pr.py record
 
-      # 6) commit/pushまで成功した記事のIDだけを、X投稿ジョブへ引き渡す。
-      #    (このステップより前のいずれかが失敗していれば、ジョブ自体が
-      #    途中で停止しているため、ここには到達しない=article_idsは空のまま)
-      - name: 本日投稿された記事IDを書き出す(X投稿ジョブ向け)
-        id: export_ids
+      # 6) 当日branchへcommit/pushする(mainへはpushしない)
+      - name: 当日branchへコミット・プッシュ
+        id: push
+        if: steps.plan.outputs.mode == 'fresh'
         run: |
-          python3 -c "
-          import json
-          with open('/tmp/shonan_doors_run_report.json', encoding='utf-8') as f:
-              report = json.load(f)
-          ids = report.get('accepted_ids', [])
-          print('article_ids=' + ','.join(str(i) for i in ids))
-          " >> "$GITHUB_OUTPUT"
+          if git diff --cached --quiet; then
+            echo "変更がないため、当日PRは作成しません。"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -F /tmp/shonan_doors_daily_commit_msg.txt
+          git push origin "HEAD:refs/heads/${{ steps.plan.outputs.branch }}"
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
-  # X(Twitter)への自動投稿。generateジョブが成功した場合のみ実行されるが、
-  # あくまで別ジョブとして疎結合にしてあるため、このジョブが失敗しても
-  # 記事生成・build・GitHub Pagesへのデプロイ(=generateジョブの成否)には
-  # 一切影響しない。
+      - name: main向けの当日PRを作成
+        if: steps.plan.outputs.mode == 'resume' || steps.push.outputs.has_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py open
+
+      # GITHUB_TOKENで作ったPRではpull_requestのCIが起動しないため、ci.ymlをworkflow_dispatchで起動して待つ
+      - name: CIの成功を確認
+        if: steps.plan.outputs.mode == 'resume' || steps.push.outputs.has_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py ci
+
+      # 公開対象がすべてconfirmed・保留記事を含まない・変更ファイルが元データ/生成物だけ・CI成功のときだけマージする
+      - name: 条件を満たす場合のみ自動マージ
+        if: steps.plan.outputs.mode == 'resume' || steps.push.outputs.has_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py merge
+
+      # 7) mainへの反映と、各記事URLの本番公開(HTTP 200)を確認する。確認できた記事IDだけをX投稿・IndexNowへ渡す
+      - name: 公開を確認
+        id: published
+        if: steps.plan.outputs.mode == 'done' || steps.plan.outputs.mode == 'resume' || steps.push.outputs.has_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python daily_pr.py published
+
+  # X(Twitter)への自動投稿。本番公開を確認できた記事だけが対象。
+  # 投稿済みログは main ではなくデータbranch(bot/x-post-log)に保存する(mainへ直接pushしない)。
   post_to_x:
     needs: generate
     if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
     runs-on: ubuntu-latest
+    concurrency:
+      group: x-post
+      cancel-in-progress: false
     permissions:
-      contents: write
+      contents: write   # データbranch bot/x-post-log へのpushのみ(mainは変更しない)
     steps:
       - name: リポジトリをチェックアウト(最新mainを取得)
         uses: actions/checkout@v4
@@ -124,12 +221,12 @@ jobs:
       - name: 依存パッケージをインストール
         run: pip install tweepy
 
+      # mainとデータbranchのどちらかに記録がある記事は投稿済みとして扱う(二重投稿防止)
+      - name: X投稿済みログを取り込む
+        run: python x_post_log_store.py pull
+
       # DRY_RUNは既定で有効(true)。リポジトリのActions variables(Secretsではない)で
       # X_POST_DRY_RUN=false を設定すると本番投稿に切り替わる。
-      # 本番投稿にはX_API_KEY等のSecretsが必要(未設定の間はDRY_RUNのままにしておくこと)。
-      # post_to_x.py自体が、各記事URLを実際にHTTP 200で取得できるまで
-      # 15秒間隔・最大5分でリトライしてから投稿するため、ここで固定sleepを
-      # 挟む必要はない(GitHub Pagesのデプロイ時間の変動にも対応できる)。
       - name: Xへ投稿
         env:
           X_API_KEY: ${{ secrets.X_API_KEY }}
@@ -139,30 +236,19 @@ jobs:
           DRY_RUN: ${{ vars.X_POST_DRY_RUN || 'true' }}
         run: python post_to_x.py --article-ids "${{ needs.generate.outputs.article_ids }}"
 
-      # 投稿済みログが更新された(=本番投稿が1件以上成功した)時だけコミットする。
-      # ステージ済みの変更がある状態でpull --rebaseを行うとrebaseが拒否される
-      # ことがあるため、必ず「add→commit→pull --rebase→push」の順にする。
-      - name: 投稿済みログをコミット・プッシュ
+      # 投稿に一部失敗しても、成功分の記録は必ず保存する
+      - name: 投稿済みログをデータbranchに保存
+        if: always()
         run: |
-          git config user.name "shonan-doors-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/x_post_log.json
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: X投稿済みログを更新"
-            git pull --rebase origin main
-            git push
-          fi
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新 (Daily Articles)"
 
-  # Bing等のIndexNow対応検索エンジンへ、本日新規公開した記事URLを通知する。
-  # generateジョブが成功した場合のみ実行されるが、あくまで別ジョブとして
-  # 疎結合にしてあるため、このジョブが失敗しても記事生成・build・
-  # GitHub Pagesへのデプロイ(=generateジョブの成否)やX投稿には一切影響しない。
-  # IndexNowはGoogle Search Console/sitemap.xml等の既存SEO実装とは独立した、
-  # 補助的な即時クロール依頼の仕組みであり、それらには一切手を加えていない。
+  # Bing等のIndexNow対応検索エンジンへ、本番公開を確認できた記事URLを通知する。
   indexnow_submit:
     needs: generate
     if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: リポジトリをチェックアウト(最新mainを取得)
         uses: actions/checkout@v4
@@ -174,10 +260,5 @@ jobs:
         with:
           python-version: '3.11'
 
-      # IndexNowのkeyはその性質上「公開ファイルとして配信される」ことが
-      # 仕様上前提のため秘密情報ではなく、GitHub Secretsは使用しない
-      # (X_API_KEY等のcredentialとは明確に別枠。indexnow_submit.py内に
-      # 直接定義済みで、標準ライブラリのみで動作するため追加パッケージの
-      # インストールも不要)。
       - name: IndexNowへ本日公開したURLを通知
         run: python indexnow_submit.py --article-ids "${{ needs.generate.outputs.article_ids }}"
