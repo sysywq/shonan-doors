@@ -26,12 +26,14 @@ Fact Audit(fact_audit.py と同じ判定ルール)にかけ、合格した記事
     (骨格の値でも、単位や書式が同じ「値だけの差し替え」なら記事の主旨は変わらないので置き換える)
   - 置き換えられない細部の誤り → その1文を削除する(新しい事実は書き足さない)
 
-人の判断が必要なのは次の4つだけ(escalation。Approve / Reject の2択で通知する):
+人の判断が必要なのは次の場合だけ(escalation。Approve / Reject の2択で通知する):
   - source_conflict: 公式情報同士が実質的に矛盾している(needsHuman)
   - core_unverified: 重要な記述(title / dek / central)が公式情報で確認できない
   - premise_change : 修正すると記事の主旨そのものが変わる(骨格の値以外の誤り)
   - ambiguous      : どの情報を採用すべきか一意に決められない
-                     (骨格の記述の根拠になる公式画像の読み取りに曖昧さがある場合もここに入る)
+  - image_reading  : 根拠は公式画像にあるが、AIの読取り確度だけが足りない(骨格の記述)。
+                     公式画像のURL・AIが読み取れた候補・確認してほしい項目だけを示し、
+                     オーナーの確認結果を読取り補助にして再監査する(resume_image_check.py)
 それ以外の不合格(監査できなかった・人物の発言を含む等)は人に聞かずに見送り、別トピックで補充する。
 
 不合格記事は公開せず、理由・claim・escalation を実行レポート(gate_rejected)に記録する。
@@ -68,6 +70,7 @@ ESCALATION_KINDS = {
     "core_unverified": "重要な記述が公式情報で確認できない",
     "premise_change": "修正すると記事の主旨そのものが変わる",
     "ambiguous": "どの情報を採用すべきか一意に決められない",
+    "image_reading": "根拠は公式画像だが、画像内の文字をAIが十分な確度で読み取れない",
 }
 ESCALATION_MAX_ITEMS = 3  # 通知に載せる claim の数(簡潔さを優先)
 
@@ -294,7 +297,7 @@ def _quote(values):
 
 def escalation(entry, result):
     """不合格の記事について、人の判断が必要かを決める。必要なら通知内容の dict を、不要なら None を返す。
-    人の判断が必要なのは ESCALATION_KINDS の4つだけ。監査できなかった記事(形式異常・例外)や
+    人の判断が必要なのは ESCALATION_KINDS の場合だけ。監査できなかった記事(形式異常・例外)や
     人物の発言を含む記事は、人に聞いても直せないので聞かずに見送る(別トピックで補充する)。
     判断は Approve / Reject の2択で済むように、承認・見送りそれぞれで何をするかを書く。"""
     import fact_audit as fa
@@ -309,15 +312,24 @@ def escalation(entry, result):
     core_unverified = [c for c in blocking if c.get("status") != "contradicted" and _is_core(c)]
     detail_contradicted = [c for c in blocking if c.get("status") == "contradicted" and not _is_core(c)]
     image_ambiguous = fa.ambiguous_image_claims(core_unverified)
-    image_only = False
+    reject = "この記事は公開せずに見送ります(不足分は Daily Articles の補充生成で別トピックを公開します)"
+    if (not result.get("needsHuman") and not core_contradicted and image_ambiguous
+            and len(image_ambiguous) == len(core_unverified)):
+        # 根拠は公式画像にあり、AIの読取り確度だけが足りない → 画像の目視確認だけを求める
+        return {
+            "kind": "image_reading",
+            "reason": ESCALATION_KINDS["image_reading"],
+            "topic": entry.get("title", ""),
+            "imageChecks": [image_check_item(c) for c in image_ambiguous[:ESCALATION_MAX_ITEMS]],
+            "approve": "確認結果を一次情報の読取り補助にして再監査し、confirmed なら公開します"
+                       "(値が違うときは `正しい値: …` を添えてください。その値に直して再監査します)",
+            "reject": "公式画像の記載は根拠にせず、" + reject,
+        }
     if result.get("needsHuman"):
         kind = "source_conflict"
         items = blocking or [c for c in claims if c.get("status") not in ("confirmed", "wording_difference")]
     elif core_contradicted:
         kind, items = "premise_change", core_contradicted
-    elif image_ambiguous and len(image_ambiguous) == len(core_unverified):
-        # 骨格の未確認が「公式画像の読み取りの曖昧さ」だけなら、読み取りの確認だけを求める
-        kind, items, image_only = "ambiguous", image_ambiguous, True
     elif core_unverified:
         kind, items = "core_unverified", core_unverified
     elif detail_contradicted:
@@ -330,13 +342,7 @@ def escalation(entry, result):
     article = " / ".join(avs) or "(該当する記載の特定なし)"
     official = " / ".join(_official_text(c) for c in items) or (result.get("summary") or "(記録なし)")
     then = "再監査し、confirmed なら公開します"
-    reject = "この記事は公開せずに見送ります(不足分は Daily Articles の補充生成で別トピックを公開します)"
-    if image_only:
-        read = _quote(pvs) if pvs else "記事内の記載どおり"
-        approve = (f"公式画像の記載を{read}と確定し、記事内{_quote(avs)}をそれに合わせて(同じなら据え置き)"
-                   f"{then}")
-        reject = "公式画像の記載は根拠にせず、" + reject
-    elif kind == "core_unverified":
+    if kind == "core_unverified":
         approve = f"確認できない{_quote(avs)}を記事から外し、公式情報で確認できる内容だけに書き直して{then}"
     elif kind == "premise_change":
         approve = (f"記事の主旨を公式情報{_quote(pvs)}に合わせて書き直し、{then}" if pvs
@@ -356,8 +362,30 @@ def escalation(entry, result):
     }
 
 
+def image_check_item(c):
+    """目視確認してほしい項目(公式画像のURL・AIが読み取れた候補・確認してほしい記載)。"""
+    return {"claim": c.get("claim", ""), "articleValue": c.get("articleValue", ""),
+            "imageUrl": c.get("imageUrl", ""), "pageUrl": c.get("primaryUrl", ""),
+            "candidate": c.get("primaryValue", "")}
+
+
 def format_escalation(esc):
-    """オーナーに判断を求めるときの通知文(簡潔な固定形式。判断は Approve / Reject の2択)。"""
+    """オーナーに判断を求めるときの通知文(簡潔な固定形式。判断は Approve / Reject の2択)。
+    公式画像の目視確認(image_reading)は、確認対象の画像・AIの読取り候補・確認してほしい項目を示す。"""
+    if esc.get("kind") == "image_reading":
+        checks = esc.get("imageChecks") or []
+        lines = [f"対象トピック: {esc.get('topic', '')}"]
+        for n, c in enumerate(checks, 1):
+            pre = f"({n}) " if len(checks) > 1 else ""
+            image = c.get("imageUrl") or "(画像URLの記録なし)"
+            page = f"(掲載ページ: {c['pageUrl']})" if c.get("pageUrl") else ""
+            lines += [
+                f"{pre}公式画像: {image}{page}",
+                f"{pre}AIが読み取れた候補: {c.get('candidate') or '(読み取れず)'}",
+                f"{pre}確認してほしい項目: {c.get('claim', '')}が「{c.get('articleValue', '')}」で正しいか",
+            ]
+        lines += [f"[Approve] {esc.get('approve', '')}", f"[Reject] {esc.get('reject', '')}"]
+        return "\n".join(lines)
     return "\n".join([
         f"対象トピック: {esc.get('topic', '')}",
         f"記事内: {esc.get('article', '')}",
@@ -369,20 +397,21 @@ def format_escalation(esc):
 
 # ---------- 監査の実行 ----------
 
-def audit_draft(client, entry):
-    """1ドラフトを Fact Audit にかけ、正規化済みの結果を返す。例外は呼び出し元で扱う。"""
+def audit_draft(client, entry, confirmations=None):
+    """1ドラフトを Fact Audit にかけ、正規化済みの結果を返す。例外は呼び出し元で扱う。
+    confirmations … オーナーによる公式画像の目視確認(None なら data/image_confirmations.json)"""
     import fact_audit as fa
 
-    raw = fa.audit_one(client, entry, fa.blocked_domains())
+    raw = fa.audit_one(client, entry, fa.blocked_domains(), confirmations=confirmations)
     result, anomalies = fa.normalize_result(raw, entry.get("id"))
     if anomalies:
         fa.log_anomalies(entry.get("id"), anomalies)
     return result
 
 
-def _audit_safely(client, entry):
+def _audit_safely(client, entry, confirmations=None):
     try:
-        return audit_draft(client, entry)
+        return audit_draft(client, entry, confirmations)
     except Exception as e:  # 監査できなかった記事は公開しない(fail-closed)
         return {"verdict": "review_required", "claims": [], "primarySources": [],
                 "hasQuotedComment": False, "needsHuman": False,
@@ -392,11 +421,13 @@ def _audit_safely(client, entry):
 
 
 def _claim_summary(c):
-    return {k: c.get(k, "") for k in ("claim", "role", "status", "basis", "imageReading", "articleValue",
-                                        "primaryValue", "primaryUrl", "note")}
+    keys = ("claim", "role", "status", "basis", "imageReading", "articleValue", "primaryValue", "primaryUrl", "note")
+    if c.get("basis") == "official_image" or c.get("imageReading") == "ambiguous":
+        keys += ("imageUrl",)
+    return {k: c.get(k, "") for k in keys}
 
 
-def check_draft(entry, client=None):
+def check_draft(entry, client=None, confirmations=None):
     """ドラフト1件を公開前監査にかける。
     修正内容が一意に決まる誤りは自動修正して再監査する(最大 AUTOFIX_MAX_ROUNDS 回)。
     戻り値: dict
@@ -409,7 +440,7 @@ def check_draft(entry, client=None):
 
     if client is None:
         client = fa.make_client()
-    result = _audit_safely(client, entry)
+    result = _audit_safely(client, entry, confirmations)
     passed, reasons, blocking = evaluate(result)
     audits, autofix, current = 1, [], entry
     for _ in range(AUTOFIX_MAX_ROUNDS):
@@ -419,7 +450,7 @@ def check_draft(entry, client=None):
         if fixed is None:
             break
         # 自動修正した記事は必ず再監査する。再監査で合格しなければ公開しない。
-        result = _audit_safely(client, fixed)
+        result = _audit_safely(client, fixed, confirmations)
         audits += 1
         autofix += fixes
         current = fixed
@@ -442,8 +473,10 @@ def check_draft(entry, client=None):
 
 
 def rejection_record(entry, gate, article_type):
-    """実行レポート(gate_rejected)に残す、不合格記事1件分の記録。"""
-    return {
+    """実行レポート(gate_rejected)に残す、不合格記事1件分の記録。
+    公式画像の目視確認待ち(image_reading)なら、確認項目(imageChecks)も残す(再開に使う)。"""
+    esc = gate.get("escalation") or {}
+    record = {
         "articleType": article_type,
         "title": entry.get("title", ""),
         "dek": entry.get("dek", ""),
@@ -462,3 +495,6 @@ def rejection_record(entry, gate, article_type):
         # Approve されたら続きから直せるよう、最後に監査した版を残す
         "draft": gate.get("candidate") or entry,
     }
+    if esc.get("kind") == "image_reading":
+        record["imageChecks"] = esc.get("imageChecks") or []
+    return record

@@ -29,6 +29,13 @@ shonan-doors で作業する際の恒久ルール。
 - review_required は誤り確定ではないので、一次情報を確認してから判断する
 - 重複記事は `mergedInto` の既存仕組みを使って整理する
 
+## 公式画像の確認Issue(`[公式画像の確認]`)への対応
+
+- 画像内の文字をAIが十分な確度で読めない場合だけ、このIssueでオーナーに目視確認を求める(推測で確定しない)
+- `@claude Approve`(値が違うときは `正しい値: …`)→ 作業branchで `python3 resume_image_check.py --issue <番号> --decision approve [--value …]` → `python3 build.py` → PR
+- `@claude Reject` → `python3 resume_image_check.py --issue <番号> --decision reject`(記事は公開しない。確認記録の変更だけPRにする)
+- オーナーの確認結果は `data/image_confirmations.json` に残り、以後の監査でも同じ画像の読取り補助として使われる
+
 ## 必須チェック
 
 - `python3 -m unittest discover -s tests -v`

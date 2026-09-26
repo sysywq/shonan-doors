@@ -28,6 +28,7 @@ import re
 import urllib.request
 
 import fact_audit as fa
+import official_image as oi
 
 VERIFY_RESULTS = ("resolved", "still_contradicted", "review_required")
 SNIPPET_CONTEXT = 1          # 該当文の前後に何文つけるか
@@ -119,7 +120,8 @@ def target_claims(full_prev, verify_prev):
         out = []
         for c in verify_prev["claims"]:
             if isinstance(c, dict) and c.get("verifyResult") != "resolved":
-                out.append({k: c.get(k, "") for k in ("claim", "role", "articleValue", "primaryValue", "primaryUrl", "note")})
+                out.append({k: c.get(k, "") for k in ("claim", "role", "articleValue", "primaryValue", "primaryUrl", "note",
+                                                      "basis", "imageUrl")})
         return out
     if isinstance(full_prev, dict) and isinstance(full_prev.get("claims"), list):
         return [dict(c) for c in full_prev["claims"]
@@ -293,10 +295,17 @@ def build_verify_prompt(article, items):
 
 def call_verify_api(client, article, items, model=None):
     prompt = build_verify_prompt(article, items)
+    content = prompt
+    images = [(n, it["image"]) for n, it in enumerate(items) if it.get("image")]
+    if images:  # 公式画像が根拠の claim は、画像そのものも一次情報として渡す
+        content = [{"type": "text", "text": prompt}]
+        for n, img in images:
+            content += [{"type": "text", "text": f"[{n}] の一次情報(公式画像)。文字が明瞭に読めない場合は review_required:"},
+                        img]
     resp = client.messages.create(
         model=model or fa.MODEL, max_tokens=2000, system=VERIFY_SYSTEM_PROMPT,
         tools=[VERIFY_TOOL], tool_choice={"type": "tool", "name": "submit_verification"},
-        messages=[{"role": "user", "content": prompt}],
+        messages=[{"role": "user", "content": content}],
     )
     usage = getattr(resp, "usage", None)
     stats = {
@@ -370,8 +379,9 @@ def normalize_verify_response(raw, n_items):
 
 # ---------- 実行 ----------
 
-def verify_article(article, claims, client_getter, fetcher, stats):
-    """1記事分の verify。client_getter は API が必要になった時だけ呼ばれる。"""
+def verify_article(article, claims, client_getter, fetcher, stats, image_fetcher=oi.fetch_claim_image):
+    """1記事分の verify。client_getter は API が必要になった時だけ呼ばれる。
+    根拠が公式画像(basis=official_image)の claim は、本文テキストが無くても画像を取り直して判定する。"""
     fetched = {}
     results, pending = [], []
     for c in claims:
@@ -383,10 +393,12 @@ def verify_article(article, claims, client_getter, fetcher, stats):
             if fetched[url] is None and url:
                 fetched[url] = fetcher(url) or ""
             text = fetched.get(url) or ""
-            verdict = code_check(article, c, primary_text_available=bool(text))
+            image = image_fetcher(c) if c.get("basis") == "official_image" and c.get("imageUrl") else None
+            verdict = code_check(article, c, primary_text_available=bool(text) or bool(image))
             if verdict is None:
                 passage, _ = locate_passage(article, c)
-                pending.append({"claim": c, "passage": passage, "excerpt": primary_excerpt(text, c)})
+                pending.append({"claim": c, "passage": passage, "excerpt": primary_excerpt(text, c),
+                                "image": image})
                 continue
         res, reason = verdict
         results.append(dict(c, verifyResult=res, method="code", verifyReason=reason))

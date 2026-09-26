@@ -11,6 +11,9 @@ generate_articles.py が書き出す実行レポート(RUN_REPORT_PATH)の gate_
 Issue本文は先頭に判断用の簡潔な5行(対象トピック / 記事内 / 公式情報 / Approve / Reject)を置き、
 判断は Approve / Reject の2択で済むようにする。監査の詳細とドラフトは折りたたんで添える。
 実行レポートに shortfall(公開件数が最低ラインに未達)があれば、その理由もIssueを1件作って残す。
+公式画像の目視確認(escalation の kind=image_reading)は「[公式画像の確認]」Issue にし、
+公式画像のURL・AIが読み取れた候補・確認してほしい項目・[Approve] [Reject] だけを示す(image_check_body)。
+本文末尾に再開用のデータを埋め込み、resume_image_check.py が Approve / Reject 後に使う。
 
 - 同じタイトルのIssueが既に open なら作らない(再実行で重複させない)
 - GITHUB_TOKEN(または GH_TOKEN)と GITHUB_REPOSITORY が必要
@@ -22,8 +25,10 @@ Issue本文は先頭に判断用の簡潔な5行(対象トピック / 記事内 
   python report_gate_rejections.py --dry-run  # 内容の確認のみ
 """
 import argparse
+import base64
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -34,6 +39,8 @@ RUN_REPORT_PATH = os.environ.get(
 API = "https://api.github.com"
 TITLE_PREFIX = "[公開前監査] 要判断:"
 SHORTFALL_TITLE_PREFIX = "[Daily Articles] 公開件数が最低ラインに未達"
+IMAGE_CHECK_TITLE_PREFIX = "[公式画像の確認]"
+IMAGE_CHECK_MARKER = "image-check-payload:"
 
 
 def issue_title(r, date):
@@ -82,6 +89,48 @@ def issue_body(r, date):
               json.dumps(draft, ensure_ascii=False, indent=1), "```",
               "", "他メディアは事実確認の根拠にしないでください。", "", "</details>"]
     return "\n".join(lines)
+
+
+def is_image_check(r):
+    return (r.get("escalation") or {}).get("kind") == "image_reading" and bool(r.get("imageChecks"))
+
+
+def image_check_title(r, date):
+    return f"{IMAGE_CHECK_TITLE_PREFIX} {r.get('title', '(タイトル不明)')} ({date})"
+
+
+def image_check_body(r, date):
+    """公式画像の目視確認を求めるIssue。根拠は公式画像にあり、AIの読取り確度だけが足りない場合に限る。
+    判断は Approve / Reject の2択。末尾の HTML コメントに再開用のドラフトと確認項目を埋め込む。"""
+    import publish_gate as pg
+
+    esc = dict(r.get("escalation") or {}, imageChecks=r.get("imageChecks") or [])
+    return "\n".join([
+        pg.format_escalation(esc),
+        "",
+        "画像を見て、このIssueに `@claude Approve`(値が違うときは `@claude Approve 正しい値: …`)"
+        "または `@claude Reject` とコメントしてください。",
+        "",
+        f"<!-- {IMAGE_CHECK_MARKER} {encode_payload(r, date)} -->",
+    ])
+
+
+def encode_payload(r, date):
+    payload = {"date": date, "articleType": r.get("articleType", ""), "imageChecks": r.get("imageChecks") or [],
+               "draft": r.get("draft") or {}}
+    return base64.b64encode(json.dumps(payload, ensure_ascii=False).encode("utf-8")).decode("ascii")
+
+
+def decode_payload(body):
+    """Issue本文に埋め込んだ再開用のデータを取り出す。無ければ None。"""
+    m = re.search(re.escape(IMAGE_CHECK_MARKER) + r"\s+([A-Za-z0-9+/=]+)\s*-->", body or "")
+    if not m:
+        return None
+    try:
+        data = json.loads(base64.b64decode(m.group(1)).decode("utf-8"))
+    except (ValueError, TypeError):
+        return None
+    return data if isinstance(data, dict) else None
 
 
 def shortfall_title(date):
@@ -150,7 +199,8 @@ def main(argv=None, request=github_request):
         return 0
     date = report.get("date") or ""
     # (タイトル, 本文) の一覧。人の判断が必要な記事1件につき1件、最低件数に未達ならその旨を1件。
-    issues = [(issue_title(r, date), issue_body(r, date)) for r in escalated]
+    issues = [(image_check_title(r, date), image_check_body(r, date)) if is_image_check(r)
+              else (issue_title(r, date), issue_body(r, date)) for r in escalated]
     if shortfall:
         issues.append((shortfall_title(date), shortfall_body(shortfall, date, rejected)))
 

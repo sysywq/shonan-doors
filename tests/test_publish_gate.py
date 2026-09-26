@@ -16,6 +16,7 @@ sys.path.insert(0, ROOT)
 sys.modules.setdefault("anthropic", types.ModuleType("anthropic"))
 import generate_articles as g  # noqa: E402
 import publish_gate as pg  # noqa: E402
+import fact_audit as pg_fa  # noqa: E402
 import report_gate_rejections as rgr  # noqa: E402
 import fact_audit as fa  # noqa: E402
 
@@ -71,7 +72,10 @@ class FakeClient:
         self.messages = self
 
     def create(self, **kw):
-        art = json.loads(kw["messages"][0]["content"].split("\n\n", 1)[1])
+        content = kw["messages"][0]["content"]
+        if isinstance(content, list):  # 公式画像を添付したメッセージは、先頭のテキストに記事がある
+            content = content[0]["text"]
+        art = json.JSONDecoder().raw_decode(content.split("\n\n", 1)[1])[0]
         self.calls.append(art["title"])
         v = self.by_title[art["title"]].pop(0)
         if isinstance(v, Exception):
@@ -319,7 +323,7 @@ class EscalationTest(unittest.TestCase):
 def image_claim(text, status, role="dek", av="", pv="", reading="clear",
                 url="https://shonan.terracemall.com/event/detail/?cd=001233"):
     return dict(claim(text, status, role=role, av=av, pv=pv, url=url), basis="official_image",
-                imageReading=reading, note="画像: https://shonan-terracemall.pictona.jp/x.png")
+                imageReading=reading, imageUrl="https://shonan-terracemall.pictona.jp/x.png")
 
 
 class OfficialImageTest(unittest.TestCase):
@@ -337,9 +341,16 @@ class OfficialImageTest(unittest.TestCase):
     def test_gate_publishes_article_backed_by_official_image(self):
         resp = audit_response([claim("10月3・4日開催", "confirmed", role="central"),
                                image_claim("20店が出店", "confirmed", av="20店", pv="出店者一覧20店")])
-        gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}))
+        img = {"pageUrl": "https://shonan.terracemall.com/event/detail/?cd=001233",
+               "imageUrl": "https://shonan-terracemall.pictona.jp/x.png", "mediaType": "image/png", "data": "AAAA"}
+        with mock.patch.object(pg_fa, "official_page_images", return_value=[img]):
+            gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}), confirmations=[])
         self.assertTrue(gate["passed"])
         self.assertEqual(gate["audits"], 1)
+        # 監査に添付していない画像を根拠にした場合は、公式画像で確認したとは扱わない
+        with mock.patch.object(pg_fa, "official_page_images", return_value=[]):
+            gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}), confirmations=[])
+        self.assertFalse(gate["passed"])
 
     def test_ambiguous_core_image_reading_is_escalated_as_approve_reject(self):
         r = normalized(audit_response([
@@ -349,13 +360,14 @@ class OfficialImageTest(unittest.TestCase):
         self.assertFalse(passed)
         self.assertEqual(blocking[0]["status"], "not_found_in_primary")
         esc = pg.escalation(draft("湘南海街珈琲祭2026"), r)
-        self.assertEqual(esc["kind"], "ambiguous")
+        self.assertEqual(esc["kind"], "image_reading")
         lines = pg.format_escalation(esc).split("\n")
-        self.assertEqual([l.split(":")[0] for l in lines], ["対象トピック", "記事内", "公式情報", "Approve", "Reject"])
-        self.assertIn("自家焙煎店20軒", lines[1])
-        self.assertIn("公式画像の読み取りに曖昧さ", lines[2])
-        self.assertIn("出店者20(または26)", lines[3])
-        self.assertIn("見送り", lines[4])
+        self.assertEqual([l.split(":")[0].split(" ")[0] for l in lines],
+                         ["対象トピック", "公式画像", "AIが読み取れた候補", "確認してほしい項目", "[Approve]", "[Reject]"])
+        self.assertIn("https://shonan-terracemall.pictona.jp/x.png", lines[1])
+        self.assertIn("出店者20(または26)", lines[2])
+        self.assertIn("「自家焙煎店20軒」で正しいか", lines[3])
+        self.assertIn("見送り", lines[5])
 
     def test_ambiguous_detail_image_reading_does_not_need_a_human(self):
         # 細部の読み取りの曖昧さは、ほかの細部の未確認と同じく公開を止めない(人に聞かない)
