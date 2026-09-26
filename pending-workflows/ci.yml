@@ -1,0 +1,82 @@
+name: CI
+
+# main向けPRとmainへのpushで、テストとビルドを検証する。
+# 記事生成・Fact Audit・X投稿などの既存workflowとは独立しており、
+# リポジトリへの書き込みやSecretsの利用は一切行わない。
+# Daily Articles の当日PRは GITHUB_TOKEN で作るため pull_request では起動しない。
+# そのため Daily Articles(daily_pr.py ci)が当日branchを指定して workflow_dispatch で起動する
+# (同じコミットに対する同じチェックとして記録される)。
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # 追跡対象の __pycache__/*.pyc を書き換えて差分チェックを誤検知させないため
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # テストはanthropicをスタブに差し替えるが、実際のimportでも動くよう
+      # Daily Articles / Fact Audit と同じ依存を入れておく。
+      - name: 依存パッケージをインストール
+        run: pip install anthropic
+
+      - name: ユニットテスト
+        run: python3 -m unittest discover -s tests -v
+
+      # build.pyはsitemap.xmlのlastmodやイベントの開催状況に実行日を使う。
+      # 実行日によって差分が出ないよう、コミット済みsitemap.xmlのトップページの
+      # lastmodをビルド基準日として固定する。
+      - name: ビルド基準日を決定
+        run: |
+          build_date=$(python3 - <<'EOF'
+          import xml.etree.ElementTree as ET
+          ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          for url in ET.parse("sitemap.xml").getroot().findall("s:url", ns):
+              if url.findtext("s:loc", namespaces=ns) == "https://www.shonandoors.com/":
+                  print(url.findtext("s:lastmod", namespaces=ns))
+                  break
+          EOF
+          )
+          if [ -z "$build_date" ]; then
+            echo "::error::sitemap.xmlからトップページのlastmodを取得できませんでした"
+            exit 1
+          fi
+          echo "ビルド基準日: $build_date"
+          echo "SHONAN_DOORS_BUILD_DATE=$build_date" >> "$GITHUB_ENV"
+
+      - name: ビルド
+        run: python3 build.py
+
+      # build後に差分が残る = 元データ(data/articles.json等)やbuild.pyの変更に対して
+      # 生成物が再生成・コミットされていない、または生成物が直接編集されている。
+      - name: 生成物に未コミットの差分が無いか確認
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::python3 build.py 実行後に未コミットの差分があります。ローカルで build.py を実行し、生成物をコミットしてください。"
+            git status --porcelain
+            git --no-pager diff --stat
+            git --no-pager diff | head -200
+            exit 1
+          fi
+          echo "差分なし"

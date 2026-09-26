@@ -1,0 +1,84 @@
+name: Publish Articles After Merge
+
+# 人がマージしたPR(保留記事の Approve で作った「この記事だけを公開する」PR など)で main に新しく入った記事について、
+# 本番公開(HTTP 200)を確認してから X投稿・IndexNow を行う。
+# Daily Articles の自動マージは GITHUB_TOKEN による push なのでこの workflow は起動せず、
+# Daily Articles 側が公開確認・X投稿・IndexNow を行う(二重に動かない)。
+# 投稿済みログで同じ記事は二度投稿しない。ログは main ではなくデータbranch(bot/x-post-log)に保存する。
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/articles.json
+
+permissions:
+  contents: read
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      article_ids: ${{ steps.published.outputs.article_ids }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: 新しく公開された記事の公開を確認
+        id: published
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: python daily_pr.py after-merge --before "$BEFORE" --after "$AFTER"
+
+  post_to_x:
+    needs: confirm
+    if: needs.confirm.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    concurrency:
+      group: x-post
+      cancel-in-progress: false
+    permissions:
+      contents: write   # データbranch bot/x-post-log へのpushのみ(mainは変更しない)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install tweepy
+      - name: X投稿済みログを取り込む
+        run: python x_post_log_store.py pull
+      - name: Xへ投稿
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ vars.X_POST_DRY_RUN || 'true' }}
+          ARTICLE_IDS: ${{ needs.confirm.outputs.article_ids }}
+        run: python post_to_x.py --article-ids "$ARTICLE_IDS"
+      - name: 投稿済みログをデータbranchに保存
+        if: always()
+        run: |
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新 (マージ後の公開)"
+
+  indexnow_submit:
+    needs: confirm
+    if: needs.confirm.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: IndexNowへ公開したURLを通知
+        env:
+          ARTICLE_IDS: ${{ needs.confirm.outputs.article_ids }}
+        run: python indexnow_submit.py --article-ids "$ARTICLE_IDS"

@@ -1,0 +1,51 @@
+name: Claude Code
+
+# Issue / PR / レビューコメントで @claude とメンションされたときに Claude Code を起動する。
+# anthropics/claude-code-action の公式 examples/claude.yml を基準にしている。
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # 自動実行が承認待ちで止まらないよう、必要なツールだけを明示的に許可する。
+          # 許可リスト外のコマンド（rm / sudo / curl 等）は実行されない。
+          # disallowedTools は main への直接 push・強制 push・他リポジトリ操作・
+          # Secrets / トークン取得を明示的に拒否するための追加の防御線。
+          claude_args: |
+            --allowedTools "Bash(python3 -m unittest discover -s tests -v),Bash(python3 build.py),Bash(python3 resume_image_check.py:*),Bash(python3 resolve_daily_hold.py:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git fetch:*),Bash(git checkout:*),Bash(git switch:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),WebFetch"
+            --disallowedTools "Bash(rm:*),Bash(sudo:*),Bash(curl:*),Bash(wget:*),Bash(env:*),Bash(printenv:*),Bash(gh secret:*),Bash(gh auth:*),Bash(gh api:*),Bash(git push * main),Bash(git push * main:*),Bash(git push * HEAD:main),Bash(git push * *:main),Bash(git push * +*),Bash(git push --force:*),Bash(git push -f:*),Bash(git push * --force*),Bash(git push * -f *),Bash(git push * -f),Bash(git push * --delete *),Bash(git push * --mirror*),Bash(gh * --repo *),Bash(gh * --repo=*),Bash(gh * -R *)"
+
+          # Claude が PR の CI 結果を読めるようにする
+          additional_permissions: |
+            actions: read

@@ -12,6 +12,9 @@ shonan-doors で作業する際の恒久ルール。
 - PRを作成する
 - CI成功を確認する
 - mergeはオーナーの確認後にのみ行う
+  - 例外(オーナー承認済み・Daily Articles の自動運用に限る): Daily Articles workflow が作る当日PR(`daily/YYYY-MM-DD` → main)は、公開対象の記事がすべて Fact Audit(full)で confirmed、tests / build / 永続化検証 / CI がすべて成功、変更が元データ・生成物だけ、という条件をすべて満たすときに限り workflow が自動マージしてよい(`daily_pr.py merge`)。confirmed 以外の記事は当日PRから分離して保留にし、PR 全体は止めない
+  - この例外は Daily Articles workflow の当日PRだけに適用する。Claude が作るPR(保留記事の Approve で作るPRを含む)や通常タスクのPRは、従来どおりオーナーの確認後にのみマージする
+  - main への直接 push・ruleset の緩和・bypass の追加はしない
 
 ## Shonan Doorsの編集ルール
 
@@ -35,6 +38,14 @@ shonan-doors で作業する際の恒久ルール。
 - `@claude Approve`(値が違うときは `正しい値: …`)→ 作業branchで `python3 resume_image_check.py --issue <番号> --decision approve [--value …]` → `python3 build.py` → PR
 - `@claude Reject` → `python3 resume_image_check.py --issue <番号> --decision reject`(記事は公開しない。確認記録の変更だけPRにする)
 - オーナーの確認結果は `data/image_confirmations.json` に残り、以後の監査でも同じ画像の読取り補助として使われる
+
+## Daily Articles の保留記事Issue(`[Daily Articles 保留]`)への対応
+
+- Daily Articles の Fact Audit(full)で confirmed にならなかった記事だけが保留になり、1件ごとにこのIssueが作られる(同じ日の confirmed 記事は当日PRで公開済み)
+- `@claude Approve`(公式画像の値が違うときは `正しい値: …`)→ 作業branchで `python3 resolve_daily_hold.py --issue <番号> --decision approve [--value …]` → `python3 build.py` → この記事だけを公開するPR(マージはオーナーの確認後。マージ後の X投稿・IndexNow は Publish Articles After Merge workflow が行う)
+  - 終了コード3(再監査で矛盾が残る等)なら公開せず、理由をIssueに報告する
+- `@claude Reject` → `python3 resolve_daily_hold.py --issue <番号> --decision reject`(記事は公開しない。ストックテーマ・確認記録の変更だけPRにする)
+- 保留記事は同じ ID / slug のまま公開する(URL を変えない)
 
 ## 必須チェック
 
