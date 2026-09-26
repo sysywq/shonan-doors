@@ -31,6 +31,7 @@ Fact Audit(fact_audit.py と同じ判定ルール)にかけ、合格した記事
   - core_unverified: 重要な記述(title / dek / central)が公式情報で確認できない
   - premise_change : 修正すると記事の主旨そのものが変わる(骨格の値以外の誤り)
   - ambiguous      : どの情報を採用すべきか一意に決められない
+                     (骨格の記述の根拠になる公式画像の読み取りに曖昧さがある場合もここに入る)
 それ以外の不合格(監査できなかった・人物の発言を含む等)は人に聞かずに見送り、別トピックで補充する。
 
 不合格記事は公開せず、理由・claim・escalation を実行レポート(gate_rejected)に記録する。
@@ -38,6 +39,11 @@ Issue 化は report_gate_rejections.py が実行レポートを読んで行う(e
 
 他メディアは fact_audit と同じく blocked_domains で遮断しているため、
 他メディアの記述を根拠に合格することはない。
+
+公式サイト・公式SNS・主催者・自治体が掲載した画像内の文字・数値も一次情報として扱う
+(fact_audit の basis=official_image)。本文テキストに同じ文言がなくても、画像で明瞭に確認できれば
+合格してよい。画像の掲載元が一次情報と確認できないものは fact_audit 側で未確認に戻す。
+読み取りに曖昧さがある(imageReading=ambiguous)骨格の記述だけを人の確認に回す。
 """
 import os
 import re
@@ -274,6 +280,10 @@ def _official_text(c):
     if not pv:
         pv = {"not_found_in_primary": "公式情報に記載なし",
               "source_unavailable": "公式ページを確認できず"}.get(c.get("status"), c.get("note") or "(記載なし)")
+    if c.get("imageReading") == "ambiguous":
+        pv = f"公式画像の読み取りに曖昧さあり: {pv}"
+    elif c.get("basis") == "official_image":
+        pv = f"公式画像: {pv}"
     url = c.get("primaryUrl") or ""
     return f"{pv}({url})" if url else pv
 
@@ -287,6 +297,8 @@ def escalation(entry, result):
     人の判断が必要なのは ESCALATION_KINDS の4つだけ。監査できなかった記事(形式異常・例外)や
     人物の発言を含む記事は、人に聞いても直せないので聞かずに見送る(別トピックで補充する)。
     判断は Approve / Reject の2択で済むように、承認・見送りそれぞれで何をするかを書く。"""
+    import fact_audit as fa
+
     if not isinstance(result, dict) or result.get("anomalies") or result.get("hasQuotedComment"):
         return None
     passed, _reasons, blocking = evaluate(result)
@@ -296,11 +308,16 @@ def escalation(entry, result):
     core_contradicted = [c for c in blocking if c.get("status") == "contradicted" and _is_core(c)]
     core_unverified = [c for c in blocking if c.get("status") != "contradicted" and _is_core(c)]
     detail_contradicted = [c for c in blocking if c.get("status") == "contradicted" and not _is_core(c)]
+    image_ambiguous = fa.ambiguous_image_claims(core_unverified)
+    image_only = False
     if result.get("needsHuman"):
         kind = "source_conflict"
         items = blocking or [c for c in claims if c.get("status") not in ("confirmed", "wording_difference")]
     elif core_contradicted:
         kind, items = "premise_change", core_contradicted
+    elif image_ambiguous and len(image_ambiguous) == len(core_unverified):
+        # 骨格の未確認が「公式画像の読み取りの曖昧さ」だけなら、読み取りの確認だけを求める
+        kind, items, image_only = "ambiguous", image_ambiguous, True
     elif core_unverified:
         kind, items = "core_unverified", core_unverified
     elif detail_contradicted:
@@ -313,7 +330,13 @@ def escalation(entry, result):
     article = " / ".join(avs) or "(該当する記載の特定なし)"
     official = " / ".join(_official_text(c) for c in items) or (result.get("summary") or "(記録なし)")
     then = "再監査し、confirmed なら公開します"
-    if kind == "core_unverified":
+    reject = "この記事は公開せずに見送ります(不足分は Daily Articles の補充生成で別トピックを公開します)"
+    if image_only:
+        read = _quote(pvs) if pvs else "記事内の記載どおり"
+        approve = (f"公式画像の記載を{read}と確定し、記事内{_quote(avs)}をそれに合わせて(同じなら据え置き)"
+                   f"{then}")
+        reject = "公式画像の記載は根拠にせず、" + reject
+    elif kind == "core_unverified":
         approve = f"確認できない{_quote(avs)}を記事から外し、公式情報で確認できる内容だけに書き直して{then}"
     elif kind == "premise_change":
         approve = (f"記事の主旨を公式情報{_quote(pvs)}に合わせて書き直し、{then}" if pvs
@@ -329,7 +352,7 @@ def escalation(entry, result):
         "article": article,
         "official": official,
         "approve": approve,
-        "reject": "この記事は公開せずに見送ります(不足分は Daily Articles の補充生成で別トピックを公開します)",
+        "reject": reject,
     }
 
 
@@ -369,8 +392,8 @@ def _audit_safely(client, entry):
 
 
 def _claim_summary(c):
-    return {k: c.get(k, "") for k in ("claim", "role", "status", "articleValue", "primaryValue",
-                                        "primaryUrl", "note")}
+    return {k: c.get(k, "") for k in ("claim", "role", "status", "basis", "imageReading", "articleValue",
+                                        "primaryValue", "primaryUrl", "note")}
 
 
 def check_draft(entry, client=None):

@@ -17,6 +17,21 @@ sys.modules.setdefault("anthropic", types.ModuleType("anthropic"))
 import generate_articles as g  # noqa: E402
 import publish_gate as pg  # noqa: E402
 import report_gate_rejections as rgr  # noqa: E402
+import fact_audit as fa  # noqa: E402
+
+_real_http_get = fa._http_get
+
+
+def _no_network(url, limit):
+    raise OSError("テストでは公式ページの画像を取得しない")
+
+
+def setUpModule():
+    fa._http_get = _no_network
+
+
+def tearDownModule():
+    fa._http_get = _real_http_get
 
 
 def claim(text, status, role="detail", av="", pv="", url="https://www.city.example.lg.jp/event.html"):
@@ -299,6 +314,66 @@ class EscalationTest(unittest.TestCase):
         self.assertIn("夜間入苑料 大人500円", lines[2])
         self.assertIn("再監査", lines[3])
         self.assertIn("見送り", lines[4])
+
+
+def image_claim(text, status, role="dek", av="", pv="", reading="clear",
+                url="https://shonan.terracemall.com/event/detail/?cd=001233"):
+    return dict(claim(text, status, role=role, av=av, pv=pv, url=url), basis="official_image",
+                imageReading=reading, note="画像: https://shonan-terracemall.pictona.jp/x.png")
+
+
+class OfficialImageTest(unittest.TestCase):
+    """公式サイト・公式SNSの画像内の情報を一次情報として扱う(#30 の型)"""
+
+    def test_clear_official_image_passes_without_human(self):
+        # 本文テキストに無くても、公式ページの画像(出店者一覧)で明瞭に確認できれば合格
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("湘南の珈琲店20店が出店", "confirmed", av="20店", pv="出店者一覧20店")]))
+        passed, reasons, _ = pg.evaluate(r)
+        self.assertTrue(passed, reasons)
+        self.assertIsNone(pg.escalation(draft("湘南海街珈琲祭2026"), r))
+
+    def test_gate_publishes_article_backed_by_official_image(self):
+        resp = audit_response([claim("10月3・4日開催", "confirmed", role="central"),
+                               image_claim("20店が出店", "confirmed", av="20店", pv="出店者一覧20店")])
+        gate = pg.check_draft(draft("珈琲祭"), client=FakeClient({"珈琲祭": [resp]}))
+        self.assertTrue(gate["passed"])
+        self.assertEqual(gate["audits"], 1)
+
+    def test_ambiguous_core_image_reading_is_escalated_as_approve_reject(self):
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("自家焙煎店20軒", "confirmed", av="自家焙煎店20軒", pv="出店者20(または26)", reading="ambiguous")]))
+        passed, _, blocking = pg.evaluate(r)
+        self.assertFalse(passed)
+        self.assertEqual(blocking[0]["status"], "not_found_in_primary")
+        esc = pg.escalation(draft("湘南海街珈琲祭2026"), r)
+        self.assertEqual(esc["kind"], "ambiguous")
+        lines = pg.format_escalation(esc).split("\n")
+        self.assertEqual([l.split(":")[0] for l in lines], ["対象トピック", "記事内", "公式情報", "Approve", "Reject"])
+        self.assertIn("自家焙煎店20軒", lines[1])
+        self.assertIn("公式画像の読み取りに曖昧さ", lines[2])
+        self.assertIn("出店者20(または26)", lines[3])
+        self.assertIn("見送り", lines[4])
+
+    def test_ambiguous_detail_image_reading_does_not_need_a_human(self):
+        # 細部の読み取りの曖昧さは、ほかの細部の未確認と同じく公開を止めない(人に聞かない)
+        r = normalized(audit_response([
+            claim("10月3・4日開催", "confirmed", role="central"),
+            image_claim("ミニマグの容量", "confirmed", role="detail", av="90ml", pv="90ml?", reading="ambiguous")]))
+        self.assertTrue(pg.evaluate(r)[0])
+
+    def test_image_without_official_source_page_is_not_primary(self):
+        # 掲載元が他メディア(転載)・URL無しの画像は一次情報にならない → 骨格なら未確認
+        for url in ("https://www.townnews.co.jp/0605/2026/09/01/1.html", ""):
+            r = normalized(audit_response([
+                claim("10月3・4日開催", "confirmed", role="central"),
+                image_claim("20店が出店", "confirmed", av="20店", pv="20店", url=url)]))
+            passed, reasons, blocking = pg.evaluate(r)
+            self.assertFalse(passed, url)
+            self.assertIn("掲載元が一次情報と確認できない", blocking[0]["note"])
+            self.assertEqual(pg.escalation(draft("珈琲祭"), r)["kind"], "core_unverified")
 
 
 def news_item(title, body_seed):
