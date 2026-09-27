@@ -1,6 +1,10 @@
 name: Resolve Daily Hold
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/resolve-daily-hold.yml"
   workflow_dispatch:
     inputs:
       issue:
@@ -15,6 +19,9 @@ permissions:
 
 jobs:
   resolve:
+    strategy:
+      matrix:
+        issue: ${{ github.event_name == 'push' && fromJSON('[42,43]') || fromJSON(format('[{0}]', inputs.issue)) }}
     runs-on: ubuntu-latest
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -35,14 +42,14 @@ jobs:
       - name: Create publication branch
         id: plan
         run: |
-          BRANCH="hold/${{ inputs.issue }}-${{ github.run_id }}"
+          BRANCH="hold/${{ matrix.issue }}-${{ github.run_id }}"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$BRANCH"
 
       - name: Re-audit held article
-        run: python3 resolve_daily_hold.py --issue "${{ inputs.issue }}" --decision approve
+        run: python3 resolve_daily_hold.py --issue "${{ matrix.issue }}" --decision approve
 
       - name: Test and build
         run: |
@@ -53,7 +60,7 @@ jobs:
         run: |
           git add -A
           git diff --cached --quiet && { echo "No publication changes"; exit 1; }
-          git commit -m "Publish approved Daily Articles hold #${{ inputs.issue }}"
+          git commit -m "Publish approved Daily Articles hold #${{ matrix.issue }}"
           git push -u origin "HEAD:refs/heads/${{ steps.plan.outputs.branch }}"
 
       - name: Create publication PR
@@ -61,5 +68,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --base main --head "${{ steps.plan.outputs.branch }}" \
-            --title "Publish approved Daily Articles hold #${{ inputs.issue }}" \
-            --body "保留記事 #${{ inputs.issue }} を通常Actions runnerでFact Audit(full)再監査し、公開条件を満たした記事のみ追加するPRです。"
+            --title "Publish approved Daily Articles hold #${{ matrix.issue }}" \
+            --body "保留記事 #${{ matrix.issue }} を通常Actions runnerでFact Audit(full)再監査し、公開条件を満たした記事のみ追加するPRです。"
