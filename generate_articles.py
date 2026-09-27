@@ -3,12 +3,8 @@
 """
 湘南Doors 記事自動生成スクリプト
 ----------------------------------------------------------
-毎日2系統の記事を生成し、data/articles.json に追記する。
-
-  A) ニュース/イベント型(news)  … NEWS_ARTICLES_PER_DAY 件/日 (既定 3)
-  B) ストックSEO型(stock)       … STOCK_ARTICLES_PER_DAY 件/日 (既定 2)
-  C) 補充(top-up)               … A+Bが DAILY_TARGET_ARTICLES 件(既定 5)に届かない分を
-                                   別のnews候補で補う(回数・監査件数に上限あり)
+ニュース/イベントとストックSEOの候補を横断評価し、合格した記事を
+data/articles.json に追記する。2026-11-30まで地域・カテゴリの探索を重視する。
 
 このスクリプトはもう index.html を直接編集しない。
 ページの再生成は別ステップで build.py が行う(このスクリプトの責務ではない)。
@@ -81,6 +77,19 @@ def growth_hints():
         return [str(q)[:80].replace("\n", " ") for q in signal.get("discovery_hints", [])[:5]]
     except (OSError, ValueError, KeyError, TypeError):
         return []
+
+
+def growth_signal():
+    path = os.environ.get("GROWTH_SIGNAL_PATH", os.path.join(tempfile.gettempdir(), "shonan_growth_signal.json"))
+    try:
+        with open(path, encoding="utf-8") as f:
+            signal = json.load(f)
+        stamp = datetime.fromisoformat(signal["generated_at"])
+        if abs((datetime.now(ZoneInfo("Asia/Tokyo")) - stamp.astimezone(ZoneInfo("Asia/Tokyo"))).total_seconds()) > 24 * 3600:
+            return {}
+        return signal
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
 
 AREAS = ["藤沢", "茅ヶ崎", "鎌倉", "平塚", "大磯", "二宮", "逗子", "葉山"]
 CATS = {
@@ -180,6 +189,7 @@ DAILY_TOPUP_MAX_ATTEMPTS = int(os.environ.get("DAILY_TOPUP_MAX_ATTEMPTS", "3"))
 # 1回の実行で公開前監査にかけるドラフト数の上限(自動修正後の再監査は数えない)。
 # refill/top-upが重なってもAPI費用が際限なく増えないための歯止め。
 MAX_GATE_DRAFTS_PER_RUN = int(os.environ.get("MAX_GATE_DRAFTS_PER_RUN", "15"))
+MAX_EDITORIAL_DRAFT_ATTEMPTS = int(os.environ.get("MAX_EDITORIAL_DRAFT_ATTEMPTS", "8"))
 
 # ---------- ストック系: API呼び出し・台帳サイズの上限(暴走防止) ----------
 STOCK_TOPIC_REFILL_THRESHOLD = int(os.environ.get("STOCK_TOPIC_REFILL_THRESHOLD", "6"))
@@ -338,7 +348,7 @@ articlesは必ずJSON配列(Python側ではlistとして解釈される構造)�
 """
 
 
-def call_claude_news(recent_titles, event_series=None, count=None):
+def call_claude_news(recent_titles, event_series=None, count=None, candidate=None):
     count = count or NEWS_ARTICLES_PER_DAY
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     system_prompt = build_news_system_prompt(recent_titles, event_series, count=count)
@@ -347,9 +357,12 @@ def call_claude_news(recent_titles, event_series=None, count=None):
     hint_text = ("\n検索データで関心が見えた語句(既存記事の検索語を含むため、新規記事の対象とは限らない): "
                  + "、".join(hints) + "。既存記事と同一対象・検索意図なら新規作成しない。"
                  "検索語は事実の根拠ではないため、従来どおり一次情報を確認する。") if hints else ""
+    targeted = (f"今回の記事対象は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
+                f"一次情報の起点は {candidate['sourceUrl']}。調査の結果、対象や根拠が不適切なら"
+                "別テーマへすり替えず空配列を提出する。" if candidate else "")
     messages = [{
         "role": "user",
-        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{hint_text}",
+        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{targeted}{hint_text}",
     }]
     tools = [
         {"type": "web_search_20250305", "name": "web_search"},
@@ -359,7 +372,7 @@ def call_claude_news(recent_titles, event_series=None, count=None):
     for _ in range(10):
         response = client.messages.create(
             model="claude-sonnet-4-6",
-            max_tokens=8000,
+            max_tokens=16000,
             system=system_prompt,
             tools=tools,
             messages=messages,
@@ -440,7 +453,8 @@ def finalize_news_entry_id(entry, article_id):
 
 
 def run_news_generation(existing_articles, today, event_series=None, gate_rejections=None,
-                        count=None, max_refills=None, strict=True, label="news"):
+                        count=None, max_refills=None, strict=True, label="news", defer_ids=False,
+                        candidate=None):
     """ニュース/イベント型記事を生成する。戻り値: (accepted_entries, log_lines, event_series)
     致命的なエラー(API呼び出し失敗・レスポンス形状異常)はそのまま例外を送出する
     (このスクリプト全体を失敗させ、articles.jsonへの書き込みを行わせないため)。
@@ -508,7 +522,10 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
 
     # ---- 初回生成 ----
     log_lines.append(f"{label}: 初回{target}件生成を試みます")
-    raw_items = call_claude_news(recent_titles, event_series, count=target)
+    if candidate is None:
+        raw_items = call_claude_news(recent_titles, event_series, count=target)
+    else:
+        raw_items = call_claude_news(recent_titles, event_series, count=target, candidate=candidate)
     raw_items = validate_response_shape(raw_items, label=label)
     if len(raw_items) != target:
         log_lines.append(f"警告({label}): 期待した{target}件ではなく{len(raw_items)}件が返されました")
@@ -557,6 +574,8 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
     # ---- 採用が確定した分だけ、まとめてIDを発行する ----
     # reject/refillで捨てられた候補はここに含まれないため、IDが無駄に消費されたり
     # 欠番が生じたりしない。articles.jsonに保存される記事だけが連番IDを持つ。
+    if defer_ids:
+        return accepted, log_lines, event_series
     reserved_ids = reserve_ids(len(accepted))
     for entry, new_id in zip(accepted, reserved_ids):
         finalize_news_entry_id(entry, new_id)
@@ -818,7 +837,7 @@ def refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines):
     return stock_topics, added
 
 
-def build_stock_selection_prompt(candidates, existing_articles, stock_topics):
+def build_stock_selection_prompt(candidates, existing_articles, stock_topics, limit=None):
     article_summary, topic_summary = build_cannibalization_context(existing_articles, stock_topics)
     candidates_block = "\n".join(
         f"- id={t['id']} query=「{t['query']}」 titleIdea=「{t['titleIdea']}」 "
@@ -830,7 +849,7 @@ def build_stock_selection_prompt(candidates, existing_articles, stock_topics):
 カテゴリは次のいずれかを使ってください: {json.dumps(CATS, ensure_ascii=False)}
 
 以下は、時間が経っても検索され続けることを狙った「ストックSEO記事」の候補テーマです。
-本日はこの中から最大{STOCK_ARTICLES_PER_DAY}件を選び、記事として書き上げてください。
+本日はこの中から最大{limit if limit is not None else STOCK_ARTICLES_PER_DAY}件を選び、記事として書き上げてください。
 
 【候補テーマ】
 {candidates_block}
@@ -884,13 +903,13 @@ submit_stock_decisions ツールで提出してください。
 """
 
 
-def call_claude_stock_selection(candidates, existing_articles, stock_topics):
+def call_claude_stock_selection(candidates, existing_articles, stock_topics, limit=None):
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    system_prompt = build_stock_selection_prompt(candidates, existing_articles, stock_topics)
+    system_prompt = build_stock_selection_prompt(candidates, existing_articles, stock_topics, limit=limit)
 
     messages = [{
         "role": "user",
-        "content": f"候補テーマを評価し、最大{STOCK_ARTICLES_PER_DAY}件を選んで執筆したうえで、"
+        "content": f"候補テーマを評価し、最大{limit if limit is not None else STOCK_ARTICLES_PER_DAY}件を選んで執筆したうえで、"
                     "submit_stock_decisionsツールで全候補の判定結果を提出してください。",
     }]
     tools = [
@@ -901,7 +920,7 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics):
     for _ in range(MAX_STOCK_SELECTION_TURNS):
         response = client.messages.create(
             model="claude-sonnet-4-6",
-            max_tokens=8000,
+            max_tokens=16000,
             system=system_prompt,
             tools=tools,
             messages=messages,
@@ -925,7 +944,8 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics):
     raise RuntimeError(f"{MAX_STOCK_SELECTION_TURNS}ターン以内にsubmit_stock_decisionsが呼ばれませんでした。")
 
 
-def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate_rejections=None):
+def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate_rejections=None,
+                         defer_ids=False, limit=None, only_topic_id=None, refill=True):
     """ストックSEO型記事を生成する。戻り値: (accepted_entries, updated_stock_topics)
 
     ニュース生成とは異なり、この関数内のあらゆる失敗(API呼び出し失敗・
@@ -933,14 +953,20 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
     として扱われる(newsの正常な生成・commitを妨げないため)。"""
     if gate_rejections is None:
         gate_rejections = []
-    stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
+    if refill:
+        stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
 
     candidates = [t for t in stock_topics if t["status"] == "candidate"][:MAX_STOCK_CANDIDATES_IN_PROMPT]
+    if only_topic_id:
+        candidates = [t for t in candidates if t["id"] == only_topic_id]
     if not candidates:
         log_lines.append("stock: 評価可能な候補テーマが0件のため、本日のストック記事生成は見送ります")
         return [], stock_topics
 
-    decisions_raw = call_claude_stock_selection(candidates, existing_articles, stock_topics)
+    if limit is None:
+        decisions_raw = call_claude_stock_selection(candidates, existing_articles, stock_topics)
+    else:
+        decisions_raw = call_claude_stock_selection(candidates, existing_articles, stock_topics, limit=limit)
     decisions_raw = validate_response_shape(decisions_raw, label="stock_decisions", max_items=len(candidates) + 5)
 
     candidates_by_id = {t["id"]: t for t in candidates}
@@ -966,8 +992,8 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
             log_lines.append(f"stock: スキップ「{topic['query']}」— {reason}")
             continue
 
-        if write_count >= STOCK_ARTICLES_PER_DAY:
-            log_lines.append(f"stock: 「{topic['query']}」は採用判定でしたが、本日の上限({STOCK_ARTICLES_PER_DAY}件)に達したため見送りました")
+        if write_count >= (limit if limit is not None else STOCK_ARTICLES_PER_DAY):
+            log_lines.append(f"stock: 「{topic['query']}」は採用判定でしたが、本日の候補上限に達したため見送りました")
             continue
 
         article = decision.get("article")
@@ -1032,19 +1058,23 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
         # その場でID を1件予約する。上限2件を予約してから絞り込む方式だと、
         # 1件しか採用されない日・0件の日に不要な欠番が積み上がってしまうため、
         # 「確定した分だけ消費する」設計に変更している。
-        new_id = reserve_ids(1)[0]
-        entry["id"] = new_id
-        entry["slug"] = f"{AREA_EN[article['area']]}-{CAT_EN[article['cat']]}-{new_id:04d}"
+        if defer_ids:
+            entry["_topicId"] = topic_id
+        else:
+            new_id = reserve_ids(1)[0]
+            entry["id"] = new_id
+            entry["slug"] = f"{AREA_EN[article['area']]}-{CAT_EN[article['cat']]}-{new_id:04d}"
         accepted.append(entry)
         working_set.append(entry)
         write_count += 1
 
-        topic["status"] = "generated"
-        topic["generatedArticleId"] = new_id
-        topic["generatedAt"] = now_str
-        log_lines.append(f"stock: 採用「{topic['query']}」→ id={new_id}")
+        if not defer_ids:
+            topic["status"] = "generated"
+            topic["generatedArticleId"] = new_id
+            topic["generatedAt"] = now_str
+            log_lines.append(f"stock: 採用「{topic['query']}」→ id={new_id}")
 
-    log_lines.append(f"stock: {len(accepted)}/{STOCK_ARTICLES_PER_DAY}件を採用しました (id:{[a['id'] for a in accepted]})")
+    log_lines.append(f"stock: {len(accepted)}件の候補を監査しました")
     return accepted, stock_topics
 
 
@@ -1440,7 +1470,7 @@ def shortfall_info(total, stock_count, gate_rejected):
         reasons.append("stockは重複判定・見送り・不合格などで0件")
     if gate_budget_exhausted():
         reasons.append(f"公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に到達")
-    reasons.append(f"news補充(refill {NEWS_REFILL_MAX_ATTEMPTS}回・top-up {DAILY_TOPUP_MAX_ATTEMPTS}回)の上限まで試行")
+    reasons.append("横断候補の生成・重複判定・監査の後、最低公開件数に届かなかった")
     return {"total": total, "min": DAILY_MIN_ARTICLES, "target": DAILY_TARGET_ARTICLES, "reasons": reasons}
 
 
@@ -1537,6 +1567,184 @@ def validate_response_shape(raw, label="news", max_items=None):
 # メイン処理
 # ============================================================
 
+def run_editorial_plan(existing_articles, today, event_series, log_lines,
+                       news_gate_rejections, stock_gate_rejections):
+    """Plan 10-30 metadata topics, draft only the ranked candidates."""
+    import editorial_planning as ep
+    from editorial_selection import plan
+
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    stock_topics = load_stock_topics()
+    try:
+        stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
+        discovered = ep.discover(client, AREAS, CATS, existing_articles, growth_hints())
+    except Exception as exc:
+        log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
+        return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                   news_gate_rejections, stock_gate_rejections)
+    stock_candidates = [{"id": t["id"], "articleType": "stock", "query": t["query"],
+                         "titleIdea": t["titleIdea"], "area": t["area"],
+                         "cat": t["category"], "searchIntent": t["searchIntent"],
+                         "subject": "", "sourceUrl": ""}
+                        for t in stock_topics if t.get("status") == "candidate"]
+    candidates = ep.candidate_pool(discovered, stock_candidates, existing_articles)
+    if len(candidates) < 10:
+        log_lines.append(f"警告(企画): 候補が{len(candidates)}件。目安10〜30件には不足")
+    if not candidates:
+        raise RuntimeError("企画候補がありません")
+    try:
+        judgments = ep.judge(client, candidates, existing_articles)
+        ranked = plan(candidates, judgments, growth_signal(), existing_articles, today,
+                      target=DAILY_TARGET_ARTICLES)
+    except Exception as exc:
+        log_lines.append(f"警告(企画): 採点に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
+        return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                   news_gate_rejections, stock_gate_rejections)
+    selected = []
+    attempts = []
+    max_attempts = max(DAILY_TARGET_ARTICLES, MAX_EDITORIAL_DRAFT_ATTEMPTS)
+    for candidate, result in ranked:
+        if (len(selected) >= DAILY_TARGET_ARTICLES or gate_budget_exhausted()
+                or len(attempts) >= max_attempts):
+            break
+        if result["parts"]["originality"] == 0:
+            log_lines.append(f"スキップ(企画): {candidate['id']} は既存記事との重複判定で独自性0点")
+            continue
+        if sum(a.get("area") == candidate["area"] and a.get("cat") == candidate["cat"]
+               for a in selected) >= 2:
+            continue
+        attempts.append({"id": candidate["id"], "score": result})
+        log_lines.append(f"企画: {candidate['id']} {candidate['titleIdea']} score={result['total']} "
+                         f"parts={result['parts']}")
+        try:
+            if candidate["articleType"] == "news":
+                drafts, draft_log, _ = run_news_generation(
+                    existing_articles + selected, today, event_series,
+                    gate_rejections=news_gate_rejections, count=1, max_refills=0,
+                    strict=False, label="planned_news", defer_ids=True, candidate=candidate)
+                log_lines.extend(draft_log)
+            else:
+                drafts, stock_topics = run_stock_generation(
+                    existing_articles + selected, stock_topics, today, log_lines,
+                    gate_rejections=stock_gate_rejections, defer_ids=True, limit=1,
+                    only_topic_id=candidate["id"], refill=False)
+            for entry in drafts:
+                if len(selected) >= DAILY_TARGET_ARTICLES:
+                    break
+                if entry.get("area") != candidate["area"] or entry.get("cat") != candidate["cat"]:
+                    log_lines.append(f"スキップ(企画): {candidate['id']} は計画した地域・カテゴリから逸脱")
+                    continue
+                if find_same_subject(entry, existing_articles + selected) or is_duplicate(entry, selected, days=None):
+                    log_lines.append(f"スキップ(企画): {candidate['id']} は採用済み対象と重複")
+                    continue
+                selected.append(entry)
+        except Exception as exc:
+            log_lines.append(f"警告(企画): {candidate['id']} の生成を見送り: {type(exc).__name__}: {exc}")
+
+    ids = reserve_ids(len(selected)) if selected else []
+    topics_by_id = {t["id"]: t for t in stock_topics}
+    now_str = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
+    for entry, article_id in zip(selected, ids):
+        finalize_news_entry_id(entry, article_id)
+        if entry["articleType"] == "stock":
+            topic = topics_by_id[entry.pop("_topicId")]
+            topic.update(status="generated", generatedArticleId=article_id, generatedAt=now_str)
+        else:
+            event_series, _ = register_event_series_if_new(entry, event_series)
+    gate_rejected = news_gate_rejections + stock_gate_rejections
+    write_gate_summary(gate_rejected)
+    shortfall = shortfall_info(len(selected), sum(a["articleType"] == "stock" for a in selected), gate_rejected)
+    write_shortfall_summary(shortfall, today)
+    if selected:
+        atomic_write_json(ARTICLES_JSON_PATH, existing_articles + selected)
+    atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
+    atomic_write_json(EVENT_SERIES_PATH, event_series)
+    news_ids = [a["id"] for a in selected if a["articleType"] == "news"]
+    stock_ids = [a["id"] for a in selected if a["articleType"] == "stock"]
+    log_lines.append(f"企画結果: {len(candidates)}候補、採用news={len(news_ids)} stock={len(stock_ids)}")
+    for line in log_lines:
+        print(line)
+    write_run_report(status="ok" if selected else ("no_articles_passed_gate" if gate_rejected else "no_articles_accepted"),
+                     accepted_ids=ids, accepted_slugs=[a["slug"] for a in selected],
+                     news_ids=news_ids, stock_ids=stock_ids,
+                     news_slugs=[a["slug"] for a in selected if a["articleType"] == "news"],
+                     stock_slugs=[a["slug"] for a in selected if a["articleType"] == "stock"],
+                     news_count=len(news_ids), stock_count=len(stock_ids), total_count=len(selected),
+                     date=today, gate_rejected=gate_rejected, shortfall=shortfall,
+                     planning={"candidate_count": len(candidates), "attempts": attempts,
+                               "period": __import__("editorial_selection").period(today)})
+    if not selected and not gate_rejected:
+        raise RuntimeError("記事候補が1件も採用されませんでした")
+
+def run_cross_selection(existing_articles, today, event_series, log_lines,
+                        news_gate_rejections, stock_gate_rejections):
+    """Audit two candidate pools, then select across types before issuing IDs."""
+    from editorial_selection import select
+
+    stock_topics = load_stock_topics()
+    try:
+        news, news_log, event_series = run_news_generation(
+            existing_articles, today, event_series, gate_rejections=news_gate_rejections,
+            count=DAILY_TARGET_ARTICLES, max_refills=1, strict=False,
+            label="news_candidates", defer_ids=True)
+        log_lines.extend(news_log)
+    except Exception as exc:
+        news = []
+        log_lines.append(f"警告(news): 候補生成に失敗: {exc}")
+    try:
+        stock, stock_topics = run_stock_generation(
+            existing_articles, stock_topics, today, log_lines,
+            gate_rejections=stock_gate_rejections, defer_ids=True,
+            limit=min(3, DAILY_TARGET_ARTICLES))
+    except Exception as exc:
+        stock = []
+        log_lines.append(f"警告(stock): 候補生成に失敗: {exc}")
+
+    candidates = news + stock
+    ranked = select(candidates, existing_articles, growth_signal(), len(candidates), today)
+    selected = []
+    for entry in ranked:
+        if len(selected) >= DAILY_TARGET_ARTICLES:
+            break
+        if (find_same_subject(entry, existing_articles + selected)
+                or is_duplicate(entry, selected, days=None)):
+            continue
+        selected.append(entry)
+    ids = reserve_ids(len(selected)) if selected else []
+    now_str = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
+    topics_by_id = {t["id"]: t for t in stock_topics}
+    for entry, article_id in zip(selected, ids):
+        finalize_news_entry_id(entry, article_id)
+        if entry["articleType"] == "stock":
+            topic = topics_by_id[entry.pop("_topicId")]
+            topic.update(status="generated", generatedArticleId=article_id,
+                         generatedAt=now_str)
+        else:
+            event_series, _ = register_event_series_if_new(entry, event_series)
+    gate_rejected = news_gate_rejections + stock_gate_rejections
+    write_gate_summary(gate_rejected)
+    shortfall = shortfall_info(len(selected), sum(a["articleType"] == "stock" for a in selected), gate_rejected)
+    write_shortfall_summary(shortfall, today)
+    if selected:
+        atomic_write_json(ARTICLES_JSON_PATH, existing_articles + selected)
+    atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
+    atomic_write_json(EVENT_SERIES_PATH, event_series)
+    news_ids = [a["id"] for a in selected if a["articleType"] == "news"]
+    stock_ids = [a["id"] for a in selected if a["articleType"] == "stock"]
+    log_lines.append(f"横断選定: 候補news={len(news)}、stock={len(stock)}、採用news={len(news_ids)}、stock={len(stock_ids)}")
+    for line in log_lines:
+        print(line)
+    write_run_report(status="ok" if selected else ("no_articles_passed_gate" if gate_rejected else "no_articles_accepted"),
+                     accepted_ids=ids, accepted_slugs=[a["slug"] for a in selected],
+                     news_ids=news_ids, stock_ids=stock_ids,
+                     news_slugs=[a["slug"] for a in selected if a["articleType"] == "news"],
+                     stock_slugs=[a["slug"] for a in selected if a["articleType"] == "stock"],
+                     news_count=len(news_ids), stock_count=len(stock_ids),
+                     total_count=len(selected), date=today,
+                     gate_rejected=gate_rejected, shortfall=shortfall)
+    if not selected and not gate_rejected:
+        raise RuntimeError("記事候補が1件も採用されませんでした")
+
 def main():
     if not os.path.exists(ARTICLES_JSON_PATH):
         raise SystemExit(f"{ARTICLES_JSON_PATH} が見つかりません。先にPhase 1の移行を完了させてください。")
@@ -1553,145 +1761,12 @@ def main():
     news_gate_rejections = []
     stock_gate_rejections = []
 
-    # ---- A) ニュース/イベント型(失敗したら全体を失敗させる) ----
-    # NEWS_ARTICLES_PER_DAY=0 は「ニュース生成を意図的に停止する」設定として
-    # 特別扱いする(将来的にニュース生成だけ止めたい場合のため)。それ以外は、
-    # 採用件数が期待値と一致しない場合、過去のサイレント障害(Successなのに
-    # 実際は記事が公開されていない)を二度と起こさないため、ここで確実に
-    # 失敗させる(articles.jsonへは一切書き込まない)。
-    # ただし不足の原因に公開前監査の不合格が含まれる場合は、合格した記事だけを公開する
-    # (不合格記事を公開しないことが目的のため。不合格分はIssue化される)。
-    if NEWS_ARTICLES_PER_DAY == 0:
-        accepted_news = []
-        log_lines.append("news: NEWS_ARTICLES_PER_DAY=0 のため、ニュース生成は意図的にスキップしました")
-    else:
-        try:
-            accepted_news, news_log, event_series = run_news_generation(
-                existing_articles, today, event_series, gate_rejections=news_gate_rejections)
-            log_lines.extend(news_log)
-        except Exception as e:
-            print(f"エラー: ニュース記事の生成に失敗しました。articles.jsonは変更していません。詳細: {e}", file=sys.stderr)
-            write_gate_summary(news_gate_rejections)
-            write_run_report(status="error", stage="news_generation", error=str(e),
-                              accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
-                              gate_rejected=news_gate_rejections)
-            raise
+    if os.environ.get("EDITORIAL_PLANNING_V2", "1") == "0":
+        return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                   news_gate_rejections, stock_gate_rejections)
+    return run_editorial_plan(existing_articles, today, event_series, log_lines,
+                              news_gate_rejections, stock_gate_rejections)
 
-        if len(accepted_news) != NEWS_ARTICLES_PER_DAY and news_gate_rejections:
-            log_lines.append(
-                f"警告(news): 公開前監査の不合格{len(news_gate_rejections)}件のため、"
-                f"news は{len(accepted_news)}/{NEWS_ARTICLES_PER_DAY}件の公開になります"
-            )
-        elif len(accepted_news) != NEWS_ARTICLES_PER_DAY:
-            error_msg = (
-                f"news採用件数が期待値と一致しません(期待:{NEWS_ARTICLES_PER_DAY}件, "
-                f"実際:{len(accepted_news)}件)。ニュース記事はgithub Pagesに"
-                "とって主要コンテンツのため、部分的な成功であってもワークフロー"
-                "全体を失敗させます。articles.jsonへは一切書き込みません。"
-            )
-            print(f"エラー: {error_msg}", file=sys.stderr)
-            for line in log_lines:
-                print(line, file=sys.stderr)
-            write_run_report(
-                status="error", stage="news_count_mismatch", error=error_msg,
-                accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
-                news_count=len(accepted_news), expected_news_count=NEWS_ARTICLES_PER_DAY,
-            )
-            raise RuntimeError(error_msg)
-
-    # ---- B) ストックSEO型(失敗しても致命的にはしない。0件として続行) ----
-    accepted_stock = []
-    stock_topics = load_stock_topics()
-    try:
-        accepted_stock, stock_topics = run_stock_generation(
-            existing_articles + accepted_news, stock_topics, today, log_lines,
-            gate_rejections=stock_gate_rejections,
-        )
-    except Exception as e:
-        log_lines.append(f"stock: エラーのため本日は0件としました。詳細: {e}")
-        print(f"警告: ストック記事の生成でエラーが発生しました(newsの結果には影響しません)。詳細: {e}", file=sys.stderr)
-
-    # ---- C) 目標件数への補充(top-up。失敗しても致命的にはしない) ----
-    # news+stockが DAILY_TARGET_ARTICLES に届かない分だけ、別のnews候補を生成して
-    # 同じ公開前監査にかける(基準は緩めない)。生成回数・監査件数とも上限付き。
-    shortfall = DAILY_TARGET_ARTICLES - len(accepted_news) - len(accepted_stock)
-    if shortfall > 0 and NEWS_ARTICLES_PER_DAY > 0 and DAILY_TOPUP_MAX_ATTEMPTS > 0:
-        if gate_budget_exhausted():
-            log_lines.append(f"警告(topup): 公開前監査の件数上限({MAX_GATE_DRAFTS_PER_RUN}件)に達しているため、補充は行いません")
-        else:
-            log_lines.append(f"topup: 目標{DAILY_TARGET_ARTICLES}件に{shortfall}件不足 → 別候補を補充生成して公開前監査にかけます"
-                             f"(最大{DAILY_TOPUP_MAX_ATTEMPTS}回)")
-            try:
-                accepted_topup, topup_log, event_series = run_news_generation(
-                    existing_articles + accepted_news + accepted_stock, today, event_series,
-                    gate_rejections=news_gate_rejections, count=shortfall,
-                    max_refills=DAILY_TOPUP_MAX_ATTEMPTS - 1, strict=False, label="topup")
-                log_lines.extend(topup_log)
-                accepted_news = accepted_news + accepted_topup
-            except Exception as e:
-                log_lines.append(f"topup: エラーのため補充を打ち切りました(合格済みの記事はそのまま公開します)。詳細: {e}")
-
-    for line in log_lines:
-        is_warn = line.startswith(("スキップ", "警告")) or "スキップ" in line or "エラー" in line
-        print(line, file=sys.stderr if is_warn else sys.stdout)
-
-    accepted_all = accepted_news + accepted_stock
-    gate_rejected = news_gate_rejections + stock_gate_rejections
-    write_gate_summary(gate_rejected)
-    shortfall = shortfall_info(len(accepted_all), len(accepted_stock), gate_rejected)
-    write_shortfall_summary(shortfall, today)
-
-    if not accepted_all:
-        print("採用できる記事が1件もありませんでした(news/stockともに0件)。articles.jsonは変更していません。", file=sys.stderr)
-        # 全件が公開前監査で不合格だった場合は、不合格記事を公開しないという正常な結果なので
-        # 失敗扱いにしない(後続のIssue化・台帳の保存を進める)。それ以外は従来どおり失敗させる。
-        all_rejected_by_gate = bool(gate_rejected)
-        write_run_report(
-            status="no_articles_passed_gate" if all_rejected_by_gate else "no_articles_accepted",
-            accepted_ids=[], accepted_slugs=[], news_ids=[], stock_ids=[],
-            news_count=0, stock_count=0, total_count=0, date=today,
-            gate_rejected=gate_rejected, shortfall=shortfall,
-        )
-        # ストック台帳・イベントシリーズ台帳の状態(候補追加・skip反映)だけは
-        # 保存しておく価値があるため書き込む
-        if stock_topics:
-            atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
-        if event_series:
-            atomic_write_json(EVENT_SERIES_PATH, event_series)
-        if all_rejected_by_gate:
-            return
-        sys.exit(1)
-
-    new_articles = existing_articles + accepted_all
-    atomic_write_json(ARTICLES_JSON_PATH, new_articles)
-    atomic_write_json(STOCK_TOPICS_PATH, stock_topics)
-    atomic_write_json(EVENT_SERIES_PATH, event_series)
-
-    news_ids = [a["id"] for a in accepted_news]
-    stock_ids = [a["id"] for a in accepted_stock]
-
-    print(
-        f"\n本日の生成結果 — news: {len(accepted_news)}件 (id:{news_ids}), "
-        f"stock: {len(accepted_stock)}件 (id:{stock_ids}), "
-        f"合計: {len(accepted_all)}件 (date:{today})"
-    )
-    print("続けて build.py を実行し、静的ページを再生成してください。")
-
-    write_run_report(
-        status="ok",
-        accepted_ids=[a["id"] for a in accepted_all],
-        accepted_slugs=[a["slug"] for a in accepted_all],
-        news_ids=news_ids,
-        news_slugs=[a["slug"] for a in accepted_news],
-        stock_ids=stock_ids,
-        stock_slugs=[a["slug"] for a in accepted_stock],
-        news_count=len(accepted_news),
-        stock_count=len(accepted_stock),
-        total_count=len(accepted_all),
-        date=today,
-        gate_rejected=gate_rejected,
-        shortfall=shortfall,
-    )
 
 
 if __name__ == "__main__":
