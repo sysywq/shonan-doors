@@ -33,10 +33,13 @@ jobs:
         run: pip install anthropic
 
       - name: Create publication branch
+        id: branch
         run: |
+          BRANCH="hold/${{ inputs.issue }}-${{ github.run_id }}"
+          echo "name=$BRANCH" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "hold/${{ inputs.issue }}-${{ github.run_id }}"
+          git switch -c "$BRANCH"
 
       - name: Re-audit held article
         run: python3 resolve_daily_hold.py --issue "${{ inputs.issue }}" --decision approve
@@ -51,12 +54,12 @@ jobs:
           git add -A
           git diff --cached --quiet && { echo "No publication changes"; exit 1; }
           git commit -m "Publish approved Daily Articles hold #${{ inputs.issue }}"
-          git push -u origin HEAD
+          git push -u origin "HEAD:refs/heads/${{ steps.branch.outputs.name }}"
 
       - name: Create publication PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --base main --head "hold/${{ inputs.issue }}-${{ github.run_id }}" \
+          gh pr create --base main --head "${{ steps.branch.outputs.name }}" \
             --title "Publish approved Daily Articles hold #${{ inputs.issue }}" \
             --body "保留記事 #${{ inputs.issue }} を通常Actions runnerでFact Audit(full)再監査し、公開条件を満たした記事のみ追加するPRです。"
