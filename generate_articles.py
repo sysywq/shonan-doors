@@ -68,6 +68,20 @@ RUN_REPORT_PATH = os.environ.get(
     os.path.join(tempfile.gettempdir(), "shonan_doors_run_report.json"),
 )
 
+
+def growth_hints():
+    """Metrics are advisory; never treat a search query as a factual source."""
+    path = os.environ.get("GROWTH_SIGNAL_PATH", os.path.join(tempfile.gettempdir(), "shonan_growth_signal.json"))
+    try:
+        with open(path, encoding="utf-8") as f:
+            signal = json.load(f)
+        stamp = datetime.fromisoformat(signal["generated_at"])
+        if (datetime.now(ZoneInfo("Asia/Tokyo")) - stamp.astimezone(ZoneInfo("Asia/Tokyo"))).total_seconds() > 24 * 3600:
+            return []
+        return [str(q)[:80].replace("\n", " ") for q in signal.get("discovery_hints", [])[:5]]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+
 AREAS = ["藤沢", "茅ヶ崎", "鎌倉", "平塚", "大磯", "二宮", "逗子", "葉山"]
 CATS = {
     "t": "観光", "b": "企業・店舗", "g": "グルメ",
@@ -329,9 +343,13 @@ def call_claude_news(recent_titles, event_series=None, count=None):
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     system_prompt = build_news_system_prompt(recent_titles, event_series, count=count)
 
+    hints = growth_hints()
+    hint_text = ("\n検索データで関心が見えた語句(既存記事の検索語を含むため、新規記事の対象とは限らない): "
+                 + "、".join(hints) + "。既存記事と同一対象・検索意図なら新規作成しない。"
+                 "検索語は事実の根拠ではないため、従来どおり一次情報を確認する。") if hints else ""
     messages = [{
         "role": "user",
-        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。",
+        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{hint_text}",
     }]
     tools = [
         {"type": "web_search_20250305", "name": "web_search"},
@@ -669,10 +687,14 @@ def build_cannibalization_context(existing_articles, stock_topics):
 
 def build_stock_refill_prompt(existing_articles, stock_topics):
     article_summary, topic_summary = build_cannibalization_context(existing_articles, stock_topics)
+    hints = growth_hints()
+    growth_context = ("検索データの参考語句: " + "、".join(hints) + "。これらは既存記事に流入した語句であり、\n"
+                      "同じ検索意図の新規テーマを作ってはいけません。一次情報と独自の切り口を確認してください。") if hints else ""
     return f"""あなたは地域メディア「湘南Doors」のSEO担当編集者です。
 このメディアは湘南エリア({", ".join(AREAS)})の情報を発信しており、
 カテゴリは次の7種類のみを使います: {json.dumps(CATS, ensure_ascii=False)}
 (新しいカテゴリを作らないこと。既存のこの7種類の中から選ぶこと)
+{growth_context}
 
 あなたの仕事は、時間が経っても検索され続ける「ストックSEO記事」のテーマ候補を
 新たに{MAX_NEW_STOCK_TOPICS_PER_REFILL}件以内で考え、submit_new_stock_topicsツールで提出することです。
@@ -1057,6 +1079,15 @@ def reserve_ids(count):
     将来再利用されることはない(欠番になるだけ)。"""
     counter = load_json(ID_COUNTER_PATH)
     start = counter["next_id"]
+    if not isinstance(start, int) or isinstance(start, bool) or start < 1 or count < 0:
+        raise ValueError("記事ID台帳または予約数が不正です")
+    # 台帳だけが古い場合でも公開済みIDを再発行しない。保留記事のIDは
+    # 台帳が予約時に前進させるので、過去の欠番は巻き戻さない。
+    articles = load_json(ARTICLES_JSON_PATH)
+    used_ids = [a.get("id") for a in articles if isinstance(a, dict)]
+    if any(not isinstance(i, int) or isinstance(i, bool) or i < 1 for i in used_ids):
+        raise ValueError("既存記事に不正なIDがあります")
+    start = max(start, max(used_ids, default=0) + 1)
     ids = list(range(start, start + count))
     counter["next_id"] = start + count
     atomic_write_json(ID_COUNTER_PATH, counter)
