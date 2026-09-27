@@ -41,7 +41,6 @@ import subprocess
 import sys
 import time
 import urllib.error
-import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
@@ -186,7 +185,9 @@ def decide_mode(pulls, branch_exists):
 def cmd_plan(gh, date):
     branch = branch_for(date)
     pulls = gh.pulls_for_branch(branch)
-    head = gh.call("GET", f"/repos/{{repo}}/commits/{urllib.parse.quote(branch, safe='')}", missing_ok=True)
+    ref = gh.call("GET", f"/repos/{{repo}}/git/ref/heads/{branch}", missing_ok=True)
+    head_sha = ((ref or {}).get("object") or {}).get("sha")
+    head = gh.call("GET", f"/repos/{{repo}}/commits/{head_sha}") if head_sha else None
     mode, pr = decide_mode(pulls, head is not None)
     meta = decode_meta(pr.get("body")) if pr else None
     if meta is None and head is not None:
