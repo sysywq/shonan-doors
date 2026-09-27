@@ -14,6 +14,7 @@ shonan-doors で作業する際の恒久ルール。
 - mergeはオーナーの確認後にのみ行う
   - 例外(オーナー承認済み・Daily Articles の自動運用に限る): Daily Articles workflow が作る当日PR(`daily/YYYY-MM-DD` → main)は、公開対象の記事がすべて Fact Audit(full)で confirmed、tests / build / 永続化検証 / CI がすべて成功、変更が元データ・生成物だけ、という条件をすべて満たすときに限り workflow が自動マージしてよい(`daily_pr.py merge`)。confirmed 以外の記事は当日PRから分離して保留にし、PR 全体は止めない
   - この例外は Daily Articles workflow の当日PRだけに適用する。Claude が作るPR(保留記事の Approve で作るPRを含む)や通常タスクのPRは、従来どおりオーナーの確認後にのみマージする
+  - オーナーの2026-09-27の全自動化指示により、Growth Auto Revision workflow が作る記事の title/dek だけのPRも、14日連続のGSC日次データ・100表示以上・記事公開28日以上・一次情報 Fact Audit(full) confirmed・tests/build/CI 成功・変更ファイル限定・PR head一致をすべて満たす場合は workflow が自動マージしてよい。該当しなければ変更しない。この例外は通常タスクのPRには及ばない
   - main への直接 push・ruleset の緩和・bypass の追加はしない
 
 ## Shonan Doorsの編集ルール
