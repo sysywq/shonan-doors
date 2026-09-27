@@ -21,3 +21,11 @@ Weekly Growth Analysis は月曜 06:00 JST に既存記事の低CTRかつ掲載�
 - アクセス設定前は Daily への影響なし。週次ジョブは設定がそろうまで起動されない。
 
 ローカルで個人データを含まない合成fixtureを使う場合は `python growth_feedback.py daily --snapshot fixture.json`。実データsnapshotや一時signalはリポジトリへ含めない。
+
+## 提案を記事改善へ進めるとき
+
+`AI_Analysis` の `Proposed` は未承認です。観測クエリ、検索意図、現行記事と一次情報を確認し、取り上げる提案の `Status` を `Approved` に変更します。確信度 `Low` は因果を示さず、特に新しい記事は集計期間や露出数が少ないため判断を保留できます。見送る場合は `Rejected` にします。
+
+GitHub Actions の `Growth Proposal Review` を手動実行し、その行の `Analysis_ID` を入力します。`Approved` の記事だけについて、期間・観測・仮説・現行 title/dek・一次情報へのリンクを Markdown の artifact にまとめます。資料は7日後に消えます。Google Sheet の値をログや git に書きません。
+
+編集者は資料をもとに検索意図と事実関係を検証し、title/dek/本文の具体的な差分を別途 PR にします。PR のレビューと既存の公開ゲートを通過した変更だけを反映し、反映後に `Action_Log` を記録します。`Approved` は記事変更の自動許可ではありません。ワークフローを再実行しても記事と `Action_Log` は変更されません。
