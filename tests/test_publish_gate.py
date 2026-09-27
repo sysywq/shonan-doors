@@ -585,7 +585,11 @@ class StockGateTest(unittest.TestCase):
                         "primarySources": [], "autofix": [], "audits": 1}
 
             rejections, log = [], []
+            articles_path = os.path.join(d, "articles.json")
+            with open(articles_path, "w") as f:
+                json.dump([], f)
             with mock.patch.object(g, "ID_COUNTER_PATH", counter), \
+                    mock.patch.object(g, "ARTICLES_JSON_PATH", articles_path), \
                     mock.patch.object(g, "refill_stock_topics_if_needed", lambda e, t, l: (t, False)), \
                     mock.patch.object(g, "call_claude_stock_selection", lambda *a: decisions), \
                     mock.patch.object(g, "_gate_client", object()), \
