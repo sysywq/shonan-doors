@@ -1,0 +1,111 @@
+name: Growth Auto Revision
+
+on:
+  schedule:
+    - cron: '30 21 * * 0' # Monday 06:30 JST, after Weekly Growth Analysis
+    - cron: '0 22 * * *' # Daily 07:00 JST, outcome measurement
+  workflow_dispatch: {}
+
+concurrency:
+  group: growth-autorevise
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  id-token: write
+
+jobs:
+  revise-and-measure:
+    if: vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' && vars.GROWTH_SPREADSHEET_ID != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
+      GROWTH_SPREADSHEET_ID: ${{ vars.GROWTH_SPREADSHEET_ID }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - run: pip install google-auth requests anthropic
+      - name: 14日後の観測をAction_Logへ記録
+        run: python growth_autorevise.py measure
+      - name: 十分な根拠がある記事だけ改稿・一次情報監査
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 21 * * 0'
+        run: python growth_autorevise.py prepare
+      - name: 記事の変更があればbuild、CI、PR、自動マージ、記録
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '30 21 * * 0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/shonan_growth_autorevise.json ]; then
+            echo '適格な改稿はありません。'
+            exit 0
+          fi
+          git config user.name 'shonan-doors-bot'
+          git config user.email 'bot@users.noreply.github.com'
+          action_id=$(python -c 'import json; print(json.load(open("/tmp/shonan_growth_autorevise.json"))["action_id"])')
+          branch="growth/${action_id}"
+          git switch -c "$branch"
+          python -m unittest discover -s tests -v
+          python build.py
+          git add data/articles.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
+          if git diff --cached --quiet; then
+            echo '生成物に変更がありません。'
+            exit 0
+          fi
+          git commit -m "Growth: audited title/dek revision ${action_id}"
+          sha=$(git rev-parse HEAD)
+          git push origin "HEAD:refs/heads/$branch"
+          aid=$(python -c 'import json; print(json.load(open("/tmp/shonan_growth_autorevise.json"))["article_id"])')
+          gh pr create --base main --head "$branch" --title "Growth: article $aid title/dek" \
+            --body "Article $aid の title/dek のみを改稿。14日連続の GSC 日次データと100件以上の観測を条件に選定し、一次情報 Fact Audit(full) confirmed とローカル tests/build を確認。CI 成功時のみ自動マージします。"
+          pr=$(gh pr view "$branch" --json number --jq .number)
+          # GitHub token-created PR does not trigger pull_request CI.
+          gh workflow run ci.yml --ref "$branch"
+          passed=false
+          for attempt in $(seq 1 90); do
+            result=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs?head_sha=${sha}&per_page=20" \
+              --jq '.workflow_runs | map(select(.head_sha == "'"$sha"'")) | map(.conclusion // .status) | join(",")')
+            if [[ ",$result," == *,success,* ]]; then passed=true; break; fi
+            if [[ ",$result," == *,failure,* || ",$result," == *,cancelled,* ]]; then
+              echo "::error::CI failed for $sha"
+              exit 1
+            fi
+            sleep 20
+          done
+          if [ "$passed" != true ]; then echo '::error::CI timeout'; exit 1; fi
+          # Recheck exact PR head, base, changed files, and audit metadata before merge.
+          python - "$pr" "$branch" "$sha" <<'PY'
+          import json, os, sys
+          from daily_pr import github_from_env, changed_files
+          gh = github_from_env()
+          pr = gh.call('GET', f'/repos/{{repo}}/pulls/{sys.argv[1]}')
+          assert pr['state'] == 'open' and pr['base']['ref'] == 'main'
+          assert pr['head']['ref'] == sys.argv[2] and pr['head']['sha'] == sys.argv[3]
+          assert pr['head']['repo']['full_name'] == os.environ['GITHUB_REPOSITORY']
+          assert pr['user']['login'] == 'github-actions[bot]' and not pr['draft']
+          assert pr.get('mergeable') is not False
+          files = changed_files(gh, pr['number'])
+          assert files and all(f == 'data/articles.json' or f == 'sitemap.xml' or
+                               f in ('index.html', 'robots.txt') or
+                               f.startswith(('articles/', 'area/', 'category/', 'page/')) for f in files)
+          meta = json.load(open('/tmp/shonan_growth_autorevise.json'))
+          assert meta['article_id'] and meta['before'] != meta['after']
+          assert any(r['conclusion'] == 'success' for r in gh.ci_runs(sys.argv[3]))
+          PY
+          gh api -X PUT "repos/${GITHUB_REPOSITORY}/pulls/${pr}/merge" \
+            -f sha="$sha" -f merge_method=merge -f commit_title="Growth article $aid (#$pr)"
+          python growth_autorevise.py record
