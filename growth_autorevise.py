@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 from pathlib import Path
 
 from growth_feedback import analyze, append_action, day, query_key, read_sheet, rows
@@ -144,7 +145,7 @@ def log_record(meta):
     reason = (f"GSC {meta['period'][0]}–{meta['period'][1]}: {meta['query']}; "
               f"{meta['baseline']['impressions']} impressions, {meta['baseline']['clicks']} clicks, "
               f"position {meta['baseline']['position']}")
-    return [meta["action_id"], dt.datetime.now(JST).isoformat(timespec="seconds"),
+    return [meta["action_id"], meta.get("timestamp") or dt.datetime.now(JST).isoformat(timespec="seconds"),
             str(meta["article_id"]), url, "AUTO_TITLE_DEK", reason,
             json.dumps(meta["before"], ensure_ascii=False), json.dumps(meta["after"], ensure_ascii=False),
             "github-actions[bot]", meta["action_id"],
@@ -156,6 +157,67 @@ def append_once(spreadsheet_id, tables, meta):
         print("Action already logged")
         return
     append_action(spreadsheet_id, log_record(meta))
+
+
+def recover_merged(tables, days=90):
+    """Recover a Sheet append missed after a successful merge or runner exit.
+
+    Merge commits and article JSON are public, but private query metrics are
+    resolved from Sheets only and never placed in the repository.
+    """
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=ROOT, check=True,
+                              text=True, capture_output=True).stdout.strip()
+
+    logged = {str(r.get("Action_ID")) for r in rows(tables["Action_Log"])}
+    pending = []
+    hashes = git("log", "--first-parent", f"--since={days} days ago", "--format=%H", "HEAD").splitlines()
+    for merge in hashes:
+        parts = git("rev-list", "--parents", "-n", "1", merge).split()
+        if len(parts) != 3:
+            continue
+        message = git("log", "-1", "--format=%s", parts[2])
+        match = re.fullmatch(r"Growth: audited title/dek revision (growth-auto-\d{4}-\d{2}-\d{2}-\d+-[a-f0-9]{12})", message)
+        if not match or match.group(1) in logged:
+            continue
+        action_id = match.group(1)
+        date_match = re.fullmatch(r"growth-auto-(\d{4}-\d{2}-\d{2})-(\d+)-[a-f0-9]{12}", action_id)
+        period_end, article_id = date_match.group(1), int(date_match.group(2))
+        before = json.loads(git("show", f"{parts[1]}:data/articles.json"))
+        after = json.loads(git("show", f"{merge}:data/articles.json"))
+        old = next((a for a in before if a.get("id") == article_id), None)
+        new = next((a for a in after if a.get("id") == article_id), None)
+        if not old or not new or old.get("slug") != new.get("slug"):
+            continue
+        if (old.get("title"), old.get("dek")) == (new.get("title"), new.get("dek")):
+            continue
+        if any(old.get(k) != new.get(k) for k in old if k not in ("title", "dek", "updated")):
+            continue
+        from growth_feedback import canonical, number
+        period_start = (dt.date.fromisoformat(period_end) - dt.timedelta(days=6)).isoformat()
+        digest = action_id.rsplit("-", 1)[-1]
+        path = canonical(f"/articles/{new['slug']}/")
+        candidates = {str(r.get("Query")) for r in rows(tables["GSC_Query_Page"])
+                      if period_start <= day(r.get("Date")) <= period_end and
+                      canonical(r.get("Page")) == path and
+                      hashlib.sha256(query_key(r.get("Query")).encode()).hexdigest()[:12] == digest}
+        query = sorted(candidates)[0] if candidates else "(historical query unavailable)"
+        detail = [r for r in rows(tables["GSC_Query_Page"])
+                  if period_start <= day(r.get("Date")) <= period_end and
+                  canonical(r.get("Page")) == path and query_key(r.get("Query")) == query_key(query)]
+        impressions = sum(number(r.get("Impressions")) for r in detail)
+        clicks = sum(number(r.get("Clicks")) for r in detail)
+        position = (sum(number(r.get("Impressions")) * number(r.get("Average_Position")) for r in detail)
+                    / impressions) if impressions else 0
+        timestamp = dt.datetime.fromisoformat(git("log", "-1", "--format=%cI", merge)).astimezone(JST).isoformat(timespec="seconds")
+        pending.append({"action_id": action_id, "article_id": article_id, "slug": new["slug"],
+                        "timestamp": timestamp,
+                        "before": {k: old[k] for k in ("title", "dek")},
+                        "after": {k: new[k] for k in ("title", "dek")},
+                        "query": query, "period": [period_start, period_end],
+                        "baseline": {"impressions": int(impressions), "clicks": int(clicks),
+                                     "position": round(position, 1)}})
+    return pending
 
 
 def outcome(tables, now):
@@ -207,13 +269,17 @@ def outcome(tables, now):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("prepare", "record", "measure"))
+    parser.add_argument("mode", choices=("prepare", "record", "measure", "reconcile"))
     args = parser.parse_args()
     sheet_id = os.environ["GROWTH_SPREADSHEET_ID"]
     tables = read_sheet(sheet_id)
     if args.mode == "record":
         meta = json.loads(META.read_text(encoding="utf-8"))
         append_once(sheet_id, tables, meta)
+    elif args.mode == "reconcile":
+        for meta in recover_merged(tables):
+            append_once(sheet_id, tables, meta)
+            print(f"Recovered merged action: {meta['action_id']}")
     elif args.mode == "measure":
         for item in outcome(tables, today()):
             append_action(sheet_id, item)
