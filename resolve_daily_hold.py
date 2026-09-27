@@ -130,7 +130,12 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
                                 image_fetcher=image_fetcher)
     ok, why = approvable(audited)
     if not ok:
-        return 3, f"再監査の結果、公開しません: id={article_id}「{title}」— {why} / {' / '.join(audited['reasons'])}", None
+        anomalies = ((audited.get("result") or {}).get("anomalies") or [])
+        anomaly_detail = " / ".join(
+            f"{a.get('type','')}: {a.get('snippet','')}" for a in anomalies if isinstance(a, dict)
+        )
+        detail = f" / API例外: {anomaly_detail}" if anomaly_detail else ""
+        return 3, f"再監査の結果、公開しません: id={article_id}「{title}」— {why} / {' / '.join(audited['reasons'])}{detail}", None
 
     published = dict(audited["entry"], date=now.strftime("%Y-%m-%d"))
     live = [a for a in articles if not a.get("mergedInto")]
