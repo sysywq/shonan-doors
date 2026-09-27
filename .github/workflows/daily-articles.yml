@@ -24,6 +24,7 @@ jobs:
     timeout-minutes: 300
     permissions:
       contents: write        # 当日branchへのpush・PRのマージ
+      id-token: write        # Google Sheets 読取用の短期 OIDC 認証
       pull-requests: write   # 当日PRの作成
       issues: write          # 保留記事・公開前監査・最低件数未達・マージ見送りのIssue
       actions: write         # CI(ci.yml)の workflow_dispatch と結果の取得
@@ -69,6 +70,23 @@ jobs:
       - name: 当日branchを作成(最新mainから)
         if: steps.plan.outputs.mode == 'fresh'
         run: git switch -c "${{ steps.plan.outputs.branch }}"
+
+      - name: Google Cloudに短期認証
+        if: steps.plan.outputs.mode == 'fresh' && vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' && vars.GROWTH_SPREADSHEET_ID != ''
+        continue-on-error: true
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - name: Growthデータを読み込む
+        if: steps.plan.outputs.mode == 'fresh' && vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' && vars.GROWTH_SPREADSHEET_ID != ''
+        continue-on-error: true
+        env:
+          GROWTH_SPREADSHEET_ID: ${{ vars.GROWTH_SPREADSHEET_ID }}
+        run: |
+          pip install google-auth requests
+          python growth_feedback.py daily
 
       - name: 既存の当日branchに切り替え(再実行)
         if: steps.plan.outputs.mode == 'resume'
