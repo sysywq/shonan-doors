@@ -21,7 +21,7 @@ jobs:
   resolve:
     strategy:
       matrix:
-        issue: ${{ github.event_name == 'push' && fromJSON('[42,43]') || fromJSON(format('[{0}]', inputs.issue)) }}
+        issue: ${{ github.event_name == 'push' && fromJSON('[43]') || fromJSON(format('[{0}]', inputs.issue)) }}
     runs-on: ubuntu-latest
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
