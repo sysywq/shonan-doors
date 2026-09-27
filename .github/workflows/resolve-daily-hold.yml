@@ -1,0 +1,62 @@
+name: Resolve Daily Hold
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: "Daily Articles hold issue number"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Create publication branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "hold/${{ inputs.issue }}-${{ github.run_id }}"
+
+      - name: Re-audit held article
+        run: python3 resolve_daily_hold.py --issue "${{ inputs.issue }}" --decision approve
+
+      - name: Test and build
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 build.py
+
+      - name: Commit and push
+        run: |
+          git add -A
+          git diff --cached --quiet && { echo "No publication changes"; exit 1; }
+          git commit -m "Publish approved Daily Articles hold #${{ inputs.issue }}"
+          git push -u origin HEAD
+
+      - name: Create publication PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --base main --head "hold/${{ inputs.issue }}-${{ github.run_id }}" \
+            --title "Publish approved Daily Articles hold #${{ inputs.issue }}" \
+            --body "保留記事 #${{ inputs.issue }} を通常Actions runnerでFact Audit(full)再監査し、公開条件を満たした記事のみ追加するPRです。"
