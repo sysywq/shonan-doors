@@ -1,0 +1,30 @@
+name: Weekly Growth Analysis
+
+on:
+  schedule:
+    - cron: '0 21 * * 0' # Monday 06:00 JST
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  analyze:
+    if: vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' && vars.GROWTH_SPREADSHEET_ID != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - run: pip install google-auth requests
+      - name: 分析案をAI_Analysisへ追記
+        env:
+          GROWTH_SPREADSHEET_ID: ${{ vars.GROWTH_SPREADSHEET_ID }}
+        run: python growth_feedback.py weekly
