@@ -1,10 +1,6 @@
 name: Resolve Daily Hold
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/resolve-daily-hold.yml"
   workflow_dispatch:
     inputs:
       issue:
@@ -21,7 +17,7 @@ jobs:
   resolve:
     strategy:
       matrix:
-        issue: ${{ github.event_name == 'push' && fromJSON('[38]') || fromJSON(format('[{0}]', inputs.issue)) }}
+        issue: ${{ fromJSON(format('[{0}]', inputs.issue)) }}
     runs-on: ubuntu-latest
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -49,12 +45,7 @@ jobs:
           git switch -c "$BRANCH"
 
       - name: Re-audit held article
-        run: |
-          if [ "${{ matrix.issue }}" = "38" ]; then
-            python3 resolve_daily_hold.py --payload-file ".github/manual-holds/38.json" --decision approve
-          else
-            python3 resolve_daily_hold.py --issue "${{ matrix.issue }}" --decision approve
-          fi
+        run: python3 resolve_daily_hold.py --issue "${{ matrix.issue }}" --decision approve
 
       - name: Test and build
         run: |
