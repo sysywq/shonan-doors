@@ -1,0 +1,39 @@
+name: Growth Proposal Review
+
+on:
+  workflow_dispatch:
+    inputs:
+      analysis_id:
+        description: "AI_Analysis の Analysis_ID（Status=Approved の行）"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  review:
+    if: vars.GCP_WIF_PROVIDER != '' && vars.GCP_SERVICE_ACCOUNT != '' && vars.GROWTH_SPREADSHEET_ID != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - run: pip install google-auth requests
+      - name: 承認済み提案のレビュー資料を作成
+        env:
+          GROWTH_SPREADSHEET_ID: ${{ vars.GROWTH_SPREADSHEET_ID }}
+          ANALYSIS_ID: ${{ inputs.analysis_id }}
+        run: python growth_review.py --analysis-id "$ANALYSIS_ID" --output "$RUNNER_TEMP/growth-review.md"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: growth-review
+          path: ${{ runner.temp }}/growth-review.md
+          retention-days: 7
