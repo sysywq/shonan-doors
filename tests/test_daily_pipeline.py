@@ -593,7 +593,9 @@ class WorkflowTest(unittest.TestCase):
                 for line in text.splitlines():
                     s = line.strip()
                     if s.startswith("git push"):
-                        self.assertIn("refs/heads/${{ steps.plan.outputs.branch }}", s, s)
+                        self.assertIn("HEAD:refs/heads/", s, s)
+                        self.assertNotIn("HEAD:refs/heads/main", s, s)
+                        self.assertNotIn("git push origin main", s, s)
 
     def test_daily_articles_saves_event_series_and_uses_pr_flow(self):
         text = read_workflow("daily-articles.yml")

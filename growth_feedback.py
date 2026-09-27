@@ -86,6 +86,18 @@ def append_analysis(spreadsheet_id, records):
     response.raise_for_status()
 
 
+def append_action(spreadsheet_id, record):
+    """Append one completed action; never record an unmerged draft."""
+    import google.auth
+    from google.auth.transport.requests import AuthorizedSession
+    credentials, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    session = AuthorizedSession(credentials)
+    endpoint = f"https://sheets.googleapis.com/v4/spreadsheets/{spreadsheet_id}/values/Action_Log!A:K:append"
+    response = session.post(endpoint, params={"valueInputOption": "RAW", "insertDataOption": "INSERT_ROWS"},
+                            json={"values": [record]}, timeout=45)
+    response.raise_for_status()
+
+
 def analyze(tables, articles, today=None):
     """Use complete GSC dates, page-level aggregation, and conservative thresholds.
 
