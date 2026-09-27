@@ -171,13 +171,60 @@ def analyze(tables, articles, today=None):
                               "position": round(position, 1), "ctr": round(ctr, 3), "score": score})
     opportunities.sort(key=lambda o: (-o["score"], -o["impressions"], o["article_id"]))
 
-    # No extrapolation from the incomplete query detail to site-wide demand.
-    # Discovery hints only: the existing source and duplication gates remain.
-    hints = [o["query"] for o in opportunities[:5]]
+    # Query/page detail is sampled. Rank observed phrases for discovery, but do
+    # not infer site-wide search volume or create another article for an
+    # existing intent without checking overlap.
+    observed_queries = collections.defaultdict(lambda: [0, 0])
+    for (_, _, query), (clicks, impressions, _) in grouped.items():
+        observed_queries[query][0] += clicks
+        observed_queries[query][1] += impressions
+    hints = [q for q, _ in sorted(observed_queries.items(),
+                                  key=lambda item: (-item[1][0], -item[1][1], item[0]))[:10]]
+    # Observed, mapped page metrics for new-article editorial selection. Query
+    # detail is sampled, so these numbers never represent total search demand.
+    segments = collections.defaultdict(lambda: {"gsc_impressions": 0, "gsc_clicks": 0,
+                                                "ga4_views": 0, "ga4_engaged_sessions": 0})
+    for record in rows(tables["GSC_Query_Page"]):
+        if day(record.get("Date")) not in window:
+            continue
+        aid = by_path.get(canonical(record.get("Page")))
+        if aid and by_id[aid].get("area") and by_id[aid].get("cat"):
+            key = (by_id[aid]["area"], by_id[aid]["cat"])
+            segments[key]["gsc_impressions"] += number(record.get("Impressions"))
+            segments[key]["gsc_clicks"] += number(record.get("Clicks"))
+    for record in rows(tables["GA4_Page"]):
+        # GA4 uses its own reporting timezone. Only observed rows in the last
+        # 7 calendar days are used; no comparison with GSC daily totals.
+        raw_date = day(record.get("Date"))
+        if not raw_date or raw_date < (today - dt.timedelta(days=7)).isoformat() or raw_date >= today.isoformat():
+            continue
+        path = (record.get("Page_Path") or record.get("Page_Path_Query_String")
+                or record.get("Page_Path_and_Screen_Class") or record.get("Page")
+                or record.get("Page_Location") or record.get("Page_Path_+_Query_String"))
+        aid = by_path.get(canonical(path))
+        if aid and by_id[aid].get("area") and by_id[aid].get("cat"):
+            key = (by_id[aid]["area"], by_id[aid]["cat"])
+            segments[key]["ga4_views"] += number(record.get("Views") or record.get("Screen_Page_Views")
+                                                 or record.get("Page_Views"))
+    for record in rows(tables["GA4_Landing"]):
+        raw_date = day(record.get("Date"))
+        if not raw_date or raw_date < (today - dt.timedelta(days=7)).isoformat() or raw_date >= today.isoformat():
+            continue
+        path = record.get("Landing_Page") or record.get("Landing_Page_+_Query_String") or record.get("Page")
+        aid = by_path.get(canonical(path))
+        if aid and by_id[aid].get("area") and by_id[aid].get("cat"):
+            key = (by_id[aid]["area"], by_id[aid]["cat"])
+            segments[key]["ga4_engaged_sessions"] += number(record.get("Engaged_Sessions"))
     return {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-            "gsc_period": [gsc_dates[-7], gsc_dates[-1]] if gsc_dates else [],
+            "gsc_period": [gsc_dates[max(0, len(gsc_dates) - 7)], gsc_dates[-1]] if gsc_dates else [],
             "trend_available": complete, "unmapped_gsc_rows": unmapped,
-            "opportunities": opportunities[:30], "discovery_hints": hints}
+            "opportunities": opportunities[:30], "discovery_hints": hints,
+            "editorial_segments": [{"area": area, "cat": cat,
+                                    "gsc_impressions": round(values["gsc_impressions"]),
+                                    "gsc_clicks": round(values["gsc_clicks"]),
+                                    "ga4_views": round(values["ga4_views"]),
+                                    "ga4_engaged_sessions": round(values["ga4_engaged_sessions"])}
+                                   for (area, cat), values in sorted(segments.items())]}
 
 
 def write_signal(signal):

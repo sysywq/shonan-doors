@@ -33,8 +33,26 @@ class GrowthFeedbackTest(unittest.TestCase):
         self.assertEqual(signal["unmapped_gsc_rows"], 1)
         self.assertEqual(len(signal["opportunities"]), 1)
         self.assertEqual(signal["opportunities"][0]["impressions"], 25)
+        self.assertEqual(signal["discovery_hints"], ["藤沢 海"])
+        self.assertEqual(signal["editorial_segments"], [])  # fixture has no area/category metadata
         self.assertEqual(len(gf.proposals(signal, [["Analysis_ID"]])), 1)
         self.assertEqual(len(gf.proposals(signal, [["Analysis_ID"], [gf.proposals(signal, [["Analysis_ID"]])[0][0]]])), 0)
+
+    def test_new_article_signal_uses_observed_ga4_and_gsc_pages(self):
+        today = dt.date(2026, 9, 27)
+        tables = {tab: [["Date"]] for tab in gf.TABS}
+        tables["Article_Master"] = [["Article_ID", "Canonical_Path"], [129, "/articles/fujisawa-event-0129/"]]
+        tables["GSC_Daily"] = [["Date"], ["2026-09-26"]]
+        tables["GSC_Query_Page"] = [["Date", "Query", "Page", "Clicks", "Impressions", "Average_Position"],
+                                    ["2026-09-26", "藤沢 イベント", "/articles/fujisawa-event-0129/", 1, 25, 8]]
+        tables["GA4_Page"] = [["Date", "Page_Path", "Views"],
+                              ["2026-09-26", "/articles/fujisawa-event-0129/", 12]]
+        tables["GA4_Landing"] = [["Date", "Landing_Page", "Engaged_Sessions"],
+                                 ["2026-09-26", "/articles/fujisawa-event-0129/", 7]]
+        signal = gf.analyze(tables, [{"id": 129, "slug": "fujisawa-event-0129", "area": "藤沢", "cat": "e"}], today=today)
+        self.assertEqual(signal["editorial_segments"], [{"area": "藤沢", "cat": "e", "gsc_impressions": 25,
+                                                      "gsc_clicks": 1, "ga4_views": 12,
+                                                      "ga4_engaged_sessions": 7}])
 
     def test_stale_counter_never_reissues_published_id(self):
         with tempfile.TemporaryDirectory() as directory:

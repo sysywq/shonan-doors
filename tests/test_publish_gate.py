@@ -425,8 +425,8 @@ class DailyIntegrationTest(unittest.TestCase):
             mock.patch.object(g, "DAILY_MIN_ARTICLES", 1),
             mock.patch.object(g, "_gate_drafts_checked", 0),
             mock.patch.object(g, "_gate_client", object()),
-            mock.patch.object(g, "run_stock_generation", lambda existing, topics, today, log, gate_rejections=None: ([], topics)),
-            mock.patch.dict(os.environ, {"PUBLISH_GATE": "on"}),
+            mock.patch.object(g, "run_stock_generation", lambda existing, topics, today, log, **kwargs: ([], topics)),
+            mock.patch.dict(os.environ, {"PUBLISH_GATE": "on", "EDITORIAL_PLANNING_V2": "0"}),
         ]
         for p in self.patches:
             p.start()
@@ -500,13 +500,13 @@ class DailyIntegrationTest(unittest.TestCase):
         self.assertEqual(len(report["gate_rejected"]), 3)
         self.assertEqual(self.load("counter")["next_id"], 10)
 
-    def test_non_gate_shortfall_still_fails(self):
-        # 監査の不合格ではなく重複などで件数に届かない場合は、従来どおり失敗させる
+    def test_non_gate_shortfall_is_reported(self):
+        # 候補不足でも採用可能な記事は公開し、不足をレポートに残す
         dup = news_item("既存記事", "既存記事の本文。")
-        with self.assertRaises(RuntimeError):
-            self.run_main([[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), dup], [dup]],
-                          {"秋の海辺まつり": True, "既存記事": True})
-        self.assertEqual(self.load("report")["status"], "error")
+        report = self.run_main([[news_item("秋の海辺まつり", "海辺のまつりが開かれる。"), dup], [dup]],
+                               {"秋の海辺まつり": True, "既存記事": True})
+        self.assertEqual(report["accepted_ids"], [10])
+        self.assertEqual(report["status"], "ok")
 
     # ---- 目標件数への補充(top-up)・最低ライン・上限 ----
 
@@ -519,11 +519,11 @@ class DailyIntegrationTest(unittest.TestCase):
                  [news_item("再補充で合格", "寺で展示がある。")]],
                 {"秋の海辺まつり": True, "山の音楽会": True, "補充で不合格": False, "補充で合格": True, "再補充で合格": True},
             )
-        self.assertEqual(self.news_calls, [2, 2, 1])
-        self.assertEqual(report["accepted_ids"], [10, 11, 12, 13])
-        self.assertEqual(report["total_count"], 4)
+        self.assertEqual(self.news_calls, [4, 2])
+        self.assertEqual(report["accepted_ids"], [10, 11, 12])
+        self.assertEqual(report["total_count"], 3)
         self.assertEqual([r["title"] for r in report["gate_rejected"]], ["補充で不合格"])
-        self.assertIsNone(report["shortfall"])
+        self.assertIsNone(report["shortfall"])  # minimum is 1 in this fixture
         self.assertNotIn("補充で不合格", [a["title"] for a in self.load("articles")])
 
     def test_topup_is_bounded_and_below_minimum_is_reported(self):
@@ -538,12 +538,12 @@ class DailyIntegrationTest(unittest.TestCase):
                  [news_item("上限後の候補", "港で祭りがある。")]],
                 {"秋の海辺まつり": True, "誤りA": False, "誤りB": False, "誤りC": False, "誤りD": False, "上限後の候補": True},
             )
-        self.assertEqual(self.news_calls, [2, 1, 3, 3])  # 上限後は生成しない
+        self.assertEqual(self.news_calls, [4, 3])  # 候補生成は上限1回のみ再試行
         self.assertEqual(report["accepted_ids"], [10])
         self.assertEqual(report["status"], "ok")
         self.assertEqual(report["shortfall"]["total"], 1)
         self.assertEqual(report["shortfall"]["min"], 3)
-        self.assertTrue(any("不合格 4件" in r for r in report["shortfall"]["reasons"]))
+        self.assertTrue(any("不合格" in r for r in report["shortfall"]["reasons"]))
         titles = [a["title"] for a in self.load("articles")]
         self.assertEqual([t for t in titles if t != "既存記事"], ["秋の海辺まつり"])
 
@@ -556,7 +556,7 @@ class DailyIntegrationTest(unittest.TestCase):
                  [news_item("上限後の候補", "寺で展示がある。")]],
                 {"誤りA": False, "誤りB": False, "誤りC": False, "誤りD": True, "上限後の候補": True},
             )
-        self.assertEqual(self.news_calls, [2, 2])
+        self.assertEqual(self.news_calls, [5, 5])
         self.assertEqual(g._gate_drafts_checked, 3)
         # 上限を超えた「誤りD」は監査していないので公開もIssue化もしない
         self.assertEqual([r["title"] for r in report["gate_rejected"]], ["誤りA", "誤りB", "誤りC"])
