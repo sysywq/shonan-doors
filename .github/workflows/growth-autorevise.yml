@@ -40,6 +40,8 @@ jobs:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
       - run: pip install google-auth requests anthropic
+      - name: マージ済みでSheets記録が欠けた変更を復旧
+        run: python growth_autorevise.py reconcile
       - name: 14日後の観測をAction_Logへ記録
         run: python growth_autorevise.py measure
       - name: 十分な根拠がある記事だけ改稿・一次情報監査
