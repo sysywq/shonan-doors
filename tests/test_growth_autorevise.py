@@ -1,6 +1,10 @@
 import datetime as dt
 import os
 import sys
+import json
+import subprocess
+import tempfile
+from pathlib import Path
 import unittest
 from unittest import mock
 
@@ -69,6 +73,38 @@ class GrowthAutoRevisionTest(unittest.TestCase):
             t['Action_Log'].append(['growth-auto-key'])
             ar.append_once('id', t, meta)
             append.assert_called_once()
+
+    def test_recover_merged_action_without_sheet_log(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'data').mkdir()
+            def git(*args):
+                return subprocess.run(['git', *args], cwd=root, check=True, capture_output=True, text=True)
+            git('init', '-b', 'main')
+            git('config', 'user.name', 'Test')
+            git('config', 'user.email', 'test@example.com')
+            old = {'id': 81, 'slug': 'cafe-0081', 'title': '湘南の焙煎所', 'dek': '焙煎を楽しむ'}
+            (root / 'data/articles.json').write_text(json.dumps([old]))
+            git('add', '.')
+            git('commit', '-m', 'base')
+            action_id = ar.key('2026-09-26', 81, '湘南 コーヒー')
+            git('switch', '-c', 'growth/test')
+            new = dict(old, title='湘南 コーヒーの焙煎所', updated='2026-09-27')
+            (root / 'data/articles.json').write_text(json.dumps([new]))
+            git('commit', '-am', f'Growth: audited title/dek revision {action_id}')
+            git('switch', 'main')
+            git('merge', '--no-ff', '-m', 'Growth article 81 (#123)', 'growth/test')
+            tables = self.tables(dt.date(2026, 9, 27))
+            tables['GSC_Query_Page'][1] = ['2026-09-26', '湘南 コーヒー',
+                                            'https://www.shonandoors.com/articles/cafe-0081/', 0, 120, 10]
+            with mock.patch.object(ar, 'ROOT', root):
+                pending = ar.recover_merged(tables)
+            self.assertEqual(len(pending), 1)
+            self.assertEqual(pending[0]['action_id'], action_id)
+            self.assertEqual(pending[0]['baseline']['impressions'], 120)
+            tables['Action_Log'].append([action_id])
+            with mock.patch.object(ar, 'ROOT', root):
+                self.assertEqual(ar.recover_merged(tables), [])
 
 
 if __name__ == '__main__':
