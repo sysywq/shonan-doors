@@ -49,7 +49,12 @@ jobs:
           git switch -c "$BRANCH"
 
       - name: Re-audit held article
-        run: python3 resolve_daily_hold.py --issue "${{ matrix.issue }}" --decision approve
+        run: |
+          if [ "${{ matrix.issue }}" = "38" ]; then
+            python3 resolve_daily_hold.py --payload-file ".github/manual-holds/38.json" --decision approve
+          else
+            python3 resolve_daily_hold.py --issue "${{ matrix.issue }}" --decision approve
+          fi
 
       - name: Test and build
         run: |
