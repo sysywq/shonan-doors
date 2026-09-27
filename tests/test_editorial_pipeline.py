@@ -1,4 +1,5 @@
 import json
+from contextlib import ExitStack
 import os
 import tempfile
 import types
@@ -62,11 +63,11 @@ class EditorialPipelineTest(unittest.TestCase):
                        mock.patch.object(ga, "register_event_series_if_new", side_effect=lambda a,b: (b,False)),
                        mock.patch.object(ga, "write_gate_summary"),
                        mock.patch.object(ga, "write_shortfall_summary")]
-            with mock.patch.multiple(ga, DAILY_TARGET_ARTICLES=5, DAILY_MIN_ARTICLES=3), \
-                 mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}), \
-                 patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], \
-                 patches[6], patches[7], patches[8], patches[9], patches[10], patches[11], \
-                 patches[12], patches[13], patches[14], patches[15], patches[16], patches[17]:
+            with ExitStack() as stack:
+                stack.enter_context(mock.patch.multiple(ga, DAILY_TARGET_ARTICLES=5, DAILY_MIN_ARTICLES=3))
+                stack.enter_context(mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}))
+                for patch in patches:
+                    stack.enter_context(patch)
                 ga.run_editorial_plan([], "2026-09-28", [], [], [], [])
             with open(paths["report"], encoding="utf-8") as f:
                 report = json.load(f)
