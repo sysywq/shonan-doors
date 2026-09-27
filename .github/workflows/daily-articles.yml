@@ -29,6 +29,10 @@ jobs:
       actions: write         # CI(ci.yml)の workflow_dispatch と結果の取得
     env:
       PYTHONDONTWRITEBYTECODE: '1'
+      # APIコスト上限: 品質ゲートは維持し、候補の無駄な再生成だけを制限
+      NEWS_REFILL_MAX_ATTEMPTS: '1'
+      DAILY_TOPUP_MAX_ATTEMPTS: '1'
+      MAX_GATE_DRAFTS_PER_RUN: '8'
     outputs:
       # mainへのマージ後、本番URLで公開を確認できた記事のID一覧(カンマ区切り)。
       # X投稿・IndexNowはこのIDだけを対象にする(保留記事・未公開の記事は含まれない)。
