@@ -75,4 +75,4 @@ jobs:
             exit 0
           fi
           git commit -m "chore: build.py生成物を自動同期"
-          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
+          git push origin "HEAD:refs/heads/${{ github.event.pull_request.head.ref }}"
