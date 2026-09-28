@@ -299,7 +299,7 @@ eventSeriesKeyを考えてください(例: "enoshima-toro")。catが'e'以外�
 対象エリアは次の8つに限定してください: {", ".join(AREAS)}
 カテゴリは次のいずれかを使ってください: {json.dumps(CATS, ensure_ascii=False)}
 {recent_block}
-Web検索を使って、直近2週間以内に実際にあった湘南エリアのニュース、または
+Web検索を使って、直近1週間以内に実際にあった湘南エリアのニュース、または
 これから開催が確定している実在のイベント情報を{count}件調べてください。
 架空の情報は絶対に作らないこと。
 
@@ -320,6 +320,10 @@ Web検索を使って、直近2週間以内に実際にあった湘南エリア�
 eventStartDateを空文字にしてください(この場合、検索結果でのイベント情報表示の対象外に
 なります)。日付は必ず情報源に明記されているものだけを使い、推測で埋めないこと。
 {series_block}
+【タイトル表記ルール】
+タイトル内で区切り記号を使う場合、長いダッシュ「——」「――」「—」「―」「–」は使わず、必ず長音記号「ー」1文字を使ってください。
+例: 「七里ヶ浜の海を眺めながらー鎌倉プリンスホテル…」
+
 本文(body)は4段落程度・合計1000文字以上とし、段落の区切りは\\n\\nで表現してください。
 事実に基づき、湘南Doors編集部としての視点を交えた読み物として書くこと。
 一次情報の文章も丸写しは禁止、必ず自分の言葉で書き直すこと。
@@ -362,7 +366,7 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
                 "別テーマへすり替えず空配列を提出する。" if candidate else "")
     messages = [{
         "role": "user",
-        "content": f"本日分の{count}記事を、直近2週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{targeted}{hint_text}",
+        "content": f"本日分の{count}記事を、直近1週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{targeted}{hint_text}",
     }]
     tools = [
         {"type": "web_search_20250305", "name": "web_search"},
@@ -418,7 +422,7 @@ def build_news_entry(item, today, article_id="today-run-pending-id"):
         "cat": item["cat"],
         "area": item["area"],
         "scene": item["scene"],
-        "title": item["title"],
+        "title": normalize_title_punctuation(item["title"]),
         "dek": item["dek"],
         "link": item.get("link") or "",
         "subjectNames": item.get("subjectNames") or [],
@@ -1017,7 +1021,7 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
             "cat": article["cat"],
             "area": article["area"],
             "scene": article["scene"],
-            "title": article["title"],
+            "title": normalize_title_punctuation(article["title"]),
             "dek": article["dek"],
             "link": article.get("link") or "",
             "subjectNames": article.get("subjectNames") or [],
@@ -1121,6 +1125,15 @@ def reserve_ids(count):
     counter["next_id"] = start + count
     atomic_write_json(ID_COUNTER_PATH, counter)
     return ids
+
+
+# ---------- タイトル表記の正規化 ----------
+
+def normalize_title_punctuation(title):
+    """記事タイトル内の長いダッシュ類を、湘南Doorsの表記ルール「ー」に統一する。"""
+    if not isinstance(title, str):
+        return title
+    return re.sub(r"(?:——|――|—|―|–)+", "ー", title)
 
 
 # ---------- スキーマ検証 ----------
