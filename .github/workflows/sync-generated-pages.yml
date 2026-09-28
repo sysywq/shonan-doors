@@ -1,0 +1,76 @@
+name: Sync Generated Pages
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'data/**'
+      - 'build.py'
+      - 'generate_articles.py'
+      - '.github/workflows/sync-generated-pages.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-generated-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: PR branchをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ github.token }}
+
+      - name: Pythonセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: git設定
+        run: |
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+
+      - name: ビルド基準日を決定
+        run: |
+          build_date=$(python3 - <<'EOF'
+          import xml.etree.ElementTree as ET
+          ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          for url in ET.parse("sitemap.xml").getroot().findall("s:url", ns):
+              if url.findtext("s:loc", namespaces=ns) == "https://www.shonandoors.com/":
+                  print(url.findtext("s:lastmod", namespaces=ns))
+                  break
+          EOF
+          )
+          if [ -z "$build_date" ]; then
+            echo "::error::sitemap.xmlからトップページのlastmodを取得できませんでした"
+            exit 1
+          fi
+          echo "SHONAN_DOORS_BUILD_DATE=$build_date" >> "$GITHUB_ENV"
+
+      - name: 静的ページを再生成
+        run: python3 build.py
+
+      - name: 生成物だけをステージ
+        run: |
+          git add index.html articles/ area/ category/ page/ sitemap.xml robots.txt 404.html site.webmanifest ads.txt 2>/dev/null || true
+
+      - name: 差分があればPR branchへ自動コミット
+        run: |
+          if git diff --cached --quiet; then
+            echo "生成物は同期済みです。"
+            exit 0
+          fi
+          git commit -m "chore: build.py生成物を自動同期"
+          git push origin "HEAD:${{ github.event.pull_request.head.ref }}"
