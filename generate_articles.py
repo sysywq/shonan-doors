@@ -956,9 +956,8 @@ def run_stock_generation(existing_articles, stock_topics, today, log_lines, gate
     if refill:
         stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
 
-    candidates = [t for t in stock_topics if t["status"] == "candidate"][:MAX_STOCK_CANDIDATES_IN_PROMPT]
-    if only_topic_id:
-        candidates = [t for t in candidates if t["id"] == only_topic_id]
+    candidates = [t for t in stock_topics if t["status"] == "candidate"
+                  and (not only_topic_id or t["id"] == only_topic_id)][:MAX_STOCK_CANDIDATES_IN_PROMPT]
     if not candidates:
         log_lines.append("stock: 評価可能な候補テーマが0件のため、本日のストック記事生成は見送ります")
         return [], stock_topics
@@ -1236,6 +1235,10 @@ def find_same_subject(item, existing_articles):
     new_link = normalize_url(item.get("link"))
     new_names = {normalize_name(n) for n in (item.get("subjectNames") or [])}
     new_names = {n for n in new_names if len(n) >= MIN_SUBJECT_NAME_LEN}
+    # A municipality is context, not the subject of every article set there.
+    # Matching 鎌倉市 against an unrelated supermarket article hid migration guides.
+    generic_places = {normalize_name(a + suffix) for a in AREAS for suffix in ("", "市", "町")}
+    new_names -= generic_places
     for ex in existing_articles:
         if _same_event_other_year(item, ex):
             continue
@@ -1640,6 +1643,27 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                 selected.append(entry)
         except Exception as exc:
             log_lines.append(f"警告(企画): {candidate['id']} の生成を見送り: {type(exc).__name__}: {exc}")
+
+    # A planned topic can become unusable during source checks. Use the existing
+    # broad discovery path for the shortfall while retaining the same audit gate.
+    if len(selected) < DAILY_MIN_ARTICLES and not gate_budget_exhausted():
+        missing = DAILY_TARGET_ARTICLES - len(selected)
+        log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します")
+        try:
+            more, more_log, _ = run_news_generation(
+                existing_articles + selected, today, event_series,
+                gate_rejections=news_gate_rejections, count=missing,
+                max_refills=1, strict=False, label="planned_fallback", defer_ids=True)
+            log_lines.extend(more_log)
+            for entry in more:
+                if len(selected) >= DAILY_TARGET_ARTICLES:
+                    break
+                if (find_same_subject(entry, existing_articles + selected)
+                        or is_duplicate(entry, selected, days=None)):
+                    continue
+                selected.append(entry)
+        except Exception as exc:
+            log_lines.append(f"警告(企画): 補充探索に失敗: {type(exc).__name__}: {exc}")
 
     ids = reserve_ids(len(selected)) if selected else []
     topics_by_id = {t["id"]: t for t in stock_topics}

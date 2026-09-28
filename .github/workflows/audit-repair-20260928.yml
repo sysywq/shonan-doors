@@ -1,0 +1,38 @@
+name: Audit repair articles 2026-09-28
+on:
+  push:
+    branches: [fix/daily-zero-20260928]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install anthropic
+      - name: Full primary source audit for today's articles
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python fact_audit.py --mode full --ids 130,131,132 --sleep 0
+          python - <<'PY'
+          import glob, json
+          reports = sorted(glob.glob('audit_reports/*.json'))
+          assert reports, 'No audit report'
+          rows = json.load(open(reports[-1]))
+          for row in rows:
+              print(row['id'], row['verdict'], row.get('verdictReasons'))
+          assert {row['id'] for row in rows} == {130, 131, 132}
+          assert all(row['verdict'] == 'confirmed' for row in rows), 'Article held by Fact Audit'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: repair-fact-audit-report
+          path: audit_reports/
+          if-no-files-found: ignore
