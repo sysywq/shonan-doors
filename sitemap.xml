@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.shonandoors.com/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/privacy/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/about/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/contact/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
@@ -27,7 +27,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/chigasaki/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -52,7 +52,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/zushi/</loc>
-    <lastmod>2026-09-25</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -92,8 +92,23 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
-    <lastmod>2026-09-22</lastmod>
+    <lastmod>2026-09-28</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/chigasaki-life-0130/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/chigasaki-life-0131/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/zushi-life-0132/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/ninomiya-event-0127/</loc>

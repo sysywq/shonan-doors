@@ -13,6 +13,26 @@ import editorial_planning as ep
 
 
 class EditorialPipelineTest(unittest.TestCase):
+    def test_targeted_stock_topic_is_not_hidden_by_prompt_slice(self):
+        topics = [{"id": f"s{i}", "status": "candidate", "query": f"q{i}",
+                   "titleIdea": f"t{i}", "area": "大磯", "category": "l",
+                   "searchIntent": "guide"} for i in range(10)]
+        with mock.patch.object(ga, "call_claude_stock_selection", return_value=[
+                {"topicId": "s9", "decision": "skip", "skipReason": "test"}]) as choose:
+            entries, updated = ga.run_stock_generation([], topics, "2026-09-28", [],
+                                                       only_topic_id="s9", refill=False, limit=1)
+        self.assertEqual(entries, [])
+        self.assertEqual(choose.call_args.args[0][0]["id"], "s9")
+        self.assertEqual(updated[9]["status"], "skipped")
+
+    def test_municipality_name_does_not_block_unrelated_topic(self):
+        existing = {"id": 78, "title": "鎌倉市のスーパーが開店", "dek": "梶原の買い物",
+                    "subjectNames": [], "link": "https://example.com/store", "area": "鎌倉",
+                    "cat": "l", "body": "スーパーの買い物"}
+        proposed = {"subjectNames": ["鎌倉市"], "link": "https://example.com/life",
+                    "area": "鎌倉", "cat": "l", "body": "移住後の保育や交通"}
+        self.assertIsNone(ga.find_same_subject(proposed, [existing]))
+
     def test_plans_before_drafting_and_reserves_only_selected_ids(self):
         with tempfile.TemporaryDirectory() as d:
             paths = {name: os.path.join(d, name + ".json") for name in
