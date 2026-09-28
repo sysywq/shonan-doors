@@ -916,10 +916,77 @@
     "area": "大磯",
     "category": "g",
     "searchIntent": "大磯を観光または散策するついでに、海や自然が見える落ち着いた雰囲気のカフェを探している",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が4件 / 一次情報同士の食い違いなど、人の確認が必要(review_required)",
+    "createdAt": "2026-09-28"
+  },
+  {
+    "id": "t0072",
+    "query": "鎌倉 座禅 体験",
+    "titleIdea": "鎌倉で座禅を体験する——建長寺・円覚寺の坐禅会、参加方法と当日の流れ",
+    "area": "鎌倉",
+    "category": "c",
+    "searchIntent": "鎌倉観光で禅寺を訪れるだけでなく、実際に座禅体験に参加したいと考えており、予約の要否・服装・所要時間など当日の段取りを具体的に知りたい",
     "status": "candidate",
     "generatedArticleId": null,
     "generatedAt": null,
     "skipReason": null,
-    "createdAt": "2026-09-28"
+    "createdAt": "2026-09-29"
+  },
+  {
+    "id": "t0073",
+    "query": "鵠沼海岸 ブランチ モーニング",
+    "titleIdea": "波音が聞こえる朝の時間——鵠沼海岸周辺でブランチを楽しむ店の選び方",
+    "area": "藤沢",
+    "category": "g",
+    "searchIntent": "江の島・鵠沼海岸周辺でサーフィンや散歩のあと、または早めに訪れてモーニング・ブランチを食べられる雰囲気の良い店を探している",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件 / 骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件 / 一次情報同士の食い違いなど、人の確認が必要(review_required)",
+    "createdAt": "2026-09-29"
+  },
+  {
+    "id": "t0074",
+    "query": "逗子 パン屋 おすすめ",
+    "titleIdea": "逗子・葉山のパン屋めぐり——地元に根ざしたクラフト系ベーカリーの選び方",
+    "area": "逗子",
+    "category": "g",
+    "searchIntent": "逗子や葉山に住んでいる、または観光で訪れた人が、個性的なクラフト系・地元密着型のパン屋を探しており、チェーン店ではない地域ならではの店を知りたい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-09-29"
+  },
+  {
+    "id": "t0075",
+    "query": "平塚 子連れ おでかけ 公園",
+    "titleIdea": "平塚で子どもと一日——公園・体験施設・ランチをまとめて計画するための手がかり",
+    "area": "平塚",
+    "category": "t",
+    "searchIntent": "平塚エリアで子どもと一緒に楽しめるおでかけ先を探しており、広い公園や体験型施設、子連れランチまでをまとめて把握したい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-09-29"
+  },
+  {
+    "id": "t0076",
+    "query": "鎌倉 日帰り 東京から アクセス",
+    "titleIdea": "東京から鎌倉へ、日帰り観光の段取り——ルート・所要時間・回り方のコツ",
+    "area": "鎌倉",
+    "category": "t",
+    "searchIntent": "東京在住・在勤者が日帰りで鎌倉観光を計画しており、新宿・渋谷・品川など出発地別の電車ルートや所要時間、限られた時間で効率よく観光するためのプランを知りたい",
+    "status": "held",
+    "generatedArticleId": 133,
+    "generatedAt": "2026-09-29 05:47",
+    "skipReason": null,
+    "createdAt": "2026-09-29",
+    "heldAt": "2026-09-29 05:47",
+    "holdReason": "Fact Audit で保留: 骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
   }
 ]
