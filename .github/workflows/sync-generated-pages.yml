@@ -1,5 +1,7 @@
 name: Sync Generated Pages
 
+# 再発防止: source-of-truth変更時に生成物をPR内で同期する
+
 on:
   pull_request:
     branches: [main]
