@@ -26,6 +26,8 @@ Reject:
   python resolve_daily_hold.py --issue 123 --decision approve [--value "10/1〜10/15"]
   python resolve_daily_hold.py --issue 123 --decision reject
   python resolve_daily_hold.py --payload-file held.json --decision approve   # Artifact の保留記事データを使う
+  --fix "旧=>新" … Approve 時、再監査の前にタイトル・リード・本文の記述を局所修正する(繰り返し指定可。
+                    オーナーが修正内容を指示した場合に使う。旧の文字列がどこにも無ければ入力不正)
   --dry-run … ファイルを変更せず、何をするかだけ出力する
 
 終了コード: 0=処理完了(公開 or 見送り) / 2=入力不正 / 3=再監査で公開できない
@@ -79,9 +81,29 @@ def approvable(audited):
     return True, "矛盾はなく、残っているのはオーナーが確認した点(骨格の未確認・情報源の食い違い)だけ"
 
 
+FIX_FIELDS = ("title", "dek", "body")
+
+
+def apply_fixes(entry, fixes):
+    """オーナー指示の局所修正(「旧=>新」)をタイトル・リード・本文に適用する。戻り値: (entry, エラー or None)"""
+    entry = dict(entry)
+    for fix in fixes or []:
+        old, sep, new = str(fix).partition("=>")
+        if not (sep and old):
+            return entry, f"--fix の形式が不正です(「旧=>新」): {fix}"
+        hit = False
+        for field in FIX_FIELDS:
+            if isinstance(entry.get(field), str) and old in entry[field]:
+                entry[field] = entry[field].replace(old, new)
+                hit = True
+        if not hit:
+            return entry, f"--fix の「{old}」がタイトル・リード・本文に見つかりません"
+    return entry, None
+
+
 def resolve(payload, decision, value="", issue="", dry_run=False, client=None, fetcher=None, image_fetcher=None,
             articles_path=None, stock_topics_path=None, event_series_path=None,
-            confirmations_path=oi.CONFIRMATIONS_PATH):
+            confirmations_path=oi.CONFIRMATIONS_PATH, fixes=None):
     """戻り値: (exit_code, message, published_entry or None)"""
     import daily_fact_audit as dfa
 
@@ -94,6 +116,10 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
         return 2, "Issue本文に保留記事のデータ(ID・slug・本文)がありません", None
     if value and len(checks) != 1:
         return 2, "--value は公式画像の確認項目が1件のときだけ使えます", None
+    if fixes and decision == "approve":
+        entry, err = apply_fixes(entry, fixes)
+        if err:
+            return 2, err, None
     title, article_id = entry["title"], entry["id"]
     now = datetime.now(ZoneInfo("Asia/Tokyo"))
     stamp = now.strftime("%Y-%m-%d %H:%M")
@@ -120,7 +146,8 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
                    "別トピックの補充は Daily Articles の top-up 方針に任せます。"), None
 
     if dry_run:
-        return 0, f"[dry-run] id={article_id}「{title}」を再監査します(記録・公開はしていません)", None
+        preview = "\n".join(f"--- {f} ---\n{entry.get(f, '')}" for f in FIX_FIELDS)
+        return 0, f"[dry-run] id={article_id}「{title}」を再監査します(記録・公開はしていません)\n{preview}", None
     if checks:
         g.atomic_write_json(confirmations_path, confirmations)
     if client is None:
@@ -166,6 +193,7 @@ def main(argv=None):
     ap.add_argument("--article-id", type=int, default=0, help="--payload-file に複数件あるときの対象ID")
     ap.add_argument("--decision", required=True, choices=["approve", "reject"])
     ap.add_argument("--value", default="", help="オーナーが公式画像で読んだ正しい値(記事の記載と違う場合)")
+    ap.add_argument("--fix", action="append", default=[], help="Approve 時の局所修正「旧=>新」(繰り返し指定可)")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args(argv)
 
@@ -173,7 +201,7 @@ def main(argv=None):
     if not payload:
         print("::error::保留記事のデータを読み取れませんでした(Issueのタイトル・本文を確認してください)", file=sys.stderr)
         return 2
-    code, message, _entry = resolve(payload, args.decision, args.value, args.issue, args.dry_run)
+    code, message, _entry = resolve(payload, args.decision, args.value, args.issue, args.dry_run, fixes=args.fix)
     print(message, file=sys.stderr if code else sys.stdout)
     return code
 

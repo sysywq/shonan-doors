@@ -246,12 +246,13 @@ class ResolveDailyHoldTest(unittest.TestCase):
         self.conf = os.path.join(self.ws.dir.name, "conf.json")
         self.addCleanup(self.ws.dir.cleanup)
 
-    def resolve(self, decision, responses, payload=None, value=""):
+    def resolve(self, decision, responses, payload=None, value="", fixes=None):
         client = FakeClient({"C": responses})
         return rdhold.resolve(payload or hold(entry=article(103, "C", eventSeriesKey="c-fes")), decision, value,
                               issue="9", client=client, fetcher=no_fetch, image_fetcher=lambda c: None,
                               articles_path=self.ws.paths["articles"], stock_topics_path=self.ws.paths["topics"],
-                              event_series_path=self.ws.paths["series"], confirmations_path=self.conf)
+                              event_series_path=self.ws.paths["series"], confirmations_path=self.conf,
+                              fixes=fixes)
 
     def test_approve_confirmed_publishes_same_id_and_slug(self):
         code, msg, entry = self.resolve("approve", [CONFIRMED])
@@ -292,6 +293,20 @@ class ResolveDailyHoldTest(unittest.TestCase):
         self.ws.write("articles", [article(103, "C")])
         self.assertEqual(self.resolve("approve", [CONFIRMED])[0], 2)
         self.assertEqual(self.resolve("approve", [], payload={"entry": {"title": "x"}})[0], 2)
+
+    def test_approve_applies_owner_fixes_before_reaudit(self):
+        entry = article(103, "C", dek="主催者が運営する海岸でイベント")
+        code, msg, published = self.resolve("approve", [CONFIRMED], payload=hold(entry=entry),
+                                            fixes=["主催者が運営する=>市が運営する"])
+        self.assertEqual(code, 0, msg)
+        self.assertEqual(published["dek"], "市が運営する海岸でイベント")
+        self.assertEqual(published["title"], "C")
+
+    def test_approve_fix_not_found_is_input_error(self):
+        code, msg, _ = self.resolve("approve", [CONFIRMED], fixes=["存在しない記述=>x"])
+        self.assertEqual(code, 2)
+        self.assertEqual(len(self.ws.read("articles")), 1)
+        self.assertEqual(self.resolve("approve", [CONFIRMED], fixes=["区切りなし"])[0], 2)
 
     def test_load_payload_requires_hold_issue_title(self):
         body = rdh.issue_body(hold())

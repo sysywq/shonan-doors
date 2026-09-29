@@ -13,6 +13,11 @@ import editorial_planning as ep
 
 
 class EditorialPipelineTest(unittest.TestCase):
+    def test_title_normalization_keeps_long_vowel_mark(self):
+        self.assertEqual(ga.normalize_title_punctuation("大磯ロングビーチに誕生——波のプール横にBBQ"),
+                         "大磯ロングビーチに誕生 - 波のプール横にBBQ")
+        self.assertEqual(ga.normalize_title_punctuation("秋のまつり ー 駅前で開催"), "秋のまつり - 駅前で開催")
+
     def test_targeted_stock_topic_is_not_hidden_by_prompt_slice(self):
         topics = [{"id": f"s{i}", "status": "candidate", "query": f"q{i}",
                    "titleIdea": f"t{i}", "area": "大磯", "category": "l",
