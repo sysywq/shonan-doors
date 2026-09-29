@@ -1130,10 +1130,12 @@ def reserve_ids(count):
 # ---------- タイトル表記の正規化 ----------
 
 def normalize_title_punctuation(title):
-    """記事タイトル内の長いダッシュ類を、湘南Doorsの表記ルール「 - 」に統一する。"""
+    """記事タイトル内の長いダッシュ類を、湘南Doorsの表記ルール「 - 」に統一する。
+    長音記号「ー」は「ビーチ」「プール」など語の一部なので置き換えない(前後に空白がある区切り用途だけ置き換える)。"""
     if not isinstance(title, str):
         return title
-    return re.sub(r"\s*(?:——|――|—|―|–|ー)\s*", " - ", title)
+    title = re.sub(r"\s*(?:——|――|—|―|–)\s*", " - ", title)
+    return re.sub(r"\s+ー\s+", " - ", title)
 
 
 # ---------- スキーマ検証 ----------
