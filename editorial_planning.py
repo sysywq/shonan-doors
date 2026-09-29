@@ -65,7 +65,7 @@ def _tool_call(client, system, prompt, tool, with_search=False, turns=8):
     raise RuntimeError(f"{tool['name']} was not called")
 
 
-def discover(client, areas, cats, existing, hints, count=12):
+def discover(client, areas, cats, existing, hints, count=30):
     digest = "\n".join(f"- {a.get('title','')} / {','.join(a.get('subjectNames') or [])}" for a in existing[-150:])
     system = ("湘南Doorsの編集者。湘南8エリアのニュース、イベント、新店、グルメ、観光、暮らし、"
               "子育て、高単価領域などを横断して新規テーマを調査する。候補は記事本文ではない。"
@@ -73,7 +73,7 @@ def discover(client, areas, cats, existing, hints, count=12):
               "Google Trendsは参照可能な時だけ季節性の補助情報として使い、数値を推測しない。"
               "他媒体は事実の根拠にしない。既存と同一対象・検索意図は候補にしない。"
               f"エリア: {areas}。カテゴリ: {cats}。既存記事:\n{digest}")
-    result = _tool_call(client, system, f"異なる地域・検索意図から最大{count}件の候補を調査。"
+    result = _tool_call(client, system, f"異なる地域・検索意図から最大{count}件の候補を広く調査。候補段階では本文を書かず、メタデータだけを提出。"
                         f"GSCの参考語句: {hints[:5]}。すべてsubmit_topic_candidatesで提出。",
                         DISCOVERY_TOOL, with_search=True)
     raw = result.get("candidates", [])
