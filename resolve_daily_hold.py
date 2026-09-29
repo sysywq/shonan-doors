@@ -92,6 +92,8 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
     checks = payload.get("imageChecks") or []
     if not (isinstance(entry.get("id"), int) and entry.get("slug") and entry.get("title") and entry.get("body")):
         return 2, "Issue本文に保留記事のデータ(ID・slug・本文)がありません", None
+    # 旧ロジックで長音符が「 - 」に壊れたタイトル(「オ - プン」等)を直してから再監査・公開する
+    entry = dict(entry, title=g.repair_broken_long_vowels(entry["title"]))
     if value and len(checks) != 1:
         return 2, "--value は公式画像の確認項目が1件のときだけ使えます", None
     title, article_id = entry["title"], entry["id"]

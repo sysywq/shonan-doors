@@ -21,6 +21,13 @@ Fact Audit workflow(fact_audit.py)と同じ監査ロジック・同じ判定ル�
   - 生成HTML・sitemap.xml … このスクリプトの後に build.py を実行するので、保留記事のページは作られない
   - 実行レポート          … accepted_ids 等を公開対象だけに書き換え、held に保留記事を残す(shortfall も再計算)
 
+最終 Fact Audit 後の confirmed が最低ライン(DAILY_MIN_ARTICLES)未満なら、post-audit top-up を行う:
+  - 別候補を追加生成し、通常の公開前ゲート(generate_articles.run_publish_gate)→ Fact Audit(full)にかける
+  - 最大 POST_AUDIT_TOPUP_MAX_ROUNDS 回・監査ドラフト合計 POST_AUDIT_TOPUP_MAX_DRAFTS 件まで。最低ラインに届いたら止める
+  - 同日の公開対象・保留記事・公開前監査の不合格ドラフト・既存記事と重複する候補は採らない
+  - IDは id_counter.json から新しく予約する(保留記事のIDを再利用しない)
+  - 届かなければ confirmed だけを公開し、shortfall として報告する(品質基準は下げない)
+
 保留記事の内容と監査結果は --holds-out(既定 /tmp/shonan_doors_daily_holds.json)に書き出す。
 report_daily_holds.py がこれを読んで、保留記事1件につき Approve / Reject の Issue を1件作る。
 
@@ -30,6 +37,7 @@ Fact Audit workflow の verify で、この Daily Articles の Run ID を previo
 使い方:
   python daily_fact_audit.py
   python daily_fact_audit.py --report /tmp/shonan_doors_run_report.json --holds-out /tmp/holds.json
+  DAILY_POST_AUDIT_TOPUP=0 python daily_fact_audit.py   # post-audit top-up を行わない
 
 終了コード: 0=監査完了(保留があっても0) / 1=実行レポートの読み込み失敗など、監査そのものができなかった
 """
@@ -48,6 +56,10 @@ import publish_gate as pg
 
 RUN_REPORT_PATH = g.RUN_REPORT_PATH
 HOLDS_PATH = os.environ.get("SHONAN_DOORS_DAILY_HOLDS_PATH", os.path.join("/tmp", "shonan_doors_daily_holds.json"))
+# post-audit top-up の上限(APIコスト上限。品質基準は緩めず、試す候補の数だけを制限する)
+POST_AUDIT_TOPUP_MAX_ROUNDS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_ROUNDS", "3"))
+POST_AUDIT_TOPUP_MAX_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_DRAFTS", "6"))
+POST_AUDIT_TOPUP_MAX_GATE_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_GATE_DRAFTS", "8"))
 
 
 # ---------- 1記事の監査 ----------
@@ -151,7 +163,7 @@ def separate_holds(articles, stock_topics, event_series, held, published, base_s
     return new_articles, new_topics, new_series
 
 
-def updated_report(report, published, held, results):
+def updated_report(report, published, held, results, topup=None, gate_rejected=None):
     """実行レポートを「公開対象だけ」の内容に書き換える(verify_daily_run.py・PR作成・X投稿が使う)。"""
     pub_ids = [a["id"] for a in published]
     news = [a for a in published if a.get("articleType") == "news"]
@@ -171,6 +183,10 @@ def updated_report(report, published, held, results):
             "all_published_confirmed": all(r["verdict"] == "confirmed" for r in results if r["id"] in pub_ids),
         },
     )
+    if gate_rejected is not None:
+        out["gate_rejected"] = gate_rejected
+    if topup is not None:
+        out["post_audit_topup"] = topup
     shortfall = report.get("shortfall") if isinstance(report.get("shortfall"), dict) else None
     if len(published) < g.DAILY_MIN_ARTICLES:
         shortfall = dict(shortfall or {"min": g.DAILY_MIN_ARTICLES, "target": g.DAILY_TARGET_ARTICLES, "reasons": []})
@@ -178,10 +194,37 @@ def updated_report(report, published, held, results):
         if held:
             shortfall["reasons"] = list(shortfall.get("reasons") or []) + [
                 f"Fact Audit(full)で confirmed 以外の {len(held)}件を保留(公開対象から分離。品質基準は緩めていない)"]
+        if topup and topup.get("rounds"):
+            shortfall["reasons"] = list(shortfall.get("reasons") or []) + [
+                f"Fact Audit 後の補充(post-audit top-up)を{topup['rounds']}回・監査{topup['drafts']}件試したが"
+                f"最低ラインに届かなかった(confirmed {len(topup.get('confirmed_ids') or [])}件を追加。"
+                f"停止理由: {topup.get('stopped') or '-'})"]
     else:
         shortfall = None
     out["shortfall"] = shortfall
     return out
+
+
+# ---------- post-audit top-up ----------
+
+def generate_topup(need, avoid, today, event_series, gate_rejections, round_no):
+    """別候補を need 件まで追加生成し、通常の公開前ゲートに通った記事(ID未発行)を返す。
+    avoid … 重複させない記事(既存記事・同日の公開対象・保留記事・不合格ドラフト)"""
+    g.MAX_GATE_DRAFTS_PER_RUN = min(g.MAX_GATE_DRAFTS_PER_RUN, POST_AUDIT_TOPUP_MAX_GATE_DRAFTS)
+    if g.gate_budget_exhausted():
+        print(f"post-audit top-up: 公開前監査の件数上限({g.MAX_GATE_DRAFTS_PER_RUN}件)に達したため生成しません")
+        return []
+    entries, log_lines, _ = g.run_news_generation(
+        avoid, today, event_series, gate_rejections=gate_rejections, count=need, max_refills=0,
+        strict=False, label=f"post_audit_topup_{round_no}", defer_ids=True)
+    for line in log_lines:
+        print(line)
+    return entries
+
+
+def _duplicate_reason(entry, pool):
+    return (g.is_duplicate(entry, pool, days=None) or g.check_series_year_duplicate(entry, pool)
+            or g.find_same_subject(entry, pool))
 
 
 # ---------- 実行 ----------
@@ -200,10 +243,13 @@ def _write_reports(out_dir, stamp, full_results, verify_results):
     return report
 
 
-def write_summary(published, held, results):
+def write_summary(published, held, results, topup=None):
     path = os.environ.get("GITHUB_STEP_SUMMARY")
     lines = ["## Daily Articles: Fact Audit(full)", "",
              f"公開対象(confirmed) {len(published)}件 / 保留 {len(held)}件", ""]
+    if topup:
+        lines += [f"post-audit top-up: {topup['rounds']}回・監査{topup['drafts']}件 → confirmed "
+                  f"{topup['confirmed_ids']} / 保留 {topup['held_ids']}(停止理由: {topup['stopped']})", ""]
     for r in results:
         mark = "公開" if r["verdict"] == "confirmed" else "保留"
         fixed = "(自動修正→verifyで解消)" if r["verdict"] == "confirmed" and r.get("autofix") else ""
@@ -215,7 +261,10 @@ def write_summary(published, held, results):
             f.write(text)
 
 
-def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_keys="git"):
+def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_keys="git", topup=None,
+         reserve_ids=None):
+    """topup … post-audit top-up の候補生成関数(generate_topup と同じ引数)。None なら補充しない
+    reserve_ids … 補充記事のID予約(既定 generate_articles.reserve_ids。id_counter.json を前進させる)"""
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", default=RUN_REPORT_PATH)
     ap.add_argument("--holds-out", default=HOLDS_PATH)
@@ -233,7 +282,12 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
         return 1
     ids = [i for i in report.get("accepted_ids") or [] if isinstance(i, int)]
     g.atomic_write_json(args.holds_out, [])
-    if report.get("status") != "ok" or not ids:
+    if os.environ.get("DAILY_POST_AUDIT_TOPUP", "1") == "0":
+        topup = None
+    # 公開前ゲートで全件不合格だった日も、品質基準を変えずに別候補の補充は試す
+    can_topup = topup is not None and report.get("status") in ("ok", "no_articles_passed_gate",
+                                                                 "no_articles_accepted")
+    if (report.get("status") != "ok" or not ids) and not can_topup:
         report = dict(report, held=[], fact_audit={"mode": "full", "verdicts": {}, "autofixed_ids": [],
                                                    "all_published_confirmed": True})
         g.atomic_write_json(args.report, report)
@@ -256,8 +310,9 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
     date = report.get("date") or datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
     now = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
     published, held, results, full_results, verify_results = [], [], [], [], []
-    for i in ids:
-        entry = by_id[i]
+
+    def audit_and_sort(entry):
+        i = entry["id"]
         print(f"[daily-audit] id:{i} {entry.get('title', '')}", flush=True)
         audited = audit_article(client, entry, fetcher=fetcher, image_fetcher=image_fetcher)
         full = dict(audited["result"], id=i, slug=entry.get("slug", ""), title=entry.get("title", ""))
@@ -273,6 +328,68 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
             published.append(audited["entry"])
         else:
             held.append(hold_record(entry, audited, entry.get("articleType", ""), date, topic_by_article.get(i)))
+        return audited["confirmed"]
+
+    for i in ids:
+        audit_and_sort(by_id[i])
+
+    # ---- post-audit top-up: 最終 Fact Audit 後の confirmed が最低ライン未満なら、別候補を補充して監査する ----
+    gate_rejected = list(report.get("gate_rejected") or [])
+    topup_info = None
+    if topup is not None and len(published) < g.DAILY_MIN_ARTICLES:
+        reserve = reserve_ids or g.reserve_ids
+        topup_info = {"rounds": 0, "drafts": 0, "added_ids": [], "confirmed_ids": [], "held_ids": [],
+                      "stopped": ""}
+        pool = list(articles)  # 既存記事+同日の公開対象+保留記事(分離前)。補充分も積んでいく
+        while len(published) < g.DAILY_MIN_ARTICLES:
+            if topup_info["rounds"] >= POST_AUDIT_TOPUP_MAX_ROUNDS:
+                topup_info["stopped"] = f"補充回数の上限({POST_AUDIT_TOPUP_MAX_ROUNDS}回)"
+                break
+            left = POST_AUDIT_TOPUP_MAX_DRAFTS - topup_info["drafts"]
+            if left <= 0:
+                topup_info["stopped"] = f"監査ドラフトの上限({POST_AUDIT_TOPUP_MAX_DRAFTS}件)"
+                break
+            topup_info["rounds"] += 1
+            round_no = topup_info["rounds"]
+            need = min(g.DAILY_MIN_ARTICLES - len(published), left)
+            print(f"post-audit top-up {round_no}/{POST_AUDIT_TOPUP_MAX_ROUNDS}: confirmed {len(published)}件 → "
+                  f"別候補を最大{need}件補充します", flush=True)
+            avoid = pool + [dict(r.get("draft") or r, id="gate-rejected") for r in gate_rejected
+                            if isinstance(r, dict) and r.get("title")]
+            try:
+                candidates = topup(need, avoid, date, event_series, gate_rejected, round_no) or []
+            except Exception as e:  # 補充の失敗で confirmed 記事の公開は止めない
+                print(f"::warning::post-audit top-up {round_no} の候補生成に失敗: {type(e).__name__}: {e}")
+                continue
+            fresh = []
+            for entry in candidates:
+                dup = _duplicate_reason(entry, avoid + fresh)
+                if dup:
+                    print(f"post-audit top-up: 「{entry.get('title', '')}」は重複のため採らない({dup})")
+                    continue
+                fresh.append(entry)
+            fresh = fresh[:need]
+            if not fresh:
+                continue
+            used = {a.get("id") for a in pool} | {h["id"] for h in held}
+            new_ids = reserve(len(fresh))
+            if set(new_ids) & used or len(set(new_ids)) != len(new_ids):
+                print(f"::error::補充記事に使用済みのIDが予約されました({new_ids})。補充を中止します", file=sys.stderr)
+                topup_info["stopped"] = "ID予約の異常"
+                break
+            for entry, new_id in zip(fresh, new_ids):
+                g.finalize_news_entry_id(entry, new_id)
+                event_series, _ = g.register_event_series_if_new(entry, event_series)
+            pool += fresh
+            articles = articles + fresh
+            topup_info["drafts"] += len(fresh)
+            topup_info["added_ids"] += new_ids
+            for entry in fresh:
+                ok = audit_and_sort(entry)
+                topup_info["confirmed_ids" if ok else "held_ids"].append(entry["id"])
+        else:
+            topup_info["stopped"] = "最低ラインに到達"
+        print(f"post-audit top-up: {topup_info}")
 
     base_keys = base_event_series_keys() if base_series_keys == "git" else base_series_keys
     new_articles, new_topics, new_series = separate_holds(
@@ -283,11 +400,13 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
     if os.path.exists(args.event_series) or new_series:
         g.atomic_write_json(args.event_series, new_series)
     g.atomic_write_json(args.holds_out, held)
-    g.atomic_write_json(args.report, updated_report(report, published, held, results))
+    base_report = report if report.get("status") == "ok" or not published else dict(report, status="ok")
+    g.atomic_write_json(args.report, updated_report(base_report, published, held, results, topup_info,
+                                                    gate_rejected if topup_info is not None else None))
 
     stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M%S")
     _write_reports(args.out_dir, stamp, full_results, verify_results)
-    write_summary(published, held, results)
+    write_summary(published, held, results, topup_info)
     for h in held:
         print(f"::warning::id:{h['id']}「{h['title']}」は Fact Audit で {h['verdict']} のため保留しました"
               "(当日PRには含めず、Issue で Approve / Reject を確認します)")
@@ -295,4 +414,4 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(topup=generate_topup))
