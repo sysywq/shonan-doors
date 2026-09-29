@@ -825,10 +825,10 @@
     "area": "逗子",
     "category": "g",
     "searchIntent": "逗子や葉山に住んでいる、または訪れる人が、地元らしいクラフト系・個性派パン屋を探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「ブレドール」が既存記事id:111と一致",
     "createdAt": "2026-09-28"
   },
   {
@@ -864,10 +864,10 @@
     "area": "茅ヶ崎",
     "category": "l",
     "searchIntent": "茅ヶ崎への移住や定住を考えており、保育・教育・公園・地域コミュニティなど子育て環境のリアルを知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「香川駅前子育て支援センター」が既存記事id:130と一致",
     "createdAt": "2026-09-28"
   },
   {
@@ -877,10 +877,10 @@
     "area": "平塚",
     "category": "c",
     "searchIntent": "平塚七夕まつりを訪れた、またはこれから訪れる人が、単なるイベント情報ではなくその歴史的背景や文化的意味を知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「湘南ひらつか七夕まつり」が既存記事id:57と一致",
     "createdAt": "2026-09-28"
   },
   {
@@ -903,11 +903,13 @@
     "area": "藤沢",
     "category": "l",
     "searchIntent": "藤沢への移住を検討しており、保育所の充実度・学区・自然環境など子育てに関する生活情報を幅広く知りたい",
-    "status": "candidate",
-    "generatedArticleId": null,
-    "generatedAt": null,
+    "status": "held",
+    "generatedArticleId": 139,
+    "generatedAt": "2026-09-30 05:39",
     "skipReason": null,
-    "createdAt": "2026-09-28"
+    "createdAt": "2026-09-28",
+    "heldAt": "2026-09-30 05:39",
+    "holdReason": "Fact Audit で保留: 骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
   },
   {
     "id": "t0071",
@@ -929,10 +931,10 @@
     "area": "鎌倉",
     "category": "c",
     "searchIntent": "鎌倉観光で禅寺を訪れるだけでなく、実際に座禅体験に参加したいと考えており、予約の要否・服装・所要時間など当日の段取りを具体的に知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「建長寺」が既存記事id:54と一致",
     "createdAt": "2026-09-29"
   },
   {
@@ -968,10 +970,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "平塚エリアで子どもと一緒に楽しめるおでかけ先を探しており、広い公園や体験型施設、子連れランチまでをまとめて把握したい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「ふれあい動物園」が既存記事id:128と一致",
     "createdAt": "2026-09-29"
   },
   {
