@@ -903,13 +903,11 @@
     "area": "藤沢",
     "category": "l",
     "searchIntent": "藤沢への移住を検討しており、保育所の充実度・学区・自然環境など子育てに関する生活情報を幅広く知りたい",
-    "status": "held",
+    "status": "generated",
     "generatedArticleId": 139,
-    "generatedAt": "2026-09-30 05:39",
+    "generatedAt": "2026-09-30 09:32",
     "skipReason": null,
-    "createdAt": "2026-09-28",
-    "heldAt": "2026-09-30 05:39",
-    "holdReason": "Fact Audit で保留: 骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+    "createdAt": "2026-09-28"
   },
   {
     "id": "t0071",
