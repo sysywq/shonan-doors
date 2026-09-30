@@ -52,7 +52,10 @@ jobs:
           with open("/tmp/shonan_doors_run_report.json","w",encoding="utf-8") as f:
               json.dump(report,f,ensure_ascii=False,indent=2)
           print("Existing target-date IDs:",ids)
+          with open("/tmp/shonan_doors_baseline_ids.txt","w",encoding="utf-8") as f:
+              f.write(",".join(map(str, ids)))
           PY
+          echo "DAILY_BASELINE_CONFIRMED_IDS=$(cat /tmp/shonan_doors_baseline_ids.txt)" >> "$GITHUB_ENV"
       - name: Generate replacements and run full Fact Audit
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
