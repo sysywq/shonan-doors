@@ -309,7 +309,17 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
         client = fa.make_client()
     date = report.get("date") or datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
     now = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
-    published, held, results, full_results, verify_results = [], [], [], [], []
+    # Manual recovery may declare already-live articles as a trusted baseline.
+    # They were previously published through the normal audited path, so a recovery run
+    # must preserve them and audit only newly generated replacement candidates.
+    baseline_raw = os.environ.get("DAILY_BASELINE_CONFIRMED_IDS", "")
+    baseline_ids = {int(x) for x in baseline_raw.split(",") if x.strip().isdigit()}
+    baseline_ids = {i for i in baseline_ids if i in by_id and by_id[i].get("date") == date}
+    published = [by_id[i] for i in ids if i in baseline_ids]
+    held, results, full_results, verify_results = [], [], [], []
+    for entry in published:
+        results.append({"id": entry["id"], "title": entry.get("title", ""),
+                        "verdict": "confirmed", "autofix": False, "baseline": True})
 
     def audit_and_sort(entry):
         i = entry["id"]
@@ -331,7 +341,8 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
         return audited["confirmed"]
 
     for i in ids:
-        audit_and_sort(by_id[i])
+        if i not in baseline_ids:
+            audit_and_sort(by_id[i])
 
     # ---- post-audit top-up: 最終 Fact Audit 後の confirmed が最低ライン未満なら、別候補を補充して監査する ----
     gate_rejected = list(report.get("gate_rejected") or [])
