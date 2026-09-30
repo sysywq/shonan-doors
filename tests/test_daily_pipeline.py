@@ -164,6 +164,136 @@ class DailyFactAuditTest(unittest.TestCase):
         self.assertEqual(set(holds), {102, 103})
         self.assertTrue(holds[103]["anomalies"])  # 監査できなかった記事も公開しない(fail-closed)
 
+    # ---- post-audit top-up(最終 Fact Audit 後の confirmed が最低ライン未満のときの補充) ----
+
+    def topup_candidate(self, title, n):
+        return article(0, title, id="today-run-pending-id", slug="", date="2026-09-26",
+                       link=f"https://www.city.example.lg.jp/topup{n}.html",
+                       sources=[f"https://www.city.example.lg.jp/topup{n}.html"], subjectNames=[f"補充対象{n}号"],
+                       body="あいうえおかきくけこ"[n % 10] * 60 + str(n) * 60 + "。")
+
+    def run_topup(self, ws, client, batches, reserved=None):
+        calls = []
+
+        def topup(need, avoid, today, event_series, gate_rejections, round_no):
+            calls.append({"need": need, "avoid_ids": [a.get("id") for a in avoid], "round": round_no})
+            return [dict(c) for c in batches.pop(0)] if batches else []
+
+        counter = iter(reserved or range(201, 300))
+
+        def reserve(count):
+            return [next(counter) for _ in range(count)]
+
+        self.addCleanup(ws.dir.cleanup)
+        env = {k: v for k, v in os.environ.items() if k != "GITHUB_STEP_SUMMARY"}
+        with mock.patch.dict(os.environ, env, clear=True):
+            code = dfa.main(ws.argv(), client=client, fetcher=no_fetch, image_fetcher=lambda c: None,
+                            base_series_keys=set(), topup=topup, reserve_ids=reserve)
+        return code, calls
+
+    def test_post_audit_topup_refills_until_minimum_and_stops(self):
+        # 2026-09-30 の事例: 公開前ゲート後3件 → full 監査で confirmed 1件 / 保留2件 → 補充して3件に届いたら止める
+        arts = [article(101, "A"), article(102, "B"), article(103, "C")]
+        rejected = {"title": "不合格", "area": "藤沢", "link": "https://x.example.jp/ng.html",
+                    "draft": article(0, "不合格", link="https://x.example.jp/ng.html")}
+        ws = Workspace(arts, report=run_report(arts, gate_rejected=[rejected]))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED], "C": [CORE_UNVERIFIED],
+                             "D": [CONFIRMED], "E": [CONFIRMED]})
+        batches = [[self.topup_candidate("D", 1), self.topup_candidate("E", 2)]]
+        code, calls = self.run_topup(ws, client, batches)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(calls), 1)  # 3件に届いたので2回目は呼ばない
+        self.assertEqual(calls[0]["need"], 2)
+        # 同日の公開対象・保留記事・不合格ドラフトを重複チェックの対象として渡している
+        self.assertTrue({101, 102, 103, "gate-rejected"} <= set(calls[0]["avoid_ids"]))
+        report = ws.read("report")
+        self.assertEqual(report["accepted_ids"], [101, 201, 202])
+        self.assertEqual(report["accepted_slugs"][1:], ["fujisawa-event-0201", "fujisawa-event-0202"])
+        self.assertIsNone(report["shortfall"])
+        self.assertTrue(report["fact_audit"]["all_published_confirmed"])
+        self.assertEqual(report["post_audit_topup"]["confirmed_ids"], [201, 202])
+        self.assertEqual(report["post_audit_topup"]["stopped"], "最低ラインに到達")
+        self.assertEqual([a["id"] for a in ws.read("articles")], [101, 201, 202])
+        self.assertEqual({h["id"] for h in ws.read("holds")}, {102, 103})
+
+    def test_post_audit_topup_is_bounded_and_reports_shortfall(self):
+        arts = [article(101, "A"), article(102, "B")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED], "D": [CORE_CONTRADICTED],
+                             "E": [CORE_UNVERIFIED], "F": [CONFIRMED]})
+        batches = [[self.topup_candidate("D", 1), self.topup_candidate("E", 2)], [],
+                   [self.topup_candidate("F", 3)], [self.topup_candidate("G", 4)]]
+        with mock.patch.object(dfa, "POST_AUDIT_TOPUP_MAX_ROUNDS", 3):
+            code, calls = self.run_topup(ws, client, batches)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(calls), 3)  # 最大3回で打ち切る(4回目の候補は生成しない)
+        report = ws.read("report")
+        self.assertEqual(report["accepted_ids"], [101, 203])  # confirmed だけを公開
+        self.assertEqual({h["id"] for h in report["held"]}, {102, 201, 202})
+        self.assertEqual(report["shortfall"]["total"], 2)
+        self.assertTrue(any("post-audit top-up" in r for r in report["shortfall"]["reasons"]))
+        self.assertIn("補充回数の上限", report["post_audit_topup"]["stopped"])
+        self.assertEqual([a["id"] for a in ws.read("articles")], [101, 203])
+
+    def test_post_audit_topup_respects_draft_cap(self):
+        arts = [article(101, "A")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CORE_CONTRADICTED], "D": [CORE_CONTRADICTED], "E": [CORE_CONTRADICTED]})
+        batches = [[self.topup_candidate("D", 1), self.topup_candidate("E", 2), self.topup_candidate("F", 3)]] * 3
+        with mock.patch.object(dfa, "POST_AUDIT_TOPUP_MAX_DRAFTS", 2):
+            code, calls = self.run_topup(ws, client, batches)
+        report = ws.read("report")
+        self.assertEqual(report["post_audit_topup"]["drafts"], 2)
+        self.assertEqual(client.calls, ["A", "D", "E"])  # 上限を超えて監査しない
+        self.assertIn("監査ドラフトの上限", report["post_audit_topup"]["stopped"])
+        self.assertEqual(report["accepted_ids"], [])
+
+    def test_post_audit_topup_skips_duplicates_of_held_articles(self):
+        arts = [article(101, "A"), article(102, "B", link="https://www.city.example.lg.jp/b.html",
+                                                    subjectNames=["保留された対象"])]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED], "E": [CONFIRMED]})
+        dup = self.topup_candidate("D", 1)
+        dup.update(link="https://www.city.example.lg.jp/b.html")  # 保留記事と同じ一次情報URL
+        batches = [[dup, self.topup_candidate("E", 2)], []]
+        with mock.patch.object(dfa, "POST_AUDIT_TOPUP_MAX_ROUNDS", 2):
+            self.run_topup(ws, client, batches)
+        self.assertNotIn("D", client.calls)
+        report = ws.read("report")
+        self.assertEqual(report["post_audit_topup"]["added_ids"], [201])  # 重複候補にIDは発行しない
+        self.assertEqual(report["accepted_ids"], [101, 201])
+
+    def test_post_audit_topup_never_reuses_held_ids(self):
+        arts = [article(101, "A"), article(102, "B")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED], "D": [CONFIRMED]})
+        code, _calls = self.run_topup(ws, client, [[self.topup_candidate("D", 1)]], reserved=[102])
+        self.assertEqual(code, 0)
+        report = ws.read("report")
+        self.assertEqual(report["accepted_ids"], [101])
+        self.assertEqual(report["post_audit_topup"]["stopped"], "ID予約の異常")
+        self.assertNotIn("D", client.calls)
+
+    def test_post_audit_topup_disabled_by_env(self):
+        arts = [article(101, "A"), article(102, "B")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED]})
+        with mock.patch.dict(os.environ, {"DAILY_POST_AUDIT_TOPUP": "0"}):
+            _code, calls = self.run_topup(ws, client, [[self.topup_candidate("D", 1)]])
+        self.assertEqual(calls, [])
+        self.assertNotIn("post_audit_topup", ws.read("report"))
+
+    def test_post_audit_topup_runs_when_gate_rejected_everything(self):
+        ws = Workspace([article(1, "既存")], report={"status": "no_articles_passed_gate", "accepted_ids": [],
+                                                     "date": "2026-09-26", "gate_rejected": []})
+        client = FakeClient({"D": [CONFIRMED], "E": [CONFIRMED], "F": [CONFIRMED]})
+        batches = [[self.topup_candidate("D", 1), self.topup_candidate("E", 2), self.topup_candidate("F", 3)]]
+        self.run_topup(ws, client, batches)
+        report = ws.read("report")
+        self.assertEqual(report["status"], "ok")
+        self.assertEqual(report["accepted_ids"], [201, 202, 203])
+        self.assertIsNone(report["shortfall"])
+
     def test_no_articles_is_noop(self):
         ws = Workspace([], report={"status": "no_articles_passed_gate", "accepted_ids": []})
         self.assertEqual(self.run_audit(ws, FakeClient({})), 0)
@@ -176,6 +306,49 @@ class DailyFactAuditTest(unittest.TestCase):
                                                                      {"seriesKey": "k2", "canonicalName": "X"}],
                                             held, [], None)
         self.assertEqual([s["seriesKey"] for s in series], ["k2"])
+
+
+class TitlePunctuationTest(unittest.TestCase):
+    """タイトルは文・節の区切りだけを「 - 」にし、単語・固有名詞の中の長音符「ー」は保持する。"""
+
+    def test_long_vowel_inside_words_is_kept(self):
+        g = dfa.g
+        for title in ("湘南モールフィル店、10月10日オープン", "秋のアフタヌーンティー開催中", "ラグビー日本代表のカフェ",
+                      "ビーチとプールの夏", "ららぽーと湘南平塚", "コーヒー 専門店が開店", "すごーい体験"):
+            self.assertEqual(g.normalize_title_punctuation(title), title)
+
+    def test_separators_become_spaced_hyphen(self):
+        g = dfa.g
+        self.assertEqual(g.normalize_title_punctuation("湘南に誕生——「リピラティス」湘南モールフィル店、10月10日オープン"),
+                         "湘南に誕生 - 「リピラティス」湘南モールフィル店、10月10日オープン")
+        self.assertEqual(g.normalize_title_punctuation("相模川の河川敷が秋色にー「お花畑」でコスモス"),
+                         "相模川の河川敷が秋色に - 「お花畑」でコスモス")
+        self.assertEqual(g.normalize_title_punctuation("ラグビー日本代表が葉山に ー カフェをオープン"),
+                         "ラグビー日本代表が葉山に - カフェをオープン")
+        self.assertEqual(g.normalize_title_punctuation("七里ヶ浜 — 秋のアフタヌーンティー"), "七里ヶ浜 - 秋のアフタヌーンティー")
+
+    def test_repair_titles_broken_by_old_logic(self):
+        g = dfa.g
+        cases = {
+            "揚げる楽しさ、選ぶ喜び - 串揚げバイキング「くし葉」ららぽ - と湘南平塚店、10月9日グランドオ - プン":
+                "揚げる楽しさ、選ぶ喜び - 串揚げバイキング「くし葉」ららぽーと湘南平塚店、10月9日グランドオープン",
+            "ラグビ - 日本代表が葉山に開いたカフェ - 廣瀬俊朗の「CAFE STAND BLOSSOM〜HAYAMA〜」、一色に3月オ - プン":
+                "ラグビー日本代表が葉山に開いたカフェ - 廣瀬俊朗の「CAFE STAND BLOSSOM〜HAYAMA〜」、一色に3月オープン",
+            "七里ヶ浜の海を眺めながら - 鎌倉プリンスホテル「ル・トリアノン」、秋のアフタヌ - ンティ - 開催中":
+                "七里ヶ浜の海を眺めながら - 鎌倉プリンスホテル「ル・トリアノン」、秋のアフタヌーンティー開催中",
+            "湘南に女性専用マシンピラティスが誕生 - 「リピラティス」湘南モ - ルフィル店、10月10日オ - プン":
+                "湘南に女性専用マシンピラティスが誕生 - 「リピラティス」湘南モールフィル店、10月10日オープン",
+            # 正しい区切りは変えない
+            "地域のコミュニティ - 茅ヶ崎の子育て広場": "地域のコミュニティ - 茅ヶ崎の子育て広場",
+        }
+        for broken, fixed in cases.items():
+            self.assertEqual(g.repair_broken_long_vowels(broken), fixed)
+
+    def test_published_titles_have_no_broken_long_vowels(self):
+        with open(os.path.join(ROOT, "data", "articles.json"), encoding="utf-8") as f:
+            titles = [a.get("title", "") for a in json.load(f)]
+        for title in titles:
+            self.assertEqual(dfa.g.repair_broken_long_vowels(title), title)
 
 
 def hold(**kw):

@@ -1129,11 +1129,48 @@ def reserve_ids(count):
 
 # ---------- タイトル表記の正規化 ----------
 
+_KANA = "ぁ-ゟ゠-ヿｦ-ﾟ"  # ひらがな・カタカナ(「ー」を含む)・半角カナ
+# 「ー」を区切りとみなすのは、空白の後か、かなではない文字(漢字・括弧・数字など)の直後にあるときだけ。
+# カタカナの直後の「ー」は長音符(オープン・ラグビー・アフタヌーンティー等)なので変えない。
+_SEPARATOR_CHOONPU = re.compile(
+    rf"(?<=\s)ー+(?=.)|(?<=[^\s{_KANA}])ー+(?=\S)"
+    # ひらがなの直後でも、後ろが漢字・括弧などなら区切り(「秋色にー「…」」)。「すごーい」「ららぽーと」は変えない
+    rf"|(?<=[ぁ-ゖ])ー+(?=[^\s{_KANA}])")
+# 旧ロジックが長音符まで「 - 」にしてしまったタイトルを直すための語。
+# 「コミュニティ」「パーティ」のように末尾の「ー」を除いた形でも使われる語や、「ア - ト」のように
+# 前後1文字ずつで正しい区切りと紛れやすい短い語は、正しい区切りまで書き換えてしまうので入れない。
+LONG_VOWEL_WORDS = (
+    "アフタヌーンティー", "ハロウィーン", "モーニング", "スーパー", "センター", "コーヒー", "オープン",
+    "リニューアル", "ラグビー", "モール", "ららぽーと", "ストーリー", "ベーカリー", "ギャラリー", "マーケット",
+    "ワークショップ", "コンサート", "スポーツ", "ラーメン", "スイーツ", "ブルワリー", "バーガー", "シーズン",
+    "サービス", "ニュース", "ステーション", "メニュー", "サーキット", "ベーグル", "ジェラート",
+)
+
+
 def normalize_title_punctuation(title):
-    """記事タイトル内の長いダッシュ類を、湘南Doorsの表記ルール「 - 」に統一する。"""
+    """記事タイトルの文・節の区切り(長いダッシュ類)を、湘南Doorsの表記ルール「 - 」に統一する。
+    単語・固有名詞の中の長音符「ー」(オープン・ラグビー・湘南モールフィル等)は変えない。"""
     if not isinstance(title, str):
         return title
-    return re.sub(r"\s*(?:——|――|—|―|–|ー)\s*", " - ", title)
+    title = re.sub(r"——|――|—|―|–", "\0", title)
+    title = _SEPARATOR_CHOONPU.sub("\0", title)
+    return re.sub(r"\s*\0+\s*", " - ", title).strip()
+
+
+def repair_broken_long_vowels(title):
+    """旧ロジックで「オ - プン」のように壊れた長音符を、既知の語(LONG_VOWEL_WORDS)に限って元に戻す。
+    文・節の区切りの「 - 」は変えない。"""
+    if not isinstance(title, str):
+        return title
+    for word in sorted(LONG_VOWEL_WORDS, key=len, reverse=True):
+        broken = word.replace("ー", " - ")
+        if broken == word:
+            continue
+        title = title.replace(broken, word)
+        tail = broken.rstrip()
+        if tail != broken and title.endswith(tail):
+            title = title[:-len(tail)] + word
+    return title
 
 
 # ---------- スキーマ検証 ----------
