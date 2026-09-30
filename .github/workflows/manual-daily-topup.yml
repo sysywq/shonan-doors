@@ -1,0 +1,107 @@
+name: Manual Daily Top-up
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Target date (YYYY-MM-DD, JST)'
+        required: true
+        default: '2026-09-30'
+
+concurrency:
+  group: manual-daily-topup
+  cancel-in-progress: false
+
+jobs:
+  topup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install anthropic
+      - name: Configure git
+        run: |
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+      - name: Create top-up branch
+        run: |
+          BRANCH="daily-topup/${{ inputs.date }}-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+      - name: Prepare report from already-published target-date articles
+        env:
+          TARGET_DATE: ${{ inputs.date }}
+        run: |
+          python - <<'PY'
+          import json, os
+          date=os.environ["TARGET_DATE"]
+          with open("data/articles.json",encoding="utf-8") as f:
+              articles=json.load(f)
+          ids=[a["id"] for a in articles if a.get("date")==date]
+          report={"status":"ok","date":date,"accepted_ids":ids,"gate_rejected":[]}
+          with open("/tmp/shonan_doors_run_report.json","w",encoding="utf-8") as f:
+              json.dump(report,f,ensure_ascii=False,indent=2)
+          print("Existing target-date IDs:",ids)
+          PY
+      - name: Generate replacements and run full Fact Audit
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          POST_AUDIT_TOPUP_MAX_ROUNDS: '3'
+          POST_AUDIT_TOPUP_MAX_DRAFTS: '6'
+          POST_AUDIT_TOPUP_MAX_GATE_DRAFTS: '8'
+        run: python daily_fact_audit.py
+      - name: Report holds
+        if: always()
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python report_daily_holds.py
+      - name: Report shortfall
+        if: always()
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python report_gate_rejections.py
+      - name: Test and build
+        run: |
+          python -m unittest discover -s tests -v
+          python build.py
+      - name: Verify minimum and target date
+        env:
+          TARGET_DATE: ${{ inputs.date }}
+        run: |
+          python - <<'PY'
+          import json, os, sys
+          date=os.environ["TARGET_DATE"]
+          with open("data/articles.json",encoding="utf-8") as f:
+              a=json.load(f)
+          rows=[x for x in a if x.get("date")==date]
+          print("Confirmed target-date articles:",[(x["id"],x["title"]) for x in rows])
+          if len(rows)<3:
+              print(f"::error::Confirmed articles remain below minimum: {len(rows)}/3")
+              sys.exit(1)
+          PY
+      - name: Commit and push
+        run: |
+          git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
+          if git diff --cached --quiet; then
+            echo "::error::No publishable top-up changes"
+            exit 1
+          fi
+          git commit -m "content: top up ${{ inputs.date }} daily articles"
+          git push origin "HEAD:refs/heads/$BRANCH"
+      - name: Open PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create --base main --head "$BRANCH" --title "Top up ${{ inputs.date }} daily articles" --body "Manual recovery top-up. Uses the normal publish gate and full Fact Audit; only confirmed articles are included."
