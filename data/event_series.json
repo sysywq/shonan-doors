@@ -19,5 +19,13 @@
     "seriesKey": "shonan-gyokyo-kamakura-sakana-matsuri",
     "canonicalName": "湘南漁業協同組合鎌倉支所 魚まつり",
     "area": "鎌倉"
+  },
+  {
+    "seriesKey": "shonan-no-hoseki",
+    "canonicalName": "冬の江の島が宝石に染まる - 「湘南の宝石2026-2027」、12月1日から3か月間の光の祭典",
+    "aliases": [],
+    "area": "藤沢",
+    "category": "e",
+    "createdAt": "2026-09-30"
   }
 ]
