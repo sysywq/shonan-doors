@@ -88,8 +88,7 @@ jobs:
           rows=[x for x in a if x.get("date")==date]
           print("Confirmed target-date articles:",[(x["id"],x["title"]) for x in rows])
           if len(rows)<3:
-              print(f"::error::Confirmed articles remain below minimum: {len(rows)}/3")
-              sys.exit(1)
+              print(f"::warning::Confirmed articles remain below minimum: {len(rows)}/3; persist confirmed articles and run again for the remaining shortfall.")
           PY
       - name: Commit and push
         run: |
@@ -98,7 +97,7 @@ jobs:
             echo "::error::No publishable top-up changes"
             exit 1
           fi
-          git commit -m "content: top up ${{ inputs.date }} daily articles"
+          git commit -m "content: persist confirmed top-up for ${{ inputs.date }}"
           git push origin "HEAD:refs/heads/$BRANCH"
       - name: Open PR
         env:
