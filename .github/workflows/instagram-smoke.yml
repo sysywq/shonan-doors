@@ -1,0 +1,59 @@
+name: Instagram API Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/instagram-smoke.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Instagram API 実トークン疎通確認
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+          import urllib.error
+
+          token = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "").strip()
+          if not token:
+              raise SystemExit("INSTAGRAM_ACCESS_TOKEN secret is missing")
+
+          def get(url, params):
+              qs = urllib.parse.urlencode({**params, "access_token": token})
+              req = urllib.request.Request(f"{url}?{qs}", headers={"User-Agent": "ShonanDoors/1.0"})
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as res:
+                      return json.loads(res.read().decode("utf-8"))
+              except urllib.error.HTTPError as exc:
+                  body = exc.read().decode("utf-8", errors="replace")
+                  raise SystemExit(f"Instagram API HTTP {exc.code}: {body[:800]}")
+
+          me = get("https://graph.instagram.com/me", {
+              "fields": "id,username,account_type,media_count"
+          })
+          if not isinstance(me, dict) or not me.get("id"):
+              raise SystemExit(f"Unexpected /me response: {me}")
+
+          media = get("https://graph.instagram.com/me/media", {
+              "fields": "id,caption,timestamp,permalink,media_type",
+              "limit": 3,
+          })
+          if not isinstance(media, dict) or "data" not in media:
+              raise SystemExit(f"Unexpected /me/media response: {media}")
+
+          print("Instagram API smoke test OK")
+          print(f"username={me.get('username','')} account_type={me.get('account_type','')} media_count={me.get('media_count','')}")
+          print(f"recent_media_returned={len(media.get('data') or [])}")
+          PY
