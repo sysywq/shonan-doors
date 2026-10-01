@@ -22,12 +22,12 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/fujisawa/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/chigasaki/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/oiso/</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/tourism/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -87,13 +87,28 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/event/</loc>
-    <lastmod>2026-09-30</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-01</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/oiso-tourism-0146/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/fujisawa-event-0147/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/chigasaki-life-0149/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/fujisawa-business-0140/</loc>
