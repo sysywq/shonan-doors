@@ -362,13 +362,22 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
                  + "、".join(hints) + "。既存記事と同一対象・検索意図なら新規作成しない。"
                  "検索語は事実の根拠ではないため、従来どおり一次情報を確認する。") if hints else ""
     if candidate and candidate.get("leadSourceType"):
-        targeted = (
-            f"今回の記事候補は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
-            f"発見シグナルは {candidate.get('leadSourceType')} / {candidate.get('leadUrl','')}。"
-            "この発見シグナル自体は一次情報ではなく、記事の事実根拠・sources・linkには使わない。"
-            "必ず対象店舗・企業の公式サイト、公式SNS、本人のプレスリリース等の一次情報をWeb検索で探し、"
-            "一次情報で確認できた事実だけで執筆する。一次情報を確認できなければ別テーマへすり替えず空配列を提出する。"
-        )
+        if candidate.get("leadSourceType") == "instagram_business_discovery":
+            targeted = (
+                f"今回の記事候補は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
+                f"発見元は既知の公式Professional AccountのInstagram投稿 {candidate.get('leadUrl','')}。"
+                "この投稿が対象店舗・施設自身の公式発信であることをWeb検索でも確認する。公式性を確認できた場合は"
+                "一次情報としてsources/linkに使用してよい。必要に応じて公式サイト・自治体・プレスリリース等も確認し、"
+                "一次情報で確認できた事実だけで執筆する。公式性または内容を確認できなければ別テーマへすり替えず空配列を提出する。"
+            )
+        else:
+            targeted = (
+                f"今回の記事候補は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
+                f"発見シグナルは {candidate.get('leadSourceType')} / {candidate.get('leadUrl','')}。"
+                "この発見シグナル自体は一次情報ではなく、記事の事実根拠・sources・linkには使わない。"
+                "必ず対象店舗・企業の公式サイト、公式SNS、本人のプレスリリース等の一次情報をWeb検索で探し、"
+                "一次情報で確認できた事実だけで執筆する。一次情報を確認できなければ別テーマへすり替えず空配列を提出する。"
+            )
     else:
         targeted = (f"今回の記事対象は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
                     f"一次情報の起点は {candidate['sourceUrl']}。調査の結果、対象や根拠が不適切なら"
@@ -1660,6 +1669,16 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                 log_lines.append("X先行シグナル: 今回の検索では候補0件")
         except Exception as x_exc:
             log_lines.append(f"警告(X): 先行シグナル取得をスキップ: {type(x_exc).__name__}")
+        try:
+            import instagram_signal
+            ig_leads = instagram_signal.discover_instagram_leads(existing_articles)
+            if ig_leads:
+                log_lines.append(f"Instagram先行シグナル: 公式アカウント/ハッシュタグから{len(ig_leads)}件検出")
+                discovered = ig_leads + discovered
+            elif os.environ.get("INSTAGRAM_FACEBOOK_ACCESS_TOKEN") and os.environ.get("INSTAGRAM_BUSINESS_USER_ID"):
+                log_lines.append("Instagram先行シグナル: 今回の監視では候補0件")
+        except Exception as ig_exc:
+            log_lines.append(f"警告(Instagram): 先行シグナル取得をスキップ: {type(ig_exc).__name__}")
     except Exception as exc:
         log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
         return run_cross_selection(existing_articles, today, event_series, log_lines,
