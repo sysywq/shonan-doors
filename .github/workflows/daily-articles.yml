@@ -100,6 +100,7 @@ jobs:
         if: steps.plan.outputs.mode == 'fresh'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
         run: python generate_articles.py
 
       # 2) accepted_ids を Fact Audit(full。fact_audit.py と同じ監査ロジック)にかける。
