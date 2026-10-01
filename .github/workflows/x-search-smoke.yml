@@ -1,0 +1,50 @@
+name: X Recent Search Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'x_signal.py'
+      - '.github/workflows/x-search-smoke.yml'
+      - '.github/workflows/daily-articles.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: X Recent Search 実トークン疎通確認
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import urllib.error
+          import x_signal
+
+          token = os.environ.get("X_BEARER_TOKEN", "").strip()
+          if not token:
+              raise SystemExit("X_BEARER_TOKEN secret is missing")
+
+          try:
+              data = x_signal._get(token, x_signal._query_for("藤沢"))
+          except urllib.error.HTTPError as exc:
+              body = exc.read().decode("utf-8", errors="replace")
+              raise SystemExit(f"X API HTTP {exc.code}: {body[:500]}")
+
+          if not isinstance(data, dict):
+              raise SystemExit("X API returned an unexpected response")
+          print(f"X Recent Search smoke test OK: {len(data.get('data', []) or [])} result(s)")
+          PY

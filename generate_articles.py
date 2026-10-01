@@ -1650,6 +1650,16 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                 log_lines.append("Google Places先行シグナル: FUTURE_OPENINGは今回0件")
         except Exception as places_exc:
             log_lines.append(f"警告(Google Places): 先行シグナル取得をスキップ: {type(places_exc).__name__}")
+        try:
+            import x_signal
+            x_leads = x_signal.discover_x_leads(AREAS)
+            if x_leads:
+                log_lines.append(f"X先行シグナル: Recent Searchから{len(x_leads)}件検出")
+                discovered = x_leads + discovered
+            elif os.environ.get("X_BEARER_TOKEN"):
+                log_lines.append("X先行シグナル: 今回の検索では候補0件")
+        except Exception as x_exc:
+            log_lines.append(f"警告(X): 先行シグナル取得をスキップ: {type(x_exc).__name__}")
     except Exception as exc:
         log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
         return run_cross_selection(existing_articles, today, event_series, log_lines,
