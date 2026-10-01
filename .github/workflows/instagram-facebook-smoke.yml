@@ -1,12 +1,10 @@
-name: Instagram Facebook Login Smoke Test
+name: Instagram Facebook Login Smoke Test (Paused)
+
+# Instagram Public Content Access / Business Discovery is intentionally paused
+# until Meta App Review / business verification is completed. Keep this file as
+# a manual diagnostic only so normal pushes do not create expected red failures.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/instagram-facebook-smoke.yml'
-      - 'instagram_signal.py'
-      - '.github/workflows/daily-articles.yml'
   workflow_dispatch: {}
 
 permissions:
