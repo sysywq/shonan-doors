@@ -361,9 +361,18 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
     hint_text = ("\n検索データで関心が見えた語句(既存記事の検索語を含むため、新規記事の対象とは限らない): "
                  + "、".join(hints) + "。既存記事と同一対象・検索意図なら新規作成しない。"
                  "検索語は事実の根拠ではないため、従来どおり一次情報を確認する。") if hints else ""
-    targeted = (f"今回の記事対象は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
-                f"一次情報の起点は {candidate['sourceUrl']}。調査の結果、対象や根拠が不適切なら"
-                "別テーマへすり替えず空配列を提出する。" if candidate else "")
+    if candidate and candidate.get("leadSourceType"):
+        targeted = (
+            f"今回の記事候補は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
+            f"発見シグナルは {candidate.get('leadSourceType')} / {candidate.get('leadUrl','')}。"
+            "この発見シグナル自体は一次情報ではなく、記事の事実根拠・sources・linkには使わない。"
+            "必ず対象店舗・企業の公式サイト、公式SNS、本人のプレスリリース等の一次情報をWeb検索で探し、"
+            "一次情報で確認できた事実だけで執筆する。一次情報を確認できなければ別テーマへすり替えず空配列を提出する。"
+        )
+    else:
+        targeted = (f"今回の記事対象は『{candidate['titleIdea']}』、検索意図は『{candidate['searchIntent']}』。"
+                    f"一次情報の起点は {candidate['sourceUrl']}。調査の結果、対象や根拠が不適切なら"
+                    "別テーマへすり替えず空配列を提出する。" if candidate else "")
     messages = [{
         "role": "user",
         "content": f"本日分の{count}記事を、直近1週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{targeted}{hint_text}",
@@ -1631,6 +1640,16 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
     try:
         stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
         discovered = ep.discover(client, AREAS, CATS, existing_articles, growth_hints())
+        try:
+            import places_signal
+            places_leads = places_signal.discover_future_openings(AREAS)
+            if places_leads:
+                log_lines.append(f"Google Places先行シグナル: FUTURE_OPENINGを{len(places_leads)}件検出")
+                discovered = places_leads + discovered
+            elif os.environ.get("GOOGLE_PLACES_API_KEY"):
+                log_lines.append("Google Places先行シグナル: FUTURE_OPENINGは今回0件")
+        except Exception as places_exc:
+            log_lines.append(f"警告(Google Places): 先行シグナル取得をスキップ: {type(places_exc).__name__}")
     except Exception as exc:
         log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
         return run_cross_selection(existing_articles, today, event_series, log_lines,
