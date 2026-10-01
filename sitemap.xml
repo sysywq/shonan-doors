@@ -22,7 +22,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/fujisawa/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -37,7 +37,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/hiratsuka/</loc>
-    <lastmod>2026-09-29</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -47,7 +47,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/ninomiya/</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/tourism/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -87,13 +87,28 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/event/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/ninomiya-tourism-0151/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/hiratsuka-life-0152/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/fujisawa-event-0153/</loc>
+    <lastmod>2026-10-02</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/oiso-tourism-0146/</loc>
