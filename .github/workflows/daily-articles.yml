@@ -102,6 +102,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          INSTAGRAM_FACEBOOK_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_FACEBOOK_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_USER_ID: ${{ secrets.INSTAGRAM_BUSINESS_USER_ID }}
         run: python generate_articles.py
 
       # 2) accepted_ids を Fact Audit(full。fact_audit.py と同じ監査ロジック)にかける。
