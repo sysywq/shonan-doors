@@ -1,0 +1,50 @@
+name: Google Places Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'places_signal.py'
+      - '.github/workflows/places-smoke.yml'
+      - '.github/workflows/daily-articles.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Places API (New) 実キー疎通確認
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import places_signal
+
+          key = os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("GOOGLE_PLACES_API_KEY secret is missing")
+
+          data = places_signal._post(key, {
+              "textQuery": "restaurant 藤沢市 神奈川県",
+              "includeFutureOpeningBusinesses": True,
+              "maxResultCount": 1,
+              "languageCode": "ja",
+              "regionCode": "JP",
+          })
+          if not isinstance(data, dict) or "places" not in data:
+              raise SystemExit("Places API returned an unexpected response")
+          print(f"Places API smoke test OK: {len(data.get('places', []))} result(s)")
+          PY
