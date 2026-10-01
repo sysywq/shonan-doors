@@ -87,15 +87,17 @@ def discover(client, areas, cats, existing, hints, count=30):
 def judge(client, candidates, existing):
     compact = [{k: c.get(k, "") for k in (
                    "id", "query", "titleIdea", "area", "cat", "articleType",
-                   "searchIntent", "sourceUrl", "leadUrl", "leadSourceType", "openingDate")}
+                   "searchIntent", "sourceUrl", "leadUrl", "leadSourceType", "openingDate",
+                   "leadAuthor", "leadCreatedAt", "leadEngagement")}
                for c in candidates]
     system = ("候補を独立に評価する編集者。demand 0-25（検索意図の明確さと需要仮説）、"
               "timing 0-20（今出す意味）、usefulness 0-20（湘南読者への具体的な有用性）、"
               "originality 0-15（独自性と既存記事・競合との重複回避）を採点。"
               "GSC/GA4の実績と探索価値は別のプログラムが採点するので加算しない。"
               "根拠のない検索ボリュームを作らない。Google Places等のleadSourceType付き候補は"
-              "一次情報ではなく発見シグナルとしてのみ扱うが、FUTURE_OPENINGやopeningDateがあれば"
-              "timingの判断材料にしてよい。既存記事と同一対象・同一検索意図の候補は"
+              "一次情報ではなく発見シグナルとしてのみ扱う。FUTURE_OPENINGやopeningDate、"
+              "XのleadCreatedAtやleadEngagementはtiming/需要仮説の補助材料にしてよいが、"
+              "Xの投稿内容自体を事実認定には使わない。既存記事と同一対象・同一検索意図の候補は"
               "originalityを0点とする。")
     import json
     existing_digest = [{"id": a.get("id"), "title": a.get("title"),
