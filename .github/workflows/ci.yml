@@ -22,6 +22,8 @@ concurrency:
 
 jobs:
   test-and-build:
+    # Daily Articles PR は daily_pr.py が workflow_dispatch で同じCIを明示実行するため、pull_request由来の重複jobは不要。
+    if: github.event_name != 'pull_request' || !startsWith(github.head_ref, 'daily/')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
