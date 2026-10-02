@@ -21,7 +21,8 @@ concurrency:
 
 jobs:
   sync:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Daily Articles は本体workflow内でbuild済みのため、daily/* PRでは重複同期しない。
+    if: github.event.pull_request.head.repo.full_name == github.repository && !startsWith(github.head_ref, 'daily/')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
