@@ -116,6 +116,12 @@ jobs:
         run: python daily_fact_audit.py
 
       # Fact Audit workflow の verify で previous_run_id にこの Run ID を使えるよう、同じ Artifact 名で保存する
+      # Fact Audit 合格記事だけを対象に、利用条件を確認済みの一次情報画像を取得する。
+      # Phase 1 は PR TIMES の本人/企業発信リリースのみ。失敗時はカテゴリ画像へfallbackする。
+      - name: 記事固有の一次情報画像を取得
+        if: steps.plan.outputs.mode == 'fresh'
+        run: python article_source_image.py
+
       - name: Fact Audit の結果を保存
         if: always() && steps.plan.outputs.mode == 'fresh'
         uses: actions/upload-artifact@v4
@@ -171,7 +177,7 @@ jobs:
         if: steps.plan.outputs.mode == 'fresh'
         run: |
           git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json \
-                  data/x_post_log.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
+                  data/x_post_log.json index.html articles/ area/ category/ page/ assets/images/articles/ sitemap.xml robots.txt
 
       # 5) 公開対象の記事がステージ内容に含まれ、保留記事が含まれず、台帳の変更が漏れていないことを検証する。
       - name: 永続化を検証(サイレント障害防止)
