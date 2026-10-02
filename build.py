@@ -802,6 +802,12 @@ def render_article_main(item, scenes, all_articles):
     event_ended_banner = render_event_ended_banner(item) or ""
     share_html = render_share_buttons(item, canonical_url)
     hero_img_src, hero_img_alt = resolve_article_hero_image(item)
+    hero_credit_html = ""
+    if item.get("heroImage") and item.get("heroImageCredit") and item.get("heroImageSourceUrl"):
+        hero_credit_html = (
+            '<p class="article-image-credit"><a href="' + esc(item["heroImageSourceUrl"]) +
+            '" target="_blank" rel="noopener noreferrer">' + esc(item["heroImageCredit"]) + '</a></p>'
+        )
 
     return f"""<main class="article-main">
   <div class="article-page-wrap">
@@ -809,6 +815,7 @@ def render_article_main(item, scenes, all_articles):
     <div class="modal article-modal-static">
       <div class="modal-art">
         <img src="{hero_img_src}" width="1200" height="630" alt="{hero_img_alt}" fetchpriority="high">
+        {hero_credit_html}
         <span class="modal-art-badge" style="background:{CATS[item["cat"]]["bg"]}">{esc(CATS[item["cat"]]["label"])}</span>
       </div>
       <div class="modal-body">
