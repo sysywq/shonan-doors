@@ -225,10 +225,11 @@ jobs:
         run: python daily_pr.py published
 
   # X(Twitter)への自動投稿。本番公開を確認できた記事だけが対象。
+  # 2026-10-02: X API問題が解消するまで明示的に一時停止。記事公開・IndexNowには影響させない。
   # 投稿済みログは main ではなくデータbranch(bot/x-post-log)に保存する(mainへ直接pushしない)。
   post_to_x:
     needs: generate
-    if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
+    if: ${{ false }} # PAUSED: X API復旧確認後に元の条件へ戻す
     runs-on: ubuntu-latest
     concurrency:
       group: x-post
