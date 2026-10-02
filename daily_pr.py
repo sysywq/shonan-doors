@@ -62,7 +62,7 @@ MERGE_ISSUE_PREFIX = "[Daily Articles] 自動マージを見送り"
 ALLOWED_FILES = ("data/articles.json", "data/id_counter.json", "data/stock_topics.json", "data/event_series.json",
                  "data/x_post_log.json", "index.html", "sitemap.xml", "robots.txt", "404.html",
                  "site.webmanifest", "ads.txt")
-ALLOWED_DIRS = ("articles/", "area/", "category/", "page/", "privacy/", "about/", "contact/")
+ALLOWED_DIRS = ("articles/", "area/", "category/", "page/", "privacy/", "about/", "contact/",\n                "assets/images/articles/")
 POLL_SEC = int(os.environ.get("DAILY_PR_POLL_SECONDS", "20"))
 CI_TIMEOUT_SEC = int(os.environ.get("DAILY_PR_CI_TIMEOUT_SECONDS", "1800"))
 PUBLISH_TIMEOUT_SEC = int(os.environ.get("DAILY_PR_PUBLISH_TIMEOUT_SECONDS", "1200"))
