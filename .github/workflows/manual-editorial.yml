@@ -1,0 +1,36 @@
+name: Manual Editorial Preview
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: editorial/manual/<slug>/article.json
+        required: true
+        type: string
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Prepare manual article
+        run: python manual_editorial.py prepare --input "${{ inputs.package }}"
+      - name: Validate
+        run: |
+          python -m unittest discover -s tests
+          git diff --check
+      - name: Create preview PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="manual/editorial-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add data/articles.json assets/images/articles articles area category page index.html sitemap.xml robots.txt 404.html 2>/dev/null || true
+          git commit -m "editorial: prepare manual article preview"
+          git push origin "$BRANCH"
+          gh pr create --draft --base main --head "$BRANCH" --title "Manual Editorial Preview" --body "手動記事の確認用PRです。確認後にマージしてください。"
