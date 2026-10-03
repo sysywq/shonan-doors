@@ -1,0 +1,121 @@
+# Social Video(記事 → short動画 → SNS配信)workflow のテンプレート。
+#
+# Claude の GitHub App には .github/workflows/ を変更する権限が無いため、テンプレートとしてここに置いている。
+# 有効化するには、オーナーがこのファイルを .github/workflows/social-video.yml にコピーしてコミットする。
+#
+# - 記事の公開フロー(Daily Articles / Deploy / Publish Articles After Merge)とは完全に独立している
+# - 公開済みの記事(data/articles.json にあり、mergedInto 無し・公開日到来・本番URLが200)だけが対象
+# - 最初は workflow_dispatch で publish-dry-run → generate-only → publish-selected-platforms の順に試す
+# - 配信ログは main ではなくデータbranch(bot/social-video-log)にだけ保存する
+# - 生成した MP4・manifest・手動投稿キットは artifact(social-video-<run_id>)に残る
+name: Social Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      article_ids:
+        description: '対象の記事ID(カンマ区切り)。空なら latest を使う'
+        required: false
+        type: string
+        default: ''
+      latest:
+        description: 'article_ids が空のとき、公開日の新しい公開記事からN件'
+        required: false
+        type: string
+        default: '1'
+      mode:
+        description: 'generate-only=生成のみ / publish-dry-run=確認のみ / publish-selected-platforms / full-auto'
+        required: true
+        type: choice
+        default: publish-dry-run
+        options: [publish-dry-run, generate-only, publish-selected-platforms, full-auto]
+      platforms:
+        description: 'publish-selected-platforms の対象(例: instagram,facebook)'
+        required: false
+        type: string
+        default: ''
+  # 安定後に有効化する(例: 毎日 19:30 JST に最新1記事を full-auto)。
+  # schedule:
+  #   - cron: '30 10 * * *'
+  # 記事公開 workflow の完了をきっかけにする場合:
+  # workflow_run:
+  #   workflows: ['Publish Articles After Merge']
+  #   types: [completed]
+
+permissions:
+  contents: write   # データbranch bot/social-video-log へのpushのみ(mainは変更しない)
+
+concurrency:
+  group: social-video
+  cancel-in-progress: false
+
+jobs:
+  social_video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      # schedule / workflow_run では inputs が空なので既定値を使う
+      IN_ARTICLE_IDS: ${{ inputs.article_ids || '' }}
+      IN_LATEST: ${{ inputs.latest || '1' }}
+      IN_MODE: ${{ inputs.mode || 'full-auto' }}
+      IN_PLATFORMS: ${{ inputs.platforms || '' }}
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 仮renderer(ffmpeg_slideshow)用。日本語字幕を焼く場合は fonts-noto-cjk も入れる
+      - name: ffmpeg をインストール
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-cjk
+
+      - name: 配信ログを取り込む(二重投稿防止)
+        run: python3 -m social_video log pull
+
+      - name: short動画の生成・配信
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+          INSTAGRAM_PUBLISH_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_PUBLISH_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_USER_ID: ${{ secrets.INSTAGRAM_BUSINESS_USER_ID }}
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+          FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          TIKTOK_CLIENT_KEY: ${{ secrets.TIKTOK_CLIENT_KEY }}
+          TIKTOK_CLIENT_SECRET: ${{ secrets.TIKTOK_CLIENT_SECRET }}
+          TIKTOK_REFRESH_TOKEN: ${{ secrets.TIKTOK_REFRESH_TOKEN }}
+        run: |
+          args=(run --mode "$IN_MODE")
+          if [ -n "$IN_ARTICLE_IDS" ]; then
+            args+=(--article-ids "$IN_ARTICLE_IDS")
+          else
+            args+=(--latest "$IN_LATEST")
+          fi
+          if [ -n "$IN_PLATFORMS" ]; then
+            args+=(--platforms "$IN_PLATFORMS")
+          fi
+          python3 -m social_video "${args[@]}"
+
+      - name: 配信ログをデータbranchに保存
+        if: always() && env.IN_MODE != 'publish-dry-run'
+        run: python3 -m social_video log push --message "chore: short動画の配信ログを更新"
+
+      - name: 動画・manifest・手動投稿キットを保存
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: social-video-${{ github.run_id }}
+          path: out/social_video/
+          if-no-files-found: ignore
+          retention-days: 14

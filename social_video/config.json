@@ -1,0 +1,81 @@
+{
+  "_comment": "short動画パイプラインの設定。クリエイティブ(尺・字幕・BGM・音声・renderer・投稿本数)は未確定のため、ここと renderer の差し替えで決める。docs/social-video.md 参照。",
+  "manifest": {
+    "duration_target_sec": 20,
+    "max_body_scenes": 3,
+    "scene_text_max_chars": 40,
+    "hook_max_chars": 40,
+    "cta": "続きは Shonan Doors で",
+    "base_hashtags": ["湘南", "ShonanDoors"],
+    "max_hashtags": 8,
+    "skip_ended_events": true
+  },
+  "renderer": {
+    "name": "ffmpeg_slideshow",
+    "options": {
+      "font_file": "",
+      "font_color": "white",
+      "text_box": true,
+      "audio_file": ""
+    },
+    "command": ""
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "video_codec": "libx264",
+    "video_profile": "high",
+    "video_level": "4.1",
+    "pix_fmt": "yuv420p",
+    "crf": 20,
+    "max_video_bitrate": "8M",
+    "audio_codec": "aac",
+    "audio_bitrate": "128k",
+    "audio_sample_rate": 48000,
+    "min_duration_sec": 3,
+    "max_duration_sec": 90
+  },
+  "storage": {
+    "provider": "r2",
+    "key_prefix": "social-video"
+  },
+  "platforms": {
+    "instagram": {
+      "enabled": true,
+      "mode": "auto",
+      "share_to_feed": true,
+      "graph_api_version": "v23.0",
+      "poll_interval_sec": 10,
+      "poll_timeout_sec": 600
+    },
+    "facebook": {
+      "enabled": true,
+      "mode": "auto",
+      "graph_api_version": "v23.0",
+      "poll_interval_sec": 10,
+      "poll_timeout_sec": 600
+    },
+    "youtube": {
+      "enabled": true,
+      "mode": "auto",
+      "privacy_status": "public",
+      "category_id": "19",
+      "add_shorts_hashtag": true,
+      "made_for_kids": false
+    },
+    "tiktok": {
+      "enabled": true,
+      "mode": "manual",
+      "post_mode": "upload",
+      "source": "FILE_UPLOAD",
+      "privacy_level": "SELF_ONLY",
+      "disable_comment": false,
+      "disable_duet": false,
+      "disable_stitch": false,
+      "is_aigc": false,
+      "poll_interval_sec": 10,
+      "poll_timeout_sec": 600
+    }
+  }
+}
