@@ -4143,7 +4143,23 @@
       "藤沢"
     ],
     "slug": "fujisawa-event-0126",
-    "updated": "2026-10-03"
+    "updated": "2026-10-03",
+    "heroImage": "/assets/images/articles/fujisawa-event-0126/venue.jpg",
+    "heroImageCredit": "写真：湘南Doors",
+    "contentImages": [
+      {
+        "src": "/assets/images/articles/fujisawa-event-0126/poster.jpg",
+        "alt": "湘南海街珈琲祭2026の会場ポスター",
+        "caption": "会場に掲示された「湘南海街珈琲祭2026」のポスター。写真：湘南Doors",
+        "afterParagraph": 3
+      },
+      {
+        "src": "/assets/images/articles/fujisawa-event-0126/stage.jpg",
+        "alt": "Coffee Culture & Music Stageのプログラム案内",
+        "caption": "Coffee Culture & Music Stageのプログラム案内。写真：湘南Doors",
+        "afterParagraph": 5
+      }
+    ]
   },
   {
     "id": 127,
