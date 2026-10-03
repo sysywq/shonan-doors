@@ -510,3 +510,9 @@ a.card{text-decoration:none; color:inherit;}
 .article-inline-image{margin:1.8rem 0 2rem}
 .article-inline-image img{display:block;width:100%;height:auto;border-radius:12px}
 .article-inline-image figcaption{margin-top:.55rem;font-size:.82rem;line-height:1.6;color:#6b7280}
+
+/* User-supplied editorial photos: preserve the full frame instead of cropping. */
+.modal-art:has(> img[src*="/assets/images/articles/"]){height:auto;background:#f4f4f2;overflow:visible}
+.modal-art:has(> img[src*="/assets/images/articles/"]) > img{width:100%;height:auto;object-fit:contain;display:block}
+.pickup-card-img:has(> img[src*="/assets/images/articles/"]){background:#f4f4f2}
+.pickup-card-img:has(> img[src*="/assets/images/articles/"]) > img{object-fit:contain}
