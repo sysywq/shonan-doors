@@ -484,7 +484,7 @@ def build_meta_description(item):
 
 
 def build_ogp_image_url(item):
-    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
+    if item.get("heroImage"):\n        return f"{SITE_DOMAIN}{item['heroImage']}"\n    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
 
 
 def build_structured_data(item, canonical_url):
@@ -789,7 +789,7 @@ def render_article_main(item, scenes, all_articles):
                         f'<a class="related-estate-btn" href="{esc(item["estateLink"])}" target="_blank" rel="noopener">実際の物件を見る ↗</a></div>')
 
     # 本文は改行(\n\n)で段落分けされたプレーンテキスト。既存の.modal-text(white-space:pre-line)をそのまま利用する。
-    paragraphs = [p.strip() for p in re.split(r"\\n\\s*\\n", item["body"]) if p.strip()]
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", item["body"]) if p.strip()]
     images_by_after = {}
     for image in item.get("contentImages") or []:
         if not isinstance(image, dict) or not image.get("src"):
