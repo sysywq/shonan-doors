@@ -484,7 +484,9 @@ def build_meta_description(item):
 
 
 def build_ogp_image_url(item):
-    if item.get("heroImage"):\n        return f"{SITE_DOMAIN}{item['heroImage']}"\n    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
+    if item.get("heroImage"):
+        return f"{SITE_DOMAIN}{item['heroImage']}"
+    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
 
 
 def build_structured_data(item, canonical_url):
