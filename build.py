@@ -515,7 +515,6 @@ def build_structured_data(item, canonical_url):
                 "address": item.get("address") or f"神奈川県{area}",
             },
             "image": [image_url],
-            "organizer": {"@type": "Organization", "name": "湘南Doors運営事務局", "url": SITE_DOMAIN},
             "url": canonical_url,
         }
         if item.get("eventEndDate"):
