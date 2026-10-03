@@ -504,3 +504,9 @@ a.card{text-decoration:none; color:inherit;}
   .hero-tagline{font-size:34px;}
   .pickup-card{width:min(560px, 40vw);}
 }
+
+/* Editorial inline images */
+.modal-text p{margin:0 0 1.35em}
+.article-inline-image{margin:1.8rem 0 2rem}
+.article-inline-image img{display:block;width:100%;height:auto;border-radius:12px}
+.article-inline-image figcaption{margin-top:.55rem;font-size:.82rem;line-height:1.6;color:#6b7280}

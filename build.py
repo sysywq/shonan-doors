@@ -484,6 +484,8 @@ def build_meta_description(item):
 
 
 def build_ogp_image_url(item):
+    if item.get("heroImage"):
+        return f"{SITE_DOMAIN}{item['heroImage']}"
     return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
 
 
@@ -513,7 +515,6 @@ def build_structured_data(item, canonical_url):
                 "address": item.get("address") or f"神奈川県{area}",
             },
             "image": [image_url],
-            "organizer": {"@type": "Organization", "name": "湘南Doors運営事務局", "url": SITE_DOMAIN},
             "url": canonical_url,
         }
         if item.get("eventEndDate"):
@@ -789,7 +790,21 @@ def render_article_main(item, scenes, all_articles):
                         f'<a class="related-estate-btn" href="{esc(item["estateLink"])}" target="_blank" rel="noopener">実際の物件を見る ↗</a></div>')
 
     # 本文は改行(\n\n)で段落分けされたプレーンテキスト。既存の.modal-text(white-space:pre-line)をそのまま利用する。
-    body_html = esc(item["body"])
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", item["body"]) if p.strip()]
+    images_by_after = {}
+    for image in item.get("contentImages") or []:
+        if not isinstance(image, dict) or not image.get("src"):
+            continue
+        after = int(image.get("afterParagraph", len(paragraphs)))
+        images_by_after.setdefault(after, []).append(image)
+    body_parts = []
+    for idx, paragraph in enumerate(paragraphs, start=1):
+        body_parts.append(f'<p>{esc(paragraph)}</p>')
+        for image in images_by_after.get(idx, []):
+            caption = image.get("caption") or ""
+            caption_html = f'<figcaption>{esc(caption)}</figcaption>' if caption else ""
+            body_parts.append(f'<figure class="article-inline-image"><img src="{esc(image["src"])}" alt="{esc(image.get("alt") or item["title"])}" loading="lazy">{caption_html}</figure>')
+    body_html = "".join(body_parts)
 
     area_en = AREA_EN[item["area"]]
     canonical_url = f"{SITE_DOMAIN}/articles/{item['slug']}/"
@@ -803,11 +818,12 @@ def render_article_main(item, scenes, all_articles):
     share_html = render_share_buttons(item, canonical_url)
     hero_img_src, hero_img_alt = resolve_article_hero_image(item)
     hero_credit_html = ""
-    if item.get("heroImage") and item.get("heroImageCredit") and item.get("heroImageSourceUrl"):
-        hero_credit_html = (
-            '<p class="article-image-credit"><a href="' + esc(item["heroImageSourceUrl"]) +
-            '" target="_blank" rel="noopener noreferrer">' + esc(item["heroImageCredit"]) + '</a></p>'
-        )
+    if item.get("heroImage") and item.get("heroImageCredit"):
+        credit = esc(item["heroImageCredit"])
+        if item.get("heroImageSourceUrl"):
+            credit = ('<a href="' + esc(item["heroImageSourceUrl"]) +
+                      '" target="_blank" rel="noopener noreferrer">' + credit + '</a>')
+        hero_credit_html = '<p class="article-image-credit">' + credit + '</p>'
 
     return f"""<main class="article-main">
   <div class="article-page-wrap">
