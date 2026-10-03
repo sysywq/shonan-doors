@@ -424,11 +424,11 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
     """
     candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended"]
 
+    # 編集部が明示的にPICK UP指定した記事は先頭で扱う。現地取材・独自写真など、\n    # 通常の公開日ランキングだけでは埋もれる編集記事を確実に露出できるようにする。\n    featured = [a for a in candidates if a.get("pickupFeatured")]\n    regular = [a for a in candidates if not a.get("pickupFeatured")]\n
     if popularity_scores:
-        candidates.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)
-        return candidates[:count]
+        featured.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)\n        regular.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)\n        return (featured + regular)[:count]
 
-    # 現地取材などで大幅更新した記事は、元の公開日ではなく更新日を鮮度として扱う。\n    # updated が無い通常記事は従来どおり date を使用する。\n    candidates.sort(key=lambda a: a.get("updated") or a["date"], reverse=True)
+    # 現地取材などで大幅更新した記事は、元の公開日ではなく更新日を鮮度として扱う。\n    # updated が無い通常記事は従来どおり date を使用する。\n    featured.sort(key=lambda a: a.get("updated") or a["date"], reverse=True)\n    regular.sort(key=lambda a: a.get("updated") or a["date"], reverse=True)\n    candidates = featured + regular
 
     picked = []
     picked_ids = set()
