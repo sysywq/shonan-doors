@@ -32,5 +32,5 @@ jobs:
           git checkout -b "$BRANCH"
           git add data/articles.json assets/images/articles articles area category page index.html sitemap.xml robots.txt 404.html 2>/dev/null || true
           git commit -m "editorial: prepare manual article preview"
-          git push origin "$BRANCH"
+          git push origin "HEAD:refs/heads/$BRANCH"
           gh pr create --draft --base main --head "$BRANCH" --title "Manual Editorial Preview" --body "手動記事の確認用PRです。確認後にマージしてください。"
