@@ -789,7 +789,21 @@ def render_article_main(item, scenes, all_articles):
                         f'<a class="related-estate-btn" href="{esc(item["estateLink"])}" target="_blank" rel="noopener">実際の物件を見る ↗</a></div>')
 
     # 本文は改行(\n\n)で段落分けされたプレーンテキスト。既存の.modal-text(white-space:pre-line)をそのまま利用する。
-    body_html = esc(item["body"])
+    paragraphs = [p.strip() for p in re.split(r"\\n\\s*\\n", item["body"]) if p.strip()]
+    images_by_after = {}
+    for image in item.get("contentImages") or []:
+        if not isinstance(image, dict) or not image.get("src"):
+            continue
+        after = int(image.get("afterParagraph", len(paragraphs)))
+        images_by_after.setdefault(after, []).append(image)
+    body_parts = []
+    for idx, paragraph in enumerate(paragraphs, start=1):
+        body_parts.append(f'<p>{esc(paragraph)}</p>')
+        for image in images_by_after.get(idx, []):
+            caption = image.get("caption") or ""
+            caption_html = f'<figcaption>{esc(caption)}</figcaption>' if caption else ""
+            body_parts.append(f'<figure class="article-inline-image"><img src="{esc(image["src"])}" alt="{esc(image.get("alt") or item["title"])}" loading="lazy">{caption_html}</figure>')
+    body_html = "".join(body_parts)
 
     area_en = AREA_EN[item["area"]]
     canonical_url = f"{SITE_DOMAIN}/articles/{item['slug']}/"
