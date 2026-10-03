@@ -817,11 +817,12 @@ def render_article_main(item, scenes, all_articles):
     share_html = render_share_buttons(item, canonical_url)
     hero_img_src, hero_img_alt = resolve_article_hero_image(item)
     hero_credit_html = ""
-    if item.get("heroImage") and item.get("heroImageCredit") and item.get("heroImageSourceUrl"):
-        hero_credit_html = (
-            '<p class="article-image-credit"><a href="' + esc(item["heroImageSourceUrl"]) +
-            '" target="_blank" rel="noopener noreferrer">' + esc(item["heroImageCredit"]) + '</a></p>'
-        )
+    if item.get("heroImage") and item.get("heroImageCredit"):
+        credit = esc(item["heroImageCredit"])
+        if item.get("heroImageSourceUrl"):
+            credit = ('<a href="' + esc(item["heroImageSourceUrl"]) +
+                      '" target="_blank" rel="noopener noreferrer">' + credit + '</a>')
+        hero_credit_html = '<p class="article-image-credit">' + credit + '</p>'
 
     return f"""<main class="article-main">
   <div class="article-page-wrap">
