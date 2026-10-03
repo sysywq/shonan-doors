@@ -428,7 +428,7 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
         candidates.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)
         return candidates[:count]
 
-    candidates.sort(key=lambda a: a["date"], reverse=True)
+    # 現地取材などで大幅更新した記事は、元の公開日ではなく更新日を鮮度として扱う。\n    # updated が無い通常記事は従来どおり date を使用する。\n    candidates.sort(key=lambda a: a.get("updated") or a["date"], reverse=True)
 
     picked = []
     picked_ids = set()
