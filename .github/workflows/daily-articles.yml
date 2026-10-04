@@ -284,6 +284,51 @@ jobs:
         run: |
           python x_post_log_store.py push --message "chore: X投稿済みログを更新 (Daily Articles)"
 
+  # Facebookページへの自動投稿。本番公開を確認できた記事だけが対象。記事公開・X・IndexNowには影響させない。
+  # 投稿済みログは main ではなくデータbranch(bot/facebook-post-log)に保存する(mainへ直接pushしない)。
+  post_to_facebook:
+    needs: generate
+    if: needs.generate.result == 'success' && needs.generate.outputs.article_ids != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: facebook-post
+      cancel-in-progress: false
+    permissions:
+      contents: write   # データbranch bot/facebook-post-log へのpushのみ(mainは変更しない)
+    steps:
+      - name: リポジトリをチェックアウト(最新mainを取得)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # データbranchがあるのに読めない場合はここで止まり、投稿しない(二重投稿防止)
+      - name: Facebook投稿済みログを取り込む
+        id: fb_log
+        run: python facebook_post_log_store.py pull
+
+      # DRY_RUNは既定で有効(true)。リポジトリのActions variablesで
+      # FACEBOOK_POST_DRY_RUN=false を設定すると本番投稿に切り替わる。
+      - name: Facebookページへ投稿
+        env:
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+          FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+          FACEBOOK_GRAPH_API_VERSION: ${{ vars.FACEBOOK_GRAPH_API_VERSION }}
+          DRY_RUN: ${{ vars.FACEBOOK_POST_DRY_RUN || 'true' }}
+          ARTICLE_IDS: ${{ needs.generate.outputs.article_ids }}
+        run: python post_to_facebook.py --article-ids "$ARTICLE_IDS"
+
+      # 投稿に一部失敗しても、成功分・結果不明分の記録は必ず保存する
+      - name: Facebook投稿済みログをデータbranchに保存
+        if: always() && steps.fb_log.outcome == 'success'
+        run: |
+          python facebook_post_log_store.py push --message "chore: Facebook投稿済みログを更新 (Daily Articles)"
+
   # Bing等のIndexNow対応検索エンジンへ、本番公開を確認できた記事URLを通知する。
   indexnow_submit:
     needs: generate
