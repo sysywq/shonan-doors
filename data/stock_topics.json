@@ -1275,10 +1275,10 @@
     "area": "葉山",
     "category": "t",
     "searchIntent": "葉山の一色海岸で海水浴を楽しみたいと考えており、混雑状況・駐車場・シャワー施設・近くのグルメなど当日の段取りをまとめて知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が2件 / 骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件",
     "createdAt": "2026-10-03"
   },
   {
@@ -1306,5 +1306,70 @@
     "generatedAt": null,
     "skipReason": "同一対象の既存記事あり: 対象名「田中屋」が既存記事id:15と一致",
     "createdAt": "2026-10-03"
+  },
+  {
+    "id": "t0101",
+    "query": "熊澤酒造 ランチ 見学",
+    "titleIdea": "酒蔵でビールと和食を楽しむ——茅ヶ崎「熊澤酒造」の訪れ方と楽しみ方",
+    "area": "茅ヶ崎",
+    "category": "b",
+    "searchIntent": "熊澤酒造・湘南ビールに興味があり、蔵のレストランやショップをどう楽しめるか、予約の要否や営業時間など訪れ方の全体像を知りたい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-10-04"
+  },
+  {
+    "id": "t0102",
+    "query": "鎌倉 日本画 美術館",
+    "titleIdea": "古都に息づく日本画の系譜——鎌倉・葉山で日本画に出会える美術館ガイド",
+    "area": "鎌倉",
+    "category": "c",
+    "searchIntent": "鎌倉エリアで日本画を鑑賞できる美術館を探しており、鏑木清方記念美術館や神奈川県立近代美術館など常設・企画の両面から選び方を知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 一次情報URLが同じ(既存記事id:109)",
+    "createdAt": "2026-10-04"
+  },
+  {
+    "id": "t0103",
+    "query": "鎌倉 座禅 体験 予約",
+    "titleIdea": "古都の禅寺で静かに向き合う——鎌倉で座禅体験に参加するための手引き",
+    "area": "鎌倉",
+    "category": "c",
+    "searchIntent": "鎌倉の禅寺（建長寺・円覚寺など）で座禅体験に参加してみたいが、予約の要否・服装・所要時間・費用など当日までの段取りを具体的に知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「建長寺」が既存記事id:54と一致",
+    "createdAt": "2026-10-04"
+  },
+  {
+    "id": "t0104",
+    "query": "茅ヶ崎 浜降祭 歴史 見どころ",
+    "titleIdea": "夜明けの海に神輿が集う——茅ヶ崎「浜降祭」の歴史と見どころ",
+    "area": "茅ヶ崎",
+    "category": "c",
+    "searchIntent": "浜降祭という祭りの名前を聞いたことがあり、なぜ夜明けの海に神輿が集まるのか、その歴史的・宗教的背景と地元ならではの見どころ・アクセスを知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 監査応答の形式異常・監査処理の例外(監査できていない)",
+    "createdAt": "2026-10-04"
+  },
+  {
+    "id": "t0105",
+    "query": "江ノ電 撮影スポット 写真 構図",
+    "titleIdea": "江ノ電を美しく撮るための場所と時間——沿線フォトガイド",
+    "area": "鎌倉",
+    "category": "t",
+    "searchIntent": "江ノ電の走る情景を写真に収めたいと思っており、鎌倉高校前以外も含めた沿線の撮影ポイントや、光の向き・時間帯・構図の選び方を具体的に知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「江ノ電」が既存記事id:36と一致",
+    "createdAt": "2026-10-04"
   }
 ]
