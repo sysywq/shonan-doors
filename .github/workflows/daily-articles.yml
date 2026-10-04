@@ -4,6 +4,9 @@ on:
   schedule:
     # UTC 20:00 = JST 05:00（日本時間 毎朝5時）
     - cron: '0 20 * * *'
+    # UTC 20:30 = JST 05:30: backup trigger for missed GitHub scheduled events.
+    # Same-day reruns are idempotent via daily_pr.py plan, so a successful 05:00 run is not duplicated.
+    - cron: '30 20 * * *'
   workflow_dispatch: {}   # 手動実行もできるようにしておく（テスト用・再実行用）
 
 # Scheduled RunとworkflowDispatch(手動実行)等が重なった場合に、
