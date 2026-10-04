@@ -47,9 +47,21 @@ jobs:
                   todays.append(r)
 
           active=[r for r in todays if r["status"] in ("queued","in_progress","waiting","pending","requested")]
-          if active:
-              print("Daily run is still active; this is healthy. Watchdog will wait for a later check.")
+          # A run can remain in_progress forever when a generator/network call hangs.
+          # Treat only recently-updated runs as healthy. Stale runs must not block recovery.
+          now=datetime.now(timezone.utc)
+          healthy=[]
+          stale=[]
+          for r in active:
+              stamp=r.get("updated_at") or r.get("run_started_at") or r.get("created_at")
+              touched=datetime.fromisoformat(stamp.replace("Z","+00:00"))
+              age=(now-touched).total_seconds()/60
+              (healthy if age < 30 else stale).append((r,age))
+          if healthy:
+              print("Daily run is active and recently progressing; watchdog will wait.")
               sys.exit(0)
+          if stale:
+              print("Stale active daily run detected; it will not block recovery:", [(r["id"], round(age,1)) for r,age in stale])
 
           # If a completed daily run exists, publication—not run success—is the final criterion.
           # Read today's articles from main and require >=3 production URLs to return HTTP 200.
