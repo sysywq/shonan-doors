@@ -1,0 +1,65 @@
+name: Facebook Page Smoke Test
+
+# Facebookページ投稿用の Secrets・権限の疎通確認と、既存の1記事だけを使った投稿テスト。
+# 既定は疎通確認のみ(投稿しない)。article_id を指定すると、その記事を DRY_RUN または実投稿する。
+# 記事生成・Daily Articles・X投稿とは完全に独立している。
+on:
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: '投稿テストする公開済み記事ID(空なら疎通確認のみ)'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'true=投稿せず本文だけ確認、false=実際にFacebookページへ投稿する'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: facebook-post
+      cancel-in-progress: false
+    permissions:
+      contents: write   # データbranch bot/facebook-post-log へのpushのみ(mainは変更しない)
+    env:
+      FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+      FACEBOOK_PAGE_ACCESS_TOKEN: ${{ secrets.FACEBOOK_PAGE_ACCESS_TOKEN }}
+      FACEBOOK_GRAPH_API_VERSION: ${{ vars.FACEBOOK_GRAPH_API_VERSION }}
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Graph API 疎通確認(投稿しない)
+        run: python post_to_facebook.py --smoke
+
+      - name: Facebook投稿済みログを取り込む
+        id: fb_log
+        if: inputs.article_id != ''
+        run: python facebook_post_log_store.py pull
+
+      - name: 1記事の投稿テスト
+        if: inputs.article_id != ''
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          ARTICLE_ID: ${{ inputs.article_id }}
+        run: python post_to_facebook.py --article-ids "$ARTICLE_ID"
+
+      - name: Facebook投稿済みログをデータbranchに保存
+        if: always() && inputs.article_id != '' && steps.fb_log.outcome == 'success'
+        run: |
+          python facebook_post_log_store.py push --message "chore: Facebook投稿済みログを更新(手動テスト)"
