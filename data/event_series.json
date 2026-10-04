@@ -67,5 +67,21 @@
     "area": "鎌倉",
     "category": "e",
     "createdAt": "2026-10-04"
+  },
+  {
+    "seriesKey": "chigasaki-eiga-matsuri",
+    "canonicalName": "旅館も飲食店も上映会場になる - 第15回 茅ヶ崎映画祭、10月10日から45日間開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-10-05"
+  },
+  {
+    "seriesKey": "kumazawa-oktoberfest",
+    "canonicalName": "湘南ビール30周年を25種類で乾杯 - 「熊澤酒造オクトーバーフェスト2026」、10月10〜12日に開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-10-05"
   }
 ]
