@@ -58,7 +58,7 @@ jobs:
               stamp=r.get("updated_at") or r.get("run_started_at") or r.get("created_at")
               touched=datetime.fromisoformat(stamp.replace("Z","+00:00"))
               age=(now-touched).total_seconds()/60
-              (healthy if age < 30 else stale).append((r,age))
+              (healthy if age < 15 else stale).append((r,age))
           if healthy:
               print("Daily run is active and recently progressing; watchdog will wait.")
               sys.exit(0)
