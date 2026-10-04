@@ -1,6 +1,8 @@
 name: Daily Publication Watchdog
 
 on:
+  push:
+    branches: [main]
   schedule:
     # JST 05:30-09:30, every 30 minutes. While the daily run is active, do nothing.
     - cron: '30 20-23 * * *'
