@@ -279,13 +279,32 @@ def graph_request(method, path, token, params=None, env=None):
         with _urlopen(req, graph_timeout(env)) as resp:
             body = resp.read().decode("utf-8", errors="replace")
     except urllib.error.HTTPError as e:
-        raise GraphAPIError(_describe_http_error(e, token), status=e.code, uncertain=e.code >= 500)
+        # Meta error messages can occasionally echo a different credential value than
+        # the token used for this request. Never forward raw credential-looking strings.
+        detail = _describe_http_error(e, token)
+        detail = re.sub(r"\b(?:EAA|EAAB)[A-Za-z0-9_\-]+\b", "***", detail)
+        raise GraphAPIError(detail, status=e.code, uncertain=e.code >= 500)
     except Exception as e:  # タイムアウト・通信断など(応答を受け取れていない)
         raise GraphAPIError(_redact(f"{type(e).__name__}: {e}", token), uncertain=True)
     try:
         return json.loads(body)
     except ValueError:
         raise GraphAPIError("Graph API の応答がJSONではありません", uncertain=True)
+
+
+def resolve_page_access_token(page_id, system_token, env=None):
+    """System User token から対象Pageの access token を取得する。
+    Meta DebuggerでSystem User token自体が有効でもPage edgeで拒否される構成に対応する。
+    取得したPage tokenはログに出さない。"""
+    data = graph_request("GET", page_id, system_token, {"fields": "id,access_token"}, env=env)
+    returned_id = str((data or {}).get("id") or "")
+    page_token = str((data or {}).get("access_token") or "").strip()
+    if returned_id != page_id:
+        raise GraphAPIError("Page access token取得時のPage IDが一致しません")
+    if not page_token:
+        raise GraphAPIError("System User tokenからPage access tokenを取得できません")
+    print("Facebook: System User tokenからPage access tokenを取得しました。")
+    return page_token
 
 
 def fetch_recent_post_urls(page_id, token, env=None):
@@ -518,7 +537,15 @@ def main(argv=None, env=None, check=url_ok, sleep=time.sleep):
     articles_by_id = {a["id"]: a for a in articles if isinstance(a, dict) and "id" in a}
 
     print(f"{prefix}Facebook: 対象記事ID {target_ids} / 投稿済みログ {len(records)}件")
-    counts = process_articles(target_ids, articles_by_id, records, page_id, token, dry_run=dry_run,
+    effective_token = token
+    if not dry_run:
+        try:
+            effective_token = resolve_page_access_token(page_id, token, env=env)
+        except GraphAPIError as e:
+            print(f"::error::Facebook Page access token の取得に失敗しました: {e}", file=sys.stderr)
+            return 1
+
+    counts = process_articles(target_ids, articles_by_id, records, page_id, effective_token, dry_run=dry_run,
                               skip_url_check=args.skip_url_check, check=check, sleep=sleep, env=env)
     print(f"\n{prefix}Facebook 完了: 投稿{counts['posted']}件 / DRY RUN確認{counts['dry_run']}件 / "
           f"スキップ{counts['skipped']}件 / 失敗{counts['failed']}件 / 結果不明{counts['uncertain']}件 / "
