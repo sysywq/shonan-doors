@@ -50,3 +50,23 @@ jobs:
         env:
           ARTICLE_IDS: ${{ needs.confirm.outputs.article_ids }}
         run: python indexnow_submit.py --article-ids "$ARTICLE_IDS"
+
+  # Facebook job validation probe: no secrets, no write permissions, no posting.
+  # If this validates, add Facebook-specific settings back incrementally.
+  post_to_facebook:
+    needs: confirm
+    if: ${{ needs.confirm.outputs.article_ids != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: facebook-post
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Facebook job validation probe
+        run: echo "Facebook job definition accepted"
