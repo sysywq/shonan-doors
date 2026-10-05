@@ -28,7 +28,8 @@ post_to_facebook.py
 
 Secrets(GitHub Secrets から環境変数で渡す):
   FACEBOOK_PAGE_ID            投稿先 Facebook ページの ID(数字)
-  FACEBOOK_PAGE_ACCESS_TOKEN  そのページの Page access token(pages_manage_posts / pages_read_engagement)
+  FACEBOOK_PAGE_ACCESS_TOKEN  System User token(pages_manage_posts / pages_read_engagement / pages_show_list)。
+                              実行時に対象Pageの access tokenを自動取得して投稿に使用する。
   ※ Instagram 用の INSTAGRAM_FACEBOOK_ACCESS_TOKEN / INSTAGRAM_BUSINESS_USER_ID とは別物として扱う。
   - 2つとも未設定 … Facebook連携が未設定とみなし、警告を出してスキップ(exit 0)
   - 片方だけ未設定 … 設定ミスとして失敗(exit 2)
@@ -42,7 +43,7 @@ Secrets(GitHub Secrets から環境変数で渡す):
   FACEBOOK_GRAPH_TIMEOUT_SEC  Graph API 呼び出しのタイムアウト秒(既定 20)
   FACEBOOK_POST_INTERVAL_SEC   連続投稿の間隔秒(既定 180 = 3分。最初の投稿前は待たない)
 
-トークンはログに出さない(Authorization ヘッダーでのみ送り、エラー本文からも伏せ字にする)。
+トークンはログに出さない。Graph APIへ access_token パラメータで送り、エラー本文からも伏せ字にする。
 
 呼び出し方法:
   python post_to_facebook.py --article-ids 93,94,95
@@ -108,17 +109,7 @@ def resolve_credentials(env=None):
     state: "ok" / "not_configured"(2つとも未設定)/ "invalid"(片方だけ・形式不正)"""
     env = env if env is not None else os.environ
     page_id = (env.get("FACEBOOK_PAGE_ID") or "").strip()
-    raw_token = env.get("FACEBOOK_PAGE_ACCESS_TOKEN") or ""
-    token = raw_token.strip()
-    # Safe diagnostics only: never print the token or a reversible fingerprint.
-    # This catches accidental whitespace/quotes/truncation in the GitHub Secret.
-    if raw_token:
-        print(
-            "Facebook token diagnostics: "
-            f"raw_len={len(raw_token)} stripped_len={len(token)} "
-            f"trimmed={raw_token != token} "
-            f"quoted={len(token) >= 2 and token[0] in chr(34)+chr(39) and token[-1] == token[0]}"
-        )
+    token = (env.get("FACEBOOK_PAGE_ACCESS_TOKEN") or "").strip()
     if not page_id and not token:
         return "not_configured", "", "", ["FACEBOOK_PAGE_ID", "FACEBOOK_PAGE_ACCESS_TOKEN"]
     problems = []
@@ -154,7 +145,7 @@ def graph_timeout(env=None):
 
 
 def post_interval(env=None):
-    """Facebookへの連続投稿間隔。既定10分、0〜3600秒に制限する。"""
+    """Facebookへの連続投稿間隔。既定3分、0〜3600秒に制限する。"""
     env = env if env is not None else os.environ
     try:
         return min(3600, max(0, int(env.get("FACEBOOK_POST_INTERVAL_SEC") or 180)))
@@ -258,13 +249,9 @@ def _describe_http_error(e, token):
 
 
 def graph_request(method, path, token, params=None, env=None):
-    """Graph API を呼ぶ。トークンは Authorization ヘッダーでのみ送る(URLに載せない)。"""
+    """Graph API を呼ぶ。トークンは access_token パラメータで送り、ログには出さない。"""
     url = f"{graph_base(env)}/{path.lstrip('/')}"
     data = None
-    # Meta Graph API accepts access_token as a request parameter. Use that form here
-    # instead of the Authorization header because System User tokens have been observed
-    # to validate in Meta's debugger while being rejected when forwarded as Bearer by
-    # the GitHub Actions path. Keep the token out of logs via _redact().
     request_params = dict(params or {})
     request_params["access_token"] = token
     if method == "GET":
