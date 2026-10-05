@@ -74,3 +74,5 @@ jobs:
         run: python facebook_post_log_store.py pull
       - name: Facebook job validation probe
         run: echo "Facebook job definition accepted"
+      - name: Facebook投稿済みログをデータbranchに保存
+        run: python facebook_post_log_store.py push --message "chore: Facebook投稿済みログを更新 (マージ後の公開)"
