@@ -35,10 +35,15 @@ jobs:
           AFTER: ${{ github.sha }}
         run: python daily_pr.py after-merge --before "$BEFORE" --after "$AFTER"
 
-  indexnow_submit:
+  post_to_x:
     needs: confirm
     if: ${{ needs.confirm.outputs.article_ids != '' }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: x-post
+      cancel-in-progress: false
+    permissions:
+      contents: write   # データbranch bot/x-post-log へのpushのみ(mainは変更しない)
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,7 +51,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: IndexNowへ公開したURLを通知
+      - run: pip install tweepy
+      - name: X投稿済みログを取り込む
+        run: python x_post_log_store.py pull
+      - name: Xへ投稿
         env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ vars.X_POST_DRY_RUN || 'true' }}
           ARTICLE_IDS: ${{ needs.confirm.outputs.article_ids }}
-        run: python indexnow_submit.py --article-ids "$ARTICLE_IDS"
+        run: python post_to_x.py --article-ids "$ARTICLE_IDS"
+      - name: 投稿済みログをデータbranchに保存
+        if: always()
+        run: |
+          python x_post_log_store.py push --message "chore: X投稿済みログを更新 (マージ後の公開)"
