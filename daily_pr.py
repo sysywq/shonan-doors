@@ -25,6 +25,7 @@ Daily Articles workflow から、次のサブコマンドを順に呼ぶ。GitHu
   - PR が open・base=main・head=当日branch(同じリポジトリ)・github-actions[bot] 作成・draft でない・競合なし
   - PR の head がこの実行で検証したコミットと同じ
   - 公開対象の記事がすべて Fact Audit(full)で confirmed(confirmed 以外の記事は保留として分離済み)
+  - 公開対象(confirmed)が最低ライン(DAILY_MIN_ARTICLES、既定3件)以上
   - 保留記事が PR の data/articles.json に含まれていない / 公開対象の記事が含まれている
   - PR の変更ファイルが Daily Articles の元データ・生成物だけ(コードや workflow の変更を含まない)
   - PR の head で CI(tests / build / 生成物の差分チェック)が success
@@ -67,6 +68,9 @@ ALLOWED_DIRS = ("articles/", "area/", "category/", "page/", "privacy/", "about/"
 POLL_SEC = int(os.environ.get("DAILY_PR_POLL_SECONDS", "20"))
 CI_TIMEOUT_SEC = int(os.environ.get("DAILY_PR_CI_TIMEOUT_SECONDS", "1800"))
 PUBLISH_TIMEOUT_SEC = int(os.environ.get("DAILY_PR_PUBLISH_TIMEOUT_SECONDS", "1200"))
+# 1日の最低公開件数(generate_articles.DAILY_MIN_ARTICLES と同じ環境変数・既定値)。
+# 未達の当日PRは自動マージせず、job を失敗させる(公開確認・Facebook・IndexNow へ進ませない)。
+DAILY_MIN_ARTICLES = int(os.environ.get("DAILY_MIN_ARTICLES", "3"))
 
 
 # ---------- GitHub API ----------
@@ -334,6 +338,10 @@ def merge_blockers(meta, pr, repo, local_sha, article_ids, files, ci):
         b.append("PR の head がこの実行で検証したコミットと異なる")
     if not meta.get("all_published_confirmed"):
         b.append("公開対象に Fact Audit(full)で confirmed になっていない記事がある")
+    published = len(meta.get("published_ids") or [])
+    if published < DAILY_MIN_ARTICLES:
+        b.append(f"公開対象(confirmed)が{published}件で、最低{DAILY_MIN_ARTICLES}件に届かない"
+                 "(品質基準は緩めずに補充を試した結果)")
     held_in = sorted(set(meta.get("held_ids") or []) & set(article_ids))
     if held_in:
         b.append(f"保留記事 {held_in} が data/articles.json に含まれている")
@@ -354,7 +362,7 @@ def report_merge_blocked(gh, meta, reasons):
     title = f"{MERGE_ISSUE_PREFIX} ({meta.get('date')})"
     body = "\n".join([f"Daily Articles({meta.get('date')})の当日PR #{meta.get('pr')} は、次の理由で自動マージしませんでした。",
                       "", *[f"- {r}" for r in reasons], "",
-                      "記事は公開されていません(X投稿・IndexNow も行っていません)。PR を確認し、問題なければオーナーの判断でマージしてください。",
+                      "記事は公開されていません(X投稿・Facebook投稿・IndexNow も行っていません)。PR を確認し、問題なければオーナーの判断でマージしてください。",
                       "マージ後の X投稿・IndexNow は「Publish Articles After Merge」workflow が行います。"])
     try:
         if title not in rgr.open_issue_titles(gh.repo, gh.token, gh._request):

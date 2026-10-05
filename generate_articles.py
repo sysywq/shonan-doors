@@ -1459,6 +1459,13 @@ _gate_client = None
 _gate_drafts_checked = 0  # この実行で公開前監査にかけたドラフト数(MAX_GATE_DRAFTS_PER_RUN と比べる)
 
 
+def gate_rejected_drafts(gate_rejections):
+    """公開前監査で不合格になったドラフトを、重複チェック用の記事として返す。
+    同一run内で既に監査して見送った対象を、補充で再び生成・監査しないために使う。"""
+    return [dict(r.get("draft") or r, id="gate-rejected") for r in gate_rejections or []
+            if isinstance(r, dict) and r.get("title")]
+
+
 def gate_budget_exhausted():
     """公開前監査の件数上限に達したか。達したら以後のドラフトは生成・監査しない(公開もしない)。"""
     import publish_gate
@@ -1744,20 +1751,27 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
 
     # A planned topic can become unusable during source checks. Use the existing
     # broad discovery path for the shortfall while retaining the same audit gate.
-    if len(selected) < DAILY_MIN_ARTICLES and not gate_budget_exhausted():
+    # 最低ラインに届くまで、別候補の探索を最大 DAILY_TOPUP_MAX_ATTEMPTS 回まで繰り返す。
+    # 同一run内で公開前監査に不合格だったドラフトも重複チェックの対象に含め、同じ対象を再生成しない。
+    fallback_round = 0
+    while (len(selected) < DAILY_MIN_ARTICLES and fallback_round < DAILY_TOPUP_MAX_ATTEMPTS
+           and not gate_budget_exhausted()):
+        fallback_round += 1
         missing = DAILY_TARGET_ARTICLES - len(selected)
-        log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します")
+        log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します"
+                         f"(top-up {fallback_round}/{DAILY_TOPUP_MAX_ATTEMPTS})")
+        rejected = gate_rejected_drafts(news_gate_rejections + stock_gate_rejections)
         try:
             more, more_log, _ = run_news_generation(
-                existing_articles + selected, today, event_series,
+                existing_articles + selected + rejected, today, event_series,
                 gate_rejections=news_gate_rejections, count=missing,
-                max_refills=1, strict=False, label="planned_fallback", defer_ids=True)
+                max_refills=0, strict=False, label=f"planned_fallback_{fallback_round}", defer_ids=True)
             log_lines.extend(more_log)
             for entry in more:
                 if len(selected) >= DAILY_TARGET_ARTICLES:
                     break
-                if (find_same_subject(entry, existing_articles + selected)
-                        or is_duplicate(entry, selected, days=None)):
+                if (find_same_subject(entry, existing_articles + selected + rejected)
+                        or is_duplicate(entry, selected + rejected, days=None)):
                     continue
                 selected.append(entry)
         except Exception as exc:

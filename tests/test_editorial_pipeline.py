@@ -100,5 +100,107 @@ class EditorialPipelineTest(unittest.TestCase):
             self.assertEqual(topics[0]["generatedArticleId"], report["stock_ids"][0])
 
 
+class PlannedFallbackTopupTest(unittest.TestCase):
+    """企画候補が全滅したときの補充探索(DAILY_TOPUP_MAX_ATTEMPTS 回まで)。"""
+
+    def run_plan(self, fallback_batches, max_attempts=3):
+        """企画候補(news)は全件が公開前監査で不合格。fallback は batches を1回ずつ返す。"""
+        with tempfile.TemporaryDirectory() as d:
+            paths = {name: os.path.join(d, name + ".json") for name in
+                     ("articles", "counter", "stock", "series", "report")}
+            for name, data in {"articles": [], "counter": {"next_id": 40}, "stock": [], "series": []}.items():
+                with open(paths[name], "w", encoding="utf-8") as f:
+                    json.dump(data, f)
+            areas = ["藤沢", "鎌倉", "茅ヶ崎", "平塚", "二宮", "逗子", "葉山", "大磯", "寒川", "藤沢"]
+            discovered = [{"id": f"n{i}", "articleType": "news", "query": f"topic{i}",
+                           "titleIdea": f"Topic {i}", "area": areas[i], "cat": "e",
+                           "searchIntent": "local", "sourceUrl": "https://example.org/official",
+                           "subject": f"subject{i}"} for i in range(10)]
+            judgments = {c["id"]: {"demand": 18, "timing": 15, "usefulness": 15, "originality": 12}
+                         for c in discovered}
+            fallback_calls = []
+            batches = list(fallback_batches)
+
+            def news(existing, *args, candidate=None, gate_rejections=None, label="", **kwargs):
+                if candidate is not None:
+                    # 企画候補は公開前監査で不合格(品質基準は緩めない)
+                    gate_rejections.append({"title": f"NG {candidate['id']}", "area": candidate["area"],
+                                            "link": f"https://example.org/{candidate['id']}",
+                                            "draft": {"title": f"NG {candidate['id']}",
+                                                      "area": candidate["area"], "tags": []}})
+                    return [], [], []
+                fallback_calls.append({"label": label, "count": kwargs.get("count"),
+                                       "max_refills": kwargs.get("max_refills"),
+                                       "avoid": [a.get("id") for a in existing]})
+                return ([dict(e) for e in batches.pop(0)] if batches else []), [], []
+
+            patches = [mock.patch.object(ga, "ARTICLES_JSON_PATH", paths["articles"]),
+                       mock.patch.object(ga, "ID_COUNTER_PATH", paths["counter"]),
+                       mock.patch.object(ga, "STOCK_TOPICS_PATH", paths["stock"]),
+                       mock.patch.object(ga, "EVENT_SERIES_PATH", paths["series"]),
+                       mock.patch.object(ga, "RUN_REPORT_PATH", paths["report"]),
+                       mock.patch.object(ga.anthropic, "Anthropic", return_value=object(), create=True),
+                       mock.patch.object(ga, "refill_stock_topics_if_needed", side_effect=lambda a, b, c: (b, 0)),
+                       mock.patch.object(ep, "discover", return_value=discovered),
+                       mock.patch.object(ep, "judge", return_value=judgments),
+                       mock.patch.object(ga, "growth_signal", return_value={}),
+                       mock.patch.object(ga, "growth_hints", return_value=[]),
+                       mock.patch.object(ga, "run_news_generation", side_effect=news),
+                       mock.patch.object(ga, "find_same_subject", return_value=None),
+                       mock.patch.object(ga, "gate_budget_exhausted", return_value=False),
+                       mock.patch.object(ga, "register_event_series_if_new", side_effect=lambda a, b: (b, False)),
+                       mock.patch.object(ga, "write_gate_summary"),
+                       mock.patch.object(ga, "write_shortfall_summary")]
+            with ExitStack() as stack:
+                stack.enter_context(mock.patch.multiple(ga, DAILY_TARGET_ARTICLES=5, DAILY_MIN_ARTICLES=3,
+                                                        DAILY_TOPUP_MAX_ATTEMPTS=max_attempts,
+                                                        MAX_EDITORIAL_DRAFT_ATTEMPTS=8))
+                stack.enter_context(mock.patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test"}))
+                for patch in patches:
+                    stack.enter_context(patch)
+                ga.run_editorial_plan([], "2026-10-06", [], [], [], [])
+            with open(paths["articles"], encoding="utf-8") as f:
+                self.saved_articles = json.load(f)
+            with open(paths["report"], encoding="utf-8") as f:
+                return json.load(f), fallback_calls
+
+    @staticmethod
+    def entry(n):
+        return {"id": "pending", "articleType": "news", "area": "藤沢", "cat": "e", "title": f"補充{n}",
+                "tags": [f"tag{n}"], "subjectNames": [f"subject-fb{n}"], "date": "2026-10-06"}
+
+    def test_fallback_retries_up_to_topup_max_attempts_until_minimum(self):
+        # 2026-10-06 の事例: 企画候補0件・fallback 2件で打ち切られていた → 3件に届くまで繰り返す
+        report, calls = self.run_plan([[self.entry(1)], [self.entry(2)], [self.entry(3)], [self.entry(4)]])
+        self.assertEqual(len(calls), 3)  # 3件に届いたので4回目は呼ばない
+        self.assertEqual(report["accepted_ids"], [40, 41, 42])
+        self.assertIsNone(report["shortfall"])
+        # 1回ごとの補充は refill せず、回数は DAILY_TOPUP_MAX_ATTEMPTS で制御する
+        self.assertTrue(all(c["max_refills"] == 0 for c in calls))
+        self.assertEqual([c["count"] for c in calls], [5, 4, 3])
+
+    def test_fallback_is_bounded_by_topup_max_attempts(self):
+        report, calls = self.run_plan([[], [self.entry(1)], [], [self.entry(2)], [self.entry(3)]],
+                                      max_attempts=3)
+        self.assertEqual(len(calls), 3)  # 上限で打ち切る(無制限に再試行しない)
+        self.assertEqual(report["accepted_ids"], [40])
+        self.assertEqual(report["shortfall"]["total"], 1)
+
+    def test_fallback_avoids_drafts_rejected_in_same_run(self):
+        _report, calls = self.run_plan([[], [], []])
+        # 同一run内で公開前監査に不合格だった企画候補のドラフトを、重複チェックの対象として毎回渡す
+        for c in calls:
+            self.assertGreater(c["avoid"].count("gate-rejected"), 0)
+
+    def test_fallback_skips_candidate_duplicating_rejected_draft(self):
+        dup = dict(self.entry(1), title="NG n0")  # 不合格ドラフトと同じタイトル
+        report, calls = self.run_plan([[dup], [self.entry(2)], [self.entry(3)], [self.entry(4)]])
+        self.assertEqual(len(calls), 3)
+        titles = [a["title"] for a in self.saved_articles]
+        self.assertNotIn("NG n0", titles)  # 同一run内で不合格になった対象は採用しない
+        self.assertEqual(titles, ["補充2", "補充3"])
+        self.assertEqual(report["shortfall"]["total"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()
