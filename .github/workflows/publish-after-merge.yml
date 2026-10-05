@@ -9,14 +9,15 @@ name: Publish Articles After Merge
 on:
   push:
     branches: [main]
-    paths:
-      - data/articles.json
 
 permissions:
   contents: read
 
 jobs:
   confirm:
+    # Workflow-level paths filters have produced jobless red runs in this repository.
+    # Start normally on main pushes and let daily_pr.py return an empty article_ids output
+    # when data/articles.json did not publish anything; downstream jobs then skip cleanly.
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
