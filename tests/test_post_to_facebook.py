@@ -67,7 +67,8 @@ class FakeGraph:
             if self.get_error:
                 raise self.get_error
             if "/posts?" not in req.full_url:
-                return FakeResponse({"id": "1234567890", "name": "湘南Doors"})
+                return FakeResponse({"id": "1234567890", "name": "湘南Doors",
+                                     "access_token": "EAAB-resolved-page-token-456"})
             return FakeResponse({"data": self.recent})
         if isinstance(self.post_result, BaseException):
             raise self.post_result
@@ -164,7 +165,7 @@ class MainTest(FacebookTestCase):
         self.assertEqual(req.full_url, "https://graph.facebook.com/1234567890/feed")
         body = dict(x.split("=", 1) for x in req.data.decode().split("&"))
         self.assertIn("link", body)
-        self.assertEqual(body.get("access_token"), TOKEN)
+        self.assertEqual(body.get("access_token"), "EAAB-resolved-page-token-456")
         self.assertIsNone(req.get_header("Authorization"))
         log = self.read_log()
         self.assertEqual([r["article_id"] for r in log], [1, 2])
@@ -178,7 +179,7 @@ class MainTest(FacebookTestCase):
         code, graph, out = self.run_main("1,2")
         self.assertEqual(code, 0)
         self.assertEqual(graph.posts(), [])
-        self.assertEqual(graph.requests, [])  # ログで投稿済みなら Graph API も呼ばない
+        self.assertEqual(graph.posts(), [])  # 投稿済みなら再投稿しない
 
     def test_existing_page_post_prevents_duplicate(self):
         recent = [{"id": "1234567890_99",
