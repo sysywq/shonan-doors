@@ -80,4 +80,6 @@ jobs:
           FACEBOOK_POST_INTERVAL_SEC: '180'
           DRY_RUN: ${{ vars.FACEBOOK_POST_DRY_RUN || 'true' }}
           ARTICLE_IDS: ${{ needs.confirm.outputs.article_ids }}
-        run: python post_to_facebook.py --article-ids "$ARTICLE_IDS"
+        run: |
+          python post_to_facebook.py --article-ids "$ARTICLE_IDS"
+          python facebook_post_log_store.py push --message "facebook-log-update"
