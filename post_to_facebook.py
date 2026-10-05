@@ -108,7 +108,17 @@ def resolve_credentials(env=None):
     state: "ok" / "not_configured"(2つとも未設定)/ "invalid"(片方だけ・形式不正)"""
     env = env if env is not None else os.environ
     page_id = (env.get("FACEBOOK_PAGE_ID") or "").strip()
-    token = (env.get("FACEBOOK_PAGE_ACCESS_TOKEN") or "").strip()
+    raw_token = env.get("FACEBOOK_PAGE_ACCESS_TOKEN") or ""
+    token = raw_token.strip()
+    # Safe diagnostics only: never print the token or a reversible fingerprint.
+    # This catches accidental whitespace/quotes/truncation in the GitHub Secret.
+    if raw_token:
+        print(
+            "Facebook token diagnostics: "
+            f"raw_len={len(raw_token)} stripped_len={len(token)} "
+            f"trimmed={raw_token != token} "
+            f"quoted={len(token) >= 2 and token[0] in chr(34)+chr(39) and token[-1] == token[0]}"
+        )
     if not page_id and not token:
         return "not_configured", "", "", ["FACEBOOK_PAGE_ID", "FACEBOOK_PAGE_ACCESS_TOKEN"]
     problems = []
