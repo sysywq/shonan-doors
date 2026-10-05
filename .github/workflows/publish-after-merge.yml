@@ -6,18 +6,17 @@ name: Publish Articles After Merge
 # Daily Articles 側が公開確認・X投稿・Facebook投稿・IndexNow を行う(二重に動かない)。
 # 投稿済みログで同じ記事は二度投稿しない。ログは main ではなくデータbranch
 # (X: bot/x-post-log / Facebook: bot/facebook-post-log)に保存する。
-on:
+'on':
   push:
     branches: [main]
+    paths:
+      - data/articles.json
 
 permissions:
   contents: read
 
 jobs:
   confirm:
-    # Workflow-level paths filters have produced jobless red runs in this repository.
-    # Start normally on main pushes and let daily_pr.py return an empty article_ids output
-    # when data/articles.json did not publish anything; downstream jobs then skip cleanly.
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
