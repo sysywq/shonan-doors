@@ -288,6 +288,21 @@ def graph_request(method, path, token, params=None, env=None):
         raise GraphAPIError("Graph API の応答がJSONではありません", uncertain=True)
 
 
+def resolve_page_access_token(page_id, system_token, env=None):
+    """System User token から対象Pageの access token を取得する。
+    Meta DebuggerでSystem User token自体が有効でもPage edgeで拒否される構成に対応する。
+    取得したPage tokenはログに出さない。"""
+    data = graph_request("GET", page_id, system_token, {"fields": "id,access_token"}, env=env)
+    returned_id = str((data or {}).get("id") or "")
+    page_token = str((data or {}).get("access_token") or "").strip()
+    if returned_id != page_id:
+        raise GraphAPIError("Page access token取得時のPage IDが一致しません")
+    if not page_token:
+        raise GraphAPIError("System User tokenからPage access tokenを取得できません")
+    print("Facebook: System User tokenからPage access tokenを取得しました。")
+    return page_token
+
+
 def fetch_recent_post_urls(page_id, token, env=None):
     """ページの最近の投稿から、本文に含まれる記事URL → 投稿ID の対応を作る(重複投稿の確認用)。"""
     data = graph_request("GET", f"{page_id}/posts", token,
@@ -518,7 +533,15 @@ def main(argv=None, env=None, check=url_ok, sleep=time.sleep):
     articles_by_id = {a["id"]: a for a in articles if isinstance(a, dict) and "id" in a}
 
     print(f"{prefix}Facebook: 対象記事ID {target_ids} / 投稿済みログ {len(records)}件")
-    counts = process_articles(target_ids, articles_by_id, records, page_id, token, dry_run=dry_run,
+    effective_token = token
+    if not dry_run:
+        try:
+            effective_token = resolve_page_access_token(page_id, token, env=env)
+        except GraphAPIError as e:
+            print(f"::error::Facebook Page access token の取得に失敗しました: {e}", file=sys.stderr)
+            return 1
+
+    counts = process_articles(target_ids, articles_by_id, records, page_id, effective_token, dry_run=dry_run,
                               skip_url_check=args.skip_url_check, check=check, sleep=sleep, env=env)
     print(f"\n{prefix}Facebook 完了: 投稿{counts['posted']}件 / DRY RUN確認{counts['dry_run']}件 / "
           f"スキップ{counts['skipped']}件 / 失敗{counts['failed']}件 / 結果不明{counts['uncertain']}件 / "
