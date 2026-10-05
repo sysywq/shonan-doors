@@ -61,6 +61,8 @@ jobs:
     concurrency:
       group: facebook-post
       cancel-in-progress: false
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -68,5 +70,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Facebook投稿済みログを取り込む
+        id: fb_log
+        run: python facebook_post_log_store.py pull
       - name: Facebook job validation probe
         run: echo "Facebook job definition accepted"
+      - name: Facebook投稿済みログをデータbranchに保存
+        if: always() && steps.fb_log.outcome == 'success'
+        run: python facebook_post_log_store.py push --message "chore: Facebook投稿済みログを更新 (マージ後の公開)"
