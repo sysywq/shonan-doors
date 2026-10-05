@@ -251,11 +251,17 @@ def graph_request(method, path, token, params=None, env=None):
     """Graph API を呼ぶ。トークンは Authorization ヘッダーでのみ送る(URLに載せない)。"""
     url = f"{graph_base(env)}/{path.lstrip('/')}"
     data = None
-    if method == "GET" and params:
-        url += "?" + urllib.parse.urlencode(params)
-    elif params:
-        data = urllib.parse.urlencode(params).encode("utf-8")
-    headers = {"Authorization": f"Bearer {token}", "User-Agent": USER_AGENT}
+    # Meta Graph API accepts access_token as a request parameter. Use that form here
+    # instead of the Authorization header because System User tokens have been observed
+    # to validate in Meta's debugger while being rejected when forwarded as Bearer by
+    # the GitHub Actions path. Keep the token out of logs via _redact().
+    request_params = dict(params or {})
+    request_params["access_token"] = token
+    if method == "GET":
+        url += "?" + urllib.parse.urlencode(request_params)
+    else:
+        data = urllib.parse.urlencode(request_params).encode("utf-8")
+    headers = {"User-Agent": USER_AGENT}
     if data is not None:
         headers["Content-Type"] = "application/x-www-form-urlencoded"
     req = urllib.request.Request(url, data=data, method=method, headers=headers)
