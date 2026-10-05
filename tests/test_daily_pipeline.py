@@ -234,6 +234,47 @@ class DailyFactAuditTest(unittest.TestCase):
         self.assertTrue(any("post-audit top-up" in r for r in report["shortfall"]["reasons"]))
         self.assertIn("補充回数の上限", report["post_audit_topup"]["stopped"])
         self.assertEqual([a["id"] for a in ws.read("articles")], [101, 203])
+        # 同一run内で監査して保留にした補充記事は、次の回でも重複チェックの対象(再生成しない)
+        self.assertTrue({101, 102, 201, 202} <= set(calls[1]["avoid_ids"]))
+        self.assertTrue({201, 202} <= set(calls[2]["avoid_ids"]))
+        # confirmed 2件の実行レポートから作る当日PRは、自動マージの条件を満たさない(success にしない)
+        meta = dpr.meta_from_report(report, "2026-09-26", "daily/2026-09-26")
+        self.assertTrue(meta["all_published_confirmed"])
+        b = dpr.merge_blockers(meta, pr(), "o/r", "abc", [101, 203], FILES, "success")
+        self.assertTrue(any("最低3件" in r for r in b), b)
+
+    def test_three_confirmed_after_topup_is_mergeable(self):
+        arts = [article(101, "A"), article(102, "B"), article(103, "C")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CONFIRMED], "B": [CORE_CONTRADICTED], "C": [CONFIRMED], "D": [CONFIRMED]})
+        code, calls = self.run_topup(ws, client, [[self.topup_candidate("D", 1)]])
+        self.assertEqual(code, 0)
+        self.assertEqual(len(calls), 1)
+        report = ws.read("report")
+        self.assertEqual(report["accepted_ids"], [101, 103, 201])
+        self.assertIsNone(report["shortfall"])
+        meta = dpr.meta_from_report(report, "2026-09-26", "daily/2026-09-26")
+        self.assertEqual(dpr.merge_blockers(meta, pr(), "o/r", "abc", [101, 103, 201], FILES, "success"), [])
+
+    def test_quality_gate_is_not_relaxed_when_below_minimum(self):
+        # 最低件数に届かなくても、confirmed 以外(矛盾・未確認・監査不能)は1件も公開対象にしない
+        arts = [article(101, "A"), article(102, "B")]
+        ws = Workspace(arts, report=run_report(arts))
+        client = FakeClient({"A": [CORE_CONTRADICTED], "B": [CORE_UNVERIFIED], "D": [RuntimeError("API error")],
+                             "E": [CORE_CONTRADICTED], "F": [CORE_UNVERIFIED]})
+        batches = [[self.topup_candidate("D", 1)], [self.topup_candidate("E", 2)], [self.topup_candidate("F", 3)]]
+        code, calls = self.run_topup(ws, client, batches)
+        self.assertEqual(code, 0)
+        self.assertEqual(len(calls), dfa.POST_AUDIT_TOPUP_MAX_ROUNDS)
+        report = ws.read("report")
+        self.assertEqual(report["accepted_ids"], [])
+        self.assertEqual({h["id"] for h in report["held"]}, {101, 102, 201, 202, 203})
+        self.assertEqual(ws.read("articles"), [])
+        self.assertEqual(report["shortfall"]["total"], 0)
+
+    def test_post_audit_topup_rounds_follow_daily_topup_max_attempts(self):
+        if "POST_AUDIT_TOPUP_MAX_ROUNDS" not in os.environ:
+            self.assertEqual(dfa.POST_AUDIT_TOPUP_MAX_ROUNDS, dfa.g.DAILY_TOPUP_MAX_ATTEMPTS)
 
     def test_post_audit_topup_respects_draft_cap(self):
         arts = [article(101, "A")]
@@ -484,27 +525,45 @@ def pr(**kw):
     return p
 
 
-META = {"date": "2026-09-26", "branch": "daily/2026-09-26", "published_ids": [101, 102], "published_slugs": ["a", "b"],
-        "held_ids": [103], "all_published_confirmed": True, "pr": 7}
+META = {"date": "2026-09-26", "branch": "daily/2026-09-26", "published_ids": [101, 102, 104],
+        "published_slugs": ["a", "b", "c"], "held_ids": [103], "all_published_confirmed": True, "pr": 7}
 FILES = ["data/articles.json", "data/id_counter.json", "articles/a/index.html", "sitemap.xml", "index.html"]
+LOCAL_IDS = [1, 101, 102, 104]
 
 
 class MergeDecisionTest(unittest.TestCase):
-    def blockers(self, meta=META, p=None, sha="abc", ids=(1, 101, 102), files=FILES, ci="success"):
+    def blockers(self, meta=META, p=None, sha="abc", ids=tuple(LOCAL_IDS), files=FILES, ci="success"):
         return dpr.merge_blockers(meta, p or pr(), "o/r", sha, list(ids), files, ci)
 
     def test_all_conditions_met_allows_merge(self):
         self.assertEqual(self.blockers(), [])
 
+    def test_below_minimum_blocks_merge(self):
+        # 2026-10-06 の事例: confirmed 2件の当日PRが自動マージされた → 最低3件未満はマージしない
+        for ids in ([], [101], [101, 102]):
+            with self.subTest(ids=ids):
+                b = self.blockers(meta=dict(META, published_ids=ids, published_slugs=["a", "b"][:len(ids)]))
+                self.assertTrue(any("最低3件" in r for r in b), b)
+
+    def test_exactly_minimum_and_target_allow_merge(self):
+        self.assertEqual(self.blockers(), [])  # 3件
+        five = dict(META, published_ids=[101, 102, 104, 105, 106], published_slugs=list("abcde"))
+        self.assertEqual(self.blockers(meta=five, ids=(1, 101, 102, 104, 105, 106)), [])
+
+    def test_minimum_count_cannot_be_met_with_unconfirmed_articles(self):
+        # 件数が足りても confirmed 以外が含まれるならマージしない(品質基準は緩めない)
+        b = self.blockers(meta=dict(META, all_published_confirmed=False))
+        self.assertTrue(any("confirmed" in r for r in b), b)
+
     def test_held_article_is_not_a_blocker_once_separated(self):
         # 保留記事(103)が articles.json に無ければ、confirmed 記事だけの PR はマージしてよい
-        self.assertEqual(self.blockers(meta=dict(META, held_ids=[103, 104])), [])
+        self.assertEqual(self.blockers(meta=dict(META, held_ids=[103, 105])), [])
 
     def test_each_failed_condition_blocks(self):
         cases = {
             "CI": dict(ci="failure"),
             "confirmed": dict(meta=dict(META, all_published_confirmed=False)),
-            "保留記事": dict(ids=(101, 102, 103)),
+            "保留記事": dict(ids=(101, 102, 103, 104)),
             "公開対象の記事": dict(ids=(101,)),
             "元データ・生成物以外": dict(files=FILES + [".github/workflows/ci.yml"]),
             "検証したコミット": dict(sha="other"),
@@ -592,7 +651,7 @@ class DailyPrCommandTest(unittest.TestCase):
                          ("GET", "/repos/o/r/commits/"): {"commit": {"message": ""}}})
         self.assertEqual(dpr.cmd_plan(gh, "2026-09-26"), 0)
         self.assertIn("mode=resume", self.output())
-        self.assertEqual(dpr.load_meta()["published_ids"], [101, 102])
+        self.assertEqual(dpr.load_meta()["published_ids"], [101, 102, 104])
         self.assertEqual(dpr.load_meta()["pr"], 7)
 
     def test_open_reuses_existing_pr_instead_of_creating_duplicate(self):
@@ -636,15 +695,27 @@ class DailyPrCommandTest(unittest.TestCase):
     def test_merge_when_all_conditions_pass(self):
         gh = self.merge_gh()
         with mock.patch.object(dpr, "local_head", return_value="abc"), \
-                mock.patch.object(dpr, "local_article_ids", return_value=[1, 101, 102]):
+                mock.patch.object(dpr, "local_article_ids", return_value=LOCAL_IDS):
             self.assertEqual(dpr.cmd_merge(gh, META, sleep=lambda s: None), 0)
         put = [c for c in gh.calls if c[0] == "PUT"][0]
         self.assertEqual(put[2]["sha"], "abc")
 
+    def test_merge_below_minimum_fails_without_merging(self):
+        # confirmed 2件では success にしない: マージせず Issue を作って非ゼロ終了
+        # (workflow の公開確認ステップが走らず、Facebook・IndexNow も needs.generate の失敗でスキップされる)
+        meta = dict(META, published_ids=[101, 102], published_slugs=["a", "b"])
+        gh = self.merge_gh()
+        with mock.patch.object(dpr, "local_head", return_value="abc"), \
+                mock.patch.object(dpr, "local_article_ids", return_value=[1, 101, 102]):
+            self.assertEqual(dpr.cmd_merge(gh, meta, sleep=lambda s: None), 1)
+        self.assertFalse([c for c in gh.calls if c[0] == "PUT"])
+        issue = [c for c in gh.calls if c[0] == "POST" and c[1].endswith("/issues")][0]
+        self.assertIn("最低3件", issue[2]["body"])
+
     def test_merge_blocked_creates_issue_and_does_not_merge(self):
         gh = self.merge_gh()
         with mock.patch.object(dpr, "local_head", return_value="abc"), \
-                mock.patch.object(dpr, "local_article_ids", return_value=[1, 101, 102, 103]):
+                mock.patch.object(dpr, "local_article_ids", return_value=LOCAL_IDS + [103]):
             self.assertEqual(dpr.cmd_merge(gh, META, sleep=lambda s: None), 1)
         self.assertFalse([c for c in gh.calls if c[0] == "PUT"])
         issue = [c for c in gh.calls if c[0] == "POST" and c[1].endswith("/issues")][0]
@@ -654,7 +725,7 @@ class DailyPrCommandTest(unittest.TestCase):
         gh = self.merge_gh()
         gh.routes[("PUT", "/repos/o/r/pulls/7/merge")] = urllib.error.HTTPError("u", 405, "x", {}, None)
         with mock.patch.object(dpr, "local_head", return_value="abc"), \
-                mock.patch.object(dpr, "local_article_ids", return_value=[1, 101, 102]):
+                mock.patch.object(dpr, "local_article_ids", return_value=LOCAL_IDS):
             self.assertEqual(dpr.cmd_merge(gh, META, sleep=lambda s: None), 1)
 
     def test_published_outputs_only_live_articles_after_merge(self):
@@ -720,6 +791,18 @@ class VerifyHoldsExcludedTest(unittest.TestCase):
         self.write_articles([])
         with self.assertRaises(SystemExit):
             vdr.verify_holds_excluded([{"id": 101, "slug": "fujisawa-event-0101"}])
+
+    def test_zero_published_articles_fails_instead_of_success(self):
+        # 公開対象0件の日は当日PRが作られないため、ここで失敗させて success で終わらせない
+        report = os.path.join(self.tmp.name, "report.json")
+        with open(report, "w", encoding="utf-8") as f:
+            json.dump({"status": "no_articles_passed_gate", "accepted_ids": [], "held": [],
+                       "news_count": 0, "stock_count": 0}, f)
+        with mock.patch.object(vdr, "RUN_REPORT_PATH", report), \
+                mock.patch.object(vdr, "verify_ledgers_staged"), \
+                self.assertRaises(SystemExit) as cm:
+            vdr.main()
+        self.assertEqual(cm.exception.code, 1)
 
 
 WORKFLOWS = os.path.join(ROOT, ".github", "workflows")

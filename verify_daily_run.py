@@ -30,6 +30,7 @@ RUN_REPORT_PATH = os.environ.get(
     "SHONAN_DOORS_RUN_REPORT_PATH",
     os.path.join("/tmp", "shonan_doors_run_report.json"),
 )
+DAILY_MIN_ARTICLES = int(os.environ.get("DAILY_MIN_ARTICLES", "3"))
 
 
 def fail(msg):
@@ -100,18 +101,16 @@ def main():
 
     print(f"[内訳] news: {news_count}件 (id:{news_ids}), stock: {stock_count}件 (id:{stock_ids}), "
           f"合計: {len(accepted_ids)}件")
-    if news_count == 0 and stock_count == 0:
-        print("news・stockともに0件です(今回追加された記事はありません)。永続化検証は不要のためスキップします。")
-        return
+    if (news_count == 0 and stock_count == 0) or not accepted_ids:
+        # 公開対象0件は最低ライン(DAILY_MIN_ARTICLES)未達。当日PRを作らないまま success で終わらせない
+        # (1件以上・最低ライン未満は、当日PRを作ったうえで daily_pr.py merge が自動マージを止めて失敗させる)。
+        fail(f"公開対象(Fact Audit full で confirmed)が0件で、最低{DAILY_MIN_ARTICLES}件に届きません。"
+             "品質基準は緩めずに見送りました。理由は最低件数未達のIssueを確認してください。")
     if news_count == 0:
         print("::warning::news(ニュース/イベント型)が0件でした。stockのみの結果です。原因をログで確認してください。")
     if stock_count == 0:
         print("::warning::stock(ストックSEO型)が0件でした。newsのみの結果です。カニバリ判定等で全件skipされた"
               "可能性があります(品質優先の設計上、異常ではありません)。原因をログで確認してください。")
-
-    if not accepted_ids:
-        print("今回追加された記事はありません(全件スキップ、または対象0件)。永続化検証は不要のためスキップします。")
-        return
 
     # 1) articles.json に永続化されているか(articleTypeも含めて検証する)
     articles_path = os.path.join(ROOT, "data", "articles.json")

@@ -23,10 +23,11 @@ Fact Audit workflow(fact_audit.py)と同じ監査ロジック・同じ判定ル�
 
 最終 Fact Audit 後の confirmed が最低ライン(DAILY_MIN_ARTICLES)未満なら、post-audit top-up を行う:
   - 別候補を追加生成し、通常の公開前ゲート(generate_articles.run_publish_gate)→ Fact Audit(full)にかける
-  - 最大 POST_AUDIT_TOPUP_MAX_ROUNDS 回・監査ドラフト合計 POST_AUDIT_TOPUP_MAX_DRAFTS 件まで。最低ラインに届いたら止める
+  - 最大 POST_AUDIT_TOPUP_MAX_ROUNDS 回(既定 DAILY_TOPUP_MAX_ATTEMPTS)・監査ドラフト合計 POST_AUDIT_TOPUP_MAX_DRAFTS 件まで。最低ラインに届いたら止める
   - 同日の公開対象・保留記事・公開前監査の不合格ドラフト・既存記事と重複する候補は採らない
   - IDは id_counter.json から新しく予約する(保留記事のIDを再利用しない)
-  - 届かなければ confirmed だけを公開し、shortfall として報告する(品質基準は下げない)
+  - 届かなければ shortfall として報告する(品質基準は下げない)。confirmed 記事は当日PRに載せるが、
+    daily_pr.py merge が最低ライン未満の当日PRを自動マージせず workflow を失敗させる(オーナー判断に回す)
 
 保留記事の内容と監査結果は --holds-out(既定 /tmp/shonan_doors_daily_holds.json)に書き出す。
 report_daily_holds.py がこれを読んで、保留記事1件につき Approve / Reject の Issue を1件作る。
@@ -57,7 +58,8 @@ import publish_gate as pg
 RUN_REPORT_PATH = g.RUN_REPORT_PATH
 HOLDS_PATH = os.environ.get("SHONAN_DOORS_DAILY_HOLDS_PATH", os.path.join("/tmp", "shonan_doors_daily_holds.json"))
 # post-audit top-up の上限(APIコスト上限。品質基準は緩めず、試す候補の数だけを制限する)
-POST_AUDIT_TOPUP_MAX_ROUNDS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_ROUNDS", "3"))
+# 補充回数は Daily Articles 全体の top-up 上限(DAILY_TOPUP_MAX_ATTEMPTS)に揃える
+POST_AUDIT_TOPUP_MAX_ROUNDS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_ROUNDS", str(g.DAILY_TOPUP_MAX_ATTEMPTS)))
 POST_AUDIT_TOPUP_MAX_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_DRAFTS", "6"))
 POST_AUDIT_TOPUP_MAX_GATE_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_GATE_DRAFTS", "8"))
 
@@ -365,8 +367,7 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
             need = min(g.DAILY_MIN_ARTICLES - len(published), left)
             print(f"post-audit top-up {round_no}/{POST_AUDIT_TOPUP_MAX_ROUNDS}: confirmed {len(published)}件 → "
                   f"別候補を最大{need}件補充します", flush=True)
-            avoid = pool + [dict(r.get("draft") or r, id="gate-rejected") for r in gate_rejected
-                            if isinstance(r, dict) and r.get("title")]
+            avoid = pool + g.gate_rejected_drafts(gate_rejected)
             try:
                 candidates = topup(need, avoid, date, event_series, gate_rejected, round_no) or []
             except Exception as e:  # 補充の失敗で confirmed 記事の公開は止めない
@@ -418,6 +419,9 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
     stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M%S")
     _write_reports(args.out_dir, stamp, full_results, verify_results)
     write_summary(published, held, results, topup_info)
+    if len(published) < g.DAILY_MIN_ARTICLES:
+        print(f"::error::Fact Audit 後の confirmed は{len(published)}件で、最低{g.DAILY_MIN_ARTICLES}件に届きません。"
+              "品質基準は緩めずに当日PRへ載せますが、自動マージはせず workflow を失敗させます。")
     for h in held:
         print(f"::warning::id:{h['id']}「{h['title']}」は Fact Audit で {h['verdict']} のため保留しました"
               "(当日PRには含めず、Issue で Approve / Reject を確認します)")
