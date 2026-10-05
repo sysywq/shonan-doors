@@ -70,5 +70,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Facebook投稿済みログを取り込む
+        run: python facebook_post_log_store.py pull
       - name: Facebook job validation probe
         run: echo "Facebook job definition accepted"
