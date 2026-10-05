@@ -279,7 +279,11 @@ def graph_request(method, path, token, params=None, env=None):
         with _urlopen(req, graph_timeout(env)) as resp:
             body = resp.read().decode("utf-8", errors="replace")
     except urllib.error.HTTPError as e:
-        raise GraphAPIError(_describe_http_error(e, token), status=e.code, uncertain=e.code >= 500)
+        # Meta error messages can occasionally echo a different credential value than
+        # the token used for this request. Never forward raw credential-looking strings.
+        detail = _describe_http_error(e, token)
+        detail = re.sub(r"\b(?:EAA|EAAB)[A-Za-z0-9_\-]+\b", "***", detail)
+        raise GraphAPIError(detail, status=e.code, uncertain=e.code >= 500)
     except Exception as e:  # タイムアウト・通信断など(応答を受け取れていない)
         raise GraphAPIError(_redact(f"{type(e).__name__}: {e}", token), uncertain=True)
     try:
