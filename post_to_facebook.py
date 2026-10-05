@@ -40,6 +40,7 @@ Secrets(GitHub Secrets から環境変数で渡す):
   FACEBOOK_GRAPH_API_VERSION  Graph API のバージョン(例: v24.0)。未設定なら URL にバージョンを付けず、
                               Meta App Dashboard でアプリに設定されている既定バージョンが使われる
   FACEBOOK_GRAPH_TIMEOUT_SEC  Graph API 呼び出しのタイムアウト秒(既定 20)
+  FACEBOOK_POST_INTERVAL_SEC   連続投稿の間隔秒(既定 180 = 3分。最初の投稿前は待たない)
 
 トークンはログに出さない(Authorization ヘッダーでのみ送り、エラー本文からも伏せ字にする)。
 
@@ -140,6 +141,15 @@ def graph_timeout(env=None):
         return max(1, int(env.get("FACEBOOK_GRAPH_TIMEOUT_SEC") or 20))
     except ValueError:
         return 20
+
+
+def post_interval(env=None):
+    """Facebookへの連続投稿間隔。既定10分、0〜3600秒に制限する。"""
+    env = env if env is not None else os.environ
+    try:
+        return min(3600, max(0, int(env.get("FACEBOOK_POST_INTERVAL_SEC") or 180)))
+    except ValueError:
+        return 180
 
 
 # ---------- 記事・本文 ----------
@@ -387,6 +397,13 @@ def process_articles(target_ids, articles_by_id, records, page_id, token, *, dry
             print(f"  {url} が HTTP 200 にならないため投稿しません。", file=sys.stderr)
             counts["unpublished"] += 1
             continue
+
+        # 短時間の連投を避ける。最初の実投稿は即時、2件目以降は既定3分空ける。
+        # DRY RUN・投稿済みスキップ・公開未確認では待たない。
+        interval = post_interval(env)
+        if counts["posted"] > 0 and interval > 0:
+            print(f"  連続投稿を避けるため {interval} 秒待ってから投稿します。")
+            sleep(interval)
 
         try:
             post_id = publish_post(page_id, token, message, url, env=env)
