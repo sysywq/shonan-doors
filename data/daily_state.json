@@ -7,13 +7,175 @@
     "1": {
      "branch": "daily/2026-10-06-r1",
      "run_id": "37404206924",
-     "started_at": "2026-10-06 11:27"
+     "started_at": "2026-10-06 11:27",
+     "published_ids": [
+      169
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "落花生畑と相模湾のあいだで一息 - 二宮で海が見えるカフェ・レストラン",
+     "dek": "吾妻山公園の帰りや西湘ドライブのついでに。相模湾を眺めながら食事やカフェタイムが楽しめる、二宮の2軒を紹介する。",
+     "area": "二宮",
+     "cat": "g",
+     "link": "https://www.shihantei.com/",
+     "subjectNames": [
+      "指帆亭",
+      "しはんてい",
+      "Shihantei",
+      "Shihantei Pine Tree Resort",
+      "GIRINO",
+      "ジリーノ",
+      "girino"
+     ],
+     "tags": [
+      "二宮",
+      "カフェ",
+      "海が見える",
+      "相模湾",
+      "指帆亭",
+      "GIRINO",
+      "ジリーノ",
+      "ランチ",
+      "オーシャンビュー",
+      "西湘",
+      "吾妻山公園",
+      "湘南グルメ"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-06",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "落花生畑と相模湾のあいだで一息——二宮の海が見えるカフェ",
+     "dek": "",
+     "area": "二宮",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "明治・大正・昭和の権力者が選んだ別荘地——大磯の邸園建築をたどる",
+     "dek": "",
+     "area": "大磯",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "134号線から葉山・逗子へ——湘南の海沿いドライブで立ち寄りたいスポット",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "江ノ電が目の前を走る、坂ノ下の小さな鎮守——御霊神社の歴史と境内を歩く",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "茅ヶ崎漁港と相模湾のしらす——水揚げの季節から食べ方まで",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "江ノ電・鵠沼海岸駅から始める、海と住宅街が交差する散歩道",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "しらすと神社と漁師町——腰越・小動神社エリアをゆっくり歩く",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "湘南のまんなかに立つ、平塚市美術館の常設コレクションと楽しみ方",
+     "dek": "",
+     "area": "平塚",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    }
+   ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-06 11:27"
+   "updated_at": "2026-10-06 11:46"
   }
  }
 }
