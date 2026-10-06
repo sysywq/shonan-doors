@@ -188,13 +188,551 @@
     "0": {
      "branch": "daily/2026-10-07",
      "run_id": "37524484491",
-     "started_at": "2026-10-07 05:11"
+     "started_at": "2026-10-07 05:11",
+     "published_ids": [
+      171,
+      173
+     ],
+     "held_ids": [
+      170,
+      172,
+      174
+     ],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "創業大正12年の味が帰ってきた - 「中秋蒲鉾店」、見附町の新店舗で再始動",
+     "dek": "2026年4月の火災で紅谷町の店舗を失った平塚の老舗練り物店・中秋蒲鉾店が、同年8月17日に見附町で新店舗を開いた。クラウドファンディングで多くの支援を集め、手作りのさつま揚げを再び届けている。",
+     "area": "平塚",
+     "cat": "b",
+     "link": "https://nakaaki.net/",
+     "subjectNames": [
+      "中秋蒲鉾店",
+      "なかあき蒲鉾店",
+      "中秋（なかあき）蒲鉾店",
+      "株式会社中秋蒲鉾店"
+     ],
+     "tags": [
+      "平塚",
+      "蒲鉾",
+      "さつま揚げ",
+      "練り物",
+      "老舗",
+      "大正創業",
+      "再オープン"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "揚げる、選ぶ、食べる - 「くし葉 ららぽーと湘南平塚店」が10月9日グランドオープン",
+     "dek": "ニラックス株式会社が運営する串揚げバイキング「くし葉」の2号店が、ららぽーと湘南平塚1階に誕生。卓上の油で自分好みに揚げたての串を楽しむ体験型レストランで、84席を構える。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://prtimes.jp/main/html/rd/p/000001234.000033462.html",
+     "subjectNames": [
+      "くし葉 ららぽーと湘南平塚店",
+      "串揚げバイキング くし葉 ららぽーと湘南平塚店",
+      "くし葉",
+      "kushiyo"
+     ],
+     "tags": [
+      "平塚",
+      "ららぽーと湘南平塚",
+      "串揚げ",
+      "バイキング",
+      "食べ放題",
+      "グランドオープン"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "創造は、まちのいたるところに - 「CHIGASAKI CREATIVE WEEK 2026」、10月10日から45日間開幕",
+     "dek": "茅ヶ崎市が進める「クリエイターシティ・チガサキ」構想の新プロジェクトとして、2026年10月10日から11月23日まで45日間にわたり「CHIGASAKI CREATIVE WEEK 2026」が開催される。映画、音楽、アート、文学、マルシェなど多彩なジャンルのイベントが市内全域で展開される。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://creativeweek.net/",
+     "subjectNames": [
+      "CHIGASAKI CREATIVE WEEK 2026",
+      "チガサキ クリエイティブ ウィーク",
+      "クリエイターシティ・チガサキ"
+     ],
+     "tags": [
+      "茅ヶ崎",
+      "CHIGASAKI CREATIVE WEEK",
+      "クリエイターシティ",
+      "アート",
+      "映画",
+      "音楽",
+      "マルシェ",
+      "イベント",
+      "秋",
+      "文化"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "chigasaki-creative-week",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "小坪漁港のボードウォークが40店舗のマルシェに - 「小坪うみかぜテラス・シーサイドハロウィンマルシェ2026」、10月31日開催",
+     "dek": "逗子・小坪漁港のボードウォークに約40店舗が並ぶ「小坪うみかぜテラス・シーサイドハロウィンマルシェ2026」が、2026年10月31日（土）に開催される。第6回目となる今回は、リビエラ逗子マリーナのハロウィンイベントと同時開催となる。",
+     "area": "逗子",
+     "cat": "e",
+     "link": "https://zushi-hayama.jp/events/",
+     "subjectNames": [
+      "小坪うみかぜテラス・シーサイドハロウィンマルシェ2026",
+      "シーサイドハロウィンマルシェ2026",
+      "小坪うみかぜテラス シーサイドハロウィンマルシェ",
+      "小坪漁港"
+     ],
+     "tags": [
+      "逗子",
+      "小坪漁港",
+      "マルシェ",
+      "ハロウィン",
+      "うみかぜテラス",
+      "小坪",
+      "イベント",
+      "秋",
+      "リビエラ逗子マリーナ"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "kozubora-seaside-halloween-marche",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "日々のごはんを、辻堂の住宅街から - 「食堂おさか 湘南キッチン」、10月2日グランドオープン",
+     "dek": "東京・三軒茶屋で長く愛されてきた深夜食堂「食堂おさか」が、藤沢市辻堂に新拠点「湘南キッチン」を開いた。お惣菜・お弁当・おむすびを中心に、毎日の食卓に寄り添う「日々のごはん」を届ける店だ。",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "https://www.instagram.com/shokudo_osaka_shonan/",
+     "subjectNames": [
+      "食堂おさか 湘南キッチン",
+      "食堂おさか湘南キッチン",
+      "shokudo_osaka_shonan",
+      "食堂おさか"
+     ],
+     "tags": [
+      "藤沢",
+      "辻堂",
+      "食堂おさか",
+      "お惣菜",
+      "お弁当",
+      "おむすび",
+      "グランドオープン",
+      "湘南キッチン",
+      "日々のごはん"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "ヨットハーバーが一日限りの祭り場になる - 「江の島ハーバーフェスティバル2026」、10月31日開催",
+     "dek": "江の島・湘南港（江の島ヨットハーバー）を舞台に、年に一度のフェスティバルが10月31日（土）に開催される。ボートライドやステージショーなど、海とヨットの魅力を体感できる一日だ。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://en.riviera.co.jp/area/enoshima/",
+     "subjectNames": [
+      "江の島ハーバーフェスティバル",
+      "江の島ハーバーフェスティバル2026",
+      "エノシマハーバーフェスティバル",
+      "Enoshima Harbor Festival"
+     ],
+     "tags": [
+      "江の島",
+      "ヨットハーバー",
+      "湘南港",
+      "フェスティバル",
+      "藤沢",
+      "秋",
+      "ボートライド"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "enoshima-harbor-festival",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "地元産業の技術とグルメが一堂に - 「ひらつか産業FES 2026」、10月10日に見附台公園で開催",
+     "dek": "平塚商工会議所が主催する年に一度の地域産業の祭典。飲食・物販・企業PRブースが集い、ステージイベントやスタンプラリーも楽しめる一日。入場無料。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratuka-cci.or.jp/fes/",
+     "subjectNames": [
+      "ひらつか産業FES 2026",
+      "ひらつか産業FES",
+      "平塚産業FES"
+     ],
+     "tags": [
+      "ひらつか産業FES",
+      "平塚",
+      "産業フェスティバル",
+      "平塚商工会議所",
+      "見附台公園",
+      "地元産業",
+      "秋イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "hiratsuka-sangyo-fes",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "沖縄と鎌倉が空手でつながる - 「鎌倉空手の日」初開催、円覚寺での奉納演武と交流祭を10〜11月に",
+     "dek": "空手の精神的な縁をもつ北鎌倉・円覚寺で奉納演武を行い、翌月には海浜公園で沖縄×鎌倉交流祭を開催。スポーツ庁や鎌倉市などの後援を受けた、鎌倉初の大型空手文化イベントが動き出す。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://kama-karateday.jp/",
+     "subjectNames": [
+      "鎌倉空手の日",
+      "鎌倉空手の日 奉納演武・沖縄鎌倉交流祭",
+      "沖縄×鎌倉交流祭"
+     ],
+     "tags": [
+      "鎌倉",
+      "空手",
+      "沖縄",
+      "円覚寺",
+      "イベント",
+      "武道",
+      "文化",
+      "交流"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "kamakura-karate-no-hi",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "半世紀の節目を迎える伝統の舞台 - 「第50回ひらつか民俗芸能まつり」、11月22日にひらしん平塚文化芸術ホールで開催",
+     "dek": "平塚市内の各地区に伝わる伝統芸能を一堂に披露する「ひらつか民俗芸能まつり」が、今年で第50回の節目を迎える。11月22日、ひらしん平塚文化芸術ホール大ホールにて入場無料で開催。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/hall/261122dai.html",
+     "subjectNames": [
+      "ひらつか民俗芸能まつり",
+      "第50回ひらつか民俗芸能まつり"
+     ],
+     "tags": [
+      "平塚",
+      "民俗芸能",
+      "伝統",
+      "ひらつか民俗芸能まつり",
+      "文化",
+      "ホール",
+      "無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "hiratsuka-minzoku-geino-matsuri",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "鉄道の日に「しおかぜ号」が50歳を迎える - 八部公園「SLまつり2026」、10月12日開催",
+     "dek": "藤沢市の鵠沼運動公園（通称・八部公園）に保存されているC11型蒸気機関車「しおかぜ号」が、今年で誘致から50年の節目を迎える。鉄道の日にちなんだ毎年恒例の「SLまつり」が10月12日（月・祝）に開催され、ミニ鉄道運転会やSLの運転室開放など、ここでしか体験できないプログラムが揃う。参加費は無料。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://f-mirai.jp/youth/sl_square",
+     "subjectNames": [
+      "SLまつり2026",
+      "SLまつり",
+      "しおかぜ号",
+      "C11型蒸気機関車245号",
+      "鵠沼運動公園SL広場",
+      "藤沢SL少年団",
+      "八部公園SL広場"
+     ],
+     "tags": [
+      "SLまつり",
+      "しおかぜ号",
+      "八部公園",
+      "鵠沼運動公園",
+      "藤沢SL少年団",
+      "蒸気機関車",
+      "鉄道の日",
+      "子ども向けイベント",
+      "藤沢",
+      "湘南",
+      "無料イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "fujisawa-sl-matsuri",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "ウクライナの誇るバレエ団が茅ヶ崎へ - 「キーウ・クラシック・バレエ 白鳥の湖」、11月6日に茅ヶ崎市民文化会館大ホールで上演",
+     "dek": "ウクライナのバレエ団「キーウ・クラシック・バレエ」が茅ヶ崎市民文化会館 大ホールに登場。2026年11月6日（金）18時30分開演、チャイコフスキーの名作「白鳥の湖 全2幕」を上演する。全席指定5,000円。4歳以上18歳以下の子どもは無料招待枠あり。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://www.chigasaki-hall.jp/events/9838.html",
+     "subjectNames": [
+      "キーウ・クラシック・バレエ 白鳥の湖",
+      "キーウ・クラシック・バレエ",
+      "Kyiv Classic Ballet",
+      "白鳥の湖"
+     ],
+     "tags": [
+      "バレエ",
+      "白鳥の湖",
+      "キーウ・クラシック・バレエ",
+      "茅ヶ崎市民文化会館",
+      "クラシック",
+      "ウクライナ",
+      "舞台芸術",
+      "茅ヶ崎",
+      "湘南",
+      "子ども無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "kyiv-classic-ballet-chigasaki",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "波のプール横に炭火の煙 - 「OISO BEACH SIDE BBQ」、大磯ロングビーチに誕生",
+     "dek": "2026年7月25日、大磯ロングビーチの波のプール横に屋外レジャー施設「OISO BEACH SIDE BBQ」がグランドオープン。炭火BBQエリアのほか、テントとパラソルエリアを備えた計256席で、遊ぶ・休む・食べるをひとつながりで楽しめる。",
+     "area": "大磯",
+     "cat": "b",
+     "link": "https://oiso-beachside-bbq.com/",
+     "subjectNames": [
+      "OISO BEACH SIDE BBQ",
+      "大磯ビーチサイドバーベキュー",
+      "大磯ビーチサイドBBQ"
+     ],
+     "tags": [
+      "大磯",
+      "大磯ロングビーチ",
+      "BBQ",
+      "バーベキュー",
+      "アウトドア",
+      "夏",
+      "レジャー"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 0
+    },
+    {
+     "title": "つけ麺とフルーツパーラーが同居する異色の一皿 - 「銀座青果堂fruitsparlor×つけ麺ささ木」ラスカ茅ヶ崎に神奈川初出店",
+     "dek": "東京・銀座発のフルーツパーラー「銀座青果堂」と、千葉・柏発のつけ麺店「ささ木」がコラボ。茅ヶ崎駅直結ラスカの6階に、神奈川県初となるコラボ店が開いている。",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "https://www.jryscc.co.jp/lusca/chigasaki/floorguide/detail.php?store_id=135",
+     "subjectNames": [
+      "銀座青果堂fruitsparlor×つけ麺ささ木",
+      "銀座青果堂fruitsparlor×つけ麺ささ木 ラスカ茅ヶ崎店",
+      "銀座青果堂",
+      "つけ麺ささ木"
+     ],
+     "tags": [
+      "ラスカ茅ヶ崎",
+      "つけ麺",
+      "フルーツパーラー",
+      "茅ヶ崎",
+      "新店",
+      "コラボ",
+      "ランチ"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 0
+    },
+    {
+     "title": "鎌倉時代の記憶、150穴が並ぶ崖 - 「まんだら堂やぐら群」秋の限定公開、10月24日から",
+     "dek": "鎌倉と逗子の境を結ぶ名越切通の山中に、150穴以上の中世横穴式墳墓が静かに口を開ける。年に二度だけ公開されるやぐら群の、秋の公開が10月24日から始まる。",
+     "area": "逗子",
+     "cat": "e",
+     "link": "https://www.city.zushi.kanagawa.jp/shiminkatsudo/bunkazai/1004537/1007768.html",
+     "subjectNames": [
+      "まんだら堂やぐら群",
+      "名越切通",
+      "まんだら堂",
+      "やぐら群"
+     ],
+     "tags": [
+      "逗子",
+      "史跡",
+      "やぐら",
+      "名越切通",
+      "鎌倉時代",
+      "限定公開",
+      "まんだら堂",
+      "文化財",
+      "無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "mandara-do-yagura-kokai",
+     "reason": "Fact Audit で fix(保留)",
+     "round": 0
+    },
+    {
+     "title": "初めてでも迷わない、江ノ電の乗り方完全ガイド——切符・IC・混雑回避のコツまで",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "茅ヶ崎で夕日を見る——えぼし岩と富士山が重なる、サンセットの名所と時間帯",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "長谷エリアを歩き尽くす——長谷寺・鎌倉大仏・由比ヶ浜を結ぶ半日コース",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "伊藤博文・大隈重信の邸宅跡をたどる——明治記念大磯邸園の歩き方",
+     "dek": "",
+     "area": "大磯",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "逗子で海を見ながらBBQをする——利用ルール・場所・手ぶらで楽しむ方法",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "海に突き出た鳥居と、漁師の神様——森戸大明神（森戸神社）の参拝ガイド",
+     "dek": "",
+     "area": "葉山",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "il Limone cafe HAYAMA - 葉山でオープン予定",
+     "dek": "",
+     "area": "葉山",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "il Limone cafe HAYAMA"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "【藤沢市】六会日大前駅前、小田急マルシェ1階の「庄や」跡地に「ダイソー」がオープン予定です♪ | 号外NET 藤沢市 https://t.co/pCizPviFwN",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-07 05:11"
+   "updated_at": "2026-10-07 06:13"
   }
  }
 }
