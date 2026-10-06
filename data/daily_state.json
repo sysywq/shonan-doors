@@ -209,7 +209,12 @@
     "1": {
      "branch": "daily/2026-10-07-r1",
      "run_id": "37532506489",
-     "started_at": "2026-10-07 06:18"
+     "started_at": "2026-10-07 06:18",
+     "published_ids": [
+      175
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -739,11 +744,133 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 0
+    },
+    {
+     "title": "お金を洗うと増える？ - 銭洗弁財天（宇賀福神社）の由来・参拝の作法・アクセスを解説",
+     "dek": "鎌倉随一の金運スポット「銭洗弁財天宇賀福神社」。岩を穿つトンネルをくぐって洞窟の霊水でお金を洗う、独自の参拝スタイルをもつ神社の成り立ちから、鎌倉駅からの歩き方、境内での正しい順序まで、訪れる前に知っておきたいことをひとまとめにした。",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "https://cms.trip-kamakura.com/place/195.html",
+     "subjectNames": [
+      "銭洗弁財天宇賀福神社",
+      "銭洗弁天",
+      "ぜにあらいべんざいてんうがふくじんじゃ",
+      "宇賀福神社",
+      "Zeniarai Benzaiten Ugafuku Shrine"
+     ],
+     "tags": [
+      "鎌倉",
+      "銭洗弁財天",
+      "宇賀福神社",
+      "金運",
+      "パワースポット",
+      "参拝",
+      "源氏山",
+      "佐助",
+      "日本遺産",
+      "鎌倉観光"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "政財界人だけじゃない——島崎藤村ら文人が愛した大磯の文学散歩ルート",
+     "dek": "",
+     "area": "大磯",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "お金を洗うと増える？——銭洗弁財天の由来・参拝の作法・山越えのアクセスを解説",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "江ノ電と鳥居が重なる奇跡の15秒——御霊神社の歴史と「撮れる場所」",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "逗子から葉山へ、海を左に走る——湘南東端のドライブコースと立ち寄りスポット",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "烏帽子岩に沈む夕日——茅ヶ崎サンセットの見どころと、ベストシーズンの選び方",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "高座渋谷の なぎちゃんラーメン24時間営業みたいだから 本藤沢で閉店まで仕上がり連コしたら 怒りのやけ食いができるか🤔",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
     }
    ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-07 06:18",
+   "updated_at": "2026-10-07 06:34",
    "social_pending": []
   }
  }
