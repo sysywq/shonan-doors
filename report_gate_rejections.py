@@ -231,5 +231,19 @@ def main(argv=None, request=github_request):
     return 0
 
 
+def record_daily_state():
+    """この run で見送った対象を Daily Articles の日次状態に残し、公開対象0件の run ならその日の続き
+    (不足分の補充 run の起動 / システム障害での停止)を決める(daily_pr.py after-audit)。
+    停止した場合は、後続の verify_daily_run.py が run を failure にする。"""
+    import daily_pr
+    try:
+        return daily_pr.main(["after-audit"])
+    except Exception as e:  # Issue化と同じく補助処理。confirmed 記事の公開は止めない
+        print(f"::warning::日次状態の更新に失敗しました: {type(e).__name__}: {e}", file=sys.stderr)
+        return 1
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    code = main()
+    state_code = record_daily_state()
+    sys.exit(code or state_code)

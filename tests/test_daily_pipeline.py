@@ -25,17 +25,25 @@ import verify_daily_run as vdr  # noqa: E402
 import x_post_log_store as xls  # noqa: E402
 from test_publish_gate import FakeClient, audit_response, claim  # noqa: E402
 
+import daily_state  # noqa: E402
+
 _real_http_get = fa._http_get
+_real_state_paths = (daily_state.CONTEXT_PATH, daily_state.ERRORS_PATH)
+_state_tmp = tempfile.TemporaryDirectory()
 
 
 def setUpModule():
     def _no_network(url, limit):
         raise OSError("テストでは公式ページの画像を取得しない")
     fa._http_get = _no_network
+    # Daily Articles の実行中(ユニットテストのステップ)でも、本物の日次状態を読み書きしない
+    daily_state.CONTEXT_PATH = os.path.join(_state_tmp.name, "ctx.json")
+    daily_state.ERRORS_PATH = os.path.join(_state_tmp.name, "errors.json")
 
 
 def tearDownModule():
     fa._http_get = _real_http_get
+    daily_state.CONTEXT_PATH, daily_state.ERRORS_PATH = _real_state_paths
 
 
 CONFIRMED = audit_response([claim("10月3日開催", "confirmed", role="central")])
@@ -284,7 +292,7 @@ class DailyFactAuditTest(unittest.TestCase):
         self.assertNotIn("post_audit_topup", ws.read("report"))
 
     def test_post_audit_topup_runs_when_gate_rejected_everything(self):
-        ws = Workspace([article(1, "既存")], report={"status": "no_articles_passed_gate", "accepted_ids": [],
+        ws = Workspace([article(1, "既存", date="2026-09-01")], report={"status": "no_articles_passed_gate", "accepted_ids": [],
                                                      "date": "2026-09-26", "gate_rejected": []})
         client = FakeClient({"D": [CONFIRMED], "E": [CONFIRMED], "F": [CONFIRMED]})
         batches = [[self.topup_candidate("D", 1), self.topup_candidate("E", 2), self.topup_candidate("F", 3)]]
@@ -579,6 +587,8 @@ class DailyPrCommandTest(unittest.TestCase):
         for p in self.patches:
             p.stop()
         self.tmp.cleanup()
+        if os.path.exists(daily_state.CONTEXT_PATH):
+            os.remove(daily_state.CONTEXT_PATH)
 
     def output(self):
         with open(os.environ["GITHUB_OUTPUT"], encoding="utf-8") as f:

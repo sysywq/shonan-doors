@@ -20,6 +20,14 @@ Daily Articles workflow から、次のサブコマンドを順に呼ぶ。GitHu
               (X投稿・IndexNow はこのIDだけを対象にする)
   after-merge … 人がマージしたPR(保留記事の Approve 等)で main に新しく入った記事について、同じく公開を確認する
               (Publish Articles After Merge workflow 用)
+  after-audit … Fact Audit の後に、この run で見送った対象を日次状態に残す(report_gate_rejections.py から呼ぶ)
+
+日次の終了条件は confirmed_today >= DAILY_MIN_ARTICLES(daily_state.py)。
+  - plan は round 0(daily/YYYY-MM-DD)から順に見て、マージ済みでも当日の confirmed が足りなければ
+    次の round(daily/YYYY-MM-DD-rN。不足分だけの補充 run)を fresh にする
+  - published(公開対象0件の run は after-audit)で、届いていれば Complete、届いていなければ
+    daily-articles.yml を workflow_dispatch して補充 run を起動する(この run の終了後に始まる)
+  - システム障害・round 上限のときだけ停止して failure + Issue。bot が起動した run は停止中の日を生成しない
 
 自動マージの条件(merge_blockers。1つでも満たさなければマージしない):
   - PR が open・base=main・head=当日branch(同じリポジトリ)・github-actions[bot] 作成・draft でない・競合なし
@@ -45,10 +53,12 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+import daily_state as ds
 import report_gate_rejections as rgr
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RUN_REPORT_PATH = os.environ.get("SHONAN_DOORS_RUN_REPORT_PATH", os.path.join("/tmp", "shonan_doors_run_report.json"))
+HOLDS_PATH = os.environ.get("SHONAN_DOORS_DAILY_HOLDS_PATH", os.path.join("/tmp", "shonan_doors_daily_holds.json"))
 META_PATH = os.environ.get("SHONAN_DOORS_DAILY_META_PATH", os.path.join("/tmp", "shonan_doors_daily_meta.json"))
 COMMIT_MSG_PATH = os.path.join("/tmp", "shonan_doors_daily_commit_msg.txt")
 SITE_DOMAIN = "https://www.shonandoors.com"
@@ -106,8 +116,9 @@ def today():
     return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
 
 
-def branch_for(date):
-    return f"{BRANCH_PREFIX}{date}"
+def branch_for(date, round_no=0):
+    """round 0 は当日branch(daily/YYYY-MM-DD)、補充 run は daily/YYYY-MM-DD-rN。"""
+    return f"{BRANCH_PREFIX}{date}" + (f"-r{round_no}" if round_no else "")
 
 
 def encode_meta(meta):
@@ -183,30 +194,203 @@ def decide_mode(pulls, branch_exists):
     return "fresh", None
 
 
-def cmd_plan(gh, date):
-    branch = branch_for(date)
+def round_status(gh, branch):
+    """round の branch/PR の状態: (mode, pr, head)"""
     pulls = gh.pulls_for_branch(branch)
     ref = gh.call("GET", f"/repos/{{repo}}/git/ref/heads/{branch}", missing_ok=True)
     head_sha = ((ref or {}).get("object") or {}).get("sha")
     head = gh.call("GET", f"/repos/{{repo}}/commits/{head_sha}") if head_sha else None
     mode, pr = decide_mode(pulls, head is not None)
+    return mode, pr, head
+
+
+def is_human_dispatch():
+    """オーナー(人)が手動で workflow_dispatch した run か(schedule・bot の起動は False)。"""
+    actor = os.environ.get("GITHUB_TRIGGERING_ACTOR") or os.environ.get("GITHUB_ACTOR") or ""
+    return os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and bool(actor) and not actor.endswith("[bot]")
+
+
+def cmd_plan(gh, date, store=None, articles=None, human=None):
+    """終了条件 confirmed_today >= DAILY_MIN_ARTICLES を満たすまで、round を進めて補充する。
+    round n がマージ済みでも当日の confirmed が足りなければ、round n+1(不足分だけの補充 run)を fresh にする。"""
+    store = store or ds.MemoryStore()
+    state = store.load(date)
+    confirmed = ds.today_ids(local_articles() if articles is None else articles, date)
+    human = is_human_dispatch() if human is None else human
+    if state["status"] in ds.STOPPED:
+        if not human:
+            reason = (state.get("failure") or {}).get("reason") or state["status"]
+            summary(f"::error::{date} の Daily Articles は停止中です({reason})。bot が起動した run では生成しません。"
+                    "原因を解消したら、オーナーが Daily Shonan Doors Articles を手動実行(workflow_dispatch)してください。")
+            report_stopped(gh, state, len(confirmed))
+            set_output(mode="stopped", branch="", date=date, pr="", round="")
+            return 1
+        summary(f"オーナーの手動実行のため、{date} の停止({state['status']})を解除して続きから再開します。")
+        state.update(status=ds.INCOMPLETE, failure=None)
+
+    # オーナーの手動実行は上限を超えても次の round を1回だけ行える(終わればまた round 上限で止まる)
+    limit = ds.DAILY_MAX_REFILL_ROUNDS + (HUMAN_EXTRA_ROUNDS if human else 0)
+    rnd = 0
+    while True:
+        branch = branch_for(date, rnd)
+        mode, pr, head = round_status(gh, branch)
+        # マージ済みでも当日の confirmed が足りなければ、次の round(補充 run)へ進む
+        if mode == "done" and len(confirmed) < ds.DAILY_MIN_ARTICLES and rnd < limit:
+            rnd += 1
+            continue
+        break
+    if mode == "done" and len(confirmed) < ds.DAILY_MIN_ARTICLES:
+        # round の上限まで補充しても届かない(暴走防止の上限)。2本で完了扱いにはせず、停止として通知する
+        return stop_day(gh, store, state, ds.ROUND_LIMIT, len(confirmed),
+                        f"補充 run の上限(round {ds.DAILY_MAX_REFILL_ROUNDS})に達しても confirmed が"
+                        f"{len(confirmed)}/{ds.DAILY_MIN_ARTICLES}件",
+                        on_stop=lambda: set_output(mode="stopped", branch="", date=date, pr="", round=""))
+
     meta = decode_meta(pr.get("body")) if pr else None
     if meta is None and head is not None:
         meta = decode_meta((head.get("commit") or {}).get("message"))
     if mode in ("resume", "done") and meta is None:
         summary(f"::error::当日branch {branch} のメタ情報を読み取れません。branch/PR を確認してください。")
         return 1
-    meta = dict(meta or {"date": date, "branch": branch}, pr=pr.get("number") if pr else None)
+    meta = dict(meta or {"date": date, "branch": branch}, pr=pr.get("number") if pr else None, round=rnd)
     save_meta(meta)
+    if mode == "fresh":
+        state["rounds"].setdefault(str(rnd), {}).update(
+            branch=branch, run_id=os.environ.get("GITHUB_RUN_ID", ""), started_at=ds.now_jst())
+    state.update(confirmed_today=len(confirmed), updated_at=ds.now_jst())
+    store.save(state)
+    ds.save_context(dict(state, round=rnd))
+    need = max(0, ds.DAILY_MIN_ARTICLES - len(confirmed))
     notes = {
-        "fresh": "当日branch/PRはありません。最新mainから当日branchを作って記事を生成します。",
+        "fresh": ("当日branch/PRはありません。最新mainから当日branchを作って記事を生成します。" if rnd == 0 else
+                  f"当日の confirmed は{len(confirmed)}件で未完了です。不足分{need}件だけを対象に補充 run(round {rnd})を行います"
+                  f"(同じ日に見送った対象 {len(state['rejected'])}件は再生成しません)。"),
         "resume": "当日branchまたはPRが既にあります。記事は生成し直さず、既存のbranch/PRで続きを行います。",
         "done": "当日PRはマージ済みです。公開確認と X投稿・IndexNow だけを行います(投稿済みの記事は投稿しません)。",
         "closed": f"当日PR #{pr.get('number') if pr else ''} はマージされずに閉じられています。記事の生成・マージは行いません。",
     }
-    summary(f"## Daily Articles: 当日branch/PR\n\n- branch: `{branch}`\n- mode: **{mode}** — {notes[mode]}")
-    set_output(mode=mode, branch=branch, date=date, pr=meta.get("pr") or "")
+    summary(f"## Daily Articles: 当日branch/PR\n\n- branch: `{branch}`(round {rnd})\n"
+            f"- confirmed_today: {len(confirmed)}/{ds.DAILY_MIN_ARTICLES}\n- mode: **{mode}** — {notes[mode]}")
+    set_output(mode=mode, branch=branch, date=date, pr=meta.get("pr") or "", round=rnd)
     return 0
+
+
+# ---------- 日次の終了判定(confirmed_today >= DAILY_MIN_ARTICLES)と補充 run の起動 ----------
+
+DAILY_WORKFLOW = "daily-articles.yml"
+STOP_ISSUE_PREFIX = "[Daily Articles] 補充を停止"
+HUMAN_EXTRA_ROUNDS = 20  # 手動実行でも1日の round 数は有限にする
+
+
+def local_articles():
+    try:
+        with open(os.path.join(ROOT, "data", "articles.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return []
+
+
+def report_stopped(gh, state, confirmed_count):
+    failure = state.get("failure") or {}
+    title = f"{STOP_ISSUE_PREFIX} ({state['date']})"
+    body = "\n".join([
+        f"{state['date']} の Daily Articles は、confirmed が **{confirmed_count}/{ds.DAILY_MIN_ARTICLES}件** の未完了のまま"
+        "補充 run を停止しました(2本で完了扱いにはしていません)。",
+        "",
+        f"- 停止理由: {failure.get('reason') or state['status']}",
+        f"- 種別: {'システム障害(候補を変えても解決しない)' if state['status'] == ds.SYSTEM_FAILURE else '補充 run の上限(暴走防止)'}",
+        f"- run: {failure.get('run_id') or os.environ.get('GITHUB_RUN_ID', '')}",
+        "",
+        "Fact Audit・一次情報・重複の基準は緩めていません。confirmed 記事だけが公開済みです。",
+        "",
+        "原因(API キー・課金・レート制限・GitHub の障害など)を解消したら、オーナーが Actions で"
+        "「Daily Shonan Doors Articles」を手動実行(Run workflow)してください。停止を解除して不足分の補充から再開します。",
+    ])
+    try:
+        if title not in rgr.open_issue_titles(gh.repo, gh.token, gh._request):
+            gh.call("POST", "/repos/{repo}/issues", {"title": title, "body": body})
+    except Exception as e:  # 通知の失敗で停止の判断は変えない
+        print(f"::warning::Issue の作成に失敗しました: {e}")
+
+
+def stop_day(gh, store, state, kind, confirmed_count, reason, on_stop=None):
+    state.update(status=kind, confirmed_today=confirmed_count, updated_at=ds.now_jst(),
+                 failure={"kind": kind, "reason": reason, "at": ds.now_jst(),
+                          "run_id": os.environ.get("GITHUB_RUN_ID", "")})
+    try:
+        store.save(state)
+    except Exception as e:
+        print(f"::warning::日次状態を保存できませんでした: {e}")
+    ds.save_context(dict(state, round=ds.load_context().get("round")))
+    summary(f"::error::{state['date']} の Daily Articles を停止しました(confirmed {confirmed_count}/"
+            f"{ds.DAILY_MIN_ARTICLES}件・未完了): {reason}")
+    report_stopped(gh, state, confirmed_count)
+    if on_stop:
+        on_stop()
+    return 1
+
+
+def dispatch_refill(gh):
+    gh.call("POST", f"/repos/{{repo}}/actions/workflows/{DAILY_WORKFLOW}/dispatches", {"ref": BASE})
+
+
+def finalize_round(gh, store, state, round_no, confirmed, errors=()):
+    """1 run の終わりに、その日を Complete にするか、不足分の補充 run を起動するか、停止するかを決める。
+    戻り値: 0(Complete / 補充 run を起動)/ 1(システム障害・round 上限で停止。明示的に failure)"""
+    count = len(confirmed)
+    action = ds.next_action(count, round_no, errors)
+    rec = state["rounds"].setdefault(str(round_no), {})
+    if action == ds.COMPLETE:
+        state.update(status=ds.COMPLETE, confirmed_today=count, failure=None, updated_at=ds.now_jst())
+        store.save(state)
+        ds.save_context(dict(state, round=round_no))
+        summary(f"## Daily Articles: Complete\n\n{state['date']} の confirmed は {count}件"
+                f"(最低{ds.DAILY_MIN_ARTICLES}件)で、その日の処理は完了です。")
+        return 0
+    if action == ds.SYSTEM_FAILURE:
+        reasons = "; ".join(f"{e.get('where')}: {e.get('reason')}" for e in list(errors)[:3])
+        return stop_day(gh, store, state, ds.SYSTEM_FAILURE, count, f"システム障害: {reasons}")
+    if action == ds.ROUND_LIMIT:
+        return stop_day(gh, store, state, ds.ROUND_LIMIT, count,
+                        f"補充 run の上限(round {ds.DAILY_MAX_REFILL_ROUNDS})に達しても confirmed が"
+                        f"{count}/{ds.DAILY_MIN_ARTICLES}件")
+    state.update(status=ds.INCOMPLETE, confirmed_today=count, updated_at=ds.now_jst())
+    if not rec.get("refill_dispatched"):
+        dispatch_refill(gh)
+        rec.update(refill_dispatched=True, refill_dispatched_at=ds.now_jst())
+    store.save(state)
+    ds.save_context(dict(state, round=round_no))
+    summary(f"## Daily Articles: 未完了({count}/{ds.DAILY_MIN_ARTICLES})\n\n"
+            f"confirmed が最低ラインに届いていないため、その日は未完了です。不足分 {ds.DAILY_MIN_ARTICLES - count}件だけを対象に、"
+            f"補充 run(round {round_no + 1})を起動しました(この run の終了後に始まります)。")
+    return 0
+
+
+def cmd_after_audit(gh, store, report, holds, articles=None):
+    """Fact Audit の後(公開前)に、この run で見送った対象を日次状態に記録する(次の round で再生成しない)。
+    公開対象が0件で当日PRを作らない run は、ここでその日の続き(補充 run の起動 / 停止)を決める。"""
+    ctx = ds.load_context()
+    date = report.get("date") or ctx.get("date") or today()
+    if not ctx or ctx.get("date") != date:
+        # この job で plan を実行していない(Manual Daily Top-up 等)。日次状態は変えない
+        print("Daily Articles の plan による日次状態がないため、日次状態は更新しません。")
+        return 0
+    round_no = int(ctx.get("round") or 0)
+    state = store.load(date)
+    ds.add_rejected(state, ds.rejected_from_run(report, holds, round_no))
+    errors = ds.system_errors_in_run(report, holds)
+    published = [i for i in report.get("accepted_ids") or []]
+    state["rounds"].setdefault(str(round_no), {}).update(
+        published_ids=published, held_ids=[h.get("id") for h in holds or [] if isinstance(h, dict)],
+        system_errors=errors[:10])
+    state["updated_at"] = ds.now_jst()
+    store.save(state)
+    ds.save_context(dict(state, round=round_no))
+    print(f"日次状態を更新しました: round {round_no} / 公開対象 {published} / 見送り累計 {len(state['rejected'])}件")
+    if published:
+        return 0  # 当日PR → マージ → 公開確認(published)の後に判断する
+    confirmed = ds.today_ids(local_articles() if articles is None else articles, date)
+    return finalize_round(gh, store, state, round_no, confirmed, errors)
 
 
 # ---------- record / open ----------
@@ -248,8 +432,9 @@ def cmd_open(gh, meta):
         pr = opened[0]
         print(f"既存の当日PR #{pr['number']} を再利用します。")
     else:
+        suffix = f"(補充 round {meta['round']})" if meta.get("round") else ""
         pr = gh.call("POST", "/repos/{repo}/pulls", {
-            "title": f"Daily Articles {meta['date']}", "head": branch, "base": BASE, "body": pr_body(meta)})
+            "title": f"Daily Articles {meta['date']}{suffix}", "head": branch, "base": BASE, "body": pr_body(meta)})
         print(f"当日PR #{pr['number']} を作成しました: {pr.get('html_url', '')}")
     meta["pr"] = pr["number"]
     save_meta(meta)
@@ -424,7 +609,7 @@ def wait_published(ids, slugs, check=url_ok, sleep=time.sleep, clock=time.monoto
     return [i for i in ids if i in live]
 
 
-def cmd_published(gh, meta, check=url_ok, sleep=time.sleep):
+def cmd_published(gh, meta, check=url_ok, sleep=time.sleep, store=None, articles=None):
     pr = gh.call("GET", f"/repos/{{repo}}/pulls/{meta['pr']}") if meta.get("pr") else None
     if not pr or not pr.get("merged_at"):
         summary("::error::当日PRがマージされていないため、公開確認・X投稿・IndexNow は行いません。")
@@ -441,8 +626,25 @@ def cmd_published(gh, meta, check=url_ok, sleep=time.sleep):
     summary(f"## Daily Articles: 公開確認\n\n公開を確認: {live}"
             + (f"\n\n::warning::{PUBLISH_TIMEOUT_SEC}秒以内に公開を確認できなかった記事(X投稿・IndexNow の対象外): {missing}"
                if missing else ""))
-    set_output(article_ids=",".join(str(i) for i in live))
-    return 0
+    # その日の終了判定(confirmed_today >= 最低ライン)。届かなければ不足分の補充 run を起動する
+    store = store or ds.MemoryStore()
+    date, round_no = meta.get("date") or today(), int(meta.get("round") or 0)
+    state = store.load(date)
+    # 前の round で公開したが、停止(failure)で SNS に渡せなかった記事だけを足す(渡し済みの記事は含めない)
+    pending = [i for i in state.get("social_pending") or [] if i not in live]
+    errors = list((state["rounds"].get(str(round_no)) or {}).get("system_errors") or [])
+    errors += [e for e in ds.load_system_errors() if e not in errors]
+    confirmed = ds.today_ids(local_articles() if articles is None else articles, date)
+    code = finalize_round(gh, store, state, round_no, confirmed, errors)
+    out = live + pending
+    state["social_pending"] = [] if code == 0 else out
+    state["rounds"].setdefault(str(round_no), {})["live_ids"] = live
+    store.save(state)
+    set_output(article_ids=",".join(str(i) for i in out))
+    if code != 0:
+        summary("::error::停止したため、この run は failure で終わります(Facebook・IndexNow は行いません)。"
+                f"公開済みの {out} は、再開後の run で新規記事として SNS に渡します。")
+    return code
 
 
 def articles_at(ref):
@@ -483,32 +685,65 @@ def cmd_after_merge(before, after, check=url_ok, sleep=time.sleep):
     return 0
 
 
-def main(argv=None, gh=None):
+def load_json_file(path, default):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return default
+
+
+def main(argv=None, gh=None, store=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument("command", choices=["plan", "record", "open", "ci", "merge", "published", "after-merge"])
+    ap.add_argument("command", choices=["plan", "record", "open", "ci", "merge", "published", "after-merge",
+                                        "after-audit"])
     ap.add_argument("--date", default="")
     ap.add_argument("--before", default="", help="after-merge: push 前のコミット")
     ap.add_argument("--after", default="HEAD", help="after-merge: push 後のコミット")
     args = ap.parse_args(argv)
     date = args.date or today()
     if args.command == "record":
-        return cmd_record(date, branch_for(date))
+        meta = load_meta()
+        date = args.date or meta.get("date") or date
+        return cmd_record(date, meta.get("branch") or branch_for(date))
     if args.command == "after-merge":
         return cmd_after_merge(args.before, args.after)
     gh = gh or github_from_env()
-    if args.command == "plan":
-        return cmd_plan(gh, date)
-    meta = load_meta()
-    if not meta.get("branch"):
-        print("::error::メタ情報がありません(先に plan を実行してください)", file=sys.stderr)
+    try:
+        store = store or ds.store_from_env()
+        if args.command == "plan":
+            return cmd_plan(gh, date, store)
+        if args.command == "after-audit":
+            report = load_json_file(RUN_REPORT_PATH, {})
+            holds = load_json_file(HOLDS_PATH, [])
+            return cmd_after_audit(gh, store, report, holds if isinstance(holds, list) else [])
+        meta = load_meta()
+        if not meta.get("branch"):
+            print("::error::メタ情報がありません(先に plan を実行してください)", file=sys.stderr)
+            return 1
+        if args.command == "open":
+            return cmd_open(gh, meta)
+        if args.command == "ci":
+            return cmd_ci(gh, meta)
+        if args.command == "merge":
+            return cmd_merge(gh, meta)
+        return cmd_published(gh, meta, store=store)
+    except (urllib.error.URLError, ds.StoreError, TimeoutError, ConnectionError) as e:
+        # GitHub の障害・認証/権限/レート制限は候補を変えても解決しない。日次状態を停止にして通知する
+        reason = ds.github_error_reason(e) if not isinstance(e, ds.StoreError) else f"日次状態の保存/取得に失敗: {e}"
+        if not reason:
+            raise
+        print(f"::error::GitHub の障害のため停止します({args.command}): {reason}", file=sys.stderr)
+        try:
+            date = args.date or load_meta().get("date") or ds.load_context().get("date") or date
+            state = store.load(date)
+            stop_day(gh, store, state, ds.SYSTEM_FAILURE, state.get("confirmed_today") or 0,
+                     f"システム障害({args.command}): {reason}")
+        except Exception as e2:  # 障害中は保存・通知もできないことがある。run は failure で終わる
+            print(f"::warning::停止の記録・通知に失敗しました: {e2}", file=sys.stderr)
+        if args.command == "published":
+            set_output(article_ids="")
         return 1
-    if args.command == "open":
-        return cmd_open(gh, meta)
-    if args.command == "ci":
-        return cmd_ci(gh, meta)
-    if args.command == "merge":
-        return cmd_merge(gh, meta)
-    return cmd_published(gh, meta)
 
 
 if __name__ == "__main__":

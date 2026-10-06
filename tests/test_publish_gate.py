@@ -20,7 +20,11 @@ import fact_audit as pg_fa  # noqa: E402
 import report_gate_rejections as rgr  # noqa: E402
 import fact_audit as fa  # noqa: E402
 
+import daily_state  # noqa: E402
+
 _real_http_get = fa._http_get
+_real_state_paths = (daily_state.CONTEXT_PATH, daily_state.ERRORS_PATH)
+_state_tmp = tempfile.TemporaryDirectory()
 
 
 def _no_network(url, limit):
@@ -29,10 +33,14 @@ def _no_network(url, limit):
 
 def setUpModule():
     fa._http_get = _no_network
+    # Daily Articles の実行中(ユニットテストのステップ)でも、本物の日次状態を読み書きしない
+    daily_state.CONTEXT_PATH = os.path.join(_state_tmp.name, "ctx.json")
+    daily_state.ERRORS_PATH = os.path.join(_state_tmp.name, "errors.json")
 
 
 def tearDownModule():
     fa._http_get = _real_http_get
+    daily_state.CONTEXT_PATH, daily_state.ERRORS_PATH = _real_state_paths
 
 
 def claim(text, status, role="detail", av="", pv="", url="https://www.city.example.lg.jp/event.html"):

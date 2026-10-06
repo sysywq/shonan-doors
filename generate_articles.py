@@ -42,6 +42,7 @@ data/articles.json に追記する。2026-11-30まで地域・カテゴリの探
 - API呼び出し回数は全ステージで上限付き(下記 MAX_* 定数を参照)。
 """
 
+import contextlib
 import os
 import re
 import sys
@@ -50,6 +51,8 @@ import tempfile
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import anthropic
+
+import daily_state
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ARTICLES_JSON_PATH = os.path.join(ROOT, "data", "articles.json")
@@ -1459,6 +1462,13 @@ _gate_client = None
 _gate_drafts_checked = 0  # この実行で公開前監査にかけたドラフト数(MAX_GATE_DRAFTS_PER_RUN と比べる)
 
 
+def gate_rejected_drafts(gate_rejections):
+    """公開前監査で不合格になったドラフトを、重複チェック用の記事として返す。
+    同一run内で既に監査して見送った対象を、補充で再び生成・監査しないために使う。"""
+    return [dict(r.get("draft") or r, id="gate-rejected") for r in gate_rejections or []
+            if isinstance(r, dict) and r.get("title")]
+
+
 def gate_budget_exhausted():
     """公開前監査の件数上限に達したか。達したら以後のドラフトは生成・監査しない(公開もしない)。"""
     import publish_gate
@@ -1639,16 +1649,20 @@ def validate_response_shape(raw, label="news", max_items=None):
 # ============================================================
 
 def run_editorial_plan(existing_articles, today, event_series, log_lines,
-                       news_gate_rejections, stock_gate_rejections):
-    """Plan 10-30 metadata topics, draft only the ranked candidates."""
+                       news_gate_rejections, stock_gate_rejections, avoid=None):
+    """Plan 10-30 metadata topics, draft only the ranked candidates.
+    avoid … 同じ日の前の round で見送った対象(daily_state.avoid_articles)。重複チェックにだけ使い、articles.json には書かない"""
     import editorial_planning as ep
     from editorial_selection import plan
 
+    avoid = list(avoid or [])
+    known = existing_articles + avoid  # 重複チェック用(既存記事+同じ日に見送った対象)
+    skip_topics = {a["topicId"] for a in avoid if a.get("topicId")}
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     stock_topics = load_stock_topics()
     try:
         stock_topics, _ = refill_stock_topics_if_needed(existing_articles, stock_topics, log_lines)
-        discovered = ep.discover(client, AREAS, CATS, existing_articles, growth_hints())
+        discovered = ep.discover(client, AREAS, CATS, known, growth_hints())
         try:
             import places_signal
             places_leads = places_signal.discover_future_openings(AREAS)
@@ -1680,15 +1694,16 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         except Exception as ig_exc:
             log_lines.append(f"警告(Instagram): 先行シグナル取得をスキップ: {type(ig_exc).__name__}")
     except Exception as exc:
+        daily_state.note_system_error(exc, "企画: 候補収集")
         log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
         return run_cross_selection(existing_articles, today, event_series, log_lines,
-                                   news_gate_rejections, stock_gate_rejections)
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid)
     stock_candidates = [{"id": t["id"], "articleType": "stock", "query": t["query"],
                          "titleIdea": t["titleIdea"], "area": t["area"],
                          "cat": t["category"], "searchIntent": t["searchIntent"],
                          "subject": "", "sourceUrl": ""}
-                        for t in stock_topics if t.get("status") == "candidate"]
-    candidates = ep.candidate_pool(discovered, stock_candidates, existing_articles)
+                        for t in stock_topics if t.get("status") == "candidate" and t["id"] not in skip_topics]
+    candidates = ep.candidate_pool(discovered, stock_candidates, known)
     if len(candidates) < 10:
         log_lines.append(f"警告(企画): 候補が{len(candidates)}件。目安10〜30件には不足")
     if not candidates:
@@ -1698,9 +1713,10 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         ranked = plan(candidates, judgments, growth_signal(), existing_articles, today,
                       target=DAILY_TARGET_ARTICLES)
     except Exception as exc:
+        daily_state.note_system_error(exc, "企画: 採点")
         log_lines.append(f"警告(企画): 採点に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
         return run_cross_selection(existing_articles, today, event_series, log_lines,
-                                   news_gate_rejections, stock_gate_rejections)
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid)
     selected = []
     attempts = []
     max_attempts = max(DAILY_TARGET_ARTICLES, MAX_EDITORIAL_DRAFT_ATTEMPTS)
@@ -1714,19 +1730,22 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         if sum(a.get("area") == candidate["area"] and a.get("cat") == candidate["cat"]
                for a in selected) >= 2:
             continue
-        attempts.append({"id": candidate["id"], "score": result})
+        attempt = {"id": candidate["id"], "score": result,
+                   **{k: candidate.get(k, "") for k in ("articleType", "titleIdea", "subject", "sourceUrl",
+                                                        "area", "cat")}}
+        attempts.append(attempt)
         log_lines.append(f"企画: {candidate['id']} {candidate['titleIdea']} score={result['total']} "
                          f"parts={result['parts']}")
         try:
             if candidate["articleType"] == "news":
                 drafts, draft_log, _ = run_news_generation(
-                    existing_articles + selected, today, event_series,
+                    known + selected, today, event_series,
                     gate_rejections=news_gate_rejections, count=1, max_refills=0,
                     strict=False, label="planned_news", defer_ids=True, candidate=candidate)
                 log_lines.extend(draft_log)
             else:
                 drafts, stock_topics = run_stock_generation(
-                    existing_articles + selected, stock_topics, today, log_lines,
+                    known + selected, stock_topics, today, log_lines,
                     gate_rejections=stock_gate_rejections, defer_ids=True, limit=1,
                     only_topic_id=candidate["id"], refill=False)
             for entry in drafts:
@@ -1735,32 +1754,42 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                 if entry.get("area") != candidate["area"] or entry.get("cat") != candidate["cat"]:
                     log_lines.append(f"スキップ(企画): {candidate['id']} は計画した地域・カテゴリから逸脱")
                     continue
-                if find_same_subject(entry, existing_articles + selected) or is_duplicate(entry, selected, days=None):
-                    log_lines.append(f"スキップ(企画): {candidate['id']} は採用済み対象と重複")
+                if find_same_subject(entry, known + selected) or is_duplicate(entry, selected + avoid, days=None):
+                    log_lines.append(f"スキップ(企画): {candidate['id']} は採用済み・見送り済みの対象と重複")
                     continue
                 selected.append(entry)
+                attempt["selected"] = True
         except Exception as exc:
+            daily_state.note_system_error(exc, f"企画: {candidate['id']} の生成")
             log_lines.append(f"警告(企画): {candidate['id']} の生成を見送り: {type(exc).__name__}: {exc}")
 
     # A planned topic can become unusable during source checks. Use the existing
     # broad discovery path for the shortfall while retaining the same audit gate.
-    if len(selected) < DAILY_MIN_ARTICLES and not gate_budget_exhausted():
+    # 最低ラインに届くまで、別候補の探索を最大 DAILY_TOPUP_MAX_ATTEMPTS 回まで繰り返す。
+    # 同一run内で公開前監査に不合格だったドラフトも重複チェックの対象に含め、同じ対象を再生成しない。
+    fallback_round = 0
+    while (len(selected) < DAILY_MIN_ARTICLES and fallback_round < DAILY_TOPUP_MAX_ATTEMPTS
+           and not gate_budget_exhausted()):
+        fallback_round += 1
         missing = DAILY_TARGET_ARTICLES - len(selected)
-        log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します")
+        log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します"
+                         f"(top-up {fallback_round}/{DAILY_TOPUP_MAX_ATTEMPTS})")
+        rejected = gate_rejected_drafts(news_gate_rejections + stock_gate_rejections) + avoid
         try:
             more, more_log, _ = run_news_generation(
-                existing_articles + selected, today, event_series,
+                existing_articles + selected + rejected, today, event_series,
                 gate_rejections=news_gate_rejections, count=missing,
-                max_refills=1, strict=False, label="planned_fallback", defer_ids=True)
+                max_refills=0, strict=False, label=f"planned_fallback_{fallback_round}", defer_ids=True)
             log_lines.extend(more_log)
             for entry in more:
                 if len(selected) >= DAILY_TARGET_ARTICLES:
                     break
-                if (find_same_subject(entry, existing_articles + selected)
-                        or is_duplicate(entry, selected, days=None)):
+                if (find_same_subject(entry, existing_articles + selected + rejected)
+                        or is_duplicate(entry, selected + rejected, days=None)):
                     continue
                 selected.append(entry)
         except Exception as exc:
+            daily_state.note_system_error(exc, "企画: 補充探索")
             log_lines.append(f"警告(企画): 補充探索に失敗: {type(exc).__name__}: {exc}")
 
     ids = reserve_ids(len(selected)) if selected else []
@@ -1799,26 +1828,30 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         raise RuntimeError("記事候補が1件も採用されませんでした")
 
 def run_cross_selection(existing_articles, today, event_series, log_lines,
-                        news_gate_rejections, stock_gate_rejections):
+                        news_gate_rejections, stock_gate_rejections, avoid=None):
     """Audit two candidate pools, then select across types before issuing IDs."""
     from editorial_selection import select
 
+    avoid = list(avoid or [])
+    known = existing_articles + avoid  # 重複チェック用(既存記事+同じ日に見送った対象)
     stock_topics = load_stock_topics()
     try:
         news, news_log, event_series = run_news_generation(
-            existing_articles, today, event_series, gate_rejections=news_gate_rejections,
+            known, today, event_series, gate_rejections=news_gate_rejections,
             count=DAILY_TARGET_ARTICLES, max_refills=1, strict=False,
             label="news_candidates", defer_ids=True)
         log_lines.extend(news_log)
     except Exception as exc:
+        daily_state.note_system_error(exc, "news: 候補生成")
         news = []
         log_lines.append(f"警告(news): 候補生成に失敗: {exc}")
     try:
         stock, stock_topics = run_stock_generation(
-            existing_articles, stock_topics, today, log_lines,
+            known, stock_topics, today, log_lines,
             gate_rejections=stock_gate_rejections, defer_ids=True,
             limit=min(3, DAILY_TARGET_ARTICLES))
     except Exception as exc:
+        daily_state.note_system_error(exc, "stock: 候補生成")
         stock = []
         log_lines.append(f"警告(stock): 候補生成に失敗: {exc}")
 
@@ -1828,8 +1861,9 @@ def run_cross_selection(existing_articles, today, event_series, log_lines,
     for entry in ranked:
         if len(selected) >= DAILY_TARGET_ARTICLES:
             break
-        if (find_same_subject(entry, existing_articles + selected)
-                or is_duplicate(entry, selected, days=None)):
+        if (entry.get("_topicId") in daily_state.rejected_topic_ids({"rejected": avoid})
+                or find_same_subject(entry, known + selected)
+                or is_duplicate(entry, selected + avoid, days=None)):
             continue
         selected.append(entry)
     ids = reserve_ids(len(selected)) if selected else []
@@ -1883,13 +1917,53 @@ def main():
     news_gate_rejections = []
     stock_gate_rejections = []
 
-    if os.environ.get("EDITORIAL_PLANNING_V2", "1") == "0":
-        return run_cross_selection(existing_articles, today, event_series, log_lines,
-                                   news_gate_rejections, stock_gate_rejections)
-    return run_editorial_plan(existing_articles, today, event_series, log_lines,
-                              news_gate_rejections, stock_gate_rejections)
+    ctx = daily_state.load_context()
+    if ctx.get("date") not in (None, today):
+        ctx = {}  # 別の日の状態は使わない
+    avoid = daily_state.avoid_articles(ctx)
+    with daily_quota_scope():
+        minimum, target = apply_daily_quota(existing_articles, today, ctx.get("round") or 0)
+        print(f"Daily Articles round {ctx.get('round') or 0}: この run の最低{minimum}件・目標{target}件"
+              f"(同じ日に見送り済みの対象 {len(avoid)}件は再生成しない)")
+        if target <= 0:
+            print(f"{today} の confirmed は既に最低ラインに達しています。この run では生成しません。")
+            write_run_report(status="no_articles_accepted", accepted_ids=[], accepted_slugs=[], news_ids=[],
+                             stock_ids=[], news_slugs=[], stock_slugs=[], news_count=0, stock_count=0,
+                             total_count=0, date=today, gate_rejected=[], shortfall=None)
+            return None
+        if os.environ.get("EDITORIAL_PLANNING_V2", "1") == "0":
+            return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                       news_gate_rejections, stock_gate_rejections, avoid=avoid)
+        return run_editorial_plan(existing_articles, today, event_series, log_lines,
+                                  news_gate_rejections, stock_gate_rejections, avoid=avoid)
 
+
+@contextlib.contextmanager
+def daily_quota_scope():
+    """apply_daily_quota で変えた件数を、抜けるときに1日全体の値へ戻す。"""
+    global DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES
+    base = DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES
+    try:
+        yield
+    finally:
+        DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES = base
+
+
+def apply_daily_quota(existing_articles, today, round_no):
+    """この run の (最低, 目標) 件数を、当日既に confirmed になった記事数と round から決めて反映する
+    (daily_quota_scope の中で1回だけ呼ぶ)。補充 round は不足分(1日の最低ライン − confirmed_today)だけを
+    対象にする。品質基準には触れない。"""
+    global DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES
+    already = len(daily_state.today_ids(existing_articles, today))
+    DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES = daily_state.run_quota(
+        already, round_no, DAILY_TARGET_ARTICLES, DAILY_MIN_ARTICLES)
+    return DAILY_MIN_ARTICLES, DAILY_TARGET_ARTICLES
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as _exc:
+        # 認証/課金/レート制限/API障害なら日次状態を停止にして、bot による補充 run を止める
+        daily_state.mark_system_failure_from_crash(_exc, "generate_articles.py")
+        raise
