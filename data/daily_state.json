@@ -1,0 +1,19 @@
+{
+ "days": {
+  "2026-10-06": {
+   "date": "2026-10-06",
+   "status": "incomplete",
+   "rounds": {
+    "1": {
+     "branch": "daily/2026-10-06-r1",
+     "run_id": "37404206924",
+     "started_at": "2026-10-06 11:27"
+    }
+   },
+   "rejected": [],
+   "failure": null,
+   "confirmed_today": 2,
+   "updated_at": "2026-10-06 11:27"
+  }
+ }
+}
