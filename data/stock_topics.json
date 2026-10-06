@@ -1709,5 +1709,83 @@
     "generatedAt": null,
     "skipReason": "同一対象の既存記事あり: 対象名「森戸大明神」が既存記事id:120と一致",
     "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0132",
+    "query": "平塚 湘南平 ハイキング コース",
+    "titleIdea": "稜線から相模湾を一望する——湘南平・高麗山の歩き方とコース選び",
+    "area": "平塚",
+    "category": "t",
+    "searchIntent": "湘南平の展望台まで車ではなく歩いて登りたいと考えており、高麗山や大磯方面とつなぐルートの距離・難易度・見どころをまとめて知りたい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0133",
+    "query": "鎌倉 御霊神社 江ノ電 撮影",
+    "titleIdea": "江ノ電と鳥居が重なる奇跡の15秒——御霊神社の歴史と「撮れる場所」",
+    "area": "鎌倉",
+    "category": "c",
+    "searchIntent": "江ノ電と鳥居が重なる写真を見かけて場所を調べており、御霊神社の歴史・祭神・撮影のタイミングと構図の選び方をまとめて知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「御霊神社」が既存記事id:80と一致",
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0134",
+    "query": "逗子 鎌倉 海沿い ドライブ コース",
+    "titleIdea": "逗子から葉山へ、海を左に走る——湘南東端のドライブコースと立ち寄りスポット",
+    "area": "逗子",
+    "category": "t",
+    "searchIntent": "逗子・葉山の海沿い（国道134号〜県道207号）をドライブしたいと考えており、景色の良いビューポイントや途中で寄れるカフェ・神社・展望台を知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「葉山しおさい公園」が既存記事id:43と一致",
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0135",
+    "query": "鎌倉 銭洗弁財天 行き方 参拝方法",
+    "titleIdea": "お金を洗うと増える？——銭洗弁財天の由来・参拝の作法・山越えのアクセスを解説",
+    "area": "鎌倉",
+    "category": "t",
+    "searchIntent": "銭洗弁財天でのお金の洗い方・ご利益の意味、山越えのアクセスルート、所要時間など「行く前に知っておきたいこと」を一通り把握したい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件",
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0136",
+    "query": "茅ヶ崎 サザンビーチ 烏帽子岩 夕日",
+    "titleIdea": "烏帽子岩に沈む夕日——茅ヶ崎サンセットの見どころと、ベストシーズンの選び方",
+    "area": "茅ヶ崎",
+    "category": "t",
+    "searchIntent": "茅ヶ崎の海岸から夕日・サンセットを眺めたいと思っており、えぼし岩（烏帽子岩）越しに富士山が見えるポイント・時期・時間帯を具体的に知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「えぼし岩」が既存記事id:19と一致",
+    "createdAt": "2026-10-07"
+  },
+  {
+    "id": "t0137",
+    "query": "大磯 文学 ゆかりの地 散策",
+    "titleIdea": "政財界人だけじゃない——島崎藤村ら文人が愛した大磯の文学散歩ルート",
+    "area": "大磯",
+    "category": "c",
+    "searchIntent": "大磯が近代の政財界人の保養地として知られるだけでなく、島崎藤村など近代文学者にも縁の深い土地であることを知り、文学・歴史ファンとしてゆかりのスポットを訪ね歩きたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「鴫立庵」が既存記事id:17と一致",
+    "createdAt": "2026-10-07"
   }
 ]
