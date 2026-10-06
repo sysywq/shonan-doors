@@ -441,6 +441,16 @@ class ResolveDailyHoldTest(unittest.TestCase):
         self.assertEqual(code, 0, msg)
         self.assertEqual(len(self.ws.read("articles")), 2)
 
+    def test_require_confirmed_blocks_publication_unless_confirmed(self):
+        payload = dict(hold(entry=article(103, "C", eventSeriesKey="c-fes")), requireConfirmed=True)
+        code, msg, _ = self.resolve("approve", [CORE_UNVERIFIED], payload=payload)
+        self.assertEqual(code, 3)
+        self.assertIn("confirmed の場合のみ", msg)
+        self.assertEqual(len(self.ws.read("articles")), 1)
+        code, msg, _ = self.resolve("approve", [CONFIRMED], payload=payload)
+        self.assertEqual(code, 0, msg)
+        self.assertEqual(len(self.ws.read("articles")), 2)
+
     def test_approve_with_remaining_contradiction_does_not_publish(self):
         code, msg, _ = self.resolve("approve", [CORE_CONTRADICTED])
         self.assertEqual(code, 3)
@@ -474,6 +484,18 @@ class ResolveDailyHoldTest(unittest.TestCase):
             ng = rdhold.load_payload(args, request=lambda *a, **k: {"title": "別のIssue", "body": body})
         self.assertEqual(ok["id"], 103)
         self.assertIsNone(ng)
+
+    def test_load_payload_prefers_manual_hold_file_for_issue(self):
+        manual_dir = os.path.join(self.ws.dir.name, "manual-holds")
+        os.makedirs(manual_dir)
+        with open(os.path.join(manual_dir, "9.json"), "w", encoding="utf-8") as f:
+            json.dump(dict(hold(entry=article(103, "直したC")), requireConfirmed=True), f, ensure_ascii=False)
+        request = mock.Mock()
+        p = rdhold.load_payload(types.SimpleNamespace(payload_file="", article_id=0, issue="9"),
+                                request=request, manual_dir=manual_dir)
+        self.assertEqual(p["entry"]["title"], "直したC")
+        self.assertTrue(p["requireConfirmed"])
+        request.assert_not_called()
 
 
 def pr(**kw):
