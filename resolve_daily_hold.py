@@ -27,6 +27,8 @@ Reject:
   python resolve_daily_hold.py --issue 123 --decision reject
   python resolve_daily_hold.py --payload-file held.json --decision approve   # Artifact の保留記事データを使う
   --dry-run … ファイルを変更せず、何をするかだけ出力する
+  .github/manual-holds/<Issue番号>.json があれば、--issue の指定時に Issue本文のデータより優先して使う
+  (一次情報に合わせて直した記事データ。"requireConfirmed": true なら再監査が confirmed のときだけ公開する)
 
 終了コード: 0=処理完了(公開 or 見送り) / 2=入力不正 / 3=再監査で公開できない
 """
@@ -44,9 +46,16 @@ import report_gate_rejections as rgr
 import resume_image_check as ric
 
 
-def load_payload(args, request=rgr.github_request):
-    if args.payload_file:
-        with open(args.payload_file, encoding="utf-8") as f:
+MANUAL_HOLDS_DIR = os.path.join(".github", "manual-holds")
+
+
+def load_payload(args, request=rgr.github_request, manual_dir=MANUAL_HOLDS_DIR):
+    # オーナーの指示で一次情報に合わせて直した記事データ(.github/manual-holds/<Issue番号>.json)があれば、
+    # Issue本文に埋め込まれた保留時のデータより優先する(Resolve Daily Hold workflow から再監査できるようにする)
+    manual = os.path.join(manual_dir, f"{args.issue}.json") if args.issue else ""
+    payload_file = args.payload_file or (manual if manual and os.path.exists(manual) else "")
+    if payload_file:
+        with open(payload_file, encoding="utf-8") as f:
             data = json.load(f)
         items = data if isinstance(data, list) else [data]
         if args.article_id:
@@ -62,11 +71,14 @@ def load_payload(args, request=rgr.github_request):
     return rdh.decode_payload(issue.get("body"))
 
 
-def approvable(audited):
-    """Approve された保留記事を公開してよいか。戻り値: (ok, 理由)"""
+def approvable(audited, require_confirmed=False):
+    """Approve された保留記事を公開してよいか。戻り値: (ok, 理由)
+    require_confirmed … オーナーが「confirmed の場合のみ公開」と指示した記事(payload の requireConfirmed)"""
     if audited.get("confirmed"):
         return True, "再監査で confirmed"
     result = audited.get("result") or {}
+    if require_confirmed and not result.get("anomalies"):
+        return False, "オーナーの指示により confirmed の場合のみ公開する記事で、再監査が confirmed にならなかった"
     if result.get("anomalies"):
         return False, "再監査で監査応答の形式異常・例外(監査できていない)"
     if result.get("hasQuotedComment"):
@@ -130,7 +142,7 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
         client = fa.make_client()
     audited = dfa.audit_article(client, entry, confirmations=confirmations, fetcher=fetcher,
                                 image_fetcher=image_fetcher)
-    ok, why = approvable(audited)
+    ok, why = approvable(audited, require_confirmed=bool(payload.get("requireConfirmed")))
     if not ok:
         anomalies = ((audited.get("result") or {}).get("anomalies") or [])
         anomaly_detail = " / ".join(
