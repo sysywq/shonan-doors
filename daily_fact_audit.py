@@ -23,10 +23,13 @@ Fact Audit workflow(fact_audit.py)と同じ監査ロジック・同じ判定ル�
 
 最終 Fact Audit 後の confirmed が最低ライン(DAILY_MIN_ARTICLES)未満なら、post-audit top-up を行う:
   - 別候補を追加生成し、通常の公開前ゲート(generate_articles.run_publish_gate)→ Fact Audit(full)にかける
-  - 最大 POST_AUDIT_TOPUP_MAX_ROUNDS 回・監査ドラフト合計 POST_AUDIT_TOPUP_MAX_DRAFTS 件まで。最低ラインに届いたら止める
+  - 最大 POST_AUDIT_TOPUP_MAX_ROUNDS 回(既定 DAILY_TOPUP_MAX_ATTEMPTS)・監査ドラフト合計 POST_AUDIT_TOPUP_MAX_DRAFTS 件まで。最低ラインに届いたら止める
   - 同日の公開対象・保留記事・公開前監査の不合格ドラフト・既存記事と重複する候補は採らない
   - IDは id_counter.json から新しく予約する(保留記事のIDを再利用しない)
-  - 届かなければ confirmed だけを公開し、shortfall として報告する(品質基準は下げない)
+  - 届かなければ shortfall として報告する(品質基準は下げない)。confirmed 記事は当日PRで公開し、
+    その日は未完了のまま daily_pr.py が不足分だけの補充 run を自動起動する(daily_state.py)
+  - 補充 run(round 1 以降)では、最低ラインは「1日の最低ライン − 当日既に公開済みの件数」になり、
+    同じ日の前の round で見送った対象(daily_state の rejected)も重複として採らない
 
 保留記事の内容と監査結果は --holds-out(既定 /tmp/shonan_doors_daily_holds.json)に書き出す。
 report_daily_holds.py がこれを読んで、保留記事1件につき Approve / Reject の Issue を1件作る。
@@ -49,6 +52,7 @@ import sys
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+import daily_state
 import generate_articles as g
 import fact_audit as fa
 import fact_verify as fv
@@ -57,7 +61,8 @@ import publish_gate as pg
 RUN_REPORT_PATH = g.RUN_REPORT_PATH
 HOLDS_PATH = os.environ.get("SHONAN_DOORS_DAILY_HOLDS_PATH", os.path.join("/tmp", "shonan_doors_daily_holds.json"))
 # post-audit top-up の上限(APIコスト上限。品質基準は緩めず、試す候補の数だけを制限する)
-POST_AUDIT_TOPUP_MAX_ROUNDS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_ROUNDS", "3"))
+# 補充回数は Daily Articles 全体の top-up 上限(DAILY_TOPUP_MAX_ATTEMPTS)に揃える
+POST_AUDIT_TOPUP_MAX_ROUNDS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_ROUNDS", str(g.DAILY_TOPUP_MAX_ATTEMPTS)))
 POST_AUDIT_TOPUP_MAX_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_DRAFTS", "6"))
 POST_AUDIT_TOPUP_MAX_GATE_DRAFTS = int(os.environ.get("POST_AUDIT_TOPUP_MAX_GATE_DRAFTS", "8"))
 
@@ -265,6 +270,11 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
          reserve_ids=None):
     """topup … post-audit top-up の候補生成関数(generate_topup と同じ引数)。None なら補充しない
     reserve_ids … 補充記事のID予約(既定 generate_articles.reserve_ids。id_counter.json を前進させる)"""
+    with g.daily_quota_scope():
+        return _main(argv, client, fetcher, image_fetcher, base_series_keys, topup, reserve_ids)
+
+
+def _main(argv, client, fetcher, image_fetcher, base_series_keys, topup, reserve_ids):
     ap = argparse.ArgumentParser()
     ap.add_argument("--report", default=RUN_REPORT_PATH)
     ap.add_argument("--holds-out", default=HOLDS_PATH)
@@ -308,6 +318,12 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
     if client is None:
         client = fa.make_client()
     date = report.get("date") or datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
+    # 日次の終了条件は confirmed_today >= 最低ライン。前の round で公開済みの当日記事を差し引いた不足分だけを補充する
+    ctx = daily_state.load_context()
+    if ctx.get("date") not in (None, date):
+        ctx = {}
+    g.apply_daily_quota([a for a in articles if a.get("id") not in set(ids)], date, ctx.get("round") or 0)
+    avoid_today = daily_state.avoid_articles(ctx)
     now = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
     # Manual recovery may declare already-live articles as a trusted baseline.
     # They were previously published through the normal audited path, so a recovery run
@@ -365,11 +381,11 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
             need = min(g.DAILY_MIN_ARTICLES - len(published), left)
             print(f"post-audit top-up {round_no}/{POST_AUDIT_TOPUP_MAX_ROUNDS}: confirmed {len(published)}件 → "
                   f"別候補を最大{need}件補充します", flush=True)
-            avoid = pool + [dict(r.get("draft") or r, id="gate-rejected") for r in gate_rejected
-                            if isinstance(r, dict) and r.get("title")]
+            avoid = pool + g.gate_rejected_drafts(gate_rejected) + avoid_today
             try:
                 candidates = topup(need, avoid, date, event_series, gate_rejected, round_no) or []
             except Exception as e:  # 補充の失敗で confirmed 記事の公開は止めない
+                daily_state.note_system_error(e, f"post-audit top-up {round_no}")
                 print(f"::warning::post-audit top-up {round_no} の候補生成に失敗: {type(e).__name__}: {e}")
                 continue
             fresh = []
@@ -418,6 +434,10 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
     stamp = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y%m%d-%H%M%S")
     _write_reports(args.out_dir, stamp, full_results, verify_results)
     write_summary(published, held, results, topup_info)
+    if len(published) < g.DAILY_MIN_ARTICLES:
+        print(f"::warning::この run の confirmed は{len(published)}件で、この run の最低{g.DAILY_MIN_ARTICLES}件に届きません。"
+              "品質基準は緩めずに confirmed 記事だけを公開し、その日は未完了として不足分の補充 run を続けます"
+              "(daily_pr.py が判断)。")
     for h in held:
         print(f"::warning::id:{h['id']}「{h['title']}」は Fact Audit で {h['verdict']} のため保留しました"
               "(当日PRには含めず、Issue で Approve / Reject を確認します)")
@@ -425,4 +445,10 @@ def main(argv=None, client=None, fetcher=None, image_fetcher=None, base_series_k
 
 
 if __name__ == "__main__":
-    sys.exit(main(topup=generate_topup))
+    try:
+        code = main(topup=generate_topup)
+    except Exception as _exc:
+        # 認証/課金/レート制限/API障害なら日次状態を停止にして、bot による補充 run を止める
+        daily_state.mark_system_failure_from_crash(_exc, "daily_fact_audit.py")
+        raise
+    sys.exit(code)

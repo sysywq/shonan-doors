@@ -72,6 +72,17 @@ def verify_ledgers_staged():
     print("[OK] 元データ(articles / id_counter / stock_topics / event_series / x_post_log)の変更はすべてステージ済みです。")
 
 
+def verify_day_not_stopped(accepted_ids):
+    """公開対象0件の run で、その日がシステム障害・round 上限で停止になっていたら failure にする
+    (success で終わらせない。公開対象がある run は当日PRで公開し、daily_pr.py published が判断する)。"""
+    import daily_state
+    ctx = daily_state.load_context()
+    if not accepted_ids and ctx.get("status") in daily_state.STOPPED:
+        reason = (ctx.get("failure") or {}).get("reason") or ctx.get("status")
+        fail(f"{ctx.get('date')} の Daily Articles は confirmed {ctx.get('confirmed_today', 0)}/"
+             f"{daily_state.DAILY_MIN_ARTICLES}件の未完了のまま停止しました: {reason}")
+
+
 def main():
     if not os.path.exists(RUN_REPORT_PATH):
         fail(
@@ -100,6 +111,7 @@ def main():
 
     print(f"[内訳] news: {news_count}件 (id:{news_ids}), stock: {stock_count}件 (id:{stock_ids}), "
           f"合計: {len(accepted_ids)}件")
+    verify_day_not_stopped(accepted_ids)
     if news_count == 0 and stock_count == 0:
         print("news・stockともに0件です(今回追加された記事はありません)。永続化検証は不要のためスキップします。")
         return

@@ -12,7 +12,7 @@ shonan-doors で作業する際の恒久ルール。
 - PRを作成する
 - CI成功を確認する
 - mergeはオーナーの確認後にのみ行う
-  - 例外(オーナー承認済み・Daily Articles の自動運用に限る): Daily Articles workflow が作る当日PR(`daily/YYYY-MM-DD` → main)は、公開対象の記事がすべて Fact Audit(full)で confirmed、tests / build / 永続化検証 / CI がすべて成功、変更が元データ・生成物だけ、という条件をすべて満たすときに限り workflow が自動マージしてよい(`daily_pr.py merge`)。confirmed 以外の記事は当日PRから分離して保留にし、PR 全体は止めない
+  - 例外(オーナー承認済み・Daily Articles の自動運用に限る): Daily Articles workflow が作る当日PR(`daily/YYYY-MM-DD` → main。補充 run の `daily/YYYY-MM-DD-rN` → main を含む)は、公開対象の記事がすべて Fact Audit(full)で confirmed、tests / build / 永続化検証 / CI がすべて成功、変更が元データ・生成物だけ、という条件をすべて満たすときに限り workflow が自動マージしてよい(`daily_pr.py merge`)。confirmed 以外の記事は当日PRから分離して保留にし、PR 全体は止めない
   - 上記Daily Articlesの例外は当日PRだけに適用する。Claude が作るPR(保留記事の Approve で作るPRを含む)や通常タスクのPRは、従来どおりオーナーの確認後にのみマージする
   - オーナーの2026-09-27の全自動化指示により、Growth Auto Revision workflow が作る記事の title/dek だけのPRも、14日連続のGSC日次データ・100表示以上・記事公開28日以上・一次情報 Fact Audit(full) confirmed・tests/build/CI 成功・変更ファイル限定・PR head一致をすべて満たす場合は workflow が自動マージしてよい。該当しなければ変更しない。この例外は通常タスクのPRには及ばない
   - main への直接 push・ruleset の緩和・bypass の追加はしない
@@ -20,6 +20,7 @@ shonan-doors で作業する際の恒久ルール。
 ## Shonan Doorsの編集ルール
 
 - Daily Articles は最大30件（目安10〜30件）の企画候補を執筆前に100点で評価する。内訳は需要・検索意図25、鮮度20、有用性20、独自性15、観測10、探索10。記事タイプの公開枠を固定せず、9〜10月は通常3＋探索2、11月は通常4＋探索1を基本とする。候補不合格なら次点を試し、一次情報・重複・Fact Audit の基準は緩めない。GSC/GA4の観測は市場全体の需要とはみなさない。Google Trendsは確認できる場合の補助情報であり、API未接続の定量値を捏造しない。11月末の総括前に12月の配点を自動で変更しない
+- Daily Articles の日次の終了条件は `confirmed_today >= 3`(その日に main で公開済みの Fact Audit confirmed 記事が3本以上)。届かない間は未完了として扱い、1 run の上限に達したら不足分だけを対象にした補充 run を自動で起動して続ける(状態はデータbranch `bot/daily-state`)。2本で完了扱いにしない。同じ日に見送った対象は再生成しない。止めるのは候補を変えても解決しないシステム障害(API・GitHub の障害、認証/課金/レート制限)と、暴走防止の round 上限のときだけで、その場合は failure + Issue で通知し、オーナーの手動実行で再開する
 - 記事の元データは原則 `data/articles.json` を編集する
 - 生成済みHTML、一覧ページ、`sitemap.xml` などは直接編集しない
 - 生成物は `python3 build.py` で再生成する
