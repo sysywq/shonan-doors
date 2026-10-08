@@ -875,6 +875,21 @@
    "confirmed_today": 3,
    "updated_at": "2026-10-07 15:22",
    "social_pending": []
+  },
+  "2026-10-08": {
+   "date": "2026-10-08",
+   "status": "incomplete",
+   "rounds": {
+    "0": {
+     "branch": "daily/2026-10-08",
+     "run_id": "37705477828",
+     "started_at": "2026-10-08 09:01"
+    }
+   },
+   "rejected": [],
+   "failure": null,
+   "confirmed_today": 0,
+   "updated_at": "2026-10-08 09:01"
   }
  }
 }
