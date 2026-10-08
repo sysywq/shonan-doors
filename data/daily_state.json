@@ -883,13 +883,198 @@
     "0": {
      "branch": "daily/2026-10-08",
      "run_id": "37705477828",
-     "started_at": "2026-10-08 09:01"
+     "started_at": "2026-10-08 09:01",
+     "published_ids": [
+      176,
+      177,
+      178
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "昭和レトロな童画の温かみ - 「企画展II 黒崎義介-童話の世界」、藤沢市アートスペースで10月10日開幕",
+     "dek": "童画家・日本画家の黒崎義介が手がけた童話の挿絵や原画を、藤沢市所蔵作品からセレクトして紹介する企画展が、辻堂の藤沢市アートスペースで2026年10月10日から12月20日まで開催される。入場無料。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+     "subjectNames": [
+      "企画展II 黒崎義介-童話の世界",
+      "黒崎義介-童話の世界",
+      "黒崎義介",
+      "藤沢市アートスペース",
+      "FAS"
+     ],
+     "tags": [
+      "藤沢",
+      "辻堂",
+      "美術",
+      "展覧会",
+      "童画",
+      "昭和レトロ",
+      "黒崎義介",
+      "藤沢市アートスペース",
+      "FAS",
+      "無料",
+      "アート"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-08",
+     "eventSeriesKey": "fas-kurosaki-yoshisuke-douwa",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "鎌倉の隣町に宿る氏神めぐり - 逗子「亀岡八幡宮」「五霊神社」「小坪須賀神社」、それぞれの個性と参拝の楽しみ方",
+     "dek": "鶴岡八幡宮のある鎌倉と隣り合う逗子には、規模は小さくとも深い歴史を持つ神社が点在する。駅から徒歩数分の市街地の鎮守から、源義朝ゆかりの古社、奈良時代から続く神事を守る漁師町の宮まで——逗子ならではの氏神めぐりを案内する。",
+     "area": "逗子",
+     "cat": "c",
+     "link": "https://kamegaoka-hachimangu.com/",
+     "subjectNames": [
+      "亀岡八幡宮",
+      "亀岡八幡神社",
+      "かめがおかはちまんぐう",
+      "五霊神社",
+      "ごりょうじんじゃ",
+      "沼間五霊神社",
+      "小坪須賀神社",
+      "須賀神社",
+      "天王社"
+     ],
+     "tags": [
+      "逗子",
+      "神社",
+      "亀岡八幡宮",
+      "五霊神社",
+      "小坪須賀神社",
+      "氏神",
+      "御朱印",
+      "鎌倉",
+      "歴史",
+      "沼間",
+      "小坪",
+      "源義朝",
+      "参拝"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-08",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "海を背に立つ葉山の鎮守——森戸大明神の歴史と境内の見どころ",
+     "dek": "",
+     "area": "葉山",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "「湘南のまんなか」平塚に移住する——交通・家賃・子育て環境をフラットに比較する",
+     "dek": "",
+     "area": "平塚",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "二宮で落花生スイーツと過ごすカフェ時間——地元の味を楽しむ店の選び方",
+     "dek": "",
+     "area": "二宮",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "えぼし岩はなぜ茅ヶ崎のシンボルなのか——烏帽子岩の歴史と伝説をたどる",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "逗子でマルシェ・朝市を楽しむ——定期開催イベントと選び方のガイド",
+     "dek": "",
+     "area": "逗子",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "逗子の神社を歩く——小坪・亀岡八幡・逗子神社、それぞれの個性と参拝の楽しみ方",
+     "dek": "",
+     "area": "逗子",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "なぜ平塚に七夕まつりが根付いたのか——その歴史と「湘南ひらつか七夕」の独自性",
+     "dek": "",
+     "area": "平塚",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-08 09:01"
+   "updated_at": "2026-10-08 09:33"
   }
  }
 }
