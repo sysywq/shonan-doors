@@ -140,6 +140,9 @@ def rejected_from_run(report, holds, round_no):
         if isinstance(h, dict):
             out.append(compact(dict(h.get("entry") or h, stockTopicId=h.get("stockTopicId") or ""),
                                f"Fact Audit で {h.get('verdict')}(保留)", round_no))
+    for r in report.get("freshness_rejected") or []:
+        if isinstance(r, dict):
+            out.append(compact(r, f"ニュース鮮度ゲートで対象外({r.get('reason', '')})", round_no))
     titles = {r["title"] for r in out}
     for a in ((report.get("planning") or {}).get("attempts") or []):
         # 採用した企画(selected)は公開対象か保留記事として上で扱う

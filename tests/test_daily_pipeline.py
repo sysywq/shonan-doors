@@ -10,7 +10,9 @@ import tempfile
 import types
 import unittest
 import urllib.error
+from datetime import datetime, timedelta
 from unittest import mock
+from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -52,6 +54,8 @@ CORE_UNVERIFIED = audit_response([claim("10月3日開催", "confirmed", role="ce
 DETAIL_TIME = audit_response([claim("10月3日開催", "confirmed", role="central"),
                               claim("開始時刻", "contradicted", av="10時開始", pv="11時開始")])
 CORE_CONTRADICTED = audit_response([claim("主催", "contradicted", role="central", av="藤沢市主催", pv="民間団体の主催")])
+# 保留記事の承認時にもニュース鮮度ゲートを通るので、イベントは実行日から見て開催前にしておく
+FUTURE_EVENT_DATE = (datetime.now(ZoneInfo("Asia/Tokyo")) + timedelta(days=7)).strftime("%Y-%m-%d")
 
 
 def article(i, title, atype="news", **kw):
@@ -365,7 +369,7 @@ def hold(**kw):
          "claims": [dict(claim("会場は海岸", "not_found_in_primary", role="dek", av="海岸"), imageReading="not_applicable")],
          "summary": "会場を確認できず", "primarySources": ["https://www.city.example.lg.jp/event.html"],
          "autofix": [], "escalation": {"kind": "core_unverified", "reason": "重要な記述が公式情報で確認できない"},
-         "entry": article(103, "C"), "stockTopicId": None}
+         "entry": article(103, "C", eventStartDate=FUTURE_EVENT_DATE), "stockTopicId": None}
     h.update(kw)
     return h
 
@@ -429,7 +433,7 @@ class ResolveDailyHoldTest(unittest.TestCase):
 
     def resolve(self, decision, responses, payload=None, value=""):
         client = FakeClient({"C": responses})
-        return rdhold.resolve(payload or hold(entry=article(103, "C", eventSeriesKey="c-fes")), decision, value,
+        return rdhold.resolve(payload or hold(entry=article(103, "C", eventSeriesKey="c-fes", eventStartDate=FUTURE_EVENT_DATE)), decision, value,
                               issue="9", client=client, fetcher=no_fetch, image_fetcher=lambda c: None,
                               articles_path=self.ws.paths["articles"], stock_topics_path=self.ws.paths["topics"],
                               event_series_path=self.ws.paths["series"], confirmations_path=self.conf)
@@ -450,7 +454,7 @@ class ResolveDailyHoldTest(unittest.TestCase):
         self.assertEqual(len(self.ws.read("articles")), 2)
 
     def test_require_confirmed_blocks_publication_unless_confirmed(self):
-        payload = dict(hold(entry=article(103, "C", eventSeriesKey="c-fes")), requireConfirmed=True)
+        payload = dict(hold(entry=article(103, "C", eventSeriesKey="c-fes", eventStartDate=FUTURE_EVENT_DATE)), requireConfirmed=True)
         code, msg, _ = self.resolve("approve", [CORE_UNVERIFIED], payload=payload)
         self.assertEqual(code, 3)
         self.assertIn("confirmed の場合のみ", msg)
@@ -497,7 +501,7 @@ class ResolveDailyHoldTest(unittest.TestCase):
         manual_dir = os.path.join(self.ws.dir.name, "manual-holds")
         os.makedirs(manual_dir)
         with open(os.path.join(manual_dir, "9.json"), "w", encoding="utf-8") as f:
-            json.dump(dict(hold(entry=article(103, "直したC")), requireConfirmed=True), f, ensure_ascii=False)
+            json.dump(dict(hold(entry=article(103, "直したC", eventStartDate=FUTURE_EVENT_DATE)), requireConfirmed=True), f, ensure_ascii=False)
         request = mock.Mock()
         p = rdhold.load_payload(types.SimpleNamespace(payload_file="", article_id=0, issue="9"),
                                 request=request, manual_dir=manual_dir)
