@@ -1089,13 +1089,319 @@
     "0": {
      "branch": "daily/2026-10-09",
      "run_id": "37863234667",
-     "started_at": "2026-10-09 09:08"
+     "started_at": "2026-10-09 09:08",
+     "published_ids": [],
+     "held_ids": [
+      179,
+      180
+     ],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "80台超えのキッチンカーが茅ヶ崎に集結 - 「第3回キッチンカーNo.1グランプリ in ちがさき」、10月11日開催",
+     "dek": "来場者の投票でNo.1を決めるグランプリ形式のキッチンカーの祭典が今年も第一カッターきいろ公園で開幕。入場無料で、グルメとステージを一日楽しめる。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://c-inshokutenkumiai.com/2026/05/01/6394/",
+     "subjectNames": [
+      "第3回キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ"
+     ],
+     "tags": [
+      "キッチンカー",
+      "グルメ",
+      "フードイベント",
+      "茅ヶ崎",
+      "茅ヶ崎中央公園",
+      "第一カッターきいろ公園",
+      "秋のイベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-09",
+     "eventSeriesKey": "chigasaki-kitchencar-k1gp",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "1300年ぶりに開く扉 - 逗子・岩殿寺の秋、まんだら堂やぐら群が10月24日から公開開始",
+     "dek": "逗子市内に点在する横穴式の中世墳墓「やぐら」。その代表格「まんだら堂やぐら群」の秋の限定公開が10月24日から始まる。あわせて市が「やぐらとは何か？」をテーマにした社会教育講座も10月23日に開催する。",
+     "area": "逗子",
+     "cat": "c",
+     "link": "https://www.city.zushi.kanagawa.jp/shiminkatsudo/bunkazai/1004537/1007768.html",
+     "subjectNames": [
+      "まんだら堂やぐら群",
+      "名越切通",
+      "逗子市 まんだら堂やぐら群"
+     ],
+     "tags": [
+      "やぐら",
+      "まんだら堂",
+      "中世",
+      "名越切通",
+      "限定公開",
+      "逗子",
+      "社会教育"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-09",
+     "eventSeriesKey": "mandara-do-yagura-aki",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "定員即満席、キャンセル待ち続出 - 逗子市が「小栗忠順の生涯」社会教育講座を令和8年度に開催",
+     "dek": "2027年NHK大河ドラマの主人公・小栗忠順を深掘りする逗子市の社会教育講座が、申し込み開始から定員に達した。横須賀製鉄所と三浦半島の近代史を切り口に、幕末の天才官僚の全貌に迫る。",
+     "area": "逗子",
+     "cat": "l",
+     "link": "https://www.city.zushi.kanagawa.jp/kosodate/shogaigakushu/1003836/1003838/index.html",
+     "subjectNames": [
+      "逆賊とされた開明派幕臣 小栗忠順の生涯とその業績",
+      "小栗忠順",
+      "小栗上野介忠順",
+      "逗子市社会教育講座"
+     ],
+     "tags": [
+      "社会教育",
+      "小栗忠順",
+      "大河ドラマ",
+      "幕末",
+      "横須賀製鉄所",
+      "逗子",
+      "講座"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-09",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "辻堂・鵠沼・藤沢駅前 - エリア別に選ぶ、藤沢のパン屋ガイド",
+     "dek": "国産小麦・自家製酵母へのこだわりを武器に、藤沢市内には個性豊かなパン屋が点在する。辻堂の海沿い、鵠沼海岸の住宅街、そして藤沢駅前の路地裏——居場所に合わせて使い分けたい4軒を、エリア別に紹介する。",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "https://www.panstage-lipple.com/",
+     "subjectNames": [
+      "パンステージ・リップル",
+      "Pan Stage Lipple",
+      "パンステージリップル",
+      "muginami BAKERY",
+      "ムギナミベーカリー",
+      "麦波ベーカリー",
+      "BOULANGERIE BONHEUR",
+      "ブーランジェリーボヌール",
+      "ボヌール",
+      "BONHEUR",
+      "Campanio",
+      "カンパニオ",
+      "bakery Campanio",
+      "ベーカリーカンパニオ"
+     ],
+     "tags": [
+      "藤沢",
+      "辻堂",
+      "鵠沼海岸",
+      "パン屋",
+      "ベーカリー",
+      "湘南グルメ",
+      "天然酵母",
+      "国産小麦",
+      "パンステージリップル",
+      "muginami BAKERY",
+      "BOULANGERIE BONHEUR",
+      "Campanio",
+      "カンパニオ",
+      "ボヌール"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-09",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "逗子海岸でSUPを始める - 体験スクールの選び方と当日の流れ",
+     "dek": "穏やかな湾に守られた逗子海岸は、初心者にとって理想的なSUP入門の舞台。複数のスクールが集まるこのエリアで、どう選んでどう臨めばいいか、事前に知っておきたいことをまとめた。",
+     "area": "逗子",
+     "cat": "t",
+     "link": "https://www.feather-factory.com/sup-school.html",
+     "subjectNames": [
+      "フェザーファクトリー",
+      "Feather Factory",
+      "OCEANS",
+      "OCEANS.CLUB",
+      "オーシャンズ",
+      "オーシャンズクラブ",
+      "スイッチスタンス",
+      "SWITCH STANCE"
+     ],
+     "tags": [
+      "逗子",
+      "SUP",
+      "サップ",
+      "スタンドアップパドル",
+      "マリンスポーツ",
+      "体験スクール",
+      "逗子海岸",
+      "初心者",
+      "湘南",
+      "フェザーファクトリー",
+      "オーシャンズ",
+      "スイッチスタンス"
+     ],
+     "articleType": "stock",
+     "topicId": "t0150",
+     "date": "2026-10-09",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 0
+    },
+    {
+     "title": "宇宙と科学と手づくりの2日間 - 「第8回みらいをひらく 湘南台ワクワク！体験ひろば」、10月10日・11日に湘南台文化センターこども館で",
+     "dek": "地球儀型の建物が目を引く藤沢・湘南台文化センターこども館で、子どもたちが自由に体験できる2日間のイベントが開催。工作・科学・展示など多彩なプログラムが揃う。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.kodomokan.jp/",
+     "subjectNames": [
+      "第8回みらいをひらく 湘南台ワクワク！体験ひろば",
+      "みらいをひらく湘南台ワクワク体験広場",
+      "湘南台文化センターこども館",
+      "藤沢市湘南台文化センターこども館"
+     ],
+     "tags": [
+      "藤沢",
+      "湘南台",
+      "こども館",
+      "体験",
+      "ワークショップ",
+      "プラネタリウム",
+      "子ども",
+      "秋のイベント",
+      "湘南台文化センター"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-09",
+     "eventSeriesKey": "shonan-dai-wakuwaku-taiken-hiroba",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 0
+    },
+    {
+     "title": "北鎌倉駅から始まる、禅寺と竹林の半日さんぽコース",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "透明な海と小さな命が待っている——葉山で磯遊びができる海岸と過ごし方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "茅ヶ崎の海岸でBBQはできる？——エリア別のルールと手ぶらプランの現実",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "落花生の町の、もうひとつの顔——二宮のオリーブ農業と産地を訪ねる",
+     "dek": "",
+     "area": "二宮",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "いやいやいやちょとまてあそこの文具屋さん閉店するの！！！？えええええええまじかよおおおお #茅ヶ崎FM #エボラジ https://t.co/rllki1dWfz",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "辻堂・鵠沼・藤沢駅前——エリア別に選ぶ、藤沢のパン屋ガイド",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "縁を結ぶ古都の社——鎌倉の縁結びパワースポット、神社めぐりの手引き",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-09 09:08"
+   "updated_at": "2026-10-09 09:39"
   }
  }
 }
