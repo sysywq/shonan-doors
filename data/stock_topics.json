@@ -1639,10 +1639,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "リニューアルオープンした平塚・龍城ケ丘の海辺施設について、BBQや飲食・駐車場・アクセスなど、実際に訪れる前に知っておきたい情報を知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存記事「12年ぶりに蘇った海辺の公園——ひらつかシーテラスで相模湾を感じる一日」(news/平塚/観光)と対象が完全に重複しているため。",
     "createdAt": "2026-10-07"
   },
   {
@@ -1691,10 +1691,10 @@
     "area": "藤沢",
     "category": "l",
     "searchIntent": "辻堂エリアへの移住・転居を検討しており、湘南T-SITEやテラスモール湘南など商業環境の充実ぶりと、海・通勤・家賃感のバランスを生活者目線で知りたい。既存の「辻堂という選択」記事よりも具体的な住環境情報を求めている",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存ストック記事「サーフィンも、都心通勤も。辻堂という選択」(stock/藤沢/暮らし)と対象エリア・検索意図が実質重複。「より具体的な住環境情報を」とあるが、一次情報のみで差別化できる独自情報の取得が困難。",
     "createdAt": "2026-10-07"
   },
   {
@@ -1717,10 +1717,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "湘南平の展望台まで車ではなく歩いて登りたいと考えており、高麗山や大磯方面とつなぐルートの距離・難易度・見どころをまとめて知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存ストック記事「360度の大パノラマ、平塚と大磯にまたがる絶景の丘」(stock/平塚/観光)が対象の湘南平・高麗山公園を扱っており、同一スポットについての記事は1本のルールに抵触する。",
     "createdAt": "2026-10-07"
   },
   {
@@ -1795,10 +1795,10 @@
     "area": "鎌倉",
     "category": "g",
     "searchIntent": "鎌倉野菜の即売所「レンバイ」に実際に行ってみたい人が、営業日・時間・アクセス・どんな野菜が買えるかなど訪れ前の実用情報をまとめて知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存ストック記事「『レンバイ』の愛称で親しまれる、鎌倉野菜の即売所」(stock/鎌倉/グルメ)と対象が完全に同一（鎌倉市農協連即売所/レンバイ）であり重複。",
     "createdAt": "2026-10-08"
   },
   {
@@ -1938,10 +1938,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "平塚エリアで海釣りを楽しみたいと考えており、相模川河口・龍城ヶ丘・大磯寄りの海岸など釣り可能なポイントと、季節ごとに狙える魚種を知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "平塚エリアの釣り場情報は、釣り可能なポイントのルール・釣り可否・季節魚種等を一次情報（自治体・漁協・施設公式）のみで網羅的に正確に記述することが困難。他メディア情報に依存せざるを得ず、情報源ポリシーを満たせないと判断。",
     "createdAt": "2026-10-09"
   },
   {
@@ -1996,6 +1996,110 @@
     "generatedArticleId": null,
     "generatedAt": null,
     "skipReason": "同一対象の既存記事あり: 対象名「明月院」が既存記事id:96と一致",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0154",
+    "query": "湘南モノレール 乗り方 沿線 楽しみ方",
+    "titleIdea": "ぶら下がって走る、湘南モノレールの乗り方と沿線スポットの歩き方",
+    "area": "藤沢",
+    "category": "t",
+    "searchIntent": "湘南モノレールに乗ってみたいが、乗車方法・ICカードの使い方・どの駅で降りると楽しいかなど、沿線観光の段取りを事前にまとめて知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "既存ストック記事「あえて丘を選んだ、日本でも珍しい懸垂式」(stock/藤沢/観光)が湘南モノレールを主要対象としており、同一対象についての記事は1本のルールに抵触する。",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0155",
+    "query": "逗子 名越切通 散策 歴史",
+    "titleIdea": "鎌倉と逗子をつなぐ、中世の山道「名越切通」を歩く",
+    "area": "逗子",
+    "category": "t",
+    "searchIntent": "名越切通を実際に歩きたいと考えており、ルートの入口・所要時間・歴史的背景・まんだら堂やぐら群との組み合わせ方を知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「名越切通」が既存記事id:rejected-todayと一致",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0156",
+    "query": "二宮金次郎 ゆかりの地 二宮",
+    "titleIdea": "二宮金次郎はなぜ「二宮」なのか——像のモデルが生きた土地と、町に残るゆかりの場所",
+    "area": "二宮",
+    "category": "c",
+    "searchIntent": "二宮金次郎（尊徳）と地名「二宮」の関係を知りたい。像でお馴染みの人物がどこで生まれ・何をした人かを歴史的背景とともに知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 監査応答の形式異常・監査処理の例外(監査できていない)",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0157",
+    "query": "茅ヶ崎 サーフショップ 老舗 おすすめ",
+    "titleIdea": "波の街の商い——茅ヶ崎で長く愛されるサーフショップを訪ねる",
+    "area": "茅ヶ崎",
+    "category": "b",
+    "searchIntent": "茅ヶ崎のサーフカルチャーを象徴する老舗・地元密着型のサーフショップを探しており、取扱ブランドや雰囲気・立地も含めてショップ選びの手がかりにしたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "複数のサーフショップを取り上げる「老舗・地元密着型ショップ」記事として書くには、各ショップの公式サイト・公式SNSから一次情報（取扱ブランド・創業年・営業時間等）を揃える必要があるが、情報源ポリシーを満たす形での複数店舗の網羅は困難。単一店舗に絞ると既存記事「1967年創業、サーファーが憧れるサーフショップ」と対象が重複するリスクも高い。",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0158",
+    "query": "大磯 魚 海鮮 食べられる店",
+    "titleIdea": "漁師町の食卓——大磯で地魚と海鮮を味わえる店の選び方",
+    "area": "大磯",
+    "category": "g",
+    "searchIntent": "大磯観光の際に、大磯港に水揚げされた地魚・海鮮を食べられる飲食店を探しており、場所・ジャンル・価格帯の目安を知りたい",
+    "status": "generated",
+    "generatedArticleId": 181,
+    "generatedAt": "2026-10-09 11:53",
+    "skipReason": null,
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0159",
+    "query": "葉山 アート ギャラリー 美術館",
+    "titleIdea": "御用邸の町のアート回廊——葉山の美術館・ギャラリーをめぐる一日",
+    "area": "葉山",
+    "category": "c",
+    "searchIntent": "葉山に神奈川県立近代美術館以外にもギャラリーや美術館があるかを知りたい。アート目的で葉山を訪れる際の選択肢を一通り把握したい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "既存のstock記事に「松林に抱かれた、茅ヶ崎の隠れ家美術館」や葉山の神奈川県立近代美術館に触れるnews記事が複数あり、また神奈川県立近代美術館 葉山を核とした複数施設の紹介記事はギャラリー個別の一次情報を揃えることが困難。単独の美術館なら既存記事と重複するリスクがあるため見送り。",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0160",
+    "query": "平塚 ドライブ コース 湘南",
+    "titleIdea": "湘南のまんなかを走る——平塚を起点にした相模湾沿いドライブコース",
+    "area": "平塚",
+    "category": "t",
+    "searchIntent": "平塚を起点またはルート上に含む湘南ドライブを計画しており、相模湾沿いの景色が楽しめる道・途中で立ち寄れるスポットやカフェを知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "平塚を起点にした湘南ドライブコースは、立ち寄りスポットや道路情報を一次情報のみで網羅することが困難。また一般的なドライブコース記事になりがちで、湘南Doorsとしての独自価値を出しにくい。",
+    "createdAt": "2026-10-09"
+  },
+  {
+    "id": "t0161",
+    "query": "鎌倉 古民家 移住 暮らし",
+    "titleIdea": "古都の古民家に住むという選択——鎌倉移住のリアルと、物件・コミュニティ探しの手がかり",
+    "area": "鎌倉",
+    "category": "l",
+    "searchIntent": "鎌倉への移住を検討しており、観光地ゆえの混雑・家賃の高さ・古民家物件の流通状況など、暮らし手目線のリアルな情報を知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "鎌倉移住の暮らし記事は、家賃相場・古民家物件の流通状況・混雑の実態等を一次情報（自治体・不動産事業者公式）のみで正確に書くことが困難。既存の「電車が生活道路と重なる、江ノ電沿線に暮らすということ」とも暮らし意図が近接している。",
     "createdAt": "2026-10-09"
   }
 ]
