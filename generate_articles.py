@@ -53,6 +53,7 @@ from zoneinfo import ZoneInfo
 import anthropic
 
 import daily_state
+import news_freshness
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ARTICLES_JSON_PATH = os.path.join(ROOT, "data", "articles.json")
@@ -233,6 +234,11 @@ NEWS_ARTICLE_TOOL = {
                         "eventStartDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 開催日をYYYY-MM-DD形式で。複数日開催の場合は初日。不明な場合は空文字"},
                         "eventEndDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 複数日開催の場合の最終日をYYYY-MM-DD形式で。単日開催または不明な場合は空文字"},
                         "eventSeriesKey": {"type": "string", "description": "catが'e'(イベント)の場合のみ: このイベントの一意なシリーズ識別子(kebab-case英数字、例: tsurugaoka-hachimangu-reitaisai)。既存のイベントシリーズ台帳に一致するイベントがあれば同じキーを使い、無ければ新しいキーを考える。catが'e'以外の場合は空文字"},
+                        "newsKind": {"type": "string", "enum": ["store_opening", "event", "news"], "description": "新店・開業・リニューアルオープンは store_opening、イベント(cat='e')は event、それ以外は news"},
+                        "announcementDate": {"type": "string", "description": "一次情報に明記された公式発表日(YYYY-MM-DD)。確認できなければ空文字(推測しない)"},
+                        "openingDate": {"type": "string", "description": "newsKind='store_opening'のみ: 一次情報に明記された開店・開業日(YYYY-MM-DD)。それ以外・確認できなければ空文字"},
+                        "effectiveDate": {"type": "string", "description": "newsKind='news'のみ: 閉店・移転・運行変更など変化が起きる日(YYYY-MM-DD)。無い・確認できなければ空文字"},
+                        "freshnessException": {"type": "string", "description": "開店・発表から8〜14日の記事だけ: 今出す読者価値の具体的な理由(例: 開店記念の特典が10月20日まで)。該当しなければ空文字"},
                         "address": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "access": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
                         "hours": {"type": "string", "description": "b/gカテゴリのみ。確認できなければ空文字"},
@@ -246,6 +252,7 @@ NEWS_ARTICLE_TOOL = {
                         "cat", "area", "scene", "title", "dek", "body", "tags", "link",
                         "subjectNames", "sources",
                         "eventStartDate", "eventEndDate", "eventSeriesKey",
+                        "newsKind", "announcementDate", "openingDate", "effectiveDate", "freshnessException",
                         "address", "access", "hours", "closedDays",
                         "instagram", "facebook", "x", "tiktok",
                     ],
@@ -322,6 +329,16 @@ Web検索を使って、直近1週間以内に実際にあった湘南エリア�
 単日開催の場合はeventEndDateは空文字のままで構いません。開催日が確認できない場合のみ、
 eventStartDateを空文字にしてください(この場合、検索結果でのイベント情報表示の対象外に
 なります)。日付は必ず情報源に明記されているものだけを使い、推測で埋めないこと。
+
+【ニュースの鮮度(プログラムで判定し、外れた記事は公開しない)】
+発表日・開店日・開催日を混同しないこと。今日は{news_freshness.today_jst()}(JST)。
+- 新店・開業(newsKind='store_opening'): openingDate(開店日)で判断する。これから開店する店舗は、公式発表が1か月以上前でもよい。
+  既に開店した店舗は開店から7日以内が対象。8〜14日は freshnessException に今出す読者価値の具体的な理由がある場合だけ。
+  開店から15日以上たった店舗は新店ニュースにしない(過去の開店を今日の速報として扱わない)。
+- イベント(cat='e'): 終了済みのイベントは書かない。開催中・これから開催するものは、発表が古くてもよい。
+- その他のニュース: effectiveDate(変化が起きる日)が未来なら対象。過去の出来事は発表日・実施日から7日以内が対象。
+- openingDate / announcementDate / effectiveDate は一次情報に明記された日付だけを入れ、確認できなければ空文字にする
+  (日付が確認できない新店・ニュースは公開されない)。
 {series_block}
 【タイトル表記ルール】
 タイトル内で区切り記号を使う場合、長いダッシュ「——」「――」「—」「―」「–」や長音記号「ー」は区切りとして使わず、必ず半角スペース＋ハイフン＋半角スペースの「 - 」を使ってください。
@@ -515,6 +532,7 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
 
     accepted = []             # 採用確定(ただしID未発行)のエントリ
     working_set = list(existing_articles)  # 重複チェック対象(既存記事+今回採用済み分)
+    stale_digests = []        # 鮮度ゲートで外したドラフト(refill で同じ対象を出させない)
 
     def process_batch(raw_items):
         """1回分のAPIレスポンスを検証し、通った候補をaccepted/working_setに積む。"""
@@ -525,6 +543,14 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
             if reason:
                 title_for_log = item.get("title", "(タイトル不明)") if isinstance(item, dict) else f"(dict以外: {type(item).__name__})"
                 log_lines.append(f"スキップ({label}): 「{title_for_log}」— スキーマ不正: {reason}")
+                continue
+            # 公開前監査(API)より先に、発表日・開店日・開催日で鮮度を判定する。全ニュース経路がここを通る
+            freshness = news_freshness.check(item, today)
+            if not freshness["ok"]:
+                record_freshness_rejection(item, freshness, label)
+                stale_digests.append(article_digest(item))
+                log_lines.append(f"スキップ({label}): 「{item['title']}」— ニュース鮮度ゲート"
+                                 f"({freshness['kind']}): {freshness['reason']}")
                 continue
             dup_reason = is_duplicate(item, working_set, days=90)
             if dup_reason:
@@ -539,7 +565,9 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
                 log_lines.append(f"スキップ({label}): 「{item['title']}」— 同一対象の既存記事あり: {subject_dup_reason}")
                 continue
 
-            entry = run_publish_gate(build_news_entry(item, today), label, gate_rejections, log_lines)
+            entry = build_news_entry(item, today)
+            entry["freshness"] = freshness_record(item, freshness)
+            entry = run_publish_gate(entry, label, gate_rejections, log_lines)
             if entry is None:
                 continue
             accepted.append(entry)
@@ -568,7 +596,7 @@ def run_news_generation(existing_articles, today, event_series=None, gate_reject
         log_lines.append(f"{label}: {shortfall}件不足 → refill attempt {attempt}/{max_refills}")
         # 「今回のrunで既に採用済みの記事」も重複防止リストに含めることで、
         # refillが直前に採用した記事と同じ話題を提案してくる確率を下げる。
-        refill_recent_titles = recent_titles + [article_digest(a) for a in accepted]
+        refill_recent_titles = recent_titles + [article_digest(a) for a in accepted] + stale_digests
         refill_raw_items = call_claude_news(refill_recent_titles, event_series, count=shortfall)
         refill_raw_items = validate_response_shape(refill_raw_items, label=f"{label}_refill")
         log_lines.append(f"{label}: 追加で{len(refill_raw_items)}件生成しました(refill attempt {attempt}/{max_refills})")
@@ -1460,6 +1488,138 @@ def register_event_series_if_new(item, event_series):
 
 _gate_client = None
 _gate_drafts_checked = 0  # この実行で公開前監査にかけたドラフト数(MAX_GATE_DRAFTS_PER_RUN と比べる)
+_freshness_rejections = []  # この実行でニュース鮮度ゲートにより外したドラフト(実行レポートの freshness_rejected)
+
+
+# ---------- ニュース鮮度ゲート(news_freshness)の記録 ----------
+
+FRESHNESS_DATE_KEYS = ("announcementDate", "openingDate", "effectiveDate", "eventStartDate", "eventEndDate")
+
+
+def freshness_record(item, result):
+    """採用したニュースに残す鮮度判定(どの日付を基準に何日目と判断したか)。"""
+    record = {"kind": result["kind"], "basis": result["basis"], "reason": result["reason"]}
+    record.update({k: item.get(k) or "" for k in ("announcementDate", "openingDate", "effectiveDate")})
+    if result.get("exception"):
+        record["exception"] = result["exception"]
+    return record
+
+
+def record_freshness_rejection(item, result, label):
+    """鮮度ゲートで外したドラフトを記録する(Fact Audit の不合格とは別。人の判断は不要なので Issue にしない)。
+    実行レポートに残し、同じ日の補充 round では見送り済みの対象として再生成しない。"""
+    _freshness_rejections.append({
+        "title": item.get("title", ""), "dek": item.get("dek", ""), "area": item.get("area", ""),
+        "cat": item.get("cat", ""), "link": item.get("link") or "",
+        "subjectNames": list(item.get("subjectNames") or []), "tags": list(item.get("tags") or []),
+        "articleType": "news", "label": label, "kind": result["kind"], "reason": result["reason"],
+        "days": result.get("days"), **{k: item.get(k) or "" for k in FRESHNESS_DATE_KEYS}})
+
+
+def final_freshness_guard(entries, today, log_lines, record=True):
+    """ID を発行する直前に、採用予定のニュースをもう一度鮮度ゲートにかける(どの経路で作られたかに関係なく)。
+    ストック記事(エバーグリーン)は対象外。日付は生成時に記録した freshness から読む(推測で補完しない)。
+    record=False … 生成 run 以外(保留記事の承認など)。この run の freshness_rejected には積まない。"""
+    kept = []
+    for e in entries:
+        if e.get("articleType") != "news":
+            kept.append(e)
+            continue
+        rec = e.get("freshness") or {}
+        probe = dict(e, **{k: rec.get(k) or "" for k in ("announcementDate", "openingDate", "effectiveDate")},
+                     freshnessException=rec.get("exception") or "")
+        if rec.get("kind") == "store_opening":
+            probe["newsKind"] = "store_opening"
+        result = news_freshness.check(probe, today)
+        if result["ok"]:
+            kept.append(e)
+            continue
+        if record:
+            record_freshness_rejection(probe, result, "final_guard")
+        log_lines.append(f"スキップ(採用前の鮮度確認): 「{e.get('title', '')}」— {result['reason']}")
+    return kept
+
+
+def freshness_rejected_drafts():
+    """鮮度ゲートで外したドラフトを、重複チェック用の記事として返す(同じ run の top-up で再採用しない)。"""
+    return [dict(r, id="freshness-rejected") for r in _freshness_rejections if r.get("title")]
+
+
+def write_freshness_summary():
+    if not _freshness_rejections:
+        return
+    lines = [f"## ニュース鮮度ゲートで外した記事({len(_freshness_rejections)}件・公開していません)", ""]
+    for r in _freshness_rejections:
+        dates = ", ".join(f"{k}={r[k]}" for k in FRESHNESS_DATE_KEYS if r.get(k))
+        lines.append(f"- [{r['kind']}] {r['title']} — {r['reason']}({dates or '日付なし'})")
+        print(f"::notice::ニュース鮮度ゲートで対象外: 「{r['title']}」— {r['reason']}")
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    try:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n\n")
+    except OSError as e:
+        print(f"警告: ジョブサマリーの書き込みに失敗しました: {e}", file=sys.stderr)
+
+
+# ---------- 企画(採点)が使えず従来経路へ fallback したときの通知 ----------
+
+_SECRET_RE = re.compile(r"sk-ant-[A-Za-z0-9_\-]+|(?i:bearer)\s+[A-Za-z0-9._\-]+|[A-Za-z0-9_\-]{40,}")
+
+
+def _redact(text, limit=300):
+    return _SECRET_RE.sub("[REDACTED]", str(text or ""))[:limit]
+
+
+def planning_fallback_info(stage, cause, exc, today, diagnostics=None, candidates=None):
+    """fallback の原因と元データ(機密を含まない範囲)をまとめ、Actions のエラー表示とジョブサマリーに出す。
+    戻り値は実行レポートの planning_fallback(report_gate_rejections.py が Issue にする)。
+    stage … 候補収集 / 採点 / 採点結果の順位付け
+    cause … api_error(API障害: 候補を変えても直らない) / score_response_invalid(採点応答の検証失敗) / exception"""
+    diag = dict(diagnostics or {})
+    info = {"stage": stage, "cause": cause, "date": today,
+            "exception": f"{type(exc).__name__}: {_redact(exc)}" if exc else "",
+            "candidate_count": len(candidates or []),
+            "candidates": [{"id": _redact(c.get("id"), 60), "articleType": c.get("articleType", ""),
+                            "area": c.get("area", ""), "cat": c.get("cat", ""),
+                            "titleIdea": _redact(c.get("titleIdea"), 80),
+                            "leadSourceType": c.get("leadSourceType", "")} for c in (candidates or [])][:30],
+            "diagnostics": json.loads(json.dumps({k: diag.get(k) for k in (
+                "candidates", "valid", "invalid", "missing", "unknown", "notes", "stop_reason", "retried")
+                if k in diag}, ensure_ascii=False, default=str))}
+    label = {"api_error": "APIエラー(システム障害)", "score_response_invalid": "採点応答の検証に失敗",
+             "exception": "想定外の例外"}.get(cause, cause)
+    msg = (f"企画({stage})が使えないため従来の横断候補経路(run_cross_selection)へ fallback しました: "
+           f"{label} — {info['exception']}")
+    print(f"::error title=企画fallback::{msg}", file=sys.stderr)
+    if diag:
+        print(f"[診断:企画{stage}] " + json.dumps(info["diagnostics"], ensure_ascii=False)[:3000], file=sys.stderr)
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if path:
+        try:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(f"## 企画が fallback しました({stage})\n\n{msg}\n\n```json\n"
+                        + json.dumps(info, ensure_ascii=False, indent=1)[:6000] + "\n```\n\n")
+        except OSError as e:
+            print(f"警告: ジョブサマリーの書き込みに失敗しました: {e}", file=sys.stderr)
+    return info
+
+
+def log_judge_diagnostics(diag, log_lines):
+    """採点で除外・補正した候補を、理由付きでログに残す(無言で採用・除外しない)。"""
+    for note in diag.get("notes") or []:
+        log_lines.append(f"診断(企画採点): {note}")
+    for cid, problem in (diag.get("invalid") or {}).items():
+        log_lines.append(f"除外(企画採点): {cid} は採点値が不正のため候補から外す: "
+                         f"{' / '.join(problem.get('problems') or [])} raw={problem.get('raw')}")
+    for cid in diag.get("missing") or []:
+        log_lines.append(f"除外(企画採点): {cid} は再採点しても採点が返らなかったため候補から外す")
+    if diag.get("unknown"):
+        log_lines.append(f"診断(企画採点): 候補に無いidの採点 {len(diag['unknown'])}件を無視: {diag['unknown'][:5]}")
+    if diag.get("invalid") or diag.get("missing"):
+        print(f"::warning::企画採点で{len(diag.get('invalid') or {})}件が不正・{len(diag.get('missing') or [])}件が欠落。"
+              f"この候補だけを外して有効な{diag.get('valid')}件で企画を続けます", file=sys.stderr)
 
 
 def gate_rejected_drafts(gate_rejections):
@@ -1547,6 +1707,9 @@ def shortfall_info(total, stock_count, gate_rejected):
     reasons = []
     if gate_rejected:
         reasons.append(f"公開前監査で不合格 {len(gate_rejected)}件(品質基準は緩めずに見送り)")
+    if _freshness_rejections:
+        reasons.append(f"ニュース鮮度ゲートで対象外 {len(_freshness_rejections)}件(開店から15日以上・終了済み・"
+                       "日付未確認などのニュースは件数不足でも公開しない)")
     if stock_count == 0:
         reasons.append("stockは重複判定・見送り・不合格などで0件")
     if gate_budget_exhausted():
@@ -1694,29 +1857,56 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         except Exception as ig_exc:
             log_lines.append(f"警告(Instagram): 先行シグナル取得をスキップ: {type(ig_exc).__name__}")
     except Exception as exc:
-        daily_state.note_system_error(exc, "企画: 候補収集")
-        log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
+        cause = "api_error" if daily_state.note_system_error(exc, "企画: 候補収集") else "exception"
+        log_lines.append(f"警告(企画): 候補収集に失敗。従来の横断候補経路で続行: {type(exc).__name__}: {_redact(exc)}")
+        fallback = planning_fallback_info("候補収集", cause, exc, today)
         return run_cross_selection(existing_articles, today, event_series, log_lines,
-                                   news_gate_rejections, stock_gate_rejections, avoid=avoid)
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid, fallback=fallback)
     stock_candidates = [{"id": t["id"], "articleType": "stock", "query": t["query"],
                          "titleIdea": t["titleIdea"], "area": t["area"],
                          "cat": t["category"], "searchIntent": t["searchIntent"],
                          "subject": "", "sourceUrl": ""}
                         for t in stock_topics if t.get("status") == "candidate" and t["id"] not in skip_topics]
-    candidates = ep.candidate_pool(discovered, stock_candidates, known)
+    fresh = []
+    for item in discovered:
+        stale = news_freshness.candidate_is_stale(item, today)
+        if stale:
+            log_lines.append(f"スキップ(企画): {item.get('id')} {item.get('titleIdea', '')} — ニュース鮮度: {stale}")
+        else:
+            fresh.append(item)
+    candidates = ep.candidate_pool(fresh, stock_candidates, known)
     if len(candidates) < 10:
         log_lines.append(f"警告(企画): 候補が{len(candidates)}件。目安10〜30件には不足")
     if not candidates:
         raise RuntimeError("企画候補がありません")
+    judge_diag = {}
     try:
-        judgments = ep.judge(client, candidates, existing_articles)
-        ranked = plan(candidates, judgments, growth_signal(), existing_articles, today,
+        judgments = ep.judge(client, candidates, existing_articles, diagnostics=judge_diag)
+    except ep.EditorialScoreError as exc:
+        # 採点応答が構造ごと壊れている・有効な採点が0件。候補を変えれば直り得るので API 障害としては記録しない
+        log_judge_diagnostics(exc.diagnostics or judge_diag, log_lines)
+        log_lines.append(f"警告(企画): 採点応答の検証に失敗。従来の横断候補経路で続行: {exc}")
+        fallback = planning_fallback_info("採点", "score_response_invalid", exc, today,
+                                          exc.diagnostics or judge_diag, candidates)
+        return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid, fallback=fallback)
+    except Exception as exc:
+        cause = "api_error" if daily_state.note_system_error(exc, "企画: 採点") else "exception"
+        log_lines.append(f"警告(企画): 採点に失敗({'APIエラー' if cause == 'api_error' else '想定外の例外'})。"
+                         f"従来の横断候補経路で続行: {type(exc).__name__}: {_redact(exc)}")
+        fallback = planning_fallback_info("採点", cause, exc, today, judge_diag, candidates)
+        return run_cross_selection(existing_articles, today, event_series, log_lines,
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid, fallback=fallback)
+    log_judge_diagnostics(judge_diag, log_lines)
+    candidates_judged = [c for c in candidates if c["id"] in judgments]
+    try:
+        ranked = plan(candidates_judged, judgments, growth_signal(), existing_articles, today,
                       target=DAILY_TARGET_ARTICLES)
     except Exception as exc:
-        daily_state.note_system_error(exc, "企画: 採点")
-        log_lines.append(f"警告(企画): 採点に失敗。従来の横断候補経路で続行: {type(exc).__name__}")
+        log_lines.append(f"警告(企画): 採点結果の順位付けに失敗。従来の横断候補経路で続行: {type(exc).__name__}: {_redact(exc)}")
+        fallback = planning_fallback_info("採点結果の順位付け", "exception", exc, today, judge_diag, candidates)
         return run_cross_selection(existing_articles, today, event_series, log_lines,
-                                   news_gate_rejections, stock_gate_rejections, avoid=avoid)
+                                   news_gate_rejections, stock_gate_rejections, avoid=avoid, fallback=fallback)
     selected = []
     attempts = []
     max_attempts = max(DAILY_TARGET_ARTICLES, MAX_EDITORIAL_DRAFT_ATTEMPTS)
@@ -1774,7 +1964,8 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         missing = DAILY_TARGET_ARTICLES - len(selected)
         log_lines.append(f"企画: 採用{len(selected)}件のため、通常のニュース探索で最大{missing}件を補充します"
                          f"(top-up {fallback_round}/{DAILY_TOPUP_MAX_ATTEMPTS})")
-        rejected = gate_rejected_drafts(news_gate_rejections + stock_gate_rejections) + avoid
+        rejected = (gate_rejected_drafts(news_gate_rejections + stock_gate_rejections)
+                    + freshness_rejected_drafts() + avoid)
         try:
             more, more_log, _ = run_news_generation(
                 existing_articles + selected + rejected, today, event_series,
@@ -1792,6 +1983,7 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
             daily_state.note_system_error(exc, "企画: 補充探索")
             log_lines.append(f"警告(企画): 補充探索に失敗: {type(exc).__name__}: {exc}")
 
+    selected = final_freshness_guard(selected, today, log_lines)
     ids = reserve_ids(len(selected)) if selected else []
     topics_by_id = {t["id"]: t for t in stock_topics}
     now_str = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M")
@@ -1804,6 +1996,7 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
             event_series, _ = register_event_series_if_new(entry, event_series)
     gate_rejected = news_gate_rejections + stock_gate_rejections
     write_gate_summary(gate_rejected)
+    write_freshness_summary()
     shortfall = shortfall_info(len(selected), sum(a["articleType"] == "stock" for a in selected), gate_rejected)
     write_shortfall_summary(shortfall, today)
     if selected:
@@ -1812,7 +2005,8 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
     atomic_write_json(EVENT_SERIES_PATH, event_series)
     news_ids = [a["id"] for a in selected if a["articleType"] == "news"]
     stock_ids = [a["id"] for a in selected if a["articleType"] == "stock"]
-    log_lines.append(f"企画結果: {len(candidates)}候補、採用news={len(news_ids)} stock={len(stock_ids)}")
+    log_lines.append(f"企画結果: {len(candidates)}候補(採点済み{len(candidates_judged)}件)、"
+                     f"採用news={len(news_ids)} stock={len(stock_ids)}")
     for line in log_lines:
         print(line)
     write_run_report(status="ok" if selected else ("no_articles_passed_gate" if gate_rejected else "no_articles_accepted"),
@@ -1822,14 +2016,20 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                      stock_slugs=[a["slug"] for a in selected if a["articleType"] == "stock"],
                      news_count=len(news_ids), stock_count=len(stock_ids), total_count=len(selected),
                      date=today, gate_rejected=gate_rejected, shortfall=shortfall,
-                     planning={"candidate_count": len(candidates), "attempts": attempts,
+                     freshness_rejected=list(_freshness_rejections),
+                     planning={"candidate_count": len(candidates), "judged_count": len(candidates_judged),
+                               "excluded_by_scoring": sorted(set(judge_diag.get("invalid") or {})
+                                                             | set(judge_diag.get("missing") or [])),
+                               "attempts": attempts,
                                "period": __import__("editorial_selection").period(today)})
-    if not selected and not gate_rejected:
+    if not selected and not gate_rejected and not _freshness_rejections:
         raise RuntimeError("記事候補が1件も採用されませんでした")
 
 def run_cross_selection(existing_articles, today, event_series, log_lines,
-                        news_gate_rejections, stock_gate_rejections, avoid=None):
-    """Audit two candidate pools, then select across types before issuing IDs."""
+                        news_gate_rejections, stock_gate_rejections, avoid=None, fallback=None):
+    """Audit two candidate pools, then select across types before issuing IDs.
+    fallback … 企画から fallback してきた場合の原因(planning_fallback_info)。実行レポートに残し Issue にする。
+    ニュースは run_news_generation の鮮度ゲートと final_freshness_guard を通る(企画経路と同じ基準)。"""
     from editorial_selection import select
 
     avoid = list(avoid or [])
@@ -1855,7 +2055,7 @@ def run_cross_selection(existing_articles, today, event_series, log_lines,
         stock = []
         log_lines.append(f"警告(stock): 候補生成に失敗: {exc}")
 
-    candidates = news + stock
+    candidates = final_freshness_guard(news + stock, today, log_lines)
     ranked = select(candidates, existing_articles, growth_signal(), len(candidates), today)
     selected = []
     for entry in ranked:
@@ -1879,7 +2079,11 @@ def run_cross_selection(existing_articles, today, event_series, log_lines,
             event_series, _ = register_event_series_if_new(entry, event_series)
     gate_rejected = news_gate_rejections + stock_gate_rejections
     write_gate_summary(gate_rejected)
+    write_freshness_summary()
     shortfall = shortfall_info(len(selected), sum(a["articleType"] == "stock" for a in selected), gate_rejected)
+    if shortfall and fallback:
+        shortfall["reasons"].insert(0, f"企画({fallback['stage']})が使えず従来の横断候補経路へ fallback した"
+                                       f"({fallback['cause']}: {fallback['exception']})")
     write_shortfall_summary(shortfall, today)
     if selected:
         atomic_write_json(ARTICLES_JSON_PATH, existing_articles + selected)
@@ -1887,7 +2091,8 @@ def run_cross_selection(existing_articles, today, event_series, log_lines,
     atomic_write_json(EVENT_SERIES_PATH, event_series)
     news_ids = [a["id"] for a in selected if a["articleType"] == "news"]
     stock_ids = [a["id"] for a in selected if a["articleType"] == "stock"]
-    log_lines.append(f"横断選定: 候補news={len(news)}、stock={len(stock)}、採用news={len(news_ids)}、stock={len(stock_ids)}")
+    log_lines.append(f"横断選定: 候補news={len(news)}、stock={len(stock)}、採用news={len(news_ids)}、stock={len(stock_ids)}"
+                     + (f"(企画 fallback: {fallback['stage']} / {fallback['cause']})" if fallback else ""))
     for line in log_lines:
         print(line)
     write_run_report(status="ok" if selected else ("no_articles_passed_gate" if gate_rejected else "no_articles_accepted"),
@@ -1897,8 +2102,9 @@ def run_cross_selection(existing_articles, today, event_series, log_lines,
                      stock_slugs=[a["slug"] for a in selected if a["articleType"] == "stock"],
                      news_count=len(news_ids), stock_count=len(stock_ids),
                      total_count=len(selected), date=today,
-                     gate_rejected=gate_rejected, shortfall=shortfall)
-    if not selected and not gate_rejected:
+                     gate_rejected=gate_rejected, shortfall=shortfall,
+                     freshness_rejected=list(_freshness_rejections), planning_fallback=fallback)
+    if not selected and not gate_rejected and not _freshness_rejections:
         raise RuntimeError("記事候補が1件も採用されませんでした")
 
 def main():
@@ -1916,6 +2122,7 @@ def main():
     # report_gate_rejections.py がこれを読んでIssue化する。
     news_gate_rejections = []
     stock_gate_rejections = []
+    _freshness_rejections.clear()
 
     ctx = daily_state.load_context()
     if ctx.get("date") not in (None, today):

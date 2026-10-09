@@ -1,10 +1,38 @@
 """Daily editorial planning; observed metrics are bounded, biased signals."""
 from collections import Counter
-from math import log1p
+from math import isfinite, log1p
 import os
+import re
 
 WEIGHTS = {"demand": 25, "timing": 20, "usefulness": 20,
            "originality": 15, "observed": 10, "exploration": 10}
+JUDGED_KEYS = ("demand", "timing", "usefulness", "originality")
+NUMERIC_TEXT = re.compile(r"[+-]?\d+(?:\.\d+)?")
+
+
+def validate_judgment(raw):
+    """AIの採点1件を検証する。戻り値 (judgment or None, problems, notes)。
+    欠落・null・範囲外・数値でない値は 0 に変換したり丸めたりせず、その候補を不正として扱う
+    (problems に理由)。"18" のような文字列数値だけは数値として読み、notes に残す。"""
+    if not isinstance(raw, dict):
+        return None, [f"採点がオブジェクトではない(型={type(raw).__name__})"], []
+    clean, problems, notes = {}, [], []
+    for key in JUDGED_KEYS:
+        value = raw.get(key)
+        if key not in raw or value is None:
+            problems.append(f"{key}が欠落/null")
+            continue
+        if isinstance(value, str) and NUMERIC_TEXT.fullmatch(value.strip()):
+            notes.append(f"{key}が文字列数値({value!r})のため数値として読んだ")
+            value = float(value.strip())
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not isfinite(value):
+            problems.append(f"{key}が数値ではない({str(value)[:40]!r})")
+            continue
+        if not 0 <= value <= WEIGHTS[key]:
+            problems.append(f"{key}={value} が範囲外(0〜{WEIGHTS[key]})")
+            continue
+        clean[key] = int(value) if float(value).is_integer() else value
+    return (None if problems else clean), problems, notes
 
 
 def period(today):
@@ -45,12 +73,10 @@ def exploration_points(candidate, existing, today):
 
 
 def score(candidate, judgment, signal, existing, today):
-    parts = {}
-    for key in ("demand", "timing", "usefulness", "originality"):
-        value = judgment.get(key, 0)
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= WEIGHTS[key]:
-            raise ValueError(f"invalid editorial score: {key}")
-        parts[key] = value
+    clean, problems, _notes = validate_judgment(judgment)
+    if problems:
+        raise ValueError(f"invalid editorial score for {candidate.get('id')}: {' / '.join(problems)}")
+    parts = dict(clean)
     parts["observed"] = observed_points(candidate, signal, today)
     parts["exploration"] = exploration_points(candidate, existing, today)
     return {"parts": parts, "total": round(sum(parts.values()), 2)}
@@ -59,7 +85,9 @@ def score(candidate, judgment, signal, existing, today):
 def plan(candidates, judgments, signal, existing, today, target=5):
     """Rank 3+2 in October, 4+1 in November; retain backups for gate failures."""
     exploration_slots = 2 if period(today) == "broad_exploration" else 1 if period(today) == "light_optimization" else 0
-    annotated = [(c, score(c, judgments.get(c["id"], {}), signal, existing, today)) for c in candidates]
+    # 採点が無い候補は 0点として混ぜず、順位付けから外す(呼び出し元が除外理由をログに残す)
+    annotated = [(c, score(c, judgments[c["id"]], signal, existing, today))
+                 for c in candidates if c["id"] in judgments]
     regular = sorted(annotated, key=lambda x: (-x[1]["total"], x[0]["id"]))
     chosen, seen = [], set()
 
@@ -83,7 +111,9 @@ def plan(candidates, judgments, signal, existing, today, target=5):
 
 
 def select(drafts, existing, signal, target, today):
-    """Compatibility for the previous candidate-first test harness."""
+    """Compatibility for the previous candidate-first test harness.
+    AIの採点を使わない経路なので、4項目は明示的に同点(0)にして観測・探索だけで並べる。"""
+    neutral = {k: 0 for k in JUDGED_KEYS}
     ranked = plan([dict(c, id=str(i)) for i, c in enumerate(drafts)],
-                  {}, signal, existing, today, target)
+                  {str(i): neutral for i in range(len(drafts))}, signal, existing, today, target)
     return [drafts[int(c["id"])] for c, _ in ranked[:target]]

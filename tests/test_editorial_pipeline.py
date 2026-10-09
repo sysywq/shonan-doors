@@ -55,7 +55,9 @@ class EditorialPipelineTest(unittest.TestCase):
                 drafted.append(candidate["id"])
                 return ([{"id": "pending", "articleType": "news", "area": candidate["area"],
                           "cat": candidate["cat"], "title": candidate["titleIdea"], "tags": [],
-                          "subjectNames": [candidate["subject"]], "date": "2026-09-28"}], [], [])
+                          "subjectNames": [candidate["subject"]], "date": "2026-09-28",
+                          "eventStartDate": "2026-10-03",
+                          "freshness": {"kind": "news", "announcementDate": "2026-09-27"}}], [], [])
             def stock(*args, only_topic_id=None, **kwargs):
                 drafted.append(only_topic_id)
                 return ([{"id": "pending", "articleType": "stock", "area": "大磯", "cat": "l",
@@ -169,7 +171,8 @@ class PlannedFallbackTopupTest(unittest.TestCase):
     @staticmethod
     def entry(n):
         return {"id": "pending", "articleType": "news", "area": "藤沢", "cat": "e", "title": f"補充{n}",
-                "tags": [f"tag{n}"], "subjectNames": [f"subject-fb{n}"], "date": "2026-10-06"}
+                "tags": [f"tag{n}"], "subjectNames": [f"subject-fb{n}"], "date": "2026-10-06",
+                "eventStartDate": "2026-10-12"}
 
     def test_fallback_retries_up_to_topup_max_attempts_until_minimum(self):
         # 2026-10-06 の事例: 企画候補0件・fallback 2件で打ち切られていた → 3件に届くまで繰り返す

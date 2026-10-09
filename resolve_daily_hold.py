@@ -135,6 +135,10 @@ def resolve(payload, decision, value="", issue="", dry_run=False, client=None, f
 
     if dry_run:
         return 0, f"[dry-run] id={article_id}「{title}」を再監査します(記録・公開はしていません)", None
+    # 保留記事は承認日の日付で公開されるので、承認時点のニュース鮮度をもう一度判定する(監査APIより先)
+    stale_log = []
+    if not g.final_freshness_guard([entry], now.strftime("%Y-%m-%d"), stale_log, record=False):
+        return 3, f"ニュースの鮮度基準を満たさないため公開しません: id={article_id}「{title}」— {' / '.join(stale_log)}", None
     if checks:
         g.atomic_write_json(confirmations_path, confirmations)
     if client is None:

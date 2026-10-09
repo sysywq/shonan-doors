@@ -397,11 +397,14 @@ class OfficialImageTest(unittest.TestCase):
 
 
 def news_item(title, body_seed):
+    # main() は実行日(JST)で鮮度ゲートを判定するので、開催日は実行日から見て未来にする
+    start = (g.datetime.now(g.ZoneInfo("Asia/Tokyo")) + g.timedelta(days=3)).strftime("%Y-%m-%d")
     return {
         "cat": "e", "area": "藤沢", "scene": "festival", "title": title, "dek": f"{title}のリード",
         "body": (body_seed * 80)[:1200], "tags": [title], "link": f"https://www.city.example.lg.jp/{abs(hash(title))}.html",
         "subjectNames": [title], "sources": [f"https://www.city.example.lg.jp/{abs(hash(title))}.html"],
-        "eventStartDate": "2026-10-10", "eventEndDate": "", "eventSeriesKey": "",
+        "eventStartDate": start, "eventEndDate": "", "eventSeriesKey": "",
+        "newsKind": "event", "announcementDate": "", "openingDate": "", "effectiveDate": "", "freshnessException": "",
         "address": "", "access": "", "hours": "", "closedDays": "",
         "instagram": "", "facebook": "", "x": "", "tiktok": "",
     }

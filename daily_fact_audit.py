@@ -381,7 +381,10 @@ def _main(argv, client, fetcher, image_fetcher, base_series_keys, topup, reserve
             need = min(g.DAILY_MIN_ARTICLES - len(published), left)
             print(f"post-audit top-up {round_no}/{POST_AUDIT_TOPUP_MAX_ROUNDS}: confirmed {len(published)}件 → "
                   f"別候補を最大{need}件補充します", flush=True)
-            avoid = pool + g.gate_rejected_drafts(gate_rejected) + avoid_today
+            # ニュース鮮度ゲートで外した対象(生成時の run・この補充の両方)も再生成しない
+            stale = [dict(r, id="freshness-rejected") for r in report.get("freshness_rejected") or []
+                     if isinstance(r, dict) and r.get("title")]
+            avoid = pool + g.gate_rejected_drafts(gate_rejected) + stale + g.freshness_rejected_drafts() + avoid_today
             try:
                 candidates = topup(need, avoid, date, event_series, gate_rejected, round_no) or []
             except Exception as e:  # 補充の失敗で confirmed 記事の公開は止めない
@@ -428,6 +431,9 @@ def _main(argv, client, fetcher, image_fetcher, base_series_keys, topup, reserve
         g.atomic_write_json(args.event_series, new_series)
     g.atomic_write_json(args.holds_out, held)
     base_report = report if report.get("status") == "ok" or not published else dict(report, status="ok")
+    if g.freshness_rejected_drafts():
+        base_report = dict(base_report, freshness_rejected=list(report.get("freshness_rejected") or [])
+                           + [dict(r) for r in g._freshness_rejections])
     g.atomic_write_json(args.report, updated_report(base_report, published, held, results, topup_info,
                                                     gate_rejected if topup_info is not None else None))
 

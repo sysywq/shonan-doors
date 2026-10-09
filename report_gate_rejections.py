@@ -39,6 +39,7 @@ RUN_REPORT_PATH = os.environ.get(
 API = "https://api.github.com"
 TITLE_PREFIX = "[公開前監査] 要判断:"
 SHORTFALL_TITLE_PREFIX = "[Daily Articles] 公開件数が最低ラインに未達"
+FALLBACK_TITLE_PREFIX = "[Daily Articles] 企画が従来経路へfallback"
 IMAGE_CHECK_TITLE_PREFIX = "[公式画像の確認]"
 IMAGE_CHECK_MARKER = "image-check-payload:"
 
@@ -155,6 +156,41 @@ def shortfall_body(s, date, rejected):
     return "\n".join(lines)
 
 
+def fallback_title(info, date):
+    return f"{FALLBACK_TITLE_PREFIX}({info.get('stage', '')}) ({date})"
+
+
+def fallback_body(info, date):
+    """企画(候補収集・採点)が使えず従来の横断候補経路へ fallback した原因と、機密を含まない元データ。"""
+    import json
+    cause = {"api_error": "APIエラー(システム障害。候補を変えても直らない)",
+             "score_response_invalid": "採点応答の検証に失敗(構造異常・有効な採点0件)",
+             "exception": "想定外の例外"}.get(info.get("cause"), info.get("cause", ""))
+    diag = info.get("diagnostics") or {}
+    lines = [
+        f"{date} の Daily Articles で、企画の{info.get('stage', '')}が使えなかったため、"
+        "従来の横断候補経路(run_cross_selection)で記事を作りました。",
+        "",
+        "品質基準(一次情報・Fact Audit・重複排除・ニュース鮮度ゲート)は fallback でも同じです。",
+        "",
+        "### 原因",
+        "",
+        f"- 種別: {cause}",
+        f"- 例外: `{info.get('exception', '')}`",
+        f"- 候補数: {info.get('candidate_count', 0)}",
+    ]
+    if diag:
+        lines += [f"- 有効な採点: {diag.get('valid')} / {diag.get('candidates')}件"
+                  f"(不正 {len(diag.get('invalid') or {})}件・欠落 {len(diag.get('missing') or [])}件・"
+                  f"stop_reason={diag.get('stop_reason')}・再採点={diag.get('retried')})"]
+    lines += ["", "<details><summary>診断データ(機密情報は含めていません)</summary>", "", "```json",
+              json.dumps({"diagnostics": diag, "candidates": info.get("candidates") or []},
+                         ensure_ascii=False, indent=1)[:50000],
+              "```", "", "</details>", "",
+              "同じ原因が続く場合は editorial_planning.py の採点応答の検証ログ(診断(企画採点) / 除外(企画採点))を確認してください。"]
+    return "\n".join(lines)
+
+
 def github_request(method, path, token, payload=None):
     req = urllib.request.Request(
         API + path, method=method,
@@ -190,11 +226,12 @@ def main(argv=None, request=github_request):
     rejected = [r for r in (report.get("gate_rejected") or []) if isinstance(r, dict)]
     escalated = [r for r in rejected if isinstance(r.get("escalation"), dict)]
     shortfall = report.get("shortfall") if isinstance(report.get("shortfall"), dict) else None
+    fallback = report.get("planning_fallback") if isinstance(report.get("planning_fallback"), dict) else None
     for r in rejected:
         if r not in escalated:
             print(f"人の判断は不要のため自動で見送り(Issueにしない): {r.get('title', '')}"
                   f" — {' / '.join(r.get('reasons') or [])}")
-    if not escalated and not shortfall:
+    if not escalated and not shortfall and not fallback:
         print("人の判断が必要な記事はありません。")
         return 0
     date = report.get("date") or ""
@@ -203,6 +240,8 @@ def main(argv=None, request=github_request):
               else (issue_title(r, date), issue_body(r, date)) for r in escalated]
     if shortfall:
         issues.append((shortfall_title(date), shortfall_body(shortfall, date, rejected)))
+    if fallback:
+        issues.append((fallback_title(fallback, date), fallback_body(fallback, date)))
 
     if args.dry_run:
         for title, body in issues:
@@ -227,7 +266,8 @@ def main(argv=None, request=github_request):
         created += 1
         print(f"Issueを作成しました: {title} {res.get('html_url', '') if isinstance(res, dict) else ''}")
     print(f"公開前監査の不合格 {len(rejected)}件(うち要判断 {len(escalated)}件)"
-          f"{'・最低件数未達 1件' if shortfall else ''}について、{created}件をIssue化しました。")
+          f"{'・最低件数未達 1件' if shortfall else ''}{'・企画fallback 1件' if fallback else ''}"
+          f"について、{created}件をIssue化しました。")
     return 0
 
 
