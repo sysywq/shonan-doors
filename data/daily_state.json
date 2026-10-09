@@ -1099,6 +1099,11 @@
      "refill_dispatched": true,
      "refill_dispatched_at": "2026-10-09 09:39",
      "live_ids": []
+    },
+    "1": {
+     "branch": "daily/2026-10-09-r1",
+     "run_id": "37865876472",
+     "started_at": "2026-10-09 09:40"
     }
    },
    "rejected": [
