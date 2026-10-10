@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.shonandoors.com/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/privacy/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/about/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/contact/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/kamakura/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -52,7 +52,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/zushi/</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -82,18 +82,28 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/culture/</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/event/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/category/life/</loc>
     <lastmod>2026-10-07</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/kamakura-culture-0184/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/zushi-event-0185/</loc>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/oiso-gourmet-0181/</loc>
