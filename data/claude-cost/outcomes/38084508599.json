@@ -1,0 +1,132 @@
+{
+  "run_id": "38084508599",
+  "date_jst": "2026-10-11",
+  "outcomes": [
+    {
+      "article_id": 188,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 190,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 189,
+      "title": "片瀬西浜海岸が日本最高峰の救助競技の舞台に - 「第52回全日本ライフセービング選手権大会」、10月10日から3日間開催",
+      "outcome": "held",
+      "verdict": "fix",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "電気を使わない野外ライブ、今年の秋も由比ヶ浜へ - 「鎌倉プチロックフェスティバル 2026 秋」、11月1日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "仮装した子どもたちが商店街をゆく - 「第6回藤沢ハロウィンウォーク2026」、10月18日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大船仲通商店街をお菓子とともに歩く - 「第8回大船ハロウィンウォーク2026」、10月31日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大船駅西口から徒歩1分 - 「東横INN大船駅西口」、10月31日オープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "来場者が王者を決める食の祭典 - 「第3回キッチンカーNo.1グランプリ in ちがさき」、10月11日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "60回目の秋、葉山の文化が一堂に - 「第60回葉山町文化祭」、10月21日から開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "自分で揚げる、選ぶ、食べる - 「くし葉 ららぽーと湘南平塚店」が10月9日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "千年の修行に勝る四日間 - 光明寺「十夜法要」、10月12日から材木座で開幕",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "年に4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "土をこねて、鎌倉みやげをつくる - 陶芸体験ができる工房ガイド",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「書く」と「贈る」をテーマにした有隣堂の新ブランド - 「Penno Penna 大船ルミネウィング店」、11月5日オープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "海とヨットの魅力を一日で体感する - 「江の島ハーバーフェスティバル2026」、10月31日に湘南港で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "毎月第2日曜、辻堂海浜公園が市になる日 - 「Tsujido Local Market（辻堂ローカルマーケット）」の楽しみ方",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
