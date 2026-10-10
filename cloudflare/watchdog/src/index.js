@@ -41,7 +41,8 @@ export async function check(env, now = new Date()) {
   const daily = (state.days || {})[today] || {};
   if (["system_failure", "round_limit"].includes(daily.status))
     return { status: "daily_state_blocks_dispatch", daily_status: daily.status };
-  const articles = decodeFile(await github(env, "/contents/data/articles.json?ref=main"));
+  const articleFile = await github(env, "/contents/data/articles.json?ref=main");
+  const articles = decodeFile(articleFile.content ? articleFile : await github(env, `/git/blobs/${articleFile.sha}`));
   if (!Array.isArray(articles)) throw new Error("Invalid articles data");
   const rows = articles.filter(a => a.date === today && !a.mergedInto && typeof a.slug === "string");
   if (rows.length >= 3) {
@@ -55,7 +56,6 @@ export async function check(env, now = new Date()) {
       if (live >= 3) return { status: "published_complete", live };
     }
   }
-  if (daily.status === "complete") return { status: "state_complete_but_publication_unverified", main_count: rows.length };
   // Cloudflare never generates articles itself. Delegate recovery to the existing
   // GitHub watchdog, which enforces cooldowns, run limits and publication checks.
   const watchdog = await github(env, "/actions/workflows/daily-publication-watchdog.yml/runs?per_page=30");
