@@ -422,6 +422,18 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
          拾ってから、残り枠を新しい順で埋める(複雑なランキングは行わない)
       4. 上位count件を返す
     """
+    # 期間限定の編集部ピックアップ。指定日の終了で自動解除する。
+    from datetime import date as _pickup_date
+    current_day = today or _pickup_date.today()
+    if isinstance(current_day, str):
+        current_day = _pickup_date.fromisoformat(current_day)
+    pinned = None
+    if _pickup_date(2026, 10, 10) <= current_day <= _pickup_date(2026, 10, 12):
+        pinned = next((a for a in articles if a.get("id") == 89), None)
+    candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended" and a.get("id") != 89]
+    if pinned:
+        return [pinned] + select_pickup_articles(candidates, count=count - 1, popularity_scores=popularity_scores, today=today)
+    # 通常選定に戻す（期間限定枠を外しただけで、記事自体は残す）。
     candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended"]
 
     if popularity_scores:
@@ -1112,7 +1124,12 @@ function trackEvent(name, params){{
    FEATURED_IDS を編集すれば、回転させる記事を自由に入れ替えられます(articleのidで指定)。
    将来ここが実際の広告枠になった際は、別途「広告主データ」を差し込む形に拡張してください。
    Phase 1でのリンク化に伴い、カードは<a href>による該当記事ページへの通常遷移に変更しています。 */
-const PICKUP_ITEMS = {pickup_items_json};
+// JST 10月13日以降、ビルドがまだ走っていなくても期間限定枠を表示しない。
+const PICKUP_ITEMS = (() => {{
+  const items = {pickup_items_json};
+  const jstDate = new Intl.DateTimeFormat('en-CA', {{timeZone:'Asia/Tokyo', year:'numeric',month:'2-digit',day:'2-digit'}}).format(new Date());
+  return jstDate > '2026-10-12' ? items.filter(item => item.id !== 89) : items;
+}})();
 const CATS_FOR_PICKUP = {cats_label_bg_json};
 (function(){{
   const N = PICKUP_ITEMS.length;
