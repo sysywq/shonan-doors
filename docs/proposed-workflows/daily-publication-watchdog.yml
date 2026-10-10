@@ -1,0 +1,41 @@
+name: Daily Publication Watchdog
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # JST 05:23-23:53, every 30 minutes. 毎時0分・30分は GitHub の schedule が混み、
+    # 数時間遅れたり欠落したりする(2026-10-08〜10-10 は 05:00 の cron が約4時間遅れた)ため、ずらした分に置く。
+    # 判定と復旧は daily_watchdog.py(実行中の run があれば何もしない・1日の起動回数に上限あり)。
+    - cron: '23,53 20-23 * * *'
+    - cron: '23,53 0-14 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: daily-publication-watchdog
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write   # Daily Articles の workflow_dispatch・停滞 run の取り消し
+      contents: read   # main の articles.json・データbranch bot/daily-state の読み取り
+      issues: write    # 自動再実行を止めたときの通知
+      pages: write     # 本番未反映のときの GitHub Pages 再ビルド要求
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 当日の公開を本番で確認し、必要なら安全に再実行
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python daily_watchdog.py
