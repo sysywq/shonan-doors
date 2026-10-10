@@ -326,7 +326,7 @@ def audit_one(client, a, blocked, images=None, confirmations=None):
     ]
     messages = [{"role": "user", "content": first_message_content(a, images, readings)}]
     for _ in range(MAX_TURNS):
-        resp = metered_create(client, stage="fact_audit", 
+        resp = metered_create(client, stage="fact_audit", article_id=a.get("id"), 
             model=MODEL, max_tokens=8000, system=SYSTEM_PROMPT,
             tools=tools, messages=messages,
             extra_headers={"anthropic-beta": "web-fetch-2025-09-10"},
