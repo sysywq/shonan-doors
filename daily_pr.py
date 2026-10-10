@@ -70,7 +70,7 @@ META_MARKER = "daily-articles-meta:"
 MERGE_ISSUE_PREFIX = "[Daily Articles] 自動マージを見送り"
 # 当日PRに含まれてよいファイル(Daily Articles の元データと build.py の生成物だけ)
 ALLOWED_FILES = ("data/articles.json", "data/id_counter.json", "data/stock_topics.json", "data/event_series.json",
-                 "data/x_post_log.json", "index.html", "sitemap.xml", "robots.txt", "404.html",
+                 "data/places_seen.json", "data/x_post_log.json", "index.html", "sitemap.xml", "robots.txt", "404.html",
                  "site.webmanifest", "ads.txt")
 ALLOWED_DIRS = ("articles/", "area/", "category/", "page/", "privacy/", "about/", "contact/",
                 "assets/images/articles/")
