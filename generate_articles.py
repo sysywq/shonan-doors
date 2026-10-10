@@ -413,7 +413,7 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
     ]
 
     for _ in range(10):
-        response = metered_create(client, stage="article_generation", 
+        response = metered_create(client, stage="news_article_generation", 
             model="claude-sonnet-4-6",
             max_tokens=16000,
             system=system_prompt,
@@ -819,7 +819,7 @@ def call_claude_stock_refill(existing_articles, stock_topics):
     tools = [STOCK_TOPIC_REFILL_TOOL]
 
     for _ in range(MAX_STOCK_REFILL_TURNS):
-        response = metered_create(client, stage="article_generation", 
+        response = metered_create(client, stage="stock_topic_refill", 
             model="claude-sonnet-4-6",
             max_tokens=4000,
             system=system_prompt,
@@ -972,7 +972,7 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics, lim
     ]
 
     for _ in range(MAX_STOCK_SELECTION_TURNS):
-        response = metered_create(client, stage="article_generation", 
+        response = metered_create(client, stage="stock_article_selection", 
             model="claude-sonnet-4-6",
             max_tokens=16000,
             system=system_prompt,
