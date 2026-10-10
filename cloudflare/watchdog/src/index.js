@@ -34,7 +34,9 @@ export async function check(env, now = new Date()) {
   if (!env.GITHUB_TOKEN || !env.GITHUB_REPO) throw new Error("GITHUB_TOKEN and GITHUB_REPO are required");
   const iso = now.toISOString();
   const hour = jstHour(iso);
-  if (hour < 5 || hour >= 22) return { status: "outside_window" };
+  if (hour < 4 || hour >= 22) return { status: "outside_window" };
+  // Daily Articles の定時run (04:13 JST) を待ち、04:22 JST から欠落を復旧する。
+  if (hour === 4 && now.getUTCMinutes() < 20) return { status: "awaiting_daily_start" };
   const today = jstDate(iso);
   // Read the authoritative state first. Any error fails closed.
   const state = decodeFile(await github(env, "/contents/data/daily_state.json?ref=bot%2Fdaily-state"));
@@ -64,8 +66,6 @@ export async function check(env, now = new Date()) {
     return age >= 0 && age < 28 * 60 * 1000;
   });
   if (recent) return { status: "watchdog_recent" };
-  // Avoid waking GitHub before the primary daily job has had time to start.
-  if (hour === 5 && now.getUTCMinutes() < 30) return { status: "awaiting_daily_start" };
   // Fail closed when the API cannot confirm the state or recent watchdog runs.
   await github(env, "/actions/workflows/daily-publication-watchdog.yml/dispatches", {
     method: "POST",
