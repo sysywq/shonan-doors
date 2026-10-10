@@ -25,6 +25,14 @@ export async function check(env, now = new Date()) {
   const hour = jstHour(iso);
   if (hour < 6 || hour >= 22) return { status: "outside_window" };
   const today = jstDate(iso);
+  // Fail closed if the authoritative daily state cannot be read.
+  // Never bypass system_failure or round_limit safeguards.
+  const stateFile = await github(env, "/contents/data/daily_state.json?ref=bot%2Fdaily-state");
+  const state = JSON.parse(atob((stateFile.content || "").replace(/\\s/g, "")));
+  const daily = (state.days || {})[today] || {};
+  if (["system_failure", "round_limit", "complete"].includes(daily.status)) {
+    return { status: "daily_state_blocks_dispatch", daily_status: daily.status };
+  }
   const data = await github(env, "/actions/workflows/daily-articles.yml/runs?per_page=100");
   const runs = data.workflow_runs || [];
   const todays = runs.filter(r => jstDate(r.created_at) === today);
