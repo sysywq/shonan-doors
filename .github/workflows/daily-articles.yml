@@ -150,6 +150,28 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
 
+      - name: Claude API usageを永続保存
+        if: always() && steps.plan.outputs.mode == 'fresh'
+        continue-on-error: true
+        run: |
+          if [ ! -s artifacts/claude_usage.jsonl ]; then exit 0; fi
+          cp artifacts/claude_usage.jsonl /tmp/claude_usage_current_run.jsonl
+          cp scripts/archive_claude_usage.py /tmp/archive_claude_usage.py
+          git fetch origin bot/claude-api-usage-archive || true
+          if git show-ref --verify --quiet refs/remotes/origin/bot/claude-api-usage-archive; then
+            git worktree add --detach /tmp/claude-usage-archive origin/bot/claude-api-usage-archive
+          else
+            git worktree add --detach /tmp/claude-usage-archive HEAD
+            (cd /tmp/claude-usage-archive && git checkout --orphan bot/claude-api-usage-archive && git rm -rfq .)
+          fi
+          cd /tmp/claude-usage-archive
+          python /tmp/archive_claude_usage.py --archive data/claude-cost/usage.jsonl /tmp/claude_usage_current_run.jsonl
+          git add data/claude-cost/usage.jsonl
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: archive Claude usage for run ${GITHUB_RUN_ID}"
+            git push origin HEAD:refs/heads/bot/claude-api-usage-archive
+          fi
+
       # 公開前監査で不合格になった記事・最低件数未達(shortfall)をIssue化する。
       # Issue化は補助的な通知なので、失敗しても合格記事のPR・公開は止めない。
       - name: 公開前監査の不合格記事・最低件数未達をIssue化
