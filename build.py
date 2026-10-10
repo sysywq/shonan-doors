@@ -404,69 +404,92 @@ def render_event_ended_banner(item, today=None):
 
 
 # ---------- トップページ PICK UP選定 ----------
-# 現時点ではGA4/Search Console等の外部人気度データを取得していないため、
-# 「終了済みイベントを除外した直近記事」を暫定fallbackとして使う。
-# 将来的にGA4等から popularity_scores={article_id: score} を用意できた場合、
-# その引数を渡すだけで人気順に切り替えられる構造にしてある
-# (呼び出し側のrender_index()やHTML/JS/CSSには一切手を加えずに済む)。
+# 「最新」ではなく「今読む意味」を優先。人気度が未連携でも開催日・鮮度・
+# ストック記事の有用性で選定し、日付だけのランキングにしない。
 
 def select_pickup_articles(articles, count=5, popularity_scores=None, today=None):
-    """PICK UPカルーセルに表示する記事を選ぶ。
-
-    popularity_scores が渡された場合はそのスコア降順で選ぶ(Phase 6以降、
-    GA4等の実データを使う際の差し替え口)。
-    Noneの場合(現状)は、以下の暫定fallbackロジックを使う:
-      1. event_lifecycle_status()が'ended'の記事を除外
-      2. 残りを公開日の新しい順に並べる
-      3. 同一エリアに極端に偏らないよう、まず各エリア1件ずつを優先的に
-         拾ってから、残り枠を新しい順で埋める(複雑なランキングは行わない)
-      4. 上位count件を返す
+    """終了イベントを除外して、直近イベント・実用ガイド・新しいニュースを評価。
+    特例: 記事89を2026-10-12(JST)まで先頭固定。残り枠だけ通常ロジック。
     """
-    # 期間限定の編集部ピックアップ。指定日の終了で自動解除する。
-    from datetime import date as _pickup_date
-    from datetime import datetime as _pickup_datetime
+    from datetime import date as _pickup_date, datetime as _pickup_datetime
     from zoneinfo import ZoneInfo as _pickup_zone
-    current_day = today or _pickup_datetime.now(_pickup_zone('Asia/Tokyo')).date()
+    current_day = today or _pickup_datetime.now(_pickup_zone("Asia/Tokyo")).date()
     if isinstance(current_day, str):
         current_day = _pickup_date.fromisoformat(current_day)
+    if count <= 0:
+        return []
+
     pinned = None
     if _pickup_date(2026, 10, 10) <= current_day <= _pickup_date(2026, 10, 12):
         pinned = next((a for a in articles if a.get("id") == 89), None)
-    candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended" and a.get("id") != 89]
-    if pinned:
-        return [pinned] + select_pickup_articles(candidates, count=count - 1, popularity_scores=popularity_scores, today=today)
-    # 通常選定に戻す（期間限定枠を外しただけで、記事自体は残す）。
-    candidates = [a for a in articles if event_lifecycle_status(a, today) != "ended"]
 
-    if popularity_scores:
-        candidates.sort(key=lambda a: popularity_scores.get(a["id"], 0), reverse=True)
-        return candidates[:count]
+    candidates = [
+        a for a in articles
+        if event_lifecycle_status(a, current_day) != "ended"
+        and (not pinned or a.get("id") != pinned["id"])
+    ]
 
-    candidates.sort(key=lambda a: a["date"], reverse=True)
+    def priority(article):
+        try:
+            published = _pickup_date.fromisoformat(article.get("date", ""))
+            age = max(0, (current_day - published).days)
+        except (ValueError, TypeError):
+            age = 365
 
-    picked = []
-    picked_ids = set()
-    seen_areas = set()
-    # 1巡目: エリアが被らない範囲で新しい順に拾う
-    for a in candidates:
-        if len(picked) >= count:
-            break
-        if a["area"] in seen_areas:
-            continue
-        picked.append(a)
-        picked_ids.add(a["id"])
-        seen_areas.add(a["area"])
-    # 2巡目: 件数が足りなければ、エリアの重複を気にせず新しい順で埋める
-    if len(picked) < count:
-        for a in candidates:
-            if len(picked) >= count:
-                break
-            if a["id"] in picked_ids:
-                continue
-            picked.append(a)
-            picked_ids.add(a["id"])
+        # ストック型の実用情報は新着ニュースより長く価値が続く。
+        kind = article.get("articleType", "news")
+        score = 45 if kind == "stock" else 25
+        if article.get("cat") in ("t", "l", "g"):
+            score += 7
+        # 新着だけで決まらないよう、鮮度ボーナスは最大15点。
+        score += max(0, 15 - min(age, 30))
 
-    return picked
+        if article.get("cat") == "e":
+            start_str = article.get("eventStartDate") or ""
+            end_str = article.get("eventEndDate") or start_str
+            try:
+                start_day = _pickup_date.fromisoformat(start_str)
+                end_day = _pickup_date.fromisoformat(end_str)
+                days = (start_day - current_day).days
+                if start_day <= current_day <= end_day:
+                    score += 85
+                elif 0 < days <= 3:
+                    score += 90
+                elif days <= 7 and days > 0:
+                    score += 75
+                elif days <= 14 and days > 0:
+                    score += 55
+                elif days <= 30 and days > 0:
+                    score += 20
+                elif days > 30:
+                    score -= 20
+            except (ValueError, TypeError):
+                score -= 15
+
+        # 実測の人気データが渡された場合だけ追加評価（外れ値の暴走を抑制）。
+        if popularity_scores:
+            score += max(0, min(40, popularity_scores.get(article["id"], 0)))
+        return (score, article.get("date", ""), article.get("id", 0))
+
+    candidates.sort(key=priority, reverse=True)
+    selected = [pinned] if pinned else []
+    seen_areas = {pinned.get("area")} if pinned else set()
+
+    # 価値を第一優先に、同点・僅差なら地域のバリエーションを確保。
+    while len(selected) < count and candidates:
+        best = max(
+            candidates,
+            key=lambda a: (
+                priority(a)[0] - (8 if a.get("area") in seen_areas else 0),
+                priority(a)[1],
+                priority(a)[2],
+            ),
+        )
+        selected.append(best)
+        seen_areas.add(best.get("area"))
+        candidates.remove(best)
+
+    return selected
 
 
 # ---------- Phase 2: SEO用メタデータ生成 ----------
