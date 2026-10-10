@@ -2099,13 +2099,542 @@
     "0": {
      "branch": "daily/2026-10-11",
      "run_id": "38084508599",
-     "started_at": "2026-10-11 05:38"
+     "started_at": "2026-10-11 05:38",
+     "published_ids": [
+      188,
+      190
+     ],
+     "held_ids": [
+      189
+     ],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "電気を使わない野外ライブ、今年の秋も由比ヶ浜へ - 「鎌倉プチロックフェスティバル 2026 秋」、11月1日開催",
+     "dek": "鎌倉・由比ヶ浜海浜公園を舞台に、アンプラグドの野外音楽祭「鎌倉プチロックフェスティバル 2026 秋」が11月1日（日）に開催される。入場無料で、誰でも気軽に生の音楽を楽しめる。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.kprf.jp/",
+     "subjectNames": [
+      "鎌倉プチロックフェスティバル",
+      "KAMAKURA PETIT ROCK FESTIVAL",
+      "プチロック",
+      "鎌倉プチロック"
+     ],
+     "tags": [
+      "音楽",
+      "野外フェス",
+      "鎌倉",
+      "由比ヶ浜",
+      "ライブ",
+      "アンプラグド",
+      "秋"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "kamakura-petit-rock-festival",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "仮装した子どもたちが商店街をゆく - 「第6回藤沢ハロウィンウォーク2026」、10月18日開催",
+     "dek": "藤沢駅北口商店街を舞台に、仮装した子どもたちがお菓子をもらいながら歩く「第6回藤沢ハロウィンウォーク2026」が10月18日（日）に開催される。NPO法人hinataboccoの主催。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "藤沢ハロウィンウォーク",
+      "第6回藤沢ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "ハロウィン",
+      "子ども",
+      "商店街",
+      "藤沢",
+      "仮装",
+      "親子",
+      "イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "fujisawa-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大船仲通商店街をお菓子とともに歩く - 「第8回大船ハロウィンウォーク2026」、10月31日開催",
+     "dek": "鎌倉市大船の仲通商店街を舞台に、仮装した子どもたちがお菓子をもらいながら巡る「第8回大船ハロウィンウォーク2026」が10月31日（土）に開催される。NPO法人hinataboccoの主催。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "大船ハロウィンウォーク",
+      "第8回大船ハロウィンウォーク2026",
+      "大船ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "ハロウィン",
+      "大船",
+      "鎌倉",
+      "商店街",
+      "子ども",
+      "仮装",
+      "親子"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "ofuna-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大船駅西口から徒歩1分 - 「東横INN大船駅西口」、10月31日オープン",
+     "dek": "大船駅西口から徒歩1分の好立地に東横インが誕生。5階建て122室で、鎌倉や江の島へのアクセス拠点として機能する。",
+     "area": "鎌倉",
+     "cat": "b",
+     "link": "https://prtimes.jp/main/html/rd/p/000000106.000009718.html",
+     "subjectNames": [
+      "東横INN大船駅西口",
+      "東横インネットワーク",
+      "東横イン大船駅西口"
+     ],
+     "tags": [
+      "ホテル",
+      "大船",
+      "鎌倉",
+      "東横INN",
+      "新規オープン"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "来場者が王者を決める食の祭典 - 「第3回キッチンカーNo.1グランプリ in ちがさき」、10月11日開催",
+     "dek": "来場者の投票でNo.1キッチンカーを決めるグランプリ形式の食の祭典が、今年も第一カッターきいろ公園で開幕。入場無料で、グルメとステージを一日楽しめる。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://c-inshokutenkumiai.com/2026/05/01/6394/",
+     "subjectNames": [
+      "第3回キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ",
+      "茅ヶ崎飲食店組合"
+     ],
+     "tags": [
+      "キッチンカー",
+      "茅ヶ崎",
+      "グルメ",
+      "イベント",
+      "第一カッターきいろ公園"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "chigasaki-kitchencar-k1gp",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "60回目の秋、葉山の文化が一堂に - 「第60回葉山町文化祭」、10月21日から開催",
+     "dek": "書道・生け花・茶道・水墨画・音楽など多彩な文化団体が集結する葉山の秋の文化祭が、10月21日から約4週間にわたり開催。葉山町福祉文化会館を会場に、地域の文化活動の成果を披露する。",
+     "area": "葉山",
+     "cat": "e",
+     "link": "https://www.town.hayama.lg.jp/soshiki/shougaigakushuu/4/1770.html",
+     "subjectNames": [
+      "第60回葉山町文化祭",
+      "葉山町文化祭",
+      "葉山町文化協会"
+     ],
+     "tags": [
+      "葉山",
+      "文化祭",
+      "葉山町",
+      "地域文化",
+      "福祉文化会館"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "hayama-bunkasai",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "自分で揚げる、選ぶ、食べる - 「くし葉 ららぽーと湘南平塚店」が10月9日グランドオープン",
+     "dek": "ニラックス株式会社が運営する串揚げバイキング「くし葉」の2号店が、ららぽーと湘南平塚1階に誕生。卓上で自分好みに揚げたての串を楽しむ体験型のブッフェレストランだ。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://www.nilax.jp/store/104",
+     "subjectNames": [
+      "くし葉 ららぽーと湘南平塚店",
+      "串揚げバイキング くし葉 ららぽーと湘南平塚店",
+      "くし葉",
+      "串揚げ・串天ブッフェ くし葉 湘南平塚",
+      "ニラックス"
+     ],
+     "tags": [
+      "平塚",
+      "グルメ",
+      "食べ放題",
+      "串揚げ",
+      "ブッフェ",
+      "バイキング",
+      "ららぽーと湘南平塚",
+      "新店",
+      "ニラックス"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "千年の修行に勝る四日間 - 光明寺「十夜法要」、10月12日から材木座で開幕",
+     "dek": "鎌倉・材木座の浄土宗大本山「光明寺」で、500年以上の歴史を持つ「十夜法要（お十夜）」が10月12日（月・祝）から15日（木）まで執り行われる。練行列や稚児礼讃舞、山門楼上の特別公開など、秋の鎌倉を彩る伝統の法要だ。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://komyoji-kamakura.or.jp/",
+     "subjectNames": [
+      "光明寺 十夜法要",
+      "十夜法要",
+      "お十夜",
+      "光明寺のお十夜",
+      "浄土宗大本山光明寺"
+     ],
+     "tags": [
+      "鎌倉",
+      "イベント",
+      "法要",
+      "十夜法要",
+      "光明寺",
+      "お十夜",
+      "材木座",
+      "伝統行事",
+      "浄土宗"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "komyoji-juyaho",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "年に4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に",
+     "dek": "鎌倉・浄明寺の緑に包まれた旧華頂宮邸が、2026年の秋の建物公開を10月24日（土）・25日（日）に実施する。ハーフティンバー様式の洋館内部を無料で見学できる、年に春秋4日間だけの特別な機会だ。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.city.kamakura.kanagawa.jp/keikan/k-index1.html",
+     "subjectNames": [
+      "旧華頂宮邸",
+      "旧華頂宮邸 秋の建物公開",
+      "旧華頂宮邸一般公開",
+      "きゅうかちょうのみやてい"
+     ],
+     "tags": [
+      "鎌倉",
+      "洋館",
+      "旧華頂宮邸",
+      "建物公開",
+      "浄明寺",
+      "ハーフティンバー",
+      "登録有形文化財",
+      "無料",
+      "鎌倉三大洋館"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "kyu-kachou-building-open",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "土をこねて、鎌倉みやげをつくる - 陶芸体験ができる工房ガイド",
+     "dek": "長谷の路地から北鎌倉の古民家まで、鎌倉には初心者でも参加しやすい陶芸工房が点在する。場所・コース・料金・作品受け取りの流れを工房別に整理した。",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "https://kamakura-pottery.com/",
+     "subjectNames": [
+      "体験工房はせ陶",
+      "陶工房DAN",
+      "はせ陶",
+      "たからの窯",
+      "Takara Clay Studio",
+      "陶芸工房飛天窯",
+      "ひてんがま"
+     ],
+     "tags": [
+      "鎌倉",
+      "陶芸",
+      "体験",
+      "工房",
+      "ものづくり",
+      "長谷",
+      "北鎌倉",
+      "お土産",
+      "初心者",
+      "手びねり",
+      "電動ロクロ"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "「書く」と「贈る」をテーマにした有隣堂の新ブランド - 「Penno Penna 大船ルミネウィング店」、11月5日オープン",
+     "dek": "神奈川の老舗書店・有隣堂が、大船ルミネウィング6階に文具・雑貨専門の新ブランド「Penno Penna（ペンノ ペンナ）」を11月5日に開く。ペンを試し、紙との相性を確かめ、大切な人への贈り物を包む——そんな体験型の売場を提案する。",
+     "area": "鎌倉",
+     "cat": "b",
+     "link": "dummy",
+     "subjectNames": [
+      "DUMMY"
+     ],
+     "tags": [
+      "書く",
+      "贈る"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "海とヨットの魅力を一日で体感する - 「江の島ハーバーフェスティバル2026」、10月31日に湘南港で開催",
+     "dek": "江の島ヨットハーバー（湘南港）を舞台に、ボートライドやステージショーが楽しめる年に一度のイベント。荒天中止のため、当日の天候確認を忘れずに。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://en.riviera.co.jp/area/enoshima/",
+     "subjectNames": [
+      "江の島ハーバーフェスティバル",
+      "江の島ハーバーフェスティバル2026",
+      "エノシマハーバーフェスティバル",
+      "Enoshima Harbor Festival",
+      "江の島ヨットハーバー",
+      "湘南港"
+     ],
+     "tags": [
+      "江の島",
+      "ヨットハーバー",
+      "湘南港",
+      "フェスティバル",
+      "ボートライド",
+      "ステージショー",
+      "藤沢",
+      "湘南",
+      "海",
+      "ヨット",
+      "イベント",
+      "ハロウィン"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "enoshima-harbor-festival",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "片瀬西浜海岸が日本最高峰の救助競技の舞台に - 「第52回全日本ライフセービング選手権大会」、10月10日から3日間開催",
+     "dek": "泳ぐ・走る・漕ぐ、すべての海上救助技術を競うライフセービングの最高峰大会が、藤沢市の片瀬西浜海岸で開催中。「ふじさわLIFE FEST」も同会場で同時開催。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://ls.jla-lifesaving.or.jp/lifesaving-sports/alljapan-lifesaving-championships/",
+     "subjectNames": [
+      "第52回全日本ライフセービング選手権大会",
+      "全日本ライフセービング選手権大会",
+      "ふじさわLIFE FEST",
+      "日本ライフセービング協会",
+      "JLA"
+     ],
+     "tags": [
+      "ライフセービング",
+      "片瀬西浜海岸",
+      "藤沢",
+      "スポーツ",
+      "全日本選手権"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "jla-alljapan-lifesaving-championships",
+     "reason": "Fact Audit で fix(保留)",
+     "round": 0
+    },
+    {
+     "title": "毎月第2日曜、辻堂海浜公園が市になる日 - 「Tsujido Local Market（辻堂ローカルマーケット）」の楽しみ方",
+     "dek": "辻堂エリアの商店主たちが中心となり、2016年から続く月いちのマルシェ。神奈川県産の有機野菜、湘南地域のキッチンカー、雑貨店が海辺の公園に集まる。",
+     "area": "藤沢",
+     "cat": "l",
+     "link": "https://tsujido-local-market.com/",
+     "subjectNames": [
+      "Tsujido Local Market",
+      "辻堂ローカルマーケット",
+      "ツジドウローカルマーケット",
+      "TSUJIDO LOCAL MARKET"
+     ],
+     "tags": [
+      "マルシェ",
+      "辻堂",
+      "藤沢",
+      "辻堂海浜公園",
+      "週末",
+      "有機野菜",
+      "キッチンカー",
+      "暮らし",
+      "湘南"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(発表日・実施日(announcementDate / effectiveDate)が一次情報で確認できていない)",
+     "round": 0
+    },
+    {
+     "title": "【閉店】【CCC】BOOK COMPASS リエール藤沢店 https://t.co/RQAzAsxhLF &gt;当店は2026年11月10日（火）をもちまして閉店することとなりました。",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "葉山の磯で竿を出す——初心者からベテランまで使える釣りスポットガイド",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "土をこねて、鎌倉みやげをつくる——陶芸体験ができる工房ガイド",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "湘南の温暖な丘でオリーブを育てる——二宮のオリーブ農園と収穫体験",
+     "dek": "",
+     "area": "二宮",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "@tomonosuke_mai 茅ヶ崎に有りました（土日祝もオープン）。 https://t.co/yWpYikzBAu",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "平塚と大磯にまたがる丘から見る夜景——湘南平展望台、昼と夜の楽しみ方",
+     "dek": "",
+     "area": "平塚",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "逗子海岸からはじめる——初心者向けサーフィン体験とスクールの選び方",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "おハローごじます(おやすみなさい) ゲームセンターのGiGO本藤沢(旧・ドラマ藤沢)さんにて、夜中の閉店まで楽しく過ごして参りました！ 店内奥側へ行くとレトロゲームやメダル機が充実しており、とても良い眺めですのよ。👀 https://t.c…",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-11 05:38"
+   "updated_at": "2026-10-11 06:37"
   }
  }
 }
