@@ -36,7 +36,7 @@ DAILY_WORKFLOW = "daily-articles.yml"
 ACTIVE = ("queued", "in_progress", "waiting", "pending", "requested")
 # daily-articles.yml の timeout-minutes(300)+余裕。これを超えた in_progress だけを stale とみなす
 ACTIVE_MAX_MIN = int(os.environ.get("WATCHDOG_ACTIVE_MAX_MIN", "320"))
-FIRST_DISPATCH_AT = (5, 30)   # cron(04:13 JST)が遅延・欠落したとみなす時刻
+FIRST_DISPATCH_AT = (4, 20)   # 04:13 JST の定時runを待ち、04:22 JST の外部監視で欠落を復旧
 LAST_DISPATCH_HOUR = 22       # これ以降は起動しない(run が日付をまたがないように)
 COOLDOWN_MIN = 10             # 直前の run 終了から、補充 run の起動が一覧に出るまでの猶予
 DEPLOY_GRACE_MIN = 20         # main 反映から本番反映までの猶予
