@@ -7,11 +7,7 @@ name: Daily Publication Watchdog
 on:
   push:
     branches: [main]
-  schedule:
-    # GitHub の schedule は毎時0分付近が混雑して遅延・欠落しやすいため、半端な分にする。
-    # JST 05:07-21:37 の30分ごと(UTC 20-23時と0-12時)
-    - cron: '7,37 20-23 * * *'
-    - cron: '7,37 0-12 * * *'
+  # Periodic checks run in Cloudflare; GitHub only wakes on dispatch or push.
   workflow_dispatch: {}
 
 concurrency:
