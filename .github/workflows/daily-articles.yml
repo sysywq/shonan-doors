@@ -141,6 +141,24 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
 
+      # 最終監査レポートから記事の審査結果を抽出（公開処理は止めない）
+      - name: Claude API記事審査結果を出力
+        if: always() && steps.plan.outputs.mode == 'fresh'
+        continue-on-error: true
+        run: |
+          if [ -s /tmp/shonan_doors_run_report.json ]; then
+            python scripts/export_claude_cost_outcomes.py --report /tmp/shonan_doors_run_report.json --output artifacts/claude_outcomes.json
+          fi
+
+      - name: Claude API記事審査結果をArtifact保存
+        if: always() && steps.plan.outputs.mode == 'fresh'
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-api-outcomes
+          path: artifacts/claude_outcomes.json
+          if-no-files-found: ignore
+          retention-days: 90
+
       - name: Claude API usage logを保存
         if: always()
         uses: actions/upload-artifact@v4
@@ -157,7 +175,10 @@ jobs:
           if [ ! -s artifacts/claude_usage.jsonl ]; then exit 0; fi
           cp artifacts/claude_usage.jsonl /tmp/claude_usage_current_run.jsonl
           cp scripts/archive_claude_usage.py /tmp/archive_claude_usage.py
-          git fetch origin bot/claude-api-usage-archive || true
+          if [ -s artifacts/claude_outcomes.json ]; then
+            cp artifacts/claude_outcomes.json /tmp/claude_outcomes_current_run.json
+          fi
+          git fetch origin refs/heads/bot/claude-api-usage-archive:refs/remotes/origin/bot/claude-api-usage-archive || true
           if git show-ref --verify --quiet refs/remotes/origin/bot/claude-api-usage-archive; then
             git worktree add --detach /tmp/claude-usage-archive origin/bot/claude-api-usage-archive
           else
@@ -166,7 +187,11 @@ jobs:
           fi
           cd /tmp/claude-usage-archive
           python /tmp/archive_claude_usage.py --archive data/claude-cost/usage.jsonl /tmp/claude_usage_current_run.jsonl
-          git add data/claude-cost/usage.jsonl
+          if [ -s /tmp/claude_outcomes_current_run.json ]; then
+            mkdir -p data/claude-cost/outcomes
+            cp /tmp/claude_outcomes_current_run.json "data/claude-cost/outcomes/${GITHUB_RUN_ID}.json"
+          fi
+          git add data/claude-cost/usage.jsonl data/claude-cost/outcomes/
           if ! git diff --cached --quiet; then
             git commit -m "chore: archive Claude usage for run ${GITHUB_RUN_ID}"
             git push origin HEAD:refs/heads/bot/claude-api-usage-archive
