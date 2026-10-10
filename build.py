@@ -424,7 +424,9 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
     """
     # 期間限定の編集部ピックアップ。指定日の終了で自動解除する。
     from datetime import date as _pickup_date
-    current_day = today or _pickup_date.today()
+    from datetime import datetime as _pickup_datetime
+    from zoneinfo import ZoneInfo as _pickup_zone
+    current_day = today or _pickup_datetime.now(_pickup_zone('Asia/Tokyo')).date()
     if isinstance(current_day, str):
         current_day = _pickup_date.fromisoformat(current_day)
     pinned = None
