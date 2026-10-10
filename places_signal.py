@@ -5,6 +5,7 @@ verified against official primary sources before publication.
 """
 import json
 import os
+from pathlib import Path
 import urllib.error
 import urllib.request
 
@@ -59,7 +60,7 @@ def _post(api_key, payload, timeout=20):
         return json.loads(response.read().decode("utf-8"))
 
 
-def discover_future_openings(areas, max_candidates=12):
+def discover_future_openings(areas, max_candidates=12, include_operational=False, state_path='data/places_seen.json'):
     """Return FUTURE_OPENING places as metadata-only news leads.
 
     Fail-soft by design: if the key is absent or an individual query fails, the
@@ -74,6 +75,15 @@ def discover_future_openings(areas, max_candidates=12):
     ).split(",") if x.strip()]
     max_queries = int(os.environ.get("PLACES_MAX_QUERIES", "24"))
     found, seen = [], set()
+    state_file = Path(state_path)
+    previous = set()
+    if include_operational and state_file.exists():
+        try:
+            previous = set(json.loads(state_file.read_text(encoding="utf-8")).get("place_ids", []))
+        except (OSError, ValueError, TypeError, AttributeError):
+            include_operational = False
+    baseline = include_operational and not state_file.exists()
+    observed = set()
     calls = 0
 
     for area in areas:
@@ -81,8 +91,8 @@ def discover_future_openings(areas, max_candidates=12):
         if not location:
             continue
         for term in terms:
-            if calls >= max_queries or len(found) >= max_candidates:
-                return found
+            if calls >= max_queries:
+                break
             calls += 1
             payload = {
                 "textQuery": f"{term} {location}",
@@ -96,10 +106,17 @@ def discover_future_openings(areas, max_candidates=12):
             except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError):
                 continue
             for place in data.get("places", []):
-                if place.get("businessStatus") != "FUTURE_OPENING":
+                status = place.get("businessStatus")
+                if status not in ("FUTURE_OPENING", "OPERATIONAL"):
                     continue
                 place_id = place.get("id", "")
-                if not place_id or place_id in seen:
+                if not place_id:
+                    continue
+                if status == "OPERATIONAL":
+                    observed.add(place_id)
+                    if not include_operational or baseline or place_id in previous:
+                        continue
+                if place_id in seen or len(found) >= max_candidates:
                     continue
                 name = ((place.get("displayName") or {}).get("text") or "").strip()
                 if not name:
@@ -107,24 +124,36 @@ def discover_future_openings(areas, max_candidates=12):
                 seen.add(place_id)
                 primary_type = place.get("primaryType", "")
                 cat = "g" if primary_type in GOURMET_TYPES or "restaurant" in primary_type else "b"
-                opening_date = _opening_date(place.get("openingDate"))
+                opening_date = _opening_date(place.get("openingDate")) if status == "FUTURE_OPENING" else ""
+                is_future = status == "FUTURE_OPENING"
                 lead_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
                 found.append({
                     "id": f"places-{place_id}",
                     "articleType": "news",
                     "query": f"{name} {area} 開店",
-                    "titleIdea": f"{name} - {area}でオープン予定",
+                    "titleIdea": (f"{name} - {area}でオープン予定" if is_future
+                                  else f"{name} - {area}の新規発見店舗（開業日未確認）"),
                     "area": area,
                     "cat": cat,
                     "subject": name,
                     "sourceUrl": "",
                     "searchIntent": "新店の開店日・場所・特徴を知る",
                     "leadUrl": lead_url,
-                    "leadSourceType": "google_places_future_opening",
+                    "leadSourceType": ("google_places_future_opening" if is_future
+                                       else "google_places_newly_observed"),
                     "openingDate": opening_date,
                     "addressHint": place.get("formattedAddress", ""),
                     "placeId": place_id,
                 })
-                if len(found) >= max_candidates:
-                    return found
+        if calls >= max_queries:
+            break
+    if include_operational:
+        try:
+            state_file.parent.mkdir(parents=True, exist_ok=True)
+            state_file.write_text(
+                json.dumps({"place_ids": sorted(previous | observed)}, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+        except OSError:
+            pass
     return found

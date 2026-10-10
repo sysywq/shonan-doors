@@ -45,5 +45,35 @@ class PlacesSignalTest(unittest.TestCase):
             self.assertEqual(places_signal.discover_future_openings(["藤沢"]), [])
 
 
+    def test_operational_baseline_then_new_id(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as d:
+            state = str(Path(d) / "seen.json")
+            def place(id, name):
+                return {"id": id, "displayName": {"text": name},
+                        "formattedAddress": "神奈川県藤沢市",
+                        "businessStatus": "OPERATIONAL", "primaryType": "restaurant"}
+            with mock.patch.dict(os.environ, {"GOOGLE_PLACES_API_KEY": "test-key",
+                    "PLACES_SEARCH_TERMS": "restaurant", "PLACES_MAX_QUERIES": "1"}), mock.patch.object(
+                    places_signal, "_post", side_effect=[
+                        {"places": [place("old", "既存店")]},
+                        {"places": [place("old", "既存店"), place("new", "新規観測店")]},
+                        {"places": [place("old", "既存店"), place("new", "新規観測店")]},
+                    ]):
+                self.assertEqual(places_signal.discover_future_openings(
+                    ["藤沢"], include_operational=True, state_path=state), [])
+                leads = places_signal.discover_future_openings(
+                    ["藤沢"], include_operational=True, state_path=state)
+                self.assertEqual(len(leads), 1)
+                self.assertEqual(leads[0]["placeId"], "new")
+                self.assertEqual(leads[0]["leadSourceType"], "google_places_newly_observed")
+                self.assertEqual(leads[0]["openingDate"], "")
+                self.assertEqual(places_signal.discover_future_openings(
+                    ["藤沢"], include_operational=True, state_path=state), [])
+                self.assertEqual(set(__import__("json").loads(Path(state).read_text())["place_ids"]),
+                                 {"old", "new"})
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -253,6 +253,7 @@ jobs:
           # A literal missing path makes git add abort the whole daily publish.
           git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json \
                   data/x_post_log.json index.html sitemap.xml robots.txt
+          if [ -f data/places_seen.json ]; then git add data/places_seen.json; fi
           for path in articles area category page assets/images/articles; do
             if [ -e "$path" ]; then
               git add -A -- "$path"
