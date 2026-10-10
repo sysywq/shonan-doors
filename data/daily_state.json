@@ -1553,13 +1553,402 @@
     "0": {
      "branch": "daily/2026-10-10",
      "run_id": "38006270615",
-     "started_at": "2026-10-10 08:49"
+     "started_at": "2026-10-10 08:49",
+     "published_ids": [
+      184,
+      185
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "湘南の海でいのちを守る技を競う - 「第52回全日本ライフセービング選手権大会」＆「ふじさわLIFE FEST」、10月10日から3日間開催",
+     "dek": "全国の予選を突破した53チーム・665名のライフセーバーが片瀬西浜海岸に集結。走る・泳ぐ・漕ぐ3日間の頂上決戦と、いのちと環境をテーマにした一般参加型イベントが同時開催。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://ls.jla-lifesaving.or.jp/lifesaving-sports/alljapan-lifesaving-championships/",
+     "subjectNames": [
+      "第52回全日本ライフセービング選手権大会",
+      "全日本ライフセービング選手権大会",
+      "ふじさわLIFE FEST",
+      "ふじさわ LIFE FEST"
+     ],
+     "tags": [
+      "ライフセービング",
+      "片瀬西浜",
+      "藤沢",
+      "スポーツ",
+      "イベント",
+      "ふじさわLIFE FEST"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "jla-alljapan-lifesaving-championships",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "80台超のキッチンカーが茅ヶ崎に大集結 - 「第3回キッチンカーNo.1グランプリ in ちがさき」、10月11日開催",
+     "dek": "来場者の投票でNo.1キッチンカーを決めるグランプリ形式の食の祭典が今年も第一カッターきいろ公園で開催。入場無料で、グルメ・ステージ・スポーツ体験が一日楽しめる。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://c-inshokutenkumiai.com/2026/05/01/6394/",
+     "subjectNames": [
+      "第3回キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ in ちがさき",
+      "キッチンカーNo.1グランプリ"
+     ],
+     "tags": [
+      "キッチンカー",
+      "グルメ",
+      "茅ヶ崎",
+      "イベント",
+      "無料",
+      "グランプリ",
+      "秋",
+      "フード",
+      "第一カッターきいろ公園"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "chigasaki-kitchencar-k1gp",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "仮装してお菓子をもらいながら商店街を歩く - 「第6回藤沢ハロウィンウォーク2026」、10月18日に藤沢駅北口商店街で開催",
+     "dek": "NPO法人hinataboccoが主催する恒例の親子ハロウィンイベントが今年も藤沢北口商店街を舞台に開催。仮装した子どもたちが商店街の対象店舗をめぐってお菓子をもらいながら歩くスタイルで、今年で6回目を迎える。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "藤沢ハロウィンウォーク",
+      "第6回藤沢ハロウィンウォーク",
+      "藤沢ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "ハロウィン",
+      "藤沢",
+      "商店街",
+      "子ども",
+      "親子イベント",
+      "NPO",
+      "地域交流",
+      "hinatabocco"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "fujisawa-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "葉山でしらすを食べる - 真名瀬漁港そばの網元直営店と、旬の時期の選び方",
+     "dek": "葉山の海でしらす漁を行う網元が、そのまま飲食店を営んでいる。漁港まで歩いて1分という立地で、朝獲れの生しらすを丼で味わえる場所と、訪れる前に知っておきたい禁漁期・漁期の知識を紹介する。",
+     "area": "葉山",
+     "cat": "g",
+     "link": "https://yushigemaru.co.jp/",
+     "subjectNames": [
+      "勇しげ",
+      "しらすと地魚料理 勇しげ",
+      "ゆうしげ丸",
+      "湘南しらす ゆうしげ丸",
+      "有限会社ゆうしげ丸"
+     ],
+     "tags": [
+      "葉山",
+      "しらす",
+      "しらす丼",
+      "生しらす",
+      "釜揚げしらす",
+      "漁港",
+      "網元",
+      "海鮮",
+      "湘南しらす",
+      "ランチ"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "古都で土をこねる - 鎌倉で陶芸体験ができる工房と、予約・持ち物の基本",
+     "dek": "長谷の路地と北鎌倉の古民家、それぞれの雰囲気で土と向き合う。鎌倉観光に「ものづくり」の時間を加えたい人のための工房ガイド。",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "https://kamakura-pottery.com/",
+     "subjectNames": [
+      "体験工房 はせ陶",
+      "はせ陶",
+      "たからの窯",
+      "Takara Clay Studio",
+      "北鎌倉たからの庭"
+     ],
+     "tags": [
+      "鎌倉",
+      "陶芸体験",
+      "体験工房はせ陶",
+      "たからの窯",
+      "北鎌倉",
+      "長谷",
+      "ものづくり",
+      "体験",
+      "工房",
+      "手びねり",
+      "電動ろくろ",
+      "観光"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "空手道の精神が生まれた地で、沖縄と鎌倉がつながる - 「鎌倉空手の日」初開催、円覚寺で奉納演武、11月は海浜公園で交流祭",
+     "dek": "10月25日は円覚寺仏殿で世界レベルの空手家たちが型を奉納。11月8日は沖縄国際通りと同時中継でつながる交流祭が鎌倉の浜辺に広がる。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://kama-karateday.jp/",
+     "subjectNames": [
+      "鎌倉空手の日",
+      "鎌倉空手の日 奉納演武・沖縄鎌倉交流祭",
+      "沖縄×鎌倉交流祭"
+     ],
+     "tags": [
+      "鎌倉",
+      "空手",
+      "円覚寺",
+      "イベント",
+      "沖縄",
+      "武道",
+      "文化交流",
+      "奉納演武"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "kamakura-karate-no-hi",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "半世紀の汽笛が鵠沼に響く - 八部公園「第50回SLまつり」、10月12日開催",
+     "dek": "藤沢市鵠沼運動公園（通称・八部公園）で毎年恒例の「SLまつり」が10月12日（月・祝）に開催される。今年は保存公開50周年の節目にあたり「第50回」として記念式典も行われる。ミニ鉄道運転会、C11型蒸気機関車「しおかぜ号」の運転室開放など、普段は味わえない体験が揃う。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://f-mirai.jp/youth/sl_square",
+     "subjectNames": [
+      "SLまつり",
+      "第50回SLまつり",
+      "SLまつり2026",
+      "しおかぜ号",
+      "C11-245",
+      "鵠沼運動公園SL広場",
+      "藤沢ミニ鉄道",
+      "藤沢SL少年団"
+     ],
+     "tags": [
+      "SLまつり",
+      "しおかぜ号",
+      "八部公園",
+      "鵠沼運動公園",
+      "藤沢SL少年団",
+      "蒸気機関車",
+      "鉄道の日",
+      "ファミリー",
+      "無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "fujisawa-sl-matsuri",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "串を選び、揚げて、食べる体験 - 「くし葉 ららぽーと湘南平塚店」、10月9日グランドオープン",
+     "dek": "ニラックス株式会社が運営する串揚げ・串天ブッフェ「くし葉」の2号店が、ららぽーと湘南平塚1階に誕生。卓上で自分好みに揚げたてを楽しむバイキング形式で、にぎり寿司やスイーツ串、ジェラートまで多彩なラインナップをそろえる。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://prtimes.jp/main/html/rd/p/000001245.000033462.html",
+     "subjectNames": [
+      "くし葉 ならぽーと湘南平塚店",
+      "くし葉 ららぽーと湘南平塚店",
+      "串揚げ・串天ブッフェ くし葉 ならぽーと湘南平塚店",
+      "串揚げ・串天ブッフェ くし葉 ららぽーと湘南平塚店",
+      "くし葉",
+      "kushiyo"
+     ],
+     "tags": [
+      "串揚げ",
+      "バイキング",
+      "ブッフェ",
+      "食べ放題",
+      "ならぽーと湘南平塚",
+      "ら・ら・ぽーと",
+      "ニラックス",
+      "平塚グルメ",
+      "新店"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "アレルギーを気にせずアクセサリーを楽しむ - スキンジュエリーブランド「モーリスワイス」、ラスカ茅ヶ崎4階に10月2日オープン",
+     "dek": "変色・色落ちしにくく金属アレルギーに配慮したステンレスアクセサリーを展開する「モーリスワイス（mauricewythe）」が、JR茅ヶ崎駅直結のラスカ茅ヶ崎4階にオープン。ピアス・リング・ネックレス・ブレスレットなど幅広いアイテムを揃える。",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "https://www.jryscc.co.jp/lusca/chigasaki/",
+     "subjectNames": [
+      "モーリスワイス",
+      "mauricewythe",
+      "Maurice WYTHE",
+      "ラスカ茅ヶ崎モーリスワイス"
+     ],
+     "tags": [
+      "アクセサリー",
+      "ステンレス",
+      "金属アレルギー",
+      "ジュエリー",
+      "ラスカ茅ヶ崎",
+      "茅ヶ崎",
+      "新店",
+      "スキンジュエリー"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店から8日経過。8〜14日は高い読者価値の理由(freshnessException)がある場合だけ例外的に扱う)",
+     "round": 0
+    },
+    {
+     "title": "いつ行けば空いてる？江の島の混雑パターンと快適に楽しむ時間帯ガイド",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "葉山でしらすを食べる——漁港そばで味わえる店と、旬の時期の選び方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "il Limone cafe HAYAMA - 葉山でオープン予定",
+     "dek": "",
+     "area": "葉山",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "il Limone cafe HAYAMA"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "古都で土をこねる——鎌倉で陶芸体験ができる工房と、予約・持ち物の基本",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "逗子海岸でSUPを始める——初心者向けスクールの選び方と体験の流れ",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "茅ヶ崎のシンボル、烏帽子岩——海岸からの見え方と近づき方を解説",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "湘南台に新しくできたファミリーマート。開店祝いで3000円以上ファミペイにチャージするとクジが引けるらしいんだけど、2回くらいチャージしたがクジ引かせてもらえなかった😢 時間帯もあるのかしら・・・",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-10 08:49"
+   "updated_at": "2026-10-10 09:38"
   }
  }
 }
