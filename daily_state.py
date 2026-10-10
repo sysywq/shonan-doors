@@ -183,7 +183,9 @@ SYSTEM_ERROR_NAMES = ("AuthenticationError", "PermissionDeniedError", "RateLimit
 SYSTEM_ERROR_RE = re.compile(
     r"\b(" + "|".join(SYSTEM_ERROR_NAMES) + r")\b"
     r"|authentication_error|permission_error|rate_limit_error|overloaded_error|billing_error"
-    r"|credit balance is too low|insufficient[_ ]quota|invalid x-api-key", re.I)
+    r"|credit balance is too low|insufficient[_ ]quota|invalid x-api-key"
+    # 利用上限(Console の usage limit)は 400 invalid_request_error で返る。候補を変えても解決しない
+    r"|reached your specified API usage limits|API usage limits", re.I)
 SYSTEM_STATUS = {401, 402, 403, 429, 500, 502, 503, 504, 529}
 
 
