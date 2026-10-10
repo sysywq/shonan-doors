@@ -43,3 +43,12 @@ def record_usage(response, *, stage, run_id=None, path=None):
     except OSError:
         pass  # Metering must never block publishing.
     return row
+
+def metered_create(client, *, stage, **kwargs):
+    """Call Claude once, then best-effort record the response usage."""
+    response = client.messages.create(**kwargs)
+    try:
+        record_usage(response, stage=stage)
+    except Exception:
+        pass
+    return response
