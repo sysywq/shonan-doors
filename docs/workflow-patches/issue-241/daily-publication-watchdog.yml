@@ -1,0 +1,41 @@
+name: Daily Publication Watchdog
+
+# Daily Articles の独立 watchdog。判定・起動のロジックは daily_watchdog.py(テストあり)。
+#  - cron 欠落・遅延(05:30 JST を過ぎても当日 run がない)/ 失敗・3本未達 → Daily Articles を workflow_dispatch
+#  - main にあるのに本番未反映(HTTP 200・一覧掲載)→ Pages 再ビルドを要求し、failure で通知
+#  - 実行中・待機中の run がある間、停止中の日、bot 起動の上限到達時は起動しない
+on:
+  push:
+    branches: [main]
+  schedule:
+    # GitHub の schedule は毎時0分付近が混雑して遅延・欠落しやすいため、半端な分にする。
+    # JST 05:07-21:37 の30分ごと(UTC 20-23時と0-12時)
+    - cron: '7,37 20-23 * * *'
+    - cron: '7,37 0-12 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: daily-publication-watchdog
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write   # Daily Articles の workflow_dispatch
+      contents: read
+      pages: write     # 本番未反映時の Pages 再ビルド要求
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check daily run and production publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python daily_watchdog.py
