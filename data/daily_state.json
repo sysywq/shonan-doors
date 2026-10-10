@@ -1570,7 +1570,14 @@
     "1": {
      "branch": "daily/2026-10-10-r1",
      "run_id": "38009967375",
-     "started_at": "2026-10-10 09:42"
+     "started_at": "2026-10-10 09:42",
+     "published_ids": [
+      187
+     ],
+     "held_ids": [
+      186
+     ],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -1955,11 +1962,131 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 0
+    },
+    {
+     "title": "平塚の産業とグルメが見附台公園に集結 - 「ひらつか産業FES 2026」、本日10月10日開催",
+     "dek": "平塚商工会議所が主催する年に一度の地域産業の祭典。ものづくり企業の技術展示から飲食・物販・ステージイベントまで、家族で一日楽しめる。10時〜15時30分、雨天中止。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratuka-cci.or.jp/fes/",
+     "subjectNames": [
+      "ひらつか産業FES 2026",
+      "ひらつか産業FES",
+      "平塚産業FES"
+     ],
+     "tags": [
+      "ひらつか産業FES",
+      "平塚",
+      "産業",
+      "イベント",
+      "見附台公園",
+      "ものづくり",
+      "グルメ",
+      "平塚商工会議所"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-10",
+     "eventSeriesKey": "hiratsuka-sangyo-fes",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "鎌倉時代の「道」を歩く - 逗子・名越切通のルートと歴史的背景",
+     "dek": "鎌倉七口のひとつ、名越切通は逗子市と鎌倉市にまたがる国指定史跡。まんだら堂やぐら群やお猿畠の大切岸とあわせて、中世の歴史景観を体感できる数少ない古道だ。",
+     "area": "逗子",
+     "cat": "t",
+     "link": "https://www.city.zushi.kanagawa.jp/shiminkatsudo/bunkazai/1004537/1004538.html",
+     "subjectNames": [
+      "名越切通",
+      "なごえきりどおし",
+      "まんだら堂やぐら群",
+      "お猿畠の大切岸",
+      "おさるばたけのおおきりぎし"
+     ],
+     "tags": [
+      "名越切通",
+      "逗子",
+      "鎌倉七口",
+      "まんだら堂やぐら群",
+      "お猿畠の大切岸",
+      "国指定史跡",
+      "ハイキング",
+      "鎌倉時代",
+      "湘南",
+      "古道"
+     ],
+     "articleType": "stock",
+     "topicId": "t0174",
+     "date": "2026-10-10",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 1
+    },
+    {
+     "title": "西湘の海風を受けながら走る——二宮発のサイクリングコースと立ち寄りスポット",
+     "dek": "",
+     "area": "二宮",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "茅ヶ崎に泊まる——海派・駅近派・コスパ派それぞれのホテル・宿の選び方",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "鎌倉・七里ヶ浜を歩く——海岸線沿いの散策ルートとカフェの選び方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "登る前に知っておきたい、江の島シーキャンドルの全ガイド——料金・時間・眺望の楽しみ方",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
     }
    ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-10 09:42",
+   "updated_at": "2026-10-10 10:04",
    "social_pending": []
   }
  }
