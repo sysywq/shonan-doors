@@ -141,6 +141,15 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
 
+      - name: Claude API usage logを保存
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-api-usage
+          path: artifacts/claude_usage.jsonl
+          if-no-files-found: ignore
+          retention-days: 90
+
       # 公開前監査で不合格になった記事・最低件数未達(shortfall)をIssue化する。
       # Issue化は補助的な通知なので、失敗しても合格記事のPR・公開は止めない。
       - name: 公開前監査の不合格記事・最低件数未達をIssue化
