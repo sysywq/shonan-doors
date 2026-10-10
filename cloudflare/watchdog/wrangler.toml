@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-10-01"
 
 [triggers]
-crons = ["7,37 20-23 * * *", "7,37 0-12 * * *"]
+crons = ["7,22,37,52 19-23 * * *", "7,22,37,52 0-12 * * *"]
 
 [vars]
 GITHUB_REPO = "sysywq/shonan-doors"
