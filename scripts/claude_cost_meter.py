@@ -29,6 +29,7 @@ def record_usage(response, *, stage, run_id=None, path=None):
     row = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "stage": stage,
+        "article_id": os.getenv("CLAUDE_COST_ARTICLE_ID") or None,
         "run_id": str(run_id or os.getenv("GITHUB_RUN_ID", "")),
         "model": model,
         "tokens": counts,
