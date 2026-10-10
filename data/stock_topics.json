@@ -2135,10 +2135,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "湘南平の展望台が昼の絶景スポットであることは知っているが、夜景も見られるのか、夜間のアクセス・駐車場・安全面を含めて事前に知りたい。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "既存ストック記事「360度の大パノラマ、平塚と大磯にまたがる絶景の丘」が同一対象（湘南平/高麗山公園）を扱っており、切り口（夜景特化）が異なっても同一対象への重複記事となるため不採用。",
     "createdAt": "2026-10-10"
   },
   {
@@ -2280,10 +2280,10 @@
     "area": "葉山",
     "category": "t",
     "searchIntent": "葉山エリアで磯釣りや海釣りを楽しみたいと考えており、森戸海岸・真名瀬など具体的なポイント・狙える魚種・注意点を事前に知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「森戸海岸」が既存記事id:41と一致",
     "createdAt": "2026-10-10"
   },
   {
@@ -2311,5 +2311,83 @@
     "generatedAt": null,
     "skipReason": "同一対象の既存記事あり: 対象名「吾妻山公園」が既存記事id:110と一致",
     "createdAt": "2026-10-10"
+  },
+  {
+    "id": "t0178",
+    "query": "鎌倉 陶芸 体験 工房",
+    "titleIdea": "土をこねて、鎌倉みやげをつくる——陶芸体験ができる工房ガイド",
+    "area": "鎌倉",
+    "category": "c",
+    "searchIntent": "鎌倉観光に「ものづくり体験」を加えたいと考えており、陶芸体験ができる工房の場所・料金・予約方法・所要時間・作品の受け取り方法など当日の段取りを事前にまとめて知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件 / 一次情報同士の食い違いなど、人の確認が必要(review_required)",
+    "createdAt": "2026-10-11"
+  },
+  {
+    "id": "t0179",
+    "query": "逗子 サーフィン 体験 スクール 初心者",
+    "titleIdea": "逗子海岸からはじめる——初心者向けサーフィン体験とスクールの選び方",
+    "area": "逗子",
+    "category": "t",
+    "searchIntent": "逗子海岸でサーフィンを初体験したい人が、スクールの選び方・料金・持ち物・所要時間など初回参加前に知りたい実用情報をまとめて把握したい（茅ヶ崎のサーフィンスクール記事とはエリアが異なる）",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "逗子海岸でのマリンスポーツ体験は、ウインドサーフィン・SUPが主体であり、「波乗りサーフィン体験スクール」として成立する一次情報が存在しない。テーマの想定クエリ「逗子 サーフィン 体験 スクール 初心者」と実態が乖離しており、誤解を招く記事になる恐れがある。またウインドサーフィン・SUPとして記事を書き直した場合、既存テーマt0150「逗子 SUP 体験 スクール」（status=held）と検索意図が実質重複する。",
+    "createdAt": "2026-10-11"
+  },
+  {
+    "id": "t0180",
+    "query": "平塚 湘南平 夜景 展望台",
+    "titleIdea": "昼だけじゃもったいない——湘南平・展望台の夜景と夜間訪問ガイド",
+    "area": "平塚",
+    "category": "t",
+    "searchIntent": "湘南平の展望台が昼の絶景スポットであることは知っているが、夜景も楽しめるのか、夜間のアクセス・駐車場事情・安全面も含めて事前に知りたい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-10-11"
+  },
+  {
+    "id": "t0181",
+    "query": "葉山 御用邸 歴史 見どころ",
+    "titleIdea": "なぜ皇室は葉山を選んだのか——葉山御用邸と「しおさい公園」の歴史",
+    "area": "葉山",
+    "category": "c",
+    "searchIntent": "葉山御用邸とその隣接公園「葉山しおさい公園」について、皇室の保養地としての歴史的背景・設計の経緯・公開エリアの見どころを知りたい（既存記事「皇室の保養地に選ばれた葉山」とは異なり、訪問実用情報と歴史背景を統合した切り口）",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-10-11"
+  },
+  {
+    "id": "t0182",
+    "query": "二宮 オリーブ 農園 体験",
+    "titleIdea": "湘南の温暖な丘でオリーブを育てる——二宮のオリーブ農園と収穫体験",
+    "area": "二宮",
+    "category": "b",
+    "searchIntent": "二宮がオリーブの産地であることを知り、農園見学や収穫体験ができるかどうか・時期・予約方法など、実際に足を運ぶための情報をまとめて知りたい",
+    "status": "skipped",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「湘南オリーブ」が既存記事id:16と一致",
+    "createdAt": "2026-10-11"
+  },
+  {
+    "id": "t0183",
+    "query": "大磯 左義長 セエトバレエ 見どころ",
+    "titleIdea": "国の重要無形民俗文化財——大磯の左義長「セエトバレエ」はなぜ特別なのか",
+    "area": "大磯",
+    "category": "c",
+    "searchIntent": "大磯の左義長（セエトバレエ）が全国のどんど焼きと何が違うのか、その歴史的意義・祭りの内容・観覧方法を知りたい",
+    "status": "candidate",
+    "generatedArticleId": null,
+    "generatedAt": null,
+    "skipReason": null,
+    "createdAt": "2026-10-11"
   }
 ]
