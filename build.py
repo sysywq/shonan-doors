@@ -475,12 +475,13 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
     selected = [pinned] if pinned else []
     seen_areas = {pinned.get("area")} if pinned else set()
 
-    # 価値を第一優先に、同点・僅差なら地域のバリエーションを確保。
+    # 価値を第一優先に、同点・僅差なら地域と出典付き個別写真を加点。\n    # 写真だけで開催直前の重要イベントを押し出さないよう、画像加点は5点に制限。
     while len(selected) < count and candidates:
         best = max(
             candidates,
             key=lambda a: (
-                priority(a)[0] - (8 if a.get("area") in seen_areas else 0),
+                priority(a)[0] - (8 if a.get("area") in seen_areas else 0)
+                + (5 if a.get("heroImage") and a.get("heroImageSourceUrl") else 0),
                 priority(a)[1],
                 priority(a)[2],
             ),
