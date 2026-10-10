@@ -1829,9 +1829,9 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         discovered = ep.discover(client, AREAS, CATS, known, growth_hints())
         try:
             import places_signal
-            places_leads = places_signal.discover_future_openings(AREAS)
+            places_leads = places_signal.discover_future_openings(AREAS, include_operational=True)
             if places_leads:
-                log_lines.append(f"Google Places先行シグナル: FUTURE_OPENINGを{len(places_leads)}件検出")
+                log_lines.append(f"Google Places先行シグナル: 全{len(places_leads)}件（開業予定と新規発見）。新規発見は開業日未確認として一次情報を要調査")
                 discovered = places_leads + discovered
             elif os.environ.get("GOOGLE_PLACES_API_KEY"):
                 log_lines.append("Google Places先行シグナル: FUTURE_OPENINGは今回0件")
