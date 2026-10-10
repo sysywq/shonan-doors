@@ -530,6 +530,10 @@ class MergeDecisionTest(unittest.TestCase):
     def test_all_conditions_met_allows_merge(self):
         self.assertEqual(self.blockers(), [])
 
+    def test_places_discovery_state_allows_daily_publication(self):
+        self.assertEqual(self.blockers(files=FILES + ["data/places_seen.json"]), [])
+        self.assertTrue(self.blockers(files=FILES + ["data/unrelated.json"]))
+
     def test_held_article_is_not_a_blocker_once_separated(self):
         # 保留記事(103)が articles.json に無ければ、confirmed 記事だけの PR はマージしてよい
         self.assertEqual(self.blockers(meta=dict(META, held_ids=[103, 104])), [])
