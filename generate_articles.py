@@ -51,6 +51,7 @@ import tempfile
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import anthropic
+from scripts.claude_cost_meter import metered_create
 
 import daily_state
 import news_freshness
@@ -412,7 +413,7 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
     ]
 
     for _ in range(10):
-        response = client.messages.create(
+        response = metered_create(client, stage="article_generation", 
             model="claude-sonnet-4-6",
             max_tokens=16000,
             system=system_prompt,
@@ -818,7 +819,7 @@ def call_claude_stock_refill(existing_articles, stock_topics):
     tools = [STOCK_TOPIC_REFILL_TOOL]
 
     for _ in range(MAX_STOCK_REFILL_TURNS):
-        response = client.messages.create(
+        response = metered_create(client, stage="article_generation", 
             model="claude-sonnet-4-6",
             max_tokens=4000,
             system=system_prompt,
@@ -971,7 +972,7 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics, lim
     ]
 
     for _ in range(MAX_STOCK_SELECTION_TURNS):
-        response = client.messages.create(
+        response = metered_create(client, stage="article_generation", 
             model="claude-sonnet-4-6",
             max_tokens=16000,
             system=system_prompt,
