@@ -1,0 +1,60 @@
+name: Backfill existing article image
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/backfill-existing-image.yml']
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: Existing article ID
+        required: true
+        default: '89'
+        type: string
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Get official image and build pages
+        env:
+          ARTICLE_ID: ${{ inputs.article_id || '89' }}
+        run: |
+          python - <<'PY'
+          import os, json
+          from article_source_image import enrich_article
+          path = 'data/articles.json'
+          with open(path, encoding='utf-8') as f:
+              articles = json.load(f)
+          target_id = int(os.environ['ARTICLE_ID'])
+          matches = [a for a in articles if a['id'] == target_id]
+          if len(matches) != 1: raise SystemExit('Article ID missing or ambiguous')
+          updated, ok = enrich_article(matches[0])
+          if not ok: raise SystemExit('Cannot fetch qualifying PR TIMES image or image exists')
+          articles = [updated if a['id'] == target_id else a for a in articles]
+          with open(path, 'w', encoding='utf-8') as f:
+              json.dump(articles, f, ensure_ascii=False, indent=2)
+              f.write('\n')
+          PY
+          python build.py
+      - name: Open image backfill PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTICLE_ID: ${{ inputs.article_id || '89' }}
+        run: |
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          BRANCH="backfill/image-${ARTICLE_ID}-${GITHUB_RUN_ID}"
+          git checkout -b "$BRANCH"
+          git add data/articles.json assets/images/articles/ articles/ area/ category/ page/ index.html sitemap.xml 404.html 2>/dev/null || true
+          git diff --cached --quiet && { echo 'No modifications'; exit 1; }
+          git commit -m "content: add PR TIMES image to article ${ARTICLE_ID}"
+          git push origin "HEAD:refs/heads/$BRANCH"
+          gh pr create --base main --head "$BRANCH" --title "Backfill official image for article ${ARTICLE_ID}" --body "Image and credits from PR TIMES using the existing allowlisted image script; rebuild pages, no duplicate article."
