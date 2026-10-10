@@ -172,6 +172,7 @@ jobs:
         if: always() && steps.plan.outputs.mode == 'fresh'
         continue-on-error: true
         run: |
+          trap 'echo "❌ Claude API履歴の長期保存に失敗しました。Actionsログを確認してください。" >> "$GITHUB_STEP_SUMMARY"' ERR
           if [ ! -s artifacts/claude_usage.jsonl ] && [ ! -s artifacts/claude_outcomes.json ]; then
             echo "No Claude usage or outcome records to archive"
             exit 0
@@ -204,6 +205,13 @@ jobs:
             git commit -m "chore: archive Claude usage for run ${GITHUB_RUN_ID}"
             git push origin HEAD:refs/heads/bot/claude-api-usage-archive
           fi
+          remote_sha="$(git ls-remote origin refs/heads/bot/claude-api-usage-archive | cut -f1)"
+          local_sha="$(git rev-parse HEAD)"
+          if [ "$remote_sha" != "$local_sha" ]; then
+            echo "Archive verification failed: remote=$remote_sha local=$local_sha" >&2
+            exit 1
+          fi
+          echo "✅ Claude API履歴の長期保存を確認: bot/claude-api-usage-archive ($remote_sha)" >> "$GITHUB_STEP_SUMMARY"
 
       # 公開前監査で不合格になった記事・最低件数未達(shortfall)をIssue化する。
       # Issue化は補助的な通知なので、失敗しても合格記事のPR・公開は止めない。
