@@ -19,11 +19,12 @@ class UsageMeterTests(unittest.TestCase):
                         self.calls += 1
                         return response
                 client = SimpleNamespace(messages=Messages())
-                self.assertIs(metered_create(client, stage="fact_audit", model="claude-sonnet-4-6"), response)
+                self.assertIs(metered_create(client, stage="fact_audit", article_id=123, model="claude-sonnet-4-6"), response)
                 self.assertEqual(client.messages.calls, 1)
                 row = json.loads(Path(os.environ["CLAUDE_USAGE_LOG"]).read_text())
                 self.assertEqual(row["tokens"]["input"], 100)
                 self.assertEqual(row["stage"], "fact_audit")
+                self.assertEqual(row["article_id"], 123)
             finally:
                 if old is None: os.environ.pop("CLAUDE_USAGE_LOG", None)
                 else: os.environ["CLAUDE_USAGE_LOG"] = old
