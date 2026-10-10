@@ -6,6 +6,7 @@ configured separately before production use.
 """
 import json
 import os
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -27,6 +28,7 @@ def record_usage(response, *, stage, run_id=None, path=None, article_id=None):
     price = PRICES_PER_MILLION.get(model)
     estimated_usd = (sum(counts[k] * price[k] for k in counts) / 1_000_000) if price else None
     row = {
+        "call_id": str(uuid.uuid4()),
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "stage": stage,
         "article_id": article_id,
