@@ -2,8 +2,9 @@ name: Daily Shonan Doors Articles
 
 on:
   schedule:
-    # UTC 20:00 = JST 05:00（日本時間 毎朝5時）
-    - cron: '0 20 * * *'
+    # UTC 19:13 = JST 04:13。毎時0分は GitHub の schedule が混雑し数時間遅延・欠落するため半端な分にする
+    # (10/8〜10/10 は 05:00 指定が 09:01〜08:49 に遅延)。欠落・遅延は Daily Publication Watchdog が補う
+    - cron: '13 19 * * *'
   workflow_dispatch: {}   # 手動実行もできるようにしておく（テスト用・再実行用）
 
 # Scheduled RunとworkflowDispatch(手動実行)等が重なった場合に、
