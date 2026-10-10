@@ -2556,7 +2556,11 @@
       "フェスティバル",
       "HUG-RIDE PARK"
     ],
-    "slug": "fujisawa-event-0089"
+    "slug": "fujisawa-event-0089",
+    "heroImage": "/assets/images/articles/89.jpg",
+    "heroImageSourceUrl": "https://prtimes.jp/main/html/rd/p/000000001.000190936.html",
+    "heroImageCredit": "画像出典：PR TIMES",
+    "heroImageOriginUrl": "https://prcdn.freetls.fastly.net/release_image/190936/1/190936-1-199179a20c7e870a81cad83f45f2f3b0-1748x1181.png?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260"
   },
   {
     "id": 90,
