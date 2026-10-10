@@ -55,6 +55,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import anthropic
+from scripts.claude_cost_meter import metered_create
 
 # generate_articles.py の定数(他メディアのドメイン一覧)を共有する。
 # generate_articles.py 自体は anthropic を import するだけなので、そのまま読み込める。
@@ -325,7 +326,7 @@ def audit_one(client, a, blocked, images=None, confirmations=None):
     ]
     messages = [{"role": "user", "content": first_message_content(a, images, readings)}]
     for _ in range(MAX_TURNS):
-        resp = client.messages.create(
+        resp = metered_create(client, stage="fact_audit", article_id=a.get("id"), 
             model=MODEL, max_tokens=8000, system=SYSTEM_PROMPT,
             tools=tools, messages=messages,
             extra_headers={"anthropic-beta": "web-fetch-2025-09-10"},

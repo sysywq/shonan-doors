@@ -105,6 +105,15 @@ jobs:
           [ -d compare_old ] || { echo "旧結果を取得できませんでした"; exit 0; }
           python compare_audits.py compare_old audit_reports --out audit_reports/compare.md
           cat audit_reports/compare.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Claude API usage logを保存
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-api-usage
+          path: artifacts/claude_usage.jsonl
+          if-no-files-found: ignore
+          retention-days: 90
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
