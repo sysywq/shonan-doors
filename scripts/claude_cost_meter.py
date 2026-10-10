@@ -13,7 +13,7 @@ PRICES_PER_MILLION = {
     "claude-sonnet-4-6": {"input": 3.0, "output": 15.0, "cache_read": 0.30, "cache_create": 3.75},
 }
 
-def record_usage(response, *, stage, run_id=None, path=None):
+def record_usage(response, *, stage, run_id=None, path=None, article_id=None):
     usage = getattr(response, "usage", None)
     if usage is None:
         return None
@@ -29,7 +29,7 @@ def record_usage(response, *, stage, run_id=None, path=None):
     row = {
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "stage": stage,
-        "article_id": os.getenv("CLAUDE_COST_ARTICLE_ID") or None,
+        "article_id": article_id,
         "run_id": str(run_id or os.getenv("GITHUB_RUN_ID", "")),
         "model": model,
         "tokens": counts,
@@ -45,11 +45,11 @@ def record_usage(response, *, stage, run_id=None, path=None):
         pass  # Metering must never block publishing.
     return row
 
-def metered_create(client, *, stage, **kwargs):
+def metered_create(client, *, stage, article_id=None, **kwargs):
     """Call Claude once, then best-effort record the response usage."""
     response = client.messages.create(**kwargs)
     try:
-        record_usage(response, stage=stage)
+        record_usage(response, stage=stage, article_id=article_id)
     except Exception:
         pass
     return response
