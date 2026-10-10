@@ -28,7 +28,7 @@ export async function check(env, now = new Date()) {
   // Fail closed if the authoritative daily state cannot be read.
   // Never bypass system_failure or round_limit safeguards.
   const stateFile = await github(env, "/contents/data/daily_state.json?ref=bot%2Fdaily-state");
-  const state = JSON.parse(atob((stateFile.content || "").replace(/\\s/g, "")));
+  const state = JSON.parse(atob((stateFile.content || "").replace(/\s/g, "")));
   const daily = (state.days || {})[today] || {};
   if (["system_failure", "round_limit", "complete"].includes(daily.status)) {
     return { status: "daily_state_blocks_dispatch", daily_status: daily.status };
