@@ -1559,7 +1559,9 @@
       185
      ],
      "held_ids": [],
-     "system_errors": []
+     "system_errors": [],
+     "refill_dispatched": true,
+     "refill_dispatched_at": "2026-10-10 09:39"
     }
    },
    "rejected": [
@@ -1947,8 +1949,8 @@
     }
    ],
    "failure": null,
-   "confirmed_today": 0,
-   "updated_at": "2026-10-10 09:38"
+   "confirmed_today": 2,
+   "updated_at": "2026-10-10 09:39"
   }
  }
 }
