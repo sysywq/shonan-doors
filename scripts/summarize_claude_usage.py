@@ -15,13 +15,13 @@ def summarize(paths):
             if not line.strip():
                 continue
             row = json.loads(line)
-            key = (row["timestamp_utc"][:10], row["stage"])
+            key = (row["timestamp_utc"][:10], row["stage"], row.get("article_id"))
             totals[key]["calls"] += 1
             if row.get("estimated_usd") is None:
                 totals[key]["unknown_prices"] += 1
             else:
                 totals[key]["estimated_usd"] += row["estimated_usd"]
-    return [{"date_utc": day, "stage": stage, **values} for (day, stage), values in sorted(totals.items())]
+    return [{"date_utc": day, "stage": stage, "article_id": article_id, **values} for (day, stage, article_id), values in sorted(totals.items(), key=lambda item: (item[0][0], item[0][1], str(item[0][2])))]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
