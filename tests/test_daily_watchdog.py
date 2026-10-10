@@ -52,8 +52,10 @@ class DecideTest(unittest.TestCase):
     def test_missing_cron_dispatches_after_grace(self):
         runs = [run(9, created="2026-10-09T03:00:00Z")]  # 前日の run だけ
         self.assertEqual(wd.decide(NOW, runs, state(), [], [])[0], "dispatch")
-        early = datetime(2026, 10, 9, 20, 7, tzinfo=timezone.utc)  # 05:07 JST
+        early = datetime(2026, 10, 9, 19, 7, tzinfo=timezone.utc)  # 04:07 JST: 定時run前なので待つ
         self.assertEqual(wd.decide(early, runs, state(), [], [])[0], "wait")
+        recovery = datetime(2026, 10, 9, 19, 22, tzinfo=timezone.utc)  # 04:22 JST: 定時run欠落を復旧
+        self.assertEqual(wd.decide(recovery, runs, state(), [], [])[0], "dispatch")
 
     def test_published_target_is_ok(self):
         runs = [run(1, status="in_progress")]

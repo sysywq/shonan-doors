@@ -1,6 +1,6 @@
 # Cloudflare external watchdog
 
-Cloudflare Cron runs daily at **06:15 JST** (21:15 UTC). It checks the GitHub Actions Daily Articles runs for the current JST date. If no run exists, it dispatches the workflow once. Existing GitHub Daily Publication Watchdog handles failures, insufficient article count and deploy lag.
+Cloudflare Cron checks every 15 minutes from **04:07 to 21:52 JST**. The 04:07 check waits for the GitHub Actions schedule at 04:13; from 04:22 onward, an incomplete publication triggers the GitHub Daily Publication Watchdog. That workflow enforces active-run checks, cooldowns, daily limits, article count and production deployment checks.
 
 ## Deploy (owner action required)
 
@@ -10,6 +10,6 @@ Cloudflare Cron runs daily at **06:15 JST** (21:15 UTC). It checks the GitHub Ac
 4. Run `npx wrangler deploy` and verify the scheduled trigger is enabled in Cloudflare.
 5. Check Workers Logs after the first 06:15 JST invocation.
 
-Safety: this worker dispatches only if **no** Daily Articles run exists for the JST date. It never calls Claude directly, never retries a failed run, and does not circumvent GitHub's publication quality gates or daily-state stop controls. A race with the existing GitHub watchdog remains theoretically possible; GitHub workflow concurrency queues overlapping runs. The Worker does not guarantee three articles published, and it is not a substitute for the existing GitHub publication watchdog.
+Safety: this worker never calls Claude directly or bypasses GitHub's publication quality gates and daily-state stop controls. It only wakes the existing GitHub watchdog when fewer than three same-day articles are live; that workflow checks active runs and cooldowns before dispatching recovery. GitHub workflow concurrency queues any overlapping run. The Worker does not guarantee three articles will publish.
 
 Cloudflare Worker deployment and the GitHub token cannot be verified from the repository alone.
