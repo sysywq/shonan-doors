@@ -1,0 +1,148 @@
+{
+  "run_id": "38167735362",
+  "date_jst": "2026-10-12",
+  "outcomes": [
+    {
+      "article_id": 192,
+      "title": "「二宮」という地名は、金次郎とは無関係だった - 川勾神社と、相模国の「二之宮」が生んだ地名",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": 193,
+      "title": "足利尊氏ゆかりの塔頭が秋の扉を開く - 長寿寺、2026年12月7日まで秋季特別拝観",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": 194,
+      "title": "ライフ鎌倉梶原店にバーガーキングが入店 - 鎌倉市内に9月30日グランドオープン",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "卓上で自分好みに揚げる、串揚げバイキング - 「くし葉 ならぽーと湘南平塚店」、10月9日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "年に4日だけ開く洋館 - 旧華頂宮邸「秋の建物公開」、10月24・25日に",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "由比ガ浜に人と物と想いが集まる - 「第29回 鎌人いち場」、10月25日に鎌倉海浜公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "二本のギターが紡ぐ対話 - 大萩康司＆朴葵姫 ギター・デュオリサイタル、11月23日に逗子なぎさホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "名曲をストーリーで届ける - 山田麗 デュオコンサート、11月14日に逗子なぎさホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "地元のものづくりが集う秋の一日 - 「キリガヤクラフトフェスタ2026」、10月24日に逗子で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能4件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ガイドと歩く鎌倉の歴史地 - 「鎌倉学散策 大町周辺」、10月26日・27日に鎌倉駅集合",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が3件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "50代からの学びと仲間づくりへ - 逗子市「第11期サードエイジ連続講座」、10月27日から全5回",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「書く」と「贈る」に特化した有隣堂の新ブランド - 「Penno Penna」大船ルミネウィング店、11月5日オープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "リゾートホテルさながらの空間で鎌倉に23時営業のイタリアン - 「ITALIAN RESORT PERTICA 鎌倉店」、9月28日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ボートライドとステージが港を満たす一日 - 「江の島ハーバーフェスティバル2026」、10月31日に湘南港で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "湘南の海でいのちを守る技が競われる3日間 - 「第52回全日本ライフセービング選手権大会」＆「ふじさわLIFE FEST」、片瀬西浜で開催中",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "昭和の童画家が藤沢に遺したやさしい世界 - 企画展「黒崎義介 - 童話の世界」、藤沢市アートスペースで12月20日まで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「青春ブタ野郎」完結編が江ノ電と出会う - 青ブタ号が鎌倉〜藤沢を駆ける、2027年1月初旬まで",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
