@@ -1430,6 +1430,9 @@ ABOUT_HTML = """
 <p>運営：湘南Doors運営事務局</p>
 <p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
 <p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+<h2>編集方針・掲載情報について</h2>
+<p>掲載情報は主催者・店舗等の一次情報や公開情報をもとに編集部が確認・構成しています。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。</p>
+<p>記事の掲載、修正、情報提供に関するご連絡は上記メールアドレスまでお寄せください。広告・PRコンテンツは通常の編集記事と区別し、広告であることを明示します。</p>
 """
 
 CONTACT_HTML = """
@@ -1658,7 +1661,7 @@ def main():
         new_privacy_html = render_trust_page(
             title="プライバシーポリシー", url_path="/privacy/", body_html=PRIVACY_POLICY_HTML)
         new_about_html = render_trust_page(
-            title="運営者情報", url_path="/about/", body_html=ABOUT_HTML)
+            title="運営者情報・編集方針", url_path="/about/", body_html=ABOUT_HTML)
         new_contact_html = render_trust_page(
             title="お問い合わせ", url_path="/contact/", body_html=CONTACT_HTML)
         write("index.html", new_index_html)
