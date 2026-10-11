@@ -2881,7 +2881,13 @@
     "1": {
      "branch": "daily/2026-10-12-r1",
      "run_id": "38171616039",
-     "started_at": "2026-10-12 05:19"
+     "started_at": "2026-10-12 05:19",
+     "published_ids": [
+      195,
+      196
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -3381,11 +3387,199 @@
      "eventSeriesKey": "",
      "reason": "ニュース鮮度ゲートで対象外(2026-09-30 に終了済みのイベント(終了後の告知はしない))",
      "round": 0
+    },
+    {
+     "title": "千年の修行に勝る四日間 - 光明寺「十夜法要」、本日10月12日から材木座で開幕",
+     "dek": "鎌倉・材木座に立つ浄土宗大本山「光明寺」で、室町時代から530年以上続く秋の大法要「十夜法要（お十夜）」が10月12日（月・祝）に開幕した。15日（木）まで、練行列・稚児礼讃舞・山門楼上特別公開など多彩な行事が続く。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://komyoji-kamakura.or.jp/",
+     "subjectNames": [
+      "光明寺",
+      "光明寺十夜法要",
+      "お十夜",
+      "十夜法要",
+      "光明寺のお十夜",
+      "浄土宗大本山光明寺"
+     ],
+     "tags": [
+      "光明寺",
+      "十夜法要",
+      "お十夜",
+      "材木座",
+      "浄土宗",
+      "鎌倉",
+      "秋",
+      "法要",
+      "練行列"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "komyoji-juyaho",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "映画スターを迎えた古民家の扉が開く - 旧川喜多邸別邸（旧和辻邸）、秋の特別公開が10月31日から",
+     "dek": "鎌倉・雪ノ下の「旧川喜多邸別邸（旧和辻邸）」が、秋の特別公開を10月31日（金）から11月3日（月・祝）まで開催する。通常は非公開のこの建物の内部まで見学できる年に数度の機会だ。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://kamakura-kawakita.org/about_museum/kwhouse_annex/",
+     "subjectNames": [
+      "旧川喜多邸別邸",
+      "旧和辻邸",
+      "旧川喜多邸別邸（旧和辻邸）",
+      "きゅうかわきたていべってい",
+      "きゅうわつじてい"
+     ],
+     "tags": [
+      "旧川喜多邸別邸",
+      "旧和辻邸",
+      "川喜多映画記念館",
+      "鎌倉",
+      "特別公開",
+      "和辻哲郎",
+      "川喜多長政",
+      "秋",
+      "古民家"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "kawakita-watsujitei-koukai",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "高麗山の麓に鎮まる古社 - 大磯「高来神社」の歴史と参拝のポイント",
+     "dek": "大磯の地名「高麗」を今に伝える古社、高来神社。高句麗との深い縁を持ち、源頼朝の祈願所としても知られるこの神社は、高麗山ハイキングや邸園巡りと組み合わせやすい大磯観光の起点でもある。",
+     "area": "大磯",
+     "cat": "c",
+     "link": "https://takakujinja.jp/",
+     "subjectNames": [
+      "高来神社",
+      "高來神社",
+      "高麗神社",
+      "たかくじんじゃ"
+     ],
+     "tags": [
+      "大磯",
+      "高来神社",
+      "高麗山",
+      "神社",
+      "歴史",
+      "ハイキング",
+      "御朱印",
+      "高麗",
+      "文化",
+      "湘南"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "50年目の汽笛が鵠沼に響く - 「SLまつり2026」、本日10月12日に八部公園で開催",
+     "dek": "藤沢市鵠沼運動公園（八部公園）に保存されているC11型蒸気機関車「しおかぜ号」が、今年で誘致保存50周年という節目を迎えた。毎年恒例の「SLまつり」は本日10月12日（月・祝）に開催。節目の年ならではの記念式典も行われる。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://f-mirai.jp/youth/sl_square",
+     "subjectNames": [
+      "SLまつり2026",
+      "SLまつり",
+      "しおかぜ号",
+      "C11-245",
+      "鵠沼運動公園SL広場",
+      "八部公園SL広場",
+      "藤沢SL少年団",
+      "藤沢鉄道車両保存会"
+     ],
+     "tags": [
+      "藤沢",
+      "鵠沼",
+      "八部公園",
+      "SL",
+      "しおかぜ号",
+      "SLまつり",
+      "鵠沼運動公園",
+      "ミニ鉄道",
+      "スポーツの日",
+      "イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "sl-matsuri-happe-park",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "鉄棒ダンスと世界No.1パフォーマーが平塚に集結 - 「AIRFOOTWORKS＋EBIKEN THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで",
+     "dek": "エアダンス集団AIRFOOTWORKSと、「アメリカズ・ゴット・タレント」アジア人初優勝者EBIKENが共演。2時間のスペシャルステージが実現する。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/hall/261024_AIRFOOTWORKSEBIKEN.html",
+     "subjectNames": [
+      "AIRFOOTWORKS＋EBIKEN THE SHOWTIME！",
+      "AIRFOOTWORKS",
+      "エアフットワークス",
+      "EBIKEN",
+      "蛯名健一",
+      "ひらしん平塚文化芸術ホール"
+     ],
+     "tags": [
+      "ダンス",
+      "パフォーマンス",
+      "ひらしん平塚文化芸術ホール",
+      "AIRFOOTWORKS",
+      "EBIKEN",
+      "鉄棒ダンス",
+      "エアダンス",
+      "平塚",
+      "イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "airfootworks-ebiken-showtime-hiratsuka",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "大船駅西口から徒歩1分 - 「東横INN大船駅西口」、10月31日グランドオープン",
+     "dek": "国内353店舗目、神奈川県25店舗目となる東横INNが大船に誕生。5階建て122室で、鎌倉・湘南観光やビジネスの新たな宿泊拠点として機能する。",
+     "area": "鎌倉",
+     "cat": "b",
+     "link": "https://prtimes.jp/main/html/rd/p/000000106.000009718.html",
+     "subjectNames": [
+      "東横INN大船駅西口",
+      "東横イン大船駅西口",
+      "東横INN大船"
+     ],
+     "tags": [
+      "東横INN",
+      "ビジネスホテル",
+      "大船",
+      "鎌倉",
+      "ホテル",
+      "開業",
+      "宿泊"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
     }
    ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-12 05:19",
+   "updated_at": "2026-10-12 05:51",
    "social_pending": []
   }
  }
