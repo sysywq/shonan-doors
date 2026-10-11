@@ -53,27 +53,29 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
       <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
-        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+        <div class="nav-menu-links"><a class="nav-cat-link" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7;color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="nav-icon-label">観光</span></a><a class="nav-cat-link" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7;color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">企業・店舗</span></a><a class="nav-cat-link" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE;color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">グルメ</span></a><a class="nav-cat-link" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6;color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nav-icon-label">人</span></a><a class="nav-cat-link" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4;color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">文化</span></a><a class="nav-cat-link" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9;color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">イベント</span></a><a class="nav-cat-link" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC;color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">暮らし</span></a></div>
       </div>
       <div class="nav-menu-group">
         <div class="nav-menu-label">エリア</div>
-        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+        <div class="nav-menu-links"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>
@@ -87,7 +89,7 @@
     <p class="hub-subtitle">鎌倉に関する記事を35件掲載しています。</p>
     <div class="article-list">
       <a class="list-item" href="/articles/kamakura-culture-0190/" data-cat="c" data-area="鎌倉" data-search="秋の長谷で、女性作家が愛した家の扉が開く - 吉屋信子記念館、10月・11月の週末に無料公開中大正・昭和を代表する女性作家・吉屋信子が晩年を過ごした邸宅が、今年も秋の一般公開の季節を迎えた。近代数寄屋建築の名手・吉田五十八が設計した国の登録有形文化財を、毎週土日と月初に無料で見学できる。吉屋信子記念館鎌倉文化財一般公開長谷無料数寄屋吉田五十八秋">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -99,7 +101,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0184/" data-cat="c" data-area="鎌倉" data-search="縁を結びに、鎌倉へ - 恋愛成就・良縁祈願で知られる神社と参拝の作法鎌倉には、縁結びや恋愛成就にゆかりのある神社・寺院が点在している。山の中の静かな社、由比ヶ浜を見下ろす丘の寺、そして鎌倉随一の大社に宿る「隠れパワースポット」——それぞれの由緒と参拝のポイントを紹介する。鎌倉縁結び恋愛成就葛原岡神社成就院鶴岡八幡宮旗上弁財天社政子石縁結び石参拝パワースポット神社寺院">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -111,7 +113,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0183/" data-cat="e" data-area="鎌倉" data-search="年に一度の扉が開く - 円覚寺「宝物風入・国宝舎利殿特別公開」、10月31日から3日間北条時宗書状や仏涅槃図など数百点の重要文化財が大方丈に並ぶ。鎌倉唯一の国宝建造物「舎利殿」へ間近に参る機会は、この3日間しかない。円覚寺宝物風入国宝舎利殿鎌倉北鎌倉禅特別公開重要文化財秋文化財">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -123,7 +125,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0175/" data-cat="e" data-area="鎌倉" data-search="萩・上田・足利の特産品が鎌倉に集結 - 「令和8年度 鎌倉市姉妹都市物産展」、10月9・10日に開催鎌倉市と姉妹都市提携を結ぶ山口県萩市、長野県上田市、栃木県足利市の特産品が一堂に集まる恒例の物産展。鎌倉生涯学習センターで2日間にわたって開催される。鎌倉物産展姉妹都市萩市上田市足利市鎌倉彫八木節秋のイベント">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -135,7 +137,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0159/" data-cat="e" data-area="鎌倉" data-search="お布施・昼食込みで13寺をめぐる一日 - 「僧侶と巡る鎌倉十三仏」、10月26・27日に開催明王院の僧侶が先達を務め、鎌倉の十三仏霊場を歩いてめぐる定期巡礼が10月も開催される。東の巡礼は10月26日（月）、西の巡礼は10月27日（火）。参加費13,500円にはお布施・御朱印代・昼食・保険が含まれる。鎌倉十三仏巡礼僧侶御朱印体験寺院イベント文化">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -147,7 +149,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0157/" data-cat="e" data-area="鎌倉" data-search="紅葉の建長寺に雲海と禅が降臨する - 「vie presents zen night 鎌倉」、10月29日から12月6日まで開催鎌倉五山第一位の禅刹・建長寺を舞台に、音・光・雲海が融合した没入型の夜間特別拝観イベントが今年も開幕。文化庁「next日本博」補助事業として実施される。鎌倉建長寺zen night夜間拝観アートイベント紅葉禅">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/articles/157.jpg" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -159,7 +161,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-gourmet-0135/" data-cat="g" data-area="鎌倉" data-search="七里ヶ浜の海を眺めながら - 鎌倉プリンスホテル「ル・トリアノン」、秋のアフタヌーンティー開催中りんごとぶどうをテーマにした秋のスイーツを、相模湾を望む窓辺で。9月24日から11月16日まで、七里ヶ浜の高台のフレンチレストランで楽しめる。アフタヌーンティー鎌倉七里ヶ浜フレンチ鎌倉プリンスホテル秋スイーツ海ビュー">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -171,7 +173,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0138/" data-cat="e" data-area="鎌倉" data-search="鎌倉の地魚と鎌倉やさいが集結 - 湘南漁協鎌倉支所「魚まつり」、10月4日開催鎌倉でとれた魚と野菜が集まる秋の恒例イベント。10月4日（日）午前10時から、鎌倉パークホテル駐車場で開催予定。鎌倉魚まつり地魚鎌倉やさい朝市湘南漁業協同組合坂ノ下イベント">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -183,7 +185,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-business-0129/" data-cat="b" data-area="鎌倉" data-search="横浜元町発のスーパー「もとまちユニオン大船店」、9月10日オープンjr大船駅直結の大船ルミネウィング地下1階に「もとまちユニオン大船店」がオープン。鎌倉野菜などの地場食材や、レンジ調理品・店内調理惣菜などを展開する。スーパーマーケットグルメ大船食材地産地消鎌倉野菜新店">
-        <span class="list-item-icon" style="background:#F6E4E7; color:#B5495B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/business.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
@@ -195,7 +197,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0124/" data-cat="c" data-area="鎌倉" data-search="俳優・役所広司の歩みをたどる特別展——鎌倉市川喜多映画記念館「living in cinema 俳優 役所広司」、12月13日まで役づくりや国際的な活躍に光を当てる特別展。出演作の関連上映や、本人と監督らを迎えた特別上映＋トークイベントも予定されている。鎌倉市川喜多映画記念館役所広司特別展映画トークイベント鎌倉">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -207,7 +209,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-business-0114/" data-cat="b" data-area="鎌倉" data-search="鎌倉梶原に大型ホームセンターが誕生——「カインズ 鎌倉梶原店」、8月28日グランドオープン鎌倉市初出店。湘南モノレール「湘南深沢」駅圏に売場面積5,244㎡の新拠点が開業し、diyから日用品、アウトドアグッズまでが揃う。鎌倉ホームセンターカインズ梶原新店暮らしdiy">
-        <span class="list-item-icon" style="background:#F6E4E7; color:#B5495B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/business.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
@@ -219,7 +221,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0115/" data-cat="t" data-area="鎌倉" data-search="混雑ゼロの古都をひとり占め——鎌倉を早朝に訪れるための完全ガイド早朝の鶴岡八幡宮から北鎌倉の禅寺めぐりまで。早朝ならではの開門時間と、人波が来る前に動くための具体的なコースを整理した。鎌倉早朝観光混雑回避鶴岡八幡宮円覚寺建長寺鎌倉大仏北鎌倉朝の鎌倉モデルコース">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -231,7 +233,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0107/" data-cat="e" data-area="鎌倉" data-search="夜の長谷寺を55人だけで独占——「長谷寺 night table 2026」、10月2日から3夜限定開催ライトアップされた境内、観音堂でのライブコンサート、鎌倉・湘南食材のガーデンディナー。アート・音楽・食が交差する夜の特別体験が今秋も幕を開ける。長谷寺鎌倉ナイトイベントライトアップコンサートディナー体験型イベント秋">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -243,7 +245,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0109/" data-cat="c" data-area="鎌倉" data-search="激動の昭和を生き抜いた画家の眼——鎌倉市鏑木清方記念美術館、特別展「昭和100年 清方作品にみる日本のこころ」開幕関東大震災、戦争、戦後——時代の荒波に揺れながら、江戸・明治の美しい記憶を描き続けた鏑木清方。昭和100年の節目に、その精神を鎌倉でたどる。鏑木清方鎌倉美術館日本画昭和100年特別展文化秋の鎌倉">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -255,7 +257,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0099/" data-cat="e" data-area="鎌倉" data-search="かがり火に揺れる幽玄の世界——「第68回鎌倉薪能」、10月9日に鎌倉宮で開催1959年から続く鎌倉の秋の風物詩が今年も幕を開ける。杜に囲まれた特設能舞台に、金春流の能と和泉流の狂言が幽玄の夜を彩る。鎌倉薪能能楽鎌倉宮伝統文化秋イベント古典芸能">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -267,7 +269,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-gourmet-0102/" data-cat="g" data-area="鎌倉" data-search="古都の空気をまとったカフェたち——鎌倉で雰囲気のいいカフェを選ぶための手がかり古民家・禅寺の境内・海を望むテラス席……。鎌倉のカフェは「場所の物語」を持つ店が多い。エリアの特徴を押さえておくと、自分の目的にぴったりな一軒に出会いやすくなる。鎌倉カフェ古民家北鎌倉長谷七里ヶ浜雰囲気湘南グルメ観光">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -279,7 +281,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0096/" data-cat="t" data-area="鎌倉" data-search="鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。鎌倉紅葉寺社建長寺明月院円覚寺獅子舞瑞泉寺秋散策ルート北鎌倉混雑回避">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -291,7 +293,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0080/" data-cat="c" data-area="鎌倉" data-search="江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる鎌倉・坂ノ下の御霊神社で毎年9月18日に行われる例祭。県の無形民俗文化財に指定された「面掛行列」は、奈良時代の伎楽面を纏った10人の行列が坂ノ下の町を練り歩く、全国的にも希少な祭礼だ。鎌倉御霊神社面掛行列坂ノ下無形民俗文化財伎楽秋祭り江ノ電鎌倉権五郎景正">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -303,7 +305,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-business-0082/" data-cat="b" data-area="鎌倉" data-search="藤沢と鎌倉の中間に深夜0時までの灯——「マクドナルド 鎌倉常盤店」、9月18日グランドオープンjr藤沢駅と鎌倉駅の間を結ぶ県道32号沿いに、マクドナルドの新店舗が誕生。朝6時から深夜0時まで営業し、ドライブスルーも備える。車での移動が多いこのエリアに新たな選択肢が加わった。鎌倉常盤マクドナルド新店24時間ドライブスルーファストフード藤沢鎌倉線">
-        <span class="list-item-icon" style="background:#F6E4E7; color:#B5495B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/business.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
@@ -315,7 +317,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0083/" data-cat="e" data-area="鎌倉" data-search="ゴルフ場が一日だけテーマパークになる——鎌倉パブリックゴルフ場「endless summer 2026」、9月26日開催フットゴルフ、乗馬体験、ライブ演奏……鎌倉の丘に広がるゴルフコースが、子どもから大人まで楽しめる夏の祭典に変わる一日。鎌倉ゴルフイベント家族フットゴルフライブ秋子ども">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -327,7 +329,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0086/" data-cat="t" data-area="鎌倉" data-search="小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方坂が多く混雑する鎌倉でも、スポットと順序を選べば乳幼児連れでも十分に楽しめる。鎌倉を訪れる子連れ家族に向けて、移動の視点から「回りやすさ」を考えるためのヒントを整理した。鎌倉子連れベビーカー子ども家族鶴岡八幡宮長谷寺鎌倉大仏由比ヶ浜材木座">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -339,7 +341,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0088/" data-cat="e" data-area="鎌倉" data-search="古都の秋を、ビールで乾杯——「オクトーバーフェスト鎌倉2026」、10月3・4日に市役所駐車場で開催鎌倉商工会議所青年部が主催するビールの祭典が今年も帰ってくる。神奈川・全国からブルワリーが集結し、ステージ、フード、子ども向けブースまで2日間にわたって楽しめる。オクトーバーフェスト鎌倉ビールクラフトビール秋イベントフェスティバル鎌倉商工会議所">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -351,7 +353,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0091/" data-cat="t" data-area="鎌倉" data-search="鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコースグループ旅行では立ち寄れない静かな路地、自分のペースで向き合える寺院の空気。ひとり旅だからこそ味わえる鎌倉がある。混雑を避けるコツとおすすめルートを紹介する。鎌倉ひとり旅モデルコース混雑回避北鎌倉銭洗弁財天報国寺竹林長谷観光">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -363,7 +365,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-life-0078/" data-cat="l" data-area="鎌倉" data-search="鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン2026年9月1日、鎌倉市梶原に「ライフ鎌倉梶原店」がグランドオープン。鎌倉市内への出店は2004年以来約22年ぶりとなり、カインズとともに新商業施設を形成する。地域の買い物事情が大きく変わりそうだ。鎌倉スーパーライフ梶原新店舗暮らし商業施設カインズ">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -391,10 +393,7 @@
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        <a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a>
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
