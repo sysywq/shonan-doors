@@ -67,7 +67,7 @@ jobs:
 
       - name: 生成物だけをステージ
         run: |
-          git add index.html articles/ area/ category/ page/ sitemap.xml robots.txt 404.html site.webmanifest ads.txt 2>/dev/null || true
+          git add index.html articles/ area/ category/ page/ privacy/ about/ contact/ assets/search-index.json sitemap.xml robots.txt 404.html site.webmanifest ads.txt 2>/dev/null || true
 
       - name: 差分があればPR branchへ自動コミット
         run: |
