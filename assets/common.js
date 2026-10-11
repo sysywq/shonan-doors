@@ -96,17 +96,36 @@ if (overlay) {
   if (el) el.addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal(id.replace('foot','').toLowerCase()); });
 });
 
-/* ---------- ヘッダーのハンバーガーメニュー ----------
-   既存のカテゴリー/エリアハブへのリンク一覧(nav-menu-panel)の開閉のみを行う。
-   新しい機能・URLは追加しない。 */
+/* 右側から開閉するアクセシブルなナビゲーション */
 (function(){
   const toggle = document.getElementById('navMenuToggle');
   const panel = document.getElementById('navMenuPanel');
-  if (!toggle || !panel) return;
-  toggle.addEventListener('click', () => {
-    const isOpen = !panel.hidden;
-    panel.hidden = isOpen;
-    toggle.setAttribute('aria-expanded', String(!isOpen));
+  const scrim = document.getElementById('navMenuScrim');
+  const closeButton = document.getElementById('navMenuClose');
+  if (!toggle || !panel || !scrim) return;
+  let previouslyFocused = null;
+  function setOpen(open){
+    panel.classList.toggle('is-open', open);
+    panel.setAttribute('aria-hidden', String(!open));
+    panel.inert = !open;
+    scrim.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('drawer-open', open);
+    if(open){ previouslyFocused=document.activeElement; (closeButton || panel).focus(); }
+    else if(previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+  }
+  toggle.addEventListener('click', () => setOpen(!panel.classList.contains('is-open')));
+  scrim.addEventListener('click', () => setOpen(false));
+  if(closeButton) closeButton.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', e => {
+    if(!panel.classList.contains('is-open')) return;
+    if(e.key==='Escape') setOpen(false);
+    if(e.key==='Tab'){
+      const focusable=[...panel.querySelectorAll('button,a[href]')].filter(el=>!el.hasAttribute('disabled'));
+      if(!focusable.length) return;
+      if(e.shiftKey && document.activeElement===focusable[0]){e.preventDefault();focusable[focusable.length-1].focus();}
+      else if(!e.shiftKey && document.activeElement===focusable[focusable.length-1]){e.preventDefault();focusable[0].focus();}
+    }
   });
 })();
 
