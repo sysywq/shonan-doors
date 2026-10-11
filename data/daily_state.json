@@ -2112,7 +2112,12 @@
     "1": {
      "branch": "daily/2026-10-11-r1",
      "run_id": "38094843246",
-     "started_at": "2026-10-11 08:51"
+     "started_at": "2026-10-11 08:51",
+     "published_ids": [
+      191
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -2635,11 +2640,216 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 0
+    },
+    {
+     "title": "海を背に、鎌倉の街がひとつになる - 「第29回鎌人いち場」、10月25日に由比ガ浜で開催",
+     "dek": "フリーマーケット、ワークショップ、鎌倉の飲食が一堂に集まるコミュニティ・マーケットが今秋も由比ガ浜海岸公園に出現する。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://kamandoichiba.com/",
+     "subjectNames": [
+      "鎌人いち場",
+      "かまんどいちば",
+      "第29回鎌人いち場",
+      "KAMANDO ICHIBA"
+     ],
+     "tags": [
+      "鎌倉",
+      "鎌人いち場",
+      "コミュニティマーケット",
+      "フリーマーケット",
+      "由比ガ浜",
+      "鎌倉海浜公園",
+      "ワークショップ",
+      "地域イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "kamando-ichiba",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "湘南エリア初のオーダースーツ専門店 - 「GINZAグローバルスタイル・コンフォート ららぽーと湘南平塚店」、10月9日グランドオープン",
+     "dek": "横浜まで通っていた湘南のスーツ愛好家に朗報。平塚のららぽーとに、メンズ・レディース・キッズを揃えるオーダースーツ専門店が誕生した。",
+     "area": "平塚",
+     "cat": "b",
+     "link": "https://www.global-style.jp/shop/lalaport-hiratsuka",
+     "subjectNames": [
+      "GINZAグローバルスタイル・コンフォート ららぽーと湘南平塚店",
+      "GINZAグローバルスタイル コンフォート",
+      "グローバルスタイル ららぽーと湘南平塚",
+      "Global Style COMFORT",
+      "GINZA Global Style COMFORT"
+     ],
+     "tags": [
+      "オーダースーツ",
+      "平塚",
+      "ららぽーと湘南平塚",
+      "グランドオープン",
+      "ファッション",
+      "スーツ",
+      "新店"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "昭和の童画が辻堂に蘇る - 「黒崎義介-童話の世界」展、藤沢市アートスペースで12月20日まで",
+     "dek": "保育絵本『キンダーブック』などで児童文化を支えた童画家・黒崎義介の原画展が、辻堂の藤沢市アートスペースで開催中。観覧無料で、藤沢ゆかりの昔話作品も並ぶ。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+     "subjectNames": [
+      "黒崎義介-童話の世界",
+      "企画展Ⅱ 黒崎義介-童話の世界",
+      "黒崎義介",
+      "藤沢市アートスペース",
+      "FAS",
+      "エファース"
+     ],
+     "tags": [
+      "黒崎義介",
+      "童画",
+      "藤沢市アートスペース",
+      "FAS",
+      "展覧会",
+      "辻堂",
+      "無料",
+      "昭和レトロ",
+      "キンダーブック",
+      "絵本",
+      "童話"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-11",
+     "eventSeriesKey": "kurosaki-yoshisuke-dowa-no-sekai",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "【茅ヶ崎市】ケンタッキーフライドチキン ラスカ茅ヶ崎店が、店舗改装のため10/14(水)～15(木)の2日間休業するようです https://t.co/0rTSLyyPUK",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "「湘南のまんなか」平塚に暮らす——交通・家賃・子育て環境のリアルな手引き",
+     "dek": "",
+     "area": "平塚",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "昼だけじゃもったいない——湘南平・展望台の夜景と夜間訪問ガイド",
+     "dek": "",
+     "area": "平塚",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "クイーンズ伊勢丹 藤沢店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "クイーンズ伊勢丹 藤沢店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "鮨 加（くわえ） - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "鮨 加（くわえ）"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "フードウェイ藤沢オーパ店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "フードウェイ藤沢オーパ店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "北海道キッチンYOSHIMI 藤沢店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "北海道キッチンYOSHIMI 藤沢店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
     }
    ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-11 08:51"
+   "updated_at": "2026-10-11 09:16"
   }
  }
 }
