@@ -2187,10 +2187,10 @@
     "area": "平塚",
     "category": "l",
     "searchIntent": "湘南エリアへの移住を検討しており、平塚の住環境・交通アクセス・家賃相場・子育てサービスなど、生活者目線のリアルな情報を知りたい。（t0086は台帳にあるが status=skipped で未記事化。内容を暮らし全般から「移住検討者が比較するための具体的指標」にフォーカスし差別化）",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「ひらつか」が既存記事id:57と一致",
     "createdAt": "2026-10-10"
   },
   {
@@ -2345,10 +2345,10 @@
     "area": "平塚",
     "category": "t",
     "searchIntent": "湘南平の展望台が昼の絶景スポットであることは知っているが、夜景も楽しめるのか、夜間のアクセス・駐車場事情・安全面も含めて事前に知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 一次情報URLが同じ(既存記事id:56)",
     "createdAt": "2026-10-11"
   },
   {

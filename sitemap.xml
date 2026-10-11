@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.shonandoors.com/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/privacy/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/about/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.shonandoors.com/contact/</loc>
-    <lastmod>2026-10-10</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
@@ -27,7 +27,7 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/area/chigasaki/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-11</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -102,6 +102,11 @@
   </url>
   <url>
     <loc>https://www.shonandoors.com/articles/kamakura-culture-0190/</loc>
+    <lastmod>2026-10-11</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shonandoors.com/articles/chigasaki-event-0191/</loc>
     <lastmod>2026-10-11</lastmod>
     <priority>0.7</priority>
   </url>
