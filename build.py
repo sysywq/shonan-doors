@@ -258,6 +258,25 @@ AREA_MENU_LINKS = "".join(
     f'<a href="/area/{AREA_EN[a]}/">{a}</a>' for a in AREA_ORDER
 )
 
+AREA_DISPLAY_ORDER = ["茅ヶ崎","藤沢","鎌倉","平塚","逗子","葉山","大磯","二宮"]
+AREA_BADGES = {
+    "茅ヶ崎": ("#e87523", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg>'),
+    "藤沢": ("#1885ca", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg>'),
+    "鎌倉": ("#895bc4", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg>'),
+    "平塚": ("#e64c83", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg>'),
+    "逗子": ("#3265be", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg>'),
+    "葉山": ("#39894e", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg>'),
+    "大磯": ("#19969b", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg>'),
+    "二宮": ("#d6a000", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg>'),
+}
+def area_links(menu=False):
+    return ''.join(f'<a class="area-nav-item" href="/area/{AREA_EN[a]}/"><span class="area-nav-icon" style="--area-color:{AREA_BADGES[a][0]}">{AREA_BADGES[a][1]}</span><span class="area-nav-label">{a}</span></a>' for a in AREA_DISPLAY_ORDER)
+
+AREA_MENU_LINKS = area_links(True)
+CATEGORY_MENU_LINKS = "".join(
+    f'<a class="nav-cat-link" href="/category/{CAT_EN[k]}/"><span class="cat-nav-icon" style="background:{CATEGORY_NAV_STYLE[k]["bg"]};color:{CATEGORY_NAV_STYLE[k]["fg"]}">{CATEGORY_NAV_STYLE[k]["icon"]}</span><span class="nav-icon-label">{v["label"]}</span></a>'
+    for k,v in CATS.items())
+
 HEADER_HTML = f"""<header>
   <svg class="wave-deco" viewBox="0 0 300 200" fill="none">
     <path d="M0 120 Q40 90 80 120 T160 120 T240 120 T320 120" stroke="#1D3557" stroke-width="2" opacity=".3"/>
@@ -274,15 +293,16 @@ HEADER_HTML = f"""<header>
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
@@ -295,6 +315,7 @@ HEADER_HTML = f"""<header>
         <div class="nav-menu-label">エリア</div>
         <div class="nav-menu-links">{AREA_MENU_LINKS}</div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>"""
@@ -316,10 +337,7 @@ FOOTER_HTML = f"""<footer>
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        {FOOTER_AREA_LINKS}
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
@@ -730,8 +748,9 @@ def render_list_item(item, scenes, with_search_attrs=False):
         search_hay = esc((item["title"] + item["dek"] + "".join(item.get("tags", []))).lower())
         search_attrs = f' data-cat="{item["cat"]}" data-area="{esc(item["area"])}" data-search="{search_hay}"'
     nav_style = CATEGORY_NAV_STYLE[item["cat"]]
+    thumb = item.get("thumbnailImage") or item.get("heroImage") or f"{IMAGES_BASE_URL}/category-photos/{CAT_EN[item['cat']]}.webp"
     return f"""<a class="list-item" href="/articles/{item['slug']}/"{search_attrs}>
-        <span class="list-item-icon" style="background:{nav_style['bg']}; color:{nav_style['fg']}" aria-hidden="true">{nav_style['icon']}</span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="{esc(thumb)}" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:{CATS[item['cat']]['bg']}">{esc(CATS[item['cat']]['label'])}</span>
@@ -983,7 +1002,7 @@ def render_index(articles, scenes):
         for k, v in CATS.items()
     )
     used_areas = {a["area"] for a in articles}
-    area_opts = "".join(f'<option value="{AREA_EN[a]}">{a}</option>' for a in AREA_ORDER if a in used_areas)
+    area_nav_html = area_links()
 
     # 旧hash URL(#article-{id}) → 新URL への転送用マップ(フォールバック用)
     id_to_slug = {a["id"]: a["slug"] for a in articles}
@@ -1013,7 +1032,8 @@ def render_index(articles, scenes):
 </section>
 <nav class="cat-nav" aria-label="カテゴリーから探す">
   <div class="cat-nav-track">{category_nav_html}</div>
-</nav>"""
+</nav>
+<section class="area-nav" aria-label="エリアから探す"><div class="area-nav-inner"><h2 class="area-nav-title serif">エリアから探す</h2><div class="area-nav-grid">{area_nav_html}</div></div></section>"""
 
     site_description = "湘南(藤沢・茅ヶ崎・鎌倉・平塚・大磯・二宮・逗子・葉山)の企業・お店・人・文化・イベント・観光情報を継続的に取材する地域メディア。"
     website_ld = {
@@ -1078,15 +1098,7 @@ def render_index(articles, scenes):
     <button class="pickup-arrow" id="pickupPrev" aria-label="前へ">‹</button>
     <div class="pickup-dots" id="pickupDots"></div>
     <button class="pickup-arrow" id="pickupNext" aria-label="次へ">›</button>
-  </div>
-</div>
-
-<div class="filterbar">
-  <div class="filter-inner">
-    <select id="areaSelect" onchange="if(this.value) location.href='/area/'+this.value+'/';">
-      <option value="">エリアで探す</option>{area_opts}
-    </select>
-    <input type="text" id="searchBox" placeholder="このページ内をキーワードで絞り込み">
+    <button class="pickup-pause" id="pickupPause" type="button" aria-label="自動切り替えを一時停止">Ⅱ 停止</button>
   </div>
 </div>
 
@@ -1108,31 +1120,8 @@ def render_index(articles, scenes):
 {FOOTER_HTML}
 
 <script>
-/* このページに表示中の記事だけを対象にした、キーワードでの簡易絞り込み。
-   カテゴリ・エリアはPhase 3で /category/{{cat}}/ ・ /area/{{area}}/ の
-   実ページ(ハブページ)に分離したため、ここでは検索ボックスのみを扱う。
-   ※記事本文自体はこのJSに依存せず、常に/articles/{{slug}}/の静的HTMLとして存在する。 */
+/* 旧記事リンクの転送 */
 (function(){{
-  const grid = document.getElementById('grid');
-  const cards = Array.from(grid.children);
-  const searchBox = document.getElementById('searchBox');
-  const resultCount = document.getElementById('resultCount');
-  const totalCount = {len(articles)};
-  const pageCount = cards.length;
-
-  searchBox.addEventListener('input', ()=>{{
-    const q = searchBox.value.trim().toLowerCase();
-    let shown = 0;
-    cards.forEach(card=>{{
-      const ok = !q || card.dataset.search.includes(q);
-      card.style.display = ok ? '' : 'none';
-      if (ok) shown++;
-    }});
-    resultCount.textContent = q
-      ? `このページ内で ${{shown}} 件が見つかりました`
-      : `全 ${{totalCount}} 件中 最新${{pageCount}}件を表示中`;
-  }});
-
   /* 旧hash URL(#article-{{id}})でのアクセス・共有リンクを、新しい /articles/{{slug}}/ へ誘導する
      フォールバック。GitHub Pagesはサーバー側301ができないため、JSによる誘導としている。 */
   const OLD_ID_TO_SLUG = {redirect_map_json};
@@ -1225,7 +1214,11 @@ const CATS_FOR_PICKUP = {cats_label_bg_json};
   }}
   function advance(dir){{ if(!isJumping) goTo(trackIndex + dir, true); }}
   function goToReal(realIndex){{ isJumping = false; clearInterval(pickupTimer); goTo(realIndex + 1, true); }}
-  function restartPickupTimer(){{ clearInterval(pickupTimer); pickupTimer = setInterval(()=> advance(1), 3000); }}
+  let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches,inView=false,hoverPaused=false,focusPaused=false;
+  const pauseBtn=document.getElementById('pickupPause');
+  function restartPickupTimer(){{clearInterval(pickupTimer);if(!userPaused&&inView&&!hoverPaused&&!focusPaused&&!document.hidden)pickupTimer=setInterval(()=>advance(1),5000);}}
+  function syncPause(){{pauseBtn.textContent=userPaused?'▶ 再開':'Ⅱ 停止';pauseBtn.setAttribute('aria-pressed',String(userPaused));pauseBtn.setAttribute('aria-label',userPaused?'自動切り替えを再開':'自動切り替えを一時停止');}}
+  pauseBtn.addEventListener('click',()=>{{userPaused=!userPaused;syncPause();restartPickupTimer();}});syncPause();
 
   updateActiveStates();
   requestAnimationFrame(()=> scrollToTrack('auto'));
@@ -1234,8 +1227,16 @@ const CATS_FOR_PICKUP = {cats_label_bg_json};
   document.getElementById('pickupPrev').addEventListener('click', ()=>{{ advance(-1); restartPickupTimer(); }});
   document.getElementById('pickupNext').addEventListener('click', ()=>{{ advance(1); restartPickupTimer(); }});
   const vp = document.getElementById('pickupViewport');
-  vp.addEventListener('mouseenter', ()=> clearInterval(pickupTimer));
-  vp.addEventListener('mouseleave', ()=> restartPickupTimer());
+  const section=document.querySelector('.pickup-section');
+  new IntersectionObserver(entries=>{{inView=entries[0].intersectionRatio>=.5;restartPickupTimer();}},{{threshold:[0,.5,1]}}).observe(section);
+  section.addEventListener('mouseenter',()=>{{hoverPaused=true;restartPickupTimer();}});
+  section.addEventListener('mouseleave',()=>{{hoverPaused=false;restartPickupTimer();}});
+  section.addEventListener('focusin',()=>{{focusPaused=true;restartPickupTimer();}});
+  section.addEventListener('focusout',()=>{{focusPaused=false;restartPickupTimer();}});
+  document.addEventListener('visibilitychange',restartPickupTimer);
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{{userPaused=e.matches;syncPause();restartPickupTimer();}});
+  let lastVisible=-1,visibleSince=0,viewTracked=false;
+  setInterval(()=>{{if(!inView||document.hidden){{visibleSince=0;return;}}const i=((trackIndex-1)+N)%N;if(i!==lastVisible||!visibleSince){{lastVisible=i;visibleSince=Date.now();viewTracked=false;}}if(!viewTracked&&Date.now()-visibleSince>=3000){{viewTracked=true;trackEvent('pickup_viewable_3s',{{article_id:PICKUP_ITEMS[i].id}});}}}},500);
   window.addEventListener('resize', ()=> scrollToTrack('auto'));
   window.addEventListener('orientationchange', ()=> setTimeout(()=> scrollToTrack('auto'), 200));
 }})();
@@ -1665,6 +1666,7 @@ def main():
         new_contact_html = render_trust_page(
             title="お問い合わせ", url_path="/contact/", body_html=CONTACT_HTML)
         write("index.html", new_index_html)
+        write("assets/search-index.json", json.dumps([{"title":a["title"],"dek":a.get("dek",""),"area":a["area"],"cat":CATS[a["cat"]]["label"],"url":"/articles/"+a["slug"]+"/","tags":a.get("tags",[])} for a in articles],ensure_ascii=False))
         write("sitemap.xml", new_sitemap_xml)
         write("robots.txt", new_robots_txt)
         write("404.html", new_404_html)
@@ -1686,6 +1688,7 @@ def main():
             if os.path.isdir(staged_dir):
                 shutil.move(staged_dir, final_dir)
 
+        shutil.move(os.path.join(staging_dir,"assets/search-index.json"),os.path.join(ROOT,"assets/search-index.json"))
         for filename in ("index.html", "sitemap.xml", "robots.txt", "404.html", "site.webmanifest", "ads.txt"):
             tmp_path = os.path.join(ROOT, filename + ".tmp")
             shutil.move(os.path.join(staging_dir, filename), tmp_path)
