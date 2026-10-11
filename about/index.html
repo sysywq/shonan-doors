@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<title>運営者情報｜湘南Doors</title>
-<meta name="description" content="湘南Doorsの運営者情報についてご案内します。">
+<title>運営者情報・編集方針｜湘南Doors</title>
+<meta name="description" content="湘南Doorsの運営者情報・編集方針についてご案内します。">
 <link rel="canonical" href="https://www.shonandoors.com/about/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="湘南Doors">
-<meta property="og:title" content="運営者情報｜湘南Doors">
+<meta property="og:title" content="運営者情報・編集方針｜湘南Doors">
 <meta property="og:url" content="https://www.shonandoors.com/about/">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "湘南Doors トップ", "item": "https://www.shonandoors.com/"}, {"@type": "ListItem", "position": 2, "name": "運営者情報"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "湘南Doors トップ", "item": "https://www.shonandoors.com/"}, {"@type": "ListItem", "position": 2, "name": "運営者情報・編集方針"}]}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -49,7 +49,7 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </a>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
@@ -58,8 +58,10 @@
       </div>
     </div>
   </div>
-  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+  <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
+  <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
+      <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
         <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
@@ -73,13 +75,16 @@
 </header>
 <main>
   <div class="hub-page-wrap">
-    <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">運営者情報</span></nav>
-    <h1 class="hub-title serif">運営者情報</h1>
+    <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">湘南Doors トップ</a> <span class="breadcrumb-sep">›</span> <span aria-current="page">運営者情報・編集方針</span></nav>
+    <h1 class="hub-title serif">運営者情報・編集方針</h1>
     <div class="static-modal-body" style="padding:0; margin-top:16px;">
 <h2>運営者情報</h2>
 <p>運営：湘南Doors運営事務局</p>
 <p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
 <p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+<h2>編集方針・掲載情報について</h2>
+<p>掲載情報は主催者・店舗等の一次情報や公開情報をもとに編集部が確認・構成しています。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。</p>
+<p>記事の掲載、修正、情報提供に関するご連絡は上記メールアドレスまでお寄せください。広告・PRコンテンツは通常の編集記事と区別し、広告であることを明示します。</p>
 </div>
   </div>
 </main>
@@ -102,12 +107,11 @@
       </div>
     </div>
     <div class="foot-note">
-      掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
-      広告掲載プランをご用意しています。詳しくはinfo@shonandoors.comまでお問い合わせください。<br><br>
+      広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
       <span class="foot-links">
         <a href="/privacy/" id="footPrivacy">プライバシーポリシー</a>
         <a href="/contact/" id="footContact">お問い合わせ</a>
-        <a href="/about/" id="footOperator">運営者情報</a>
+        <a href="/about/" id="footOperator">運営者情報・編集方針</a>
       </span><br><br>
       © 湘南Doors運営事務局
     </div>
