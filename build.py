@@ -1031,6 +1031,7 @@ def render_index(articles, scenes):
   </div>
 </section>
 <nav class="cat-nav" aria-label="カテゴリーから探す">
+  <h2 class="cat-nav-heading serif">カテゴリーから探す</h2>
   <div class="cat-nav-track">{category_nav_html}</div>
 </nav>
 <section class="area-nav" aria-label="エリアから探す"><div class="area-nav-inner"><h2 class="area-nav-title serif">エリアから探す</h2><div class="area-nav-grid">{area_nav_html}</div></div></section>"""
@@ -1098,7 +1099,7 @@ def render_index(articles, scenes):
     <button class="pickup-arrow" id="pickupPrev" aria-label="前へ">‹</button>
     <div class="pickup-dots" id="pickupDots"></div>
     <button class="pickup-arrow" id="pickupNext" aria-label="次へ">›</button>
-    <button class="pickup-pause" id="pickupPause" type="button" aria-label="自動切り替えを一時停止">Ⅱ 停止</button>
+    <button class="pickup-pause" id="pickupPause" type="button" aria-label="自動切り替えを一時停止"></button>
   </div>
 </div>
 
@@ -1216,8 +1217,8 @@ const CATS_FOR_PICKUP = {cats_label_bg_json};
   function goToReal(realIndex){{ isJumping = false; clearInterval(pickupTimer); goTo(realIndex + 1, true); }}
   let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches,inView=false,hoverPaused=false,focusPaused=false;
   const pauseBtn=document.getElementById('pickupPause');
-  function restartPickupTimer(){{clearInterval(pickupTimer);if(!userPaused&&inView&&!hoverPaused&&!focusPaused&&!document.hidden)pickupTimer=setInterval(()=>advance(1),5000);}}
-  function syncPause(){{pauseBtn.textContent=userPaused?'▶ 再開':'Ⅱ 停止';pauseBtn.setAttribute('aria-pressed',String(userPaused));pauseBtn.setAttribute('aria-label',userPaused?'自動切り替えを再開':'自動切り替えを一時停止');}}
+  function restartPickupTimer(){{clearInterval(pickupTimer);if(!userPaused&&inView&&!hoverPaused&&!focusPaused&&!document.hidden)pickupTimer=setInterval(()=>advance(1),4000);}}
+  function syncPause(){{pauseBtn.innerHTML=userPaused?'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';pauseBtn.setAttribute('aria-pressed',String(userPaused));pauseBtn.setAttribute('aria-label',userPaused?'自動切り替えを再開':'自動切り替えを一時停止');}}
   pauseBtn.addEventListener('click',()=>{{userPaused=!userPaused;syncPause();restartPickupTimer();}});syncPause();
 
   updateActiveStates();
