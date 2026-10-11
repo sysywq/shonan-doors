@@ -157,3 +157,5 @@ document.querySelectorAll('.share-btn-copy').forEach(btn => {
 /* Navigation presentation CI validation marker. */
 
 /* Area visual consistency validation. */
+
+/* Article detail badge color release validation. */
