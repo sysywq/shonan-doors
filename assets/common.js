@@ -68,6 +68,7 @@ const STATIC_PAGES = {
       <p>運営：湘南Doors運営事務局</p>
       <p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
       <p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+      <h3>編集方針・掲載情報について</h3><p>掲載情報は公開情報や一次情報をもとに編集部が確認・構成しています。情報は変更になる場合があるため、訪問前に公式情報をご確認ください。広告・PRコンテンツは広告であることを明示します。</p>
     `,
   },
 };
@@ -96,17 +97,36 @@ if (overlay) {
   if (el) el.addEventListener('click', (e)=>{ e.preventDefault(); openStaticModal(id.replace('foot','').toLowerCase()); });
 });
 
-/* ---------- ヘッダーのハンバーガーメニュー ----------
-   既存のカテゴリー/エリアハブへのリンク一覧(nav-menu-panel)の開閉のみを行う。
-   新しい機能・URLは追加しない。 */
+/* 右側から開閉するアクセシブルなナビゲーション */
 (function(){
   const toggle = document.getElementById('navMenuToggle');
   const panel = document.getElementById('navMenuPanel');
-  if (!toggle || !panel) return;
-  toggle.addEventListener('click', () => {
-    const isOpen = !panel.hidden;
-    panel.hidden = isOpen;
-    toggle.setAttribute('aria-expanded', String(!isOpen));
+  const scrim = document.getElementById('navMenuScrim');
+  const closeButton = document.getElementById('navMenuClose');
+  if (!toggle || !panel || !scrim) return;
+  let previouslyFocused = null;
+  function setOpen(open){
+    panel.classList.toggle('is-open', open);
+    panel.setAttribute('aria-hidden', String(!open));
+    panel.inert = !open;
+    scrim.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('drawer-open', open);
+    if(open){ previouslyFocused=document.activeElement; (closeButton || panel).focus(); }
+    else if(previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+  }
+  toggle.addEventListener('click', () => setOpen(!panel.classList.contains('is-open')));
+  scrim.addEventListener('click', () => setOpen(false));
+  if(closeButton) closeButton.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', e => {
+    if(!panel.classList.contains('is-open')) return;
+    if(e.key==='Escape') setOpen(false);
+    if(e.key==='Tab'){
+      const focusable=[...panel.querySelectorAll('button,a[href]')].filter(el=>!el.hasAttribute('disabled'));
+      if(!focusable.length) return;
+      if(e.shiftKey && document.activeElement===focusable[0]){e.preventDefault();focusable[focusable.length-1].focus();}
+      else if(!e.shiftKey && document.activeElement===focusable[focusable.length-1]){e.preventDefault();focusable[0].focus();}
+    }
   });
 })();
 

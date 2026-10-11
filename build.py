@@ -274,7 +274,7 @@ HEADER_HTML = f"""<header>
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/" aria-label="トップ・記事をさがす">
+        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </a>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
@@ -283,8 +283,10 @@ HEADER_HTML = f"""<header>
       </div>
     </div>
   </div>
-  <nav class="nav-menu-panel" id="navMenuPanel" hidden>
+  <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
+  <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
+      <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
         <div class="nav-menu-links">{CATEGORY_MENU_LINKS}</div>
@@ -320,12 +322,11 @@ FOOTER_HTML = f"""<footer>
       </div>
     </div>
     <div class="foot-note">
-      掲載情報は公開情報をもとに編集部が取材・構成したものです。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。<br><br>
-      広告掲載プランをご用意しています。詳しくはinfo@shonandoors.comまでお問い合わせください。<br><br>
+      広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
       <span class="foot-links">
         <a href="/privacy/" id="footPrivacy">プライバシーポリシー</a>
         <a href="/contact/" id="footContact">お問い合わせ</a>
-        <a href="/about/" id="footOperator">運営者情報</a>
+        <a href="/about/" id="footOperator">運営者情報・編集方針</a>
       </span><br><br>
       © 湘南Doors運営事務局
     </div>
@@ -1429,6 +1430,9 @@ ABOUT_HTML = """
 <p>運営：湘南Doors運営事務局</p>
 <p>連絡先：<a href="mailto:info@shonandoors.com">info@shonandoors.com</a></p>
 <p>湘南Doorsは、湘南エリアの企業・お店・人・文化・イベント・観光を継続的に取材し、記録として積み重ねていく地域メディアです。「湘南を知る入口」であることを目的に、湘南Doors運営事務局が企画・編集・運営を行っています。</p>
+<h2>編集方針・掲載情報について</h2>
+<p>掲載情報は主催者・店舗等の一次情報や公開情報をもとに編集部が確認・構成しています。店舗情報・開催情報は変更となる場合がありますので、最新情報は各施設・団体の公式情報をご確認ください。</p>
+<p>記事の掲載、修正、情報提供に関するご連絡は上記メールアドレスまでお寄せください。広告・PRコンテンツは通常の編集記事と区別し、広告であることを明示します。</p>
 """
 
 CONTACT_HTML = """
@@ -1657,7 +1661,7 @@ def main():
         new_privacy_html = render_trust_page(
             title="プライバシーポリシー", url_path="/privacy/", body_html=PRIVACY_POLICY_HTML)
         new_about_html = render_trust_page(
-            title="運営者情報", url_path="/about/", body_html=ABOUT_HTML)
+            title="運営者情報・編集方針", url_path="/about/", body_html=ABOUT_HTML)
         new_contact_html = render_trust_page(
             title="お問い合わせ", url_path="/contact/", body_html=CONTACT_HTML)
         write("index.html", new_index_html)
