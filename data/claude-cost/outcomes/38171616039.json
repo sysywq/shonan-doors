@@ -1,0 +1,66 @@
+{
+  "run_id": "38171616039",
+  "date_jst": "2026-10-12",
+  "outcomes": [
+    {
+      "article_id": 195,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 196,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "千年の修行に勝る四日間 - 光明寺「十夜法要」、本日10月12日から材木座で開幕",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "映画スターを迎えた古民家の扉が開く - 旧川喜多邸別邸（旧和辻邸）、秋の特別公開が10月31日から",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "高麗山の麓に鎮まる古社 - 大磯「高来神社」の歴史と参拝のポイント",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "50年目の汽笛が鵠沼に響く - 「SLまつり2026」、本日10月12日に八部公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "鉄棒ダンスと世界No.1パフォーマーが平塚に集結 - 「AIRFOOTWORKS＋EBIKEN THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大船駅西口から徒歩1分 - 「東横INN大船駅西口」、10月31日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
