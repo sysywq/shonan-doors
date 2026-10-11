@@ -234,6 +234,12 @@ NEWS_ARTICLE_TOOL = {
                         "link": {"type": "string", "description": "一次情報源のURL。見つからなければ空文字"},
                         "eventStartDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 開催日をYYYY-MM-DD形式で。複数日開催の場合は初日。不明な場合は空文字"},
                         "eventEndDate": {"type": "string", "description": "catが'e'(イベント)の場合のみ: 複数日開催の場合の最終日をYYYY-MM-DD形式で。単日開催または不明な場合は空文字"},
+                        "eventPrice": {"type": "string", "description": "イベント一般入場料金の数値だけ。無料と明記された場合のみ0。不明・非イベントは空文字。飲食や物販の価格を使わない"},
+                        "eventTicketUrl": {"type": "string", "description": "イベントの公式申込・チケット購入URL。不明は空文字"},
+                        "eventOrganizer": {"type": "string", "description": "一次情報に明記された主催者名。不明は空文字。会場・掲載媒体を主催者と推測しない"},
+                        "eventOrganizerUrl": {"type": "string", "description": "確認できた主催者公式URL。不明は空文字"},
+                        "eventMetadataSource": {"type": "string", "description": "料金・主催・出演者を確認した一次情報URL。sourcesにも含める。不明は空文字"},
+                        "eventPerformers": {"type": "array", "items": {"type": "object", "additionalProperties": False, "properties": {"name": {"type": "string"}, "type": {"type": "string", "enum": ["Person", "PerformingGroup"]}}, "required": ["name", "type"]}, "description": "一次情報に明記された出演者の名前。非公演や不明は空配列。主催者・出店者・イラスト担当を出演者にしない"},
                         "eventSeriesKey": {"type": "string", "description": "catが'e'(イベント)の場合のみ: このイベントの一意なシリーズ識別子(kebab-case英数字、例: tsurugaoka-hachimangu-reitaisai)。既存のイベントシリーズ台帳に一致するイベントがあれば同じキーを使い、無ければ新しいキーを考える。catが'e'以外の場合は空文字"},
                         "newsKind": {"type": "string", "enum": ["store_opening", "event", "news"], "description": "新店・開業・リニューアルオープンは store_opening、イベント(cat='e')は event、それ以外は news"},
                         "announcementDate": {"type": "string", "description": "一次情報に明記された公式発表日(YYYY-MM-DD)。確認できなければ空文字(推測しない)"},
@@ -253,6 +259,7 @@ NEWS_ARTICLE_TOOL = {
                         "cat", "area", "scene", "title", "dek", "body", "tags", "link",
                         "subjectNames", "sources",
                         "eventStartDate", "eventEndDate", "eventSeriesKey",
+                        "eventPrice", "eventTicketUrl", "eventOrganizer", "eventOrganizerUrl", "eventMetadataSource", "eventPerformers",
                         "newsKind", "announcementDate", "openingDate", "effectiveDate", "freshnessException",
                         "address", "access", "hours", "closedDays",
                         "instagram", "facebook", "x", "tiktok",
@@ -330,6 +337,8 @@ Web検索を使って、直近1週間以内に実際にあった湘南エリア�
 単日開催の場合はeventEndDateは空文字のままで構いません。開催日が確認できない場合のみ、
 eventStartDateを空文字にしてください(この場合、検索結果でのイベント情報表示の対象外に
 なります)。日付は必ず情報源に明記されているものだけを使い、推測で埋めないこと。
+
+料金・主催・出演者は既に確認している一次情報に明記されたものだけを任意で記録し、本文にも記載してください。取得できない場合は空文字/空配列で提出し、追加調査だけのために執筆や公開を止めない。無料と推測しない。チケットの在庫状況は推測しない。
 
 【ニュースの鮮度(プログラムで判定し、外れた記事は公開しない)】
 発表日・開店日・開催日を混同しないこと。今日は{news_freshness.today_jst()}(JST)。
@@ -470,6 +479,12 @@ def build_news_entry(item, today, article_id="today-run-pending-id"):
         "eventStartDate": item.get("eventStartDate") or "",
         "eventEndDate": item.get("eventEndDate") or "",
         "eventSeriesKey": item.get("eventSeriesKey") or "",
+        "eventPrice": item.get("eventPrice") or "",
+        "eventTicketUrl": item.get("eventTicketUrl") or "",
+        "eventOrganizer": item.get("eventOrganizer") or "",
+        "eventOrganizerUrl": item.get("eventOrganizerUrl") or "",
+        "eventMetadataSource": item.get("eventMetadataSource") or "",
+        "eventPerformers": item.get("eventPerformers") or [],
         "address": item.get("address") or "",
         "access": item.get("access") or "",
         "hours": item.get("hours") or "",

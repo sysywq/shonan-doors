@@ -546,6 +546,39 @@ def build_ogp_image_url(item):
     return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
 
 
+def event_optional_data(item):
+    """一次情報に紐づく任意情報のみ。欠落・不正値は公開を妨げず省略する。"""
+    source = item.get("eventMetadataSource")
+    sources = item.get("sources") or []
+    if not isinstance(source, str) or source not in sources:
+        return {}
+    data = {}
+    def clean(value):
+        return value.strip() if isinstance(value, str) else ""
+    def web_url(value):
+        value = clean(value)
+        return value if re.match(r"^https?://[^/\s]+", value) else ""
+    organizer = clean(item.get("eventOrganizer"))
+    if organizer:
+        data["organizer"] = {"@type": "Organization", "name": organizer}
+        url = web_url(item.get("eventOrganizerUrl"))
+        if url:
+            data["organizer"]["url"] = url
+    performers = item.get("eventPerformers")
+    if isinstance(performers, list):
+        people = [{"@type": p["type"], "name": clean(p.get("name"))}
+                  for p in performers if isinstance(p, dict)
+                  and p.get("type") in ("Person", "PerformingGroup") and clean(p.get("name"))]
+        if people:
+            data["performer"] = people
+    price = clean(item.get("eventPrice"))
+    ticket_url = web_url(item.get("eventTicketUrl"))
+    if re.fullmatch(r"\d+(?:\.\d{1,2})?", price) and ticket_url:
+        data["offers"] = {"@type": "Offer", "price": price,
+                          "priceCurrency": "JPY", "url": ticket_url}
+    return data
+
+
 def build_structured_data(item, canonical_url):
     """記事タイプに応じてJSON-LDを出し分ける。
     - cat='e' かつ eventStartDateが確認できている場合 → Event
@@ -576,6 +609,7 @@ def build_structured_data(item, canonical_url):
         }
         if item.get("eventEndDate"):
             data["endDate"] = item["eventEndDate"]
+        data.update(event_optional_data(item))
         return data
 
     if item["cat"] in ("b", "g") and item.get("address"):
@@ -654,6 +688,22 @@ def render_infobox(item):
         rows.append(f'<div class="modal-info-row"><span class="modal-info-label">営業時間</span><span>{esc(item["hours"])}</span></div>')
     if item.get("closedDays"):
         rows.append(f'<div class="modal-info-row"><span class="modal-info-label">定休日</span><span>{esc(item["closedDays"])}</span></div>')
+
+    if item.get("cat") == "e":
+        details = event_optional_data(item)
+        values = []
+        if details.get("organizer"):
+            values.append(("主催", details["organizer"]["name"]))
+        if details.get("performer"):
+            values.append(("出演", "、".join(p["name"] for p in details["performer"])))
+        if details.get("offers"):
+            offer = details["offers"]
+            values.append(("一般入場料金", offer["price"] + "円"))
+        for label, value in values:
+            rows.append(f'<div class="modal-info-row"><span class="modal-info-label">{esc(label)}</span><span>{esc(value)}</span></div>')
+        if details.get("offers"):
+            url = esc(details["offers"]["url"])
+            rows.append(f'<div class="modal-info-row"><span class="modal-info-label">申込・購入</span><a href="{url}" target="_blank" rel="noopener noreferrer">公式チケット案内</a></div>')
 
     sns = item.get("snsLinks") or {}
     sns_chips = []
