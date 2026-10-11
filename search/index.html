@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>記事を検索 | 湘南Doors</title><meta name="description" content="湘南Doorsの記事を地域・キーワードで横断検索。複数キーワードや関連記事にも対応。">
+<link rel="canonical" href="https://www.shonandoors.com/search/">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.search-shell{max-width:960px;margin:auto;padding:32px 20px 80px;min-height:72vh}
+.search-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.search-top a{color:#1d3557}
+.search-heading{margin:46px 0 20px;font-size:clamp(26px,4vw,40px)}
+.search-bar{display:flex;gap:10px}
+.search-bar input{flex:1;min-width:0;border:1px solid #c4cad0;border-radius:12px;font-size:17px;padding:17px;background:white;color:#172a3a}
+.search-bar button{background:#1d3557;color:white;border:0;border-radius:12px;padding:12px 22px;cursor:pointer}
+.search-note{color:#617080;font-size:13px;margin:12px 0 28px}
+.search-results{display:grid;gap:12px}
+.search-result{display:flex;gap:16px;padding:18px;border:1px solid #e1e4e6;border-radius:12px;background:white;text-decoration:none;color:#192938}
+.search-result img{width:145px;aspect-ratio:16/10;object-fit:cover;border-radius:8px;flex-shrink:0}
+.search-result h2{font-size:18px;margin:3px 0 9px;line-height:1.45}
+.search-result p{font-size:13px;line-height:1.7;color:#586574;margin:0}
+.search-result small{color:#657280}
+#resultSummary{margin:28px 0 16px;font-weight:600}
+@media(max-width:600px){.search-bar button{padding:12px 15px}.search-result{padding:12px;gap:10px}.search-result img{width:105px}.search-result h2{font-size:15px}.search-result p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}}
+</style></head><body>
+<main class="search-shell">
+<div class="search-top"><a href="/" aria-label="湘南Doorsトップへ戻る">← 湘南Doors</a><a href="/about/">運営者情報</a></div>
+<h1 class="search-heading">記事を探す</h1>
+<form class="search-bar" id="searchForm" role="search"><input id="searchInput" name="q" type="search" maxlength="160" autocomplete="off" placeholder="例：藤沢 カフェ オープン" aria-label="記事を検索" autofocus><button>検索</button></form>
+<p class="search-note">スペース区切りで複数キーワードを検索できます。完全一致がなくても、関連する記事を探します。</p>
+<p id="resultSummary" role="status" aria-live="polite">記事を読み込んでいます…</p>
+<div class="search-results" id="searchResults"></div>
+</main>
+<script>
+const input=document.getElementById('searchInput'), form=document.getElementById('searchForm'), out=document.getElementById('searchResults'), summary=document.getElementById('resultSummary');
+let articles=[];
+const norm=s=>String(s||'').normalize('NFKC').toLowerCase().replace(/[\u3000\s]+/g,' ').trim();
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const terms=q=>[...new Set(norm(q).split(/[ ,、，・]+/).filter(Boolean))].slice(0,12);
+function score(a, words){
+ const title=norm(a.title), tags=norm((a.tags||[]).join(' ')), area=norm(a.area), subj=norm((a.subjectNames||[]).join(' '));
+ const description=norm(a.dek),body=norm(a.body);
+ let matched=0, pts=0;
+ for(const w of words){let hit=0;
+  if(title.includes(w))hit+=9;
+  if(tags.includes(w)||area.includes(w)||subj.includes(w))hit+=7;
+  if(description.includes(w))hit+=4;
+  if(body.includes(w))hit+=1;
+  if(hit){matched++;pts+=hit;}
+ }
+ return {pts:pts+(matched===words.length?12:0),matched};
+}
+function search(){
+ const q=input.value.trim(), words=terms(q);
+ history.replaceState(null,'',q?'/search/?q='+encodeURIComponent(q):'/search/');
+ if(!articles.length){summary.textContent='記事を読み込めませんでした。再読み込みしてください。';return;}
+ if(!words.length){summary.textContent='検索キーワードを入力してください。';out.innerHTML='';return;}
+ let ranked=articles.map(a=>({...score(a,words),a})).filter(x=>x.matched).sort((a,b)=>b.matched-a.matched||b.pts-a.pts||b.a.date.localeCompare(a.a.date));
+ let related=false;
+ if(!ranked.length){
+  related=true;
+  // No exact term match: show topic-relevant editor picks and recent useful guides.
+  ranked=articles.filter(a=>a.articleType==='stock'||a.cat==='e').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12).map(a=>({a,pts:0,matched:0}));
+ }else{
+  related=ranked[0].matched<words.length;
+ }
+ summary.textContent=related?'すべてのキーワードに一致する記事はありません。関連する記事を表示します。':ranked.length+'件の記事が見つかりました';
+ out.innerHTML=ranked.slice(0,40).map(({a})=>{
+  const image=a.heroImage||('/assets/images/category-photos/'+({e:'event',g:'gourmet',c:'culture',t:'tourism',b:'business',l:'lifestyle',p:'people'}[a.cat]||'event')+'.webp');
+  return '<a class="search-result" href="/articles/'+encodeURIComponent(a.slug)+'/"><img loading="lazy" src="'+esc(image)+'" alt=""><div><small>'+esc(a.area)+' · '+esc(a.date)+'</small><h2>'+esc(a.title)+'</h2><p>'+esc(a.dek)+'</p></div></a>';
+ }).join('');
+}
+form.addEventListener('submit',e=>{e.preventDefault();search();});
+fetch('/data/articles.json').then(r=>{if(!r.ok)throw Error('fetch');return r.json()}).then(data=>{articles=data;input.value=new URLSearchParams(location.search).get('q')||'';search();}).catch(()=>{summary.textContent='記事データを取得できませんでした。';});
+</script></body></html>
