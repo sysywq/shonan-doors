@@ -6103,7 +6103,22 @@
       "announcementDate": "",
       "openingDate": "",
       "effectiveDate": ""
-    }
+    },
+    "eventPrice": "2000",
+    "eventTicketUrl": "https://www.s2.e-get.jp/kaat/pt/&s=26x18ZS",
+    "eventOrganizer": "神奈川県立県民ホール（指定管理者：公益財団法人神奈川芸術文化財団）",
+    "eventOrganizerUrl": "https://www.kanagawa-kenminhall.com/",
+    "eventMetadataSource": "https://www.kanagawa-kenminhall.com/d/ongaku_ehon_zushi",
+    "eventPerformers": [
+      {
+        "name": "一龍斎貞弥",
+        "type": "Person"
+      },
+      {
+        "name": "高本一郎",
+        "type": "Person"
+      }
+    ]
   },
   {
     "id": 187,
