@@ -1,0 +1,35 @@
+{
+  "run_id": "38094843246",
+  "date_jst": "2026-10-11",
+  "outcomes": [
+    {
+      "article_id": 191,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "海を背に、鎌倉の街がひとつになる - 「第29回鎌人いち場」、10月25日に由比ガ浜で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "湘南エリア初のオーダースーツ専門店 - 「GINZAグローバルスタイル・コンフォート ららぽーと湘南平塚店」、10月9日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "昭和の童画が辻堂に蘇る - 「黒崎義介-童話の世界」展、藤沢市アートスペースで12月20日まで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
