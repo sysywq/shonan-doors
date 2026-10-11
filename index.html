@@ -59,27 +59,29 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
       <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
-        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+        <div class="nav-menu-links"><a class="nav-cat-link" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7;color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="nav-icon-label">観光</span></a><a class="nav-cat-link" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7;color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">企業・店舗</span></a><a class="nav-cat-link" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE;color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">グルメ</span></a><a class="nav-cat-link" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6;color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nav-icon-label">人</span></a><a class="nav-cat-link" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4;color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">文化</span></a><a class="nav-cat-link" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9;color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">イベント</span></a><a class="nav-cat-link" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC;color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">暮らし</span></a></div>
       </div>
       <div class="nav-menu-group">
         <div class="nav-menu-label">エリア</div>
-        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+        <div class="nav-menu-links"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>
@@ -96,6 +98,7 @@
 <nav class="cat-nav" aria-label="カテゴリーから探す">
   <div class="cat-nav-track"><a class="cat-nav-item" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7; color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="cat-nav-label">観光</span></a><a class="cat-nav-item" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7; color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">企業・店舗</span></a><a class="cat-nav-item" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE; color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">グルメ</span></a><a class="cat-nav-item" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6; color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="cat-nav-label">人</span></a><a class="cat-nav-item" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4; color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">文化</span></a><a class="cat-nav-item" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9; color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">イベント</span></a><a class="cat-nav-item" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC; color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="cat-nav-label">暮らし</span></a></div>
 </nav>
+<section class="area-nav" aria-label="エリアから探す"><div class="area-nav-inner"><h2 class="area-nav-title serif">エリアから探す</h2><div class="area-nav-grid"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div></div></section>
 
 <!-- top banner slot (松プラン想定・回転バナー) : 実際に広告主がつく際は、ステマ規制対応として小さく「PR」等の表示を追加してください -->
 <div class="pickup-section">
@@ -107,15 +110,7 @@
     <button class="pickup-arrow" id="pickupPrev" aria-label="前へ">‹</button>
     <div class="pickup-dots" id="pickupDots"></div>
     <button class="pickup-arrow" id="pickupNext" aria-label="次へ">›</button>
-  </div>
-</div>
-
-<div class="filterbar">
-  <div class="filter-inner">
-    <select id="areaSelect" onchange="if(this.value) location.href='/area/'+this.value+'/';">
-      <option value="">エリアで探す</option><option value="fujisawa">藤沢</option><option value="chigasaki">茅ヶ崎</option><option value="kamakura">鎌倉</option><option value="hiratsuka">平塚</option><option value="oiso">大磯</option><option value="ninomiya">二宮</option><option value="zushi">逗子</option><option value="hayama">葉山</option>
-    </select>
-    <input type="text" id="searchBox" placeholder="このページ内をキーワードで絞り込み">
+    <button class="pickup-pause" id="pickupPause" type="button" aria-label="自動切り替えを一時停止">Ⅱ 停止</button>
   </div>
 </div>
 
@@ -128,7 +123,7 @@
       </div>
       <div class="article-list" id="grid">
       <a class="list-item" href="/articles/fujisawa-event-0188/" data-cat="e" data-area="藤沢" data-search="湘南台の秋の祭典が今年も開幕する - 「第26回湘南台ファンタジア」、10月24・25日に湘南台駅周辺で開催藤沢市民まつりの湘南台エリアを彩る「第26回湘南台ファンタジア」が、10月24日（土）・25日（日）に湘南台駅周辺で開催される。ステージ・フリーマーケット・フードマーケットなど2日間にわたって楽しめる。お祭り湘南台藤沢ステージフリーマーケットフードマーケット秋">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -140,7 +135,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0190/" data-cat="c" data-area="鎌倉" data-search="秋の長谷で、女性作家が愛した家の扉が開く - 吉屋信子記念館、10月・11月の週末に無料公開中大正・昭和を代表する女性作家・吉屋信子が晩年を過ごした邸宅が、今年も秋の一般公開の季節を迎えた。近代数寄屋建築の名手・吉田五十八が設計した国の登録有形文化財を、毎週土日と月初に無料で見学できる。吉屋信子記念館鎌倉文化財一般公開長谷無料数寄屋吉田五十八秋">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -152,7 +147,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-event-0191/" data-cat="e" data-area="茅ヶ崎" data-search="ウクライナのバレエ団が茅ヶ崎に登場 - 「キーウ・クラシック・バレエ 白鳥の湖」、11月6日に市民文化会館大ホールで上演パリ・ロンドン・ローマをはじめ世界各国で公演を重ねてきたウクライナのバレエ団が、今秋は茅ヶ崎の舞台へ。チャイコフスキーの名作「白鳥の湖」全2幕を届ける。バレエ茅ヶ崎キーウクラシックバレエ白鳥の湖ウクライナ茅ヶ崎市民文化会館クラシック公演">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -164,7 +159,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0184/" data-cat="c" data-area="鎌倉" data-search="縁を結びに、鎌倉へ - 恋愛成就・良縁祈願で知られる神社と参拝の作法鎌倉には、縁結びや恋愛成就にゆかりのある神社・寺院が点在している。山の中の静かな社、由比ヶ浜を見下ろす丘の寺、そして鎌倉随一の大社に宿る「隠れパワースポット」——それぞれの由緒と参拝のポイントを紹介する。鎌倉縁結び恋愛成就葛原岡神社成就院鶴岡八幡宮旗上弁財天社政子石縁結び石参拝パワースポット神社寺院">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -176,7 +171,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/zushi-event-0185/" data-cat="e" data-area="逗子" data-search="講談・リュートのしらべで届ける宮澤賢治 - 「音楽絵本 宮澤賢治シリーズ【逗子公演】」、10月18日になぎさホールで神奈川県立県民ホールが県内各地で展開する「音楽絵本」シリーズの逗子公演。講談師・一龍斎貞弥の語りとリュート奏者・高本一郎の音色で、賢治の名作「オツベルと象」「どんぐりと山猫」の世界が広がる。音楽朗読宮澤賢治逗子逗子文化プラザなぎさホール県民ホール講談リュート秋クラシック">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -188,7 +183,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-event-0187/" data-cat="e" data-area="藤沢" data-search="冬の江の島が宝石に染まる - 「湘南の宝石2026-2027」、12月1日から開催。11月22日に点灯式も関東三大イルミネーションに認定された江の島の冬の風物詩「湘南の宝石2026-2027」が12月1日に開幕。前夜の11月22日には点灯式＆オープニングライブも開催される。湘南の宝石江の島イルミネーション冬のイベント藤沢江の島シーキャンドル江の島サムエル・コッキング苑">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -200,7 +195,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-gourmet-0181/" data-cat="g" data-area="大磯" data-search="漁港の食堂で、朝獲れを食べる - 大磯で地魚と海鮮を味わう「めしや大磯港」大磯町漁業協同組合が直営する港の食堂。確定したメニューはなく、その日に揚がった魚だけが食卓に並ぶ。大磯地魚海鮮漁港定食生しらすめしや大磯港大磯港漁協直営湘南グルメ">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -212,7 +207,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-gourmet-0182/" data-cat="g" data-area="平塚" data-search="油そばと家系ラーメン、二刀流で登場 - 「油そば総本店×壱角家」、ジアウトレット湘南平塚に9月16日オープン油そば専門店「油そば総本店」と横浜家系ラーメン「壱角家」が一つの店舗に同居する「油そば総本店×壱角家 ジアウトレット湘南平塚店」が、9月16日にオープンした。広大なフードコートに加わった、二つの味の新スタンダード。平塚ラーメン油そば家系ラーメン壱角家ジアウトレット湘南平塚新店フードコート">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/articles/182.jpg" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -224,7 +219,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0183/" data-cat="e" data-area="鎌倉" data-search="年に一度の扉が開く - 円覚寺「宝物風入・国宝舎利殿特別公開」、10月31日から3日間北条時宗書状や仏涅槃図など数百点の重要文化財が大方丈に並ぶ。鎌倉唯一の国宝建造物「舎利殿」へ間近に参る機会は、この3日間しかない。円覚寺宝物風入国宝舎利殿鎌倉北鎌倉禅特別公開重要文化財秋文化財">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -236,7 +231,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-tourism-0176/" data-cat="t" data-area="大磯" data-search="大磯の海沿いをサイクリングで走る - 太平洋岸自転車道と旧吉田茂邸を巡る快走ルート西湘バイパスに沿って整備された「太平洋岸自転車道」を軸に、大磯港・照ヶ崎海岸・旧吉田茂邸をつなぐサイクリングルートを案内する。シェアサイクルの借り方から立ち寄りスポットまで、大磯を自転車で巡るための実用ガイド。大磯サイクリング太平洋岸自転車道西湘バイパス旧吉田茂邸照ヶ崎海岸大磯港シェアサイクルhello cycling海沿い湘南自転車">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/articles/176.jpg" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -248,7 +243,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-gourmet-0177/" data-cat="g" data-area="平塚" data-search="平塚のららぽーとにkfcが誕生 - 「ケンタッキーフライドチキン ららぽーと湘南平塚店」、10月2日オープン神奈川県平塚市のショッピングモール「ららぽーと湘南平塚」に、ケンタッキーフライドチキンの新店舗が10月2日にオープンした。平塚ケンタッキーフライドチキンkfcファストフードららぽーと湘南平塚新店グルメ">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -260,7 +255,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-event-0178/" data-cat="e" data-area="茅ヶ崎" data-search="茅ヶ崎のまち全体が創造の舞台になる45日間 - 「chigasaki creative week 2026」、10月10日から11月23日まで映画、音楽、アート、文学、マルシェ、トークイベントなど多彩なプログラムが茅ヶ崎市内各所で展開される「chigasaki creative week 2026」が、2026年10月10日から11月23日まで45日間にわたって初開催される。茅ヶ崎アート映画音楽文学マルシェイベントchigasaki creative week茅ヶ崎映画祭クリエイターシティ">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -272,7 +267,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-life-0171/" data-cat="l" data-area="大磯" data-search="毎月第3日曜日、大磯港が市（いち）になる - 「大磯市（おおいそいち）」神奈川県下最大の朝市と称される「大磯市（おおいそいち）」が、毎月第3日曜日に大磯港で開かれている。クラフトや飲食など120店舗前後が港に集い、海を眺めながらのんびり過ごす一日は、大磯の暮らしに根ざした風景のひとつだ。大磯大磯市おおいそいち朝市マルシェクラフト大磯港暮らしoiso connect">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -284,7 +279,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-event-0173/" data-cat="e" data-area="藤沢" data-search="プロ選手と体を動かす2日間 - 「fujisawa sports park プロスポーツ・パラスポーツ編」、10月11日・12日に藤沢駅前で藤沢駅北口のサンパール広場が、スポーツ体験の広場に変わる。11日はプロスポーツ、12日はパラスポーツをテーマに、子どもから大人まで参加無料で楽しめる2日間。藤沢スポーツパラスポーツプロスポーツ体験イベントサンパール広場無料">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -296,7 +291,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0175/" data-cat="e" data-area="鎌倉" data-search="萩・上田・足利の特産品が鎌倉に集結 - 「令和8年度 鎌倉市姉妹都市物産展」、10月9・10日に開催鎌倉市と姉妹都市提携を結ぶ山口県萩市、長野県上田市、栃木県足利市の特産品が一堂に集まる恒例の物産展。鎌倉生涯学習センターで2日間にわたって開催される。鎌倉物産展姉妹都市萩市上田市足利市鎌倉彫八木節秋のイベント">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -308,7 +303,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-event-0166/" data-cat="e" data-area="藤沢" data-search="秋の龍口寺が3,000の灯りに包まれる - 「第16回 龍の口竹灯籠2026」、11月13日・14日に開催江ノ電江ノ島駅のそばに立つ龍口寺の境内に、今年も約3,000基の竹灯籠が灯る。2日間限りの幻想的な夜を体験する。龍の口竹灯籠龍口寺竹灯籠江の島藤沢片瀬秋夜景日蓮宗イベント">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -320,7 +315,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-business-0168/" data-cat="b" data-area="葉山" data-search="元ラグビー日本代表・廣瀬俊朗が葉山に開いたカフェ - 「cafe stand blossom〜hayama〜」、一色のgood stock内で発酵と食の時間を届ける元ラグビー日本代表キャプテン・廣瀬俊朗が手がける「cafe stand blossom〜hayama〜」が、2026年3月に葉山町一色のgood stock内にオープン。発酵・米糀など日本の食文化を日常に取り入れやすい形で提案する、小さくて丁寧なカフェスタンドだ。カフェ葉山発酵米糀甘酒ラグビー廣瀬俊朗good stock葉山一色プラントベース">
-        <span class="list-item-icon" style="background:#F6E4E7; color:#B5495B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/business.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#A6431E">企業・店舗</span>
@@ -332,7 +327,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/zushi-life-0169/" data-cat="l" data-area="逗子" data-search="逗子駅に2028年春、新しい駅ビルが誕生する - jr東日本が9月末に建設工事を着手jr東日本が2026年9月29日、横須賀線・逗子駅に隣接する新しい駅ビルの建設工事着手を発表した。地上2階建ての地域密着型商業施設で、2028年春の開業を目指す。逗子駅ビルjr東日本まちづくり商業施設横須賀線逗子駅新改札防災津波避難">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -344,7 +339,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-tourism-0161/" data-cat="t" data-area="葉山" data-search="海と空が一望できる、葉山・三ヶ岡山緑地の歩き方葉山といえば海——そのイメージの裏に、標高約140mの豊かな緑地が息づいている。県立はやま三ヶ岡山緑地は、3つのハイキングコースを持つ「都市林」。山頂広場や展望デッキからは相模湾と富士山が一望でき、「関東の富士見百景」にも選ばれた絶景スポットだ。葉山三ヶ岡山はやま三ヶ岡山緑地ハイキング山歩き都市林関東の富士見百景富士山相模湾自然無料森戸海岸真名瀬つつじコースあじさいコース真名瀬コース">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -356,7 +351,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-event-0162/" data-cat="e" data-area="茅ヶ崎" data-search="旅館も飲食店も上映会場になる - 第15回 茅ヶ崎映画祭、10月10日から45日間開催2012年から続く「街と人がつながる、手作りの映画祭」が15回目の節目を迎えた。茅ヶ崎館やスタジオカフェバル、アートスペースなどまちなかの会場を使い、全6プログラムを上映する。茅ヶ崎映画祭第15回茅ヶ崎映画祭chigasaki creative week 2026映画茅ヶ崎手作り映画祭茅ヶ崎館夜明け秋刀魚の味狐の嫁入り">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -368,7 +363,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-event-0164/" data-cat="e" data-area="茅ヶ崎" data-search="湘南ビール30周年を25種類で乾杯 - 「熊澤酒造オクトーバーフェスト2026」、10月10〜12日に開催茅ヶ崎の蔵元・熊澤酒造が毎年恒例のオクトーバーフェストを今年も3日間にわたって開催。湘南ビール醸造開始から数えて30周年という節目に、定番から限定醸造まで計25種類のラインナップが蔵の敷地に集結する。茅ヶ崎熊澤酒造湘南ビールオクトーバーフェストクラフトビール蔵元秋イベントビール">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -380,7 +375,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-gourmet-0158/" data-cat="g" data-area="平塚" data-search="沖縄のソウルフードが平塚八幡宮そばに - 「ポークたまごおにぎり810 平塚八幡宮店」、10月1日オープン横浜・鶴見に本店を持つポークたまごおにぎり専門店「810」が平塚に3号店を開いた。平塚八幡宮の近く、浅間町に構えた新店舗では朝7時から提供を開始する。沖縄料理おにぎりポークたまご平塚新店朝ごはんグルメ平塚八幡宮">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -392,7 +387,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-event-0159/" data-cat="e" data-area="鎌倉" data-search="お布施・昼食込みで13寺をめぐる一日 - 「僧侶と巡る鎌倉十三仏」、10月26・27日に開催明王院の僧侶が先達を務め、鎌倉の十三仏霊場を歩いてめぐる定期巡礼が10月も開催される。東の巡礼は10月26日（月）、西の巡礼は10月27日（火）。参加費13,500円にはお布施・御朱印代・昼食・保険が含まれる。鎌倉十三仏巡礼僧侶御朱印体験寺院イベント文化">
-        <span class="list-item-icon" style="background:#E7F3E9; color:#357A4A" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/event.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#E8542B">イベント</span>
@@ -404,7 +399,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-gourmet-0160/" data-cat="g" data-area="葉山" data-search="キャンプ場の隣に生まれた食の場所 - 「earth dining hayama」、葉山・上山口に10月8日グランドオープン湘南・葉山を拠点とする工務店スターホームが手がけるレストラン「earth dining hayama（アースダイニング葉山）」が、2026年10月8日（木）に開店する。スターフォレストキャンプ葉山を併設する葉山オフィス1階に誕生する、定休日なしの新たな食の拠点だ。葉山レストラン新規オープングルメスターフォレストキャンプ葉山スターホーム">
-        <span class="list-item-icon" style="background:#FDE9DE; color:#B8532B" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/gourmet.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#8B5E34">グルメ</span>
@@ -434,10 +429,7 @@
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        <a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a>
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
@@ -454,31 +446,8 @@
 <div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
 
 <script>
-/* このページに表示中の記事だけを対象にした、キーワードでの簡易絞り込み。
-   カテゴリ・エリアはPhase 3で /category/{cat}/ ・ /area/{area}/ の
-   実ページ(ハブページ)に分離したため、ここでは検索ボックスのみを扱う。
-   ※記事本文自体はこのJSに依存せず、常に/articles/{slug}/の静的HTMLとして存在する。 */
+/* 旧記事リンクの転送 */
 (function(){
-  const grid = document.getElementById('grid');
-  const cards = Array.from(grid.children);
-  const searchBox = document.getElementById('searchBox');
-  const resultCount = document.getElementById('resultCount');
-  const totalCount = 164;
-  const pageCount = cards.length;
-
-  searchBox.addEventListener('input', ()=>{
-    const q = searchBox.value.trim().toLowerCase();
-    let shown = 0;
-    cards.forEach(card=>{
-      const ok = !q || card.dataset.search.includes(q);
-      card.style.display = ok ? '' : 'none';
-      if (ok) shown++;
-    });
-    resultCount.textContent = q
-      ? `このページ内で ${shown} 件が見つかりました`
-      : `全 ${totalCount} 件中 最新${pageCount}件を表示中`;
-  });
-
   /* 旧hash URL(#article-{id})でのアクセス・共有リンクを、新しい /articles/{slug}/ へ誘導する
      フォールバック。GitHub Pagesはサーバー側301ができないため、JSによる誘導としている。 */
   const OLD_ID_TO_SLUG = {"77": "fujisawa-event-0077", "78": "kamakura-life-0078", "79": "fujisawa-event-0079", "69": "chigasaki-culture-0069", "71": "kamakura-event-0071", "72": "chigasaki-culture-0072", "73": "fujisawa-event-0073", "74": "fujisawa-gourmet-0074", "75": "chigasaki-gourmet-0075", "66": "chigasaki-gourmet-0066", "67": "chigasaki-culture-0067", "62": "kamakura-event-0062", "63": "fujisawa-tourism-0063", "64": "oiso-event-0064", "50": "chigasaki-tourism-0050", "56": "hiratsuka-tourism-0056", "57": "hiratsuka-tourism-0057", "58": "hiratsuka-life-0058", "53": "kamakura-tourism-0053", "54": "kamakura-tourism-0054", "55": "kamakura-tourism-0055", "51": "chigasaki-people-0051", "52": "chigasaki-tourism-0052", "47": "fujisawa-tourism-0047", "48": "fujisawa-tourism-0048", "49": "fujisawa-culture-0049", "44": "hayama-people-0044", "45": "zushi-life-0045", "46": "zushi-business-0046", "41": "hayama-tourism-0041", "42": "hayama-culture-0042", "43": "hayama-culture-0043", "38": "oiso-tourism-0038", "40": "zushi-event-0040", "35": "ninomiya-life-0035", "36": "kamakura-life-0036", "32": "ninomiya-people-0032", "33": "fujisawa-life-0033", "34": "oiso-life-0034", "29": "chigasaki-people-0029", "30": "fujisawa-people-0030", "31": "oiso-people-0031", "26": "chigasaki-event-0026", "27": "oiso-event-0027", "39": "zushi-event-0039", "23": "hiratsuka-event-0023", "24": "hiratsuka-event-0024", "25": "fujisawa-event-0025", "37": "fujisawa-tourism-0037", "20": "oiso-culture-0020", "21": "kamakura-gourmet-0021", "22": "oiso-culture-0022", "17": "oiso-culture-0017", "19": "chigasaki-culture-0019", "14": "kamakura-gourmet-0014", "15": "ninomiya-gourmet-0015", "16": "ninomiya-gourmet-0016", "11": "fujisawa-business-0011", "12": "fujisawa-business-0012", "13": "kamakura-gourmet-0013", "28": "chigasaki-people-0028", "9": "fujisawa-business-0009", "10": "fujisawa-gourmet-0010", "5": "kamakura-tourism-0005", "7": "kamakura-tourism-0007", "18": "hiratsuka-culture-0018", "2": "fujisawa-tourism-0002", "3": "fujisawa-tourism-0003", "4": "oiso-tourism-0004", "6": "fujisawa-tourism-0006", "8": "chigasaki-gourmet-0008", "1": "fujisawa-tourism-0001", "80": "kamakura-culture-0080", "81": "fujisawa-gourmet-0081", "82": "kamakura-business-0082", "83": "kamakura-event-0083", "84": "zushi-event-0084", "85": "hiratsuka-event-0085", "86": "kamakura-tourism-0086", "87": "hayama-life-0087", "88": "kamakura-event-0088", "89": "fujisawa-event-0089", "90": "chigasaki-event-0090", "91": "kamakura-tourism-0091", "92": "fujisawa-tourism-0092", "93": "chigasaki-event-0093", "94": "zushi-event-0094", "95": "oiso-event-0095", "96": "kamakura-tourism-0096", "97": "chigasaki-tourism-0097", "98": "fujisawa-gourmet-0098", "99": "kamakura-event-0099", "100": "zushi-event-0100", "101": "fujisawa-tourism-0101", "102": "kamakura-gourmet-0102", "103": "hiratsuka-life-0103", "104": "zushi-event-0104", "105": "oiso-event-0105", "106": "hayama-gourmet-0106", "107": "kamakura-event-0107", "108": "zushi-event-0108", "109": "kamakura-culture-0109", "110": "ninomiya-tourism-0110", "111": "hayama-business-0111", "112": "hiratsuka-event-0112", "113": "oiso-event-0113", "114": "kamakura-business-0114", "115": "kamakura-tourism-0115", "116": "oiso-tourism-0116", "117": "fujisawa-event-0117", "118": "hiratsuka-event-0118", "119": "zushi-event-0119", "120": "hayama-tourism-0120", "121": "oiso-event-0121", "122": "hiratsuka-culture-0122", "123": "fujisawa-event-0123", "124": "kamakura-culture-0124", "125": "hayama-culture-0125", "126": "fujisawa-event-0126", "127": "ninomiya-event-0127", "128": "fujisawa-event-0128", "129": "kamakura-business-0129", "130": "chigasaki-life-0130", "131": "chigasaki-life-0131", "132": "zushi-life-0132", "135": "kamakura-gourmet-0135", "136": "hiratsuka-tourism-0136", "138": "kamakura-event-0138", "140": "fujisawa-business-0140", "142": "fujisawa-event-0142", "145": "fujisawa-event-0145", "146": "oiso-tourism-0146", "147": "fujisawa-event-0147", "149": "chigasaki-life-0149", "151": "ninomiya-tourism-0151", "152": "hiratsuka-life-0152", "153": "fujisawa-event-0153", "155": "hayama-culture-0155", "156": "hiratsuka-tourism-0156", "157": "kamakura-event-0157", "158": "hiratsuka-gourmet-0158", "159": "kamakura-event-0159", "160": "hayama-gourmet-0160", "161": "hayama-tourism-0161", "162": "chigasaki-event-0162", "164": "chigasaki-event-0164", "166": "fujisawa-event-0166", "168": "hayama-business-0168", "169": "zushi-life-0169", "171": "oiso-life-0171", "173": "fujisawa-event-0173", "175": "kamakura-event-0175", "176": "oiso-tourism-0176", "177": "hiratsuka-gourmet-0177", "178": "chigasaki-event-0178", "181": "oiso-gourmet-0181", "182": "hiratsuka-gourmet-0182", "183": "kamakura-event-0183", "184": "kamakura-culture-0184", "185": "zushi-event-0185", "187": "fujisawa-event-0187", "188": "fujisawa-event-0188", "190": "kamakura-culture-0190", "191": "chigasaki-event-0191"};
@@ -571,7 +540,11 @@ const CATS_FOR_PICKUP = {"t": {"label": "観光", "bg": "#1D3557"}, "b": {"label
   }
   function advance(dir){ if(!isJumping) goTo(trackIndex + dir, true); }
   function goToReal(realIndex){ isJumping = false; clearInterval(pickupTimer); goTo(realIndex + 1, true); }
-  function restartPickupTimer(){ clearInterval(pickupTimer); pickupTimer = setInterval(()=> advance(1), 3000); }
+  let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches,inView=false,hoverPaused=false,focusPaused=false;
+  const pauseBtn=document.getElementById('pickupPause');
+  function restartPickupTimer(){clearInterval(pickupTimer);if(!userPaused&&inView&&!hoverPaused&&!focusPaused&&!document.hidden)pickupTimer=setInterval(()=>advance(1),5000);}
+  function syncPause(){pauseBtn.textContent=userPaused?'▶ 再開':'Ⅱ 停止';pauseBtn.setAttribute('aria-pressed',String(userPaused));pauseBtn.setAttribute('aria-label',userPaused?'自動切り替えを再開':'自動切り替えを一時停止');}
+  pauseBtn.addEventListener('click',()=>{userPaused=!userPaused;syncPause();restartPickupTimer();});syncPause();
 
   updateActiveStates();
   requestAnimationFrame(()=> scrollToTrack('auto'));
@@ -580,8 +553,16 @@ const CATS_FOR_PICKUP = {"t": {"label": "観光", "bg": "#1D3557"}, "b": {"label
   document.getElementById('pickupPrev').addEventListener('click', ()=>{ advance(-1); restartPickupTimer(); });
   document.getElementById('pickupNext').addEventListener('click', ()=>{ advance(1); restartPickupTimer(); });
   const vp = document.getElementById('pickupViewport');
-  vp.addEventListener('mouseenter', ()=> clearInterval(pickupTimer));
-  vp.addEventListener('mouseleave', ()=> restartPickupTimer());
+  const section=document.querySelector('.pickup-section');
+  new IntersectionObserver(entries=>{inView=entries[0].intersectionRatio>=.5;restartPickupTimer();},{threshold:[0,.5,1]}).observe(section);
+  section.addEventListener('mouseenter',()=>{hoverPaused=true;restartPickupTimer();});
+  section.addEventListener('mouseleave',()=>{hoverPaused=false;restartPickupTimer();});
+  section.addEventListener('focusin',()=>{focusPaused=true;restartPickupTimer();});
+  section.addEventListener('focusout',()=>{focusPaused=false;restartPickupTimer();});
+  document.addEventListener('visibilitychange',restartPickupTimer);
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{userPaused=e.matches;syncPause();restartPickupTimer();});
+  let lastVisible=-1,visibleSince=0,viewTracked=false;
+  setInterval(()=>{if(!inView||document.hidden){visibleSince=0;return;}const i=((trackIndex-1)+N)%N;if(i!==lastVisible||!visibleSince){lastVisible=i;visibleSince=Date.now();viewTracked=false;}if(!viewTracked&&Date.now()-visibleSince>=3000){viewTracked=true;trackEvent('pickup_viewable_3s',{article_id:PICKUP_ITEMS[i].id});}},500);
   window.addEventListener('resize', ()=> scrollToTrack('auto'));
   window.addEventListener('orientationchange', ()=> setTimeout(()=> scrollToTrack('auto'), 200));
 })();

@@ -53,27 +53,29 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
       <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
-        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+        <div class="nav-menu-links"><a class="nav-cat-link" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7;color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="nav-icon-label">観光</span></a><a class="nav-cat-link" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7;color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">企業・店舗</span></a><a class="nav-cat-link" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE;color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">グルメ</span></a><a class="nav-cat-link" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6;color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nav-icon-label">人</span></a><a class="nav-cat-link" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4;color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">文化</span></a><a class="nav-cat-link" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9;color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">イベント</span></a><a class="nav-cat-link" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC;color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">暮らし</span></a></div>
       </div>
       <div class="nav-menu-group">
         <div class="nav-menu-label">エリア</div>
-        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+        <div class="nav-menu-links"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>
@@ -87,7 +89,7 @@
     <p class="hub-subtitle">「観光」に関する記事を36件掲載しています。</p>
     <div class="article-list">
       <a class="list-item" href="/articles/oiso-tourism-0176/" data-cat="t" data-area="大磯" data-search="大磯の海沿いをサイクリングで走る - 太平洋岸自転車道と旧吉田茂邸を巡る快走ルート西湘バイパスに沿って整備された「太平洋岸自転車道」を軸に、大磯港・照ヶ崎海岸・旧吉田茂邸をつなぐサイクリングルートを案内する。シェアサイクルの借り方から立ち寄りスポットまで、大磯を自転車で巡るための実用ガイド。大磯サイクリング太平洋岸自転車道西湘バイパス旧吉田茂邸照ヶ崎海岸大磯港シェアサイクルhello cycling海沿い湘南自転車">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/articles/176.jpg" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -99,7 +101,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-tourism-0161/" data-cat="t" data-area="葉山" data-search="海と空が一望できる、葉山・三ヶ岡山緑地の歩き方葉山といえば海——そのイメージの裏に、標高約140mの豊かな緑地が息づいている。県立はやま三ヶ岡山緑地は、3つのハイキングコースを持つ「都市林」。山頂広場や展望デッキからは相模湾と富士山が一望でき、「関東の富士見百景」にも選ばれた絶景スポットだ。葉山三ヶ岡山はやま三ヶ岡山緑地ハイキング山歩き都市林関東の富士見百景富士山相模湾自然無料森戸海岸真名瀬つつじコースあじさいコース真名瀬コース">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -111,7 +113,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-tourism-0156/" data-cat="t" data-area="平塚" data-search="12年ぶりに蘇った海辺の公園 - 「ひらつかシーテラス」で相模湾を感じる一日龍城ケ丘プール跡地に2025年10月開業した平塚の新拠点。芝生広場、展望テラス、bbqレストラン、マルシェが国道134号沿いの海辺に集まった。平塚ひらつかシーテラス海辺公園bbq湘南相模湾龍城ケ丘">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -123,7 +125,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/ninomiya-tourism-0151/" data-cat="t" data-area="二宮" data-search="落花生畑と太平洋のあいだに - 二宮・梅沢海岸を歩く吾妻山公園だけじゃない。二宮の海岸線は、特産の落花生畑と相模湾の眺めが交差する、静かで豊かな散歩道だ。二宮梅沢海岸袖が浦海岸海岸散歩落花生吾妻山公園湘南散策相模湾西湘">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -135,7 +137,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-tourism-0146/" data-cat="t" data-area="大磯" data-search="海水を飲みに来る緑の鳥 - 大磯・照ヶ崎海岸でアオバトに会いに行く神奈川県の天然記念物に指定された照ヶ崎海岸には、毎年5月ごろから丹沢山地のアオバトが群れで飛来する。いつ・どこで・どのように観察すればよいか、現地の情報をまとめた。大磯照ヶ崎海岸アオバト野鳥観察天然記念物バードウォッチングこまたん自然湘南大磯港">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -147,7 +149,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-tourism-0136/" data-cat="t" data-area="平塚" data-search="相模川の河川敷が秋色に - 「イシックス馬入のお花畑」でコスモスが見頃を迎える季節へ約3万平方メートルの花畑が、秋になるとコスモスに染まる。平塚・相模川の河川敷にある入場無料の花の名所を、この季節ならではの楽しみ方とともに紹介する。コスモス平塚相模川花畑秋無料お出かけ">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -159,7 +161,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-tourism-0120/" data-cat="t" data-area="葉山" data-search="葉山で夕日を見る——富士山のシルエットが際立つ、サンセットの名所相模湾に向かって西に開けた葉山の海岸線は、夕日の名所が連なる。なかでも神奈川県が選ぶ「かながわの景勝50選」に選ばれたスポットが複数あり、富士山・江の島・灯台が一画に収まる絶景は、一度見たら忘れられない。葉山夕日サンセット富士山森戸海岸森戸神社森戸大明神長者ヶ崎真名瀬海岸かながわの景勝50選葉山灯台裕次郎灯台">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -171,7 +173,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0115/" data-cat="t" data-area="鎌倉" data-search="混雑ゼロの古都をひとり占め——鎌倉を早朝に訪れるための完全ガイド早朝の鶴岡八幡宮から北鎌倉の禅寺めぐりまで。早朝ならではの開門時間と、人波が来る前に動くための具体的なコースを整理した。鎌倉早朝観光混雑回避鶴岡八幡宮円覚寺建長寺鎌倉大仏北鎌倉朝の鎌倉モデルコース">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -183,7 +185,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-tourism-0116/" data-cat="t" data-area="大磯" data-search="明治・大正・昭和の記憶が残る町——大磯の観光スポットをまとめて歩く宰相の邸宅、日本初の海水浴場の地、三大俳諧道場、そして緑の鳩が海水を飲む岩場まで。歴史と自然が凝縮された大磯の見どころを、動線とともに整理した。大磯観光スポット旧吉田茂邸明治記念大磯邸園鴫立庵高来神社照ヶ崎海岸アオバト歴史湘南">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -195,7 +197,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/ninomiya-tourism-0110/" data-cat="t" data-area="二宮" data-search="冬に湘南へ菜の花を見に行く——二宮「吾妻山公園」の歩き方1月から2月、約6万株の早咲き菜の花が山頂を黄色に染める。jr二宮駅から30分で立てる絶景台地の、登り方・見どころ・訪れる前に知っておきたいことをまとめた。二宮吾妻山公園菜の花富士山冬の湘南絶景ハイキング展望お花見">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -207,7 +209,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-tourism-0101/" data-cat="t" data-area="藤沢" data-search="江の島を1日で歩き尽くす——王道から穴場まで、エリア別モデルコース都心から約1時間、相模湾に浮かぶ江の島は、神社・洞窟・展望台・しらすグルメが一島に凝縮した唯一無二の観光地だ。動線を意識して回れば、初めての人も効率よく島の魅力を味わい尽くせる。江の島藤沢観光モデルコース江島神社江の島岩屋江の島シーキャンドル稚児ヶ淵しらす湘南">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -219,7 +221,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0096/" data-cat="t" data-area="鎌倉" data-search="鎌倉の紅葉を歩く——色づきが美しい社寺と、穴場の散策ルート関東でも屈指の紅葉スポットが集まる鎌倉。定番の社寺から山中の秘境まで、見頃の時期と混雑を避けるコツを押さえれば、秋の古都をぐっと深く楽しめる。鎌倉紅葉寺社建長寺明月院円覚寺獅子舞瑞泉寺秋散策ルート北鎌倉混雑回避">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -231,7 +233,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-tourism-0097/" data-cat="t" data-area="茅ヶ崎" data-search="茅ヶ崎でサーフィンを始める——スクール選びと体験の流れ「茅ヶ崎といえばサーフィン」はもはや定説だが、初めての一歩は意外とシンプル。スクールの選び方から当日の流れまで、ゼロから整理した。茅ヶ崎サーフィンサーフィンスクール初心者体験湘南サーフカルチャーパークポイントウェットスーツレンタル茅ヶ崎駅">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -243,7 +245,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0086/" data-cat="t" data-area="鎌倉" data-search="小さな子どもと歩く鎌倉——ベビーカーでも回りやすいルートの考え方坂が多く混雑する鎌倉でも、スポットと順序を選べば乳幼児連れでも十分に楽しめる。鎌倉を訪れる子連れ家族に向けて、移動の視点から「回りやすさ」を考えるためのヒントを整理した。鎌倉子連れベビーカー子ども家族鶴岡八幡宮長谷寺鎌倉大仏由比ヶ浜材木座">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -255,7 +257,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0091/" data-cat="t" data-area="鎌倉" data-search="鎌倉ひとり旅の歩き方——混まない時間帯と、自分だけのペースで巡るモデルコースグループ旅行では立ち寄れない静かな路地、自分のペースで向き合える寺院の空気。ひとり旅だからこそ味わえる鎌倉がある。混雑を避けるコツとおすすめルートを紹介する。鎌倉ひとり旅モデルコース混雑回避北鎌倉銭洗弁財天報国寺竹林長谷観光">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -267,7 +269,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-tourism-0092/" data-cat="t" data-area="藤沢" data-search="愛犬と歩く江の島——ペット可スポットと、押さえておきたい注意点犬を連れて江の島に行きたいけれど、どこまで入れるの？ 何に気をつければいい？ 飼い主なら誰もが抱く疑問を、エリア別に整理する。江の島藤沢犬連れペット可散歩江島神社サムエルコッキング苑新江ノ島水族館ペット同伴湘南">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -279,7 +281,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-tourism-0063/" data-cat="t" data-area="藤沢" data-search="東洋のマイアミビーチを彩る、夏のフィナーレ「江の島マイアミビーチショー」7月から続く海開きイベントも、今シーズンは9月13日で幕を閉じる。江の島マイアミビーチショー片瀬海岸夏イベント">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -291,7 +293,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-tourism-0050/" data-cat="t" data-area="茅ヶ崎" data-search="松林に抱かれた、茅ヶ崎の隠れ家美術館明治の別荘地の跡地に、1998年開館した郷土美術館。茅ヶ崎市美術館高砂緑地">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -303,7 +305,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-tourism-0056/" data-cat="t" data-area="平塚" data-search="360度の大パノラマ、平塚と大磯にまたがる絶景の丘富士山から相模湾まで見渡せる、湘南屈指の展望スポット。湘南平展望台平塚">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -315,7 +317,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-tourism-0057/" data-cat="t" data-area="平塚" data-search="「地元の守り神」として親しまれる、平塚八幡宮湘南ひらつか七夕まつりの際にも多くの人が参拝に訪れる古社。平塚八幡宮平塚">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -327,7 +329,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0053/" data-cat="t" data-area="鎌倉" data-search="謎に包まれた、鎌倉唯一の国宝仏誰が、いつ造ったのか。今も解明されていない鎌倉大仏の謎。鎌倉大仏高徳院国宝">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -339,7 +341,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0054/" data-cat="t" data-area="鎌倉" data-search="日本最初の禅宗専門道場、建長寺鎌倉幕府5代執権が創建した、鎌倉五山第一位の名刹。建長寺鎌倉五山禅">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -351,7 +353,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-tourism-0055/" data-cat="t" data-area="鎌倉" data-search="2000本の竹が揺れる、鎌倉の「竹寺」足利・上杉両氏の菩提寺として栄えた禅宗寺院の、静かな庭。報国寺竹の庭鎌倉">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -363,7 +365,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-tourism-0052/" data-cat="t" data-area="茅ヶ崎" data-search="茅ヶ崎の暮らしと自然を伝える、博物館と古民家旧和田家住宅など、市指定文化財の古民家が点在するエリア。茅ヶ崎市博物館旧和田家住宅">
-        <span class="list-item-icon" style="background:#E3F2F7; color:#1D6E8C" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/tourism.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#1D3557">観光</span>
@@ -391,10 +393,7 @@
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        <a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a>
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>

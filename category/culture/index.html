@@ -53,27 +53,29 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
       <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
-        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+        <div class="nav-menu-links"><a class="nav-cat-link" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7;color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="nav-icon-label">観光</span></a><a class="nav-cat-link" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7;color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">企業・店舗</span></a><a class="nav-cat-link" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE;color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">グルメ</span></a><a class="nav-cat-link" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6;color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nav-icon-label">人</span></a><a class="nav-cat-link" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4;color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">文化</span></a><a class="nav-cat-link" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9;color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">イベント</span></a><a class="nav-cat-link" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC;color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">暮らし</span></a></div>
       </div>
       <div class="nav-menu-group">
         <div class="nav-menu-label">エリア</div>
-        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+        <div class="nav-menu-links"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>
@@ -87,7 +89,7 @@
     <p class="hub-subtitle">「文化」に関する記事を19件掲載しています。</p>
     <div class="article-list">
       <a class="list-item" href="/articles/kamakura-culture-0190/" data-cat="c" data-area="鎌倉" data-search="秋の長谷で、女性作家が愛した家の扉が開く - 吉屋信子記念館、10月・11月の週末に無料公開中大正・昭和を代表する女性作家・吉屋信子が晩年を過ごした邸宅が、今年も秋の一般公開の季節を迎えた。近代数寄屋建築の名手・吉田五十八が設計した国の登録有形文化財を、毎週土日と月初に無料で見学できる。吉屋信子記念館鎌倉文化財一般公開長谷無料数寄屋吉田五十八秋">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -99,7 +101,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0184/" data-cat="c" data-area="鎌倉" data-search="縁を結びに、鎌倉へ - 恋愛成就・良縁祈願で知られる神社と参拝の作法鎌倉には、縁結びや恋愛成就にゆかりのある神社・寺院が点在している。山の中の静かな社、由比ヶ浜を見下ろす丘の寺、そして鎌倉随一の大社に宿る「隠れパワースポット」——それぞれの由緒と参拝のポイントを紹介する。鎌倉縁結び恋愛成就葛原岡神社成就院鶴岡八幡宮旗上弁財天社政子石縁結び石参拝パワースポット神社寺院">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -111,7 +113,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-culture-0155/" data-cat="c" data-area="葉山" data-search="開館35年目の問いかけ - 葉山「山口蓬春記念館」秋季特別展で蓬春と次世代の日本画に出会う大正から昭和の日本画壇をリードした山口蓬春の旧邸宅に、2026年秋、蓬春と次世代の画家たちが対話する特別展が開幕した。11月15日まで。山口蓬春日本画葉山展覧会山口蓬春記念館東山魁夷秋の美術館">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -123,7 +125,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-culture-0122/" data-cat="c" data-area="平塚" data-search="リトアニア現代作家の34点が日本初公開——「シュヴェグジュダと湘南の画家たち」展、11月23日まで平塚市美術館で、平塚・カウナス姉妹都市提携3周年を記念した展覧会が9月26日に開幕。リトアニアを代表する現代作家アルギマンタス・シュヴェグジュダの作品を、日本初公開の34点で紹介する。平塚市美術館展覧会リトアニアカウナス姉妹都市日本初公開平塚">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -135,7 +137,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0124/" data-cat="c" data-area="鎌倉" data-search="俳優・役所広司の歩みをたどる特別展——鎌倉市川喜多映画記念館「living in cinema 俳優 役所広司」、12月13日まで役づくりや国際的な活躍に光を当てる特別展。出演作の関連上映や、本人と監督らを迎えた特別上映＋トークイベントも予定されている。鎌倉市川喜多映画記念館役所広司特別展映画トークイベント鎌倉">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -147,7 +149,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-culture-0125/" data-cat="c" data-area="葉山" data-search="没後50年、詩情の銅版画をたどる——「銅版画家・駒井哲郎　掌上にひろがる星座のように」、神奈川県立近代美術館 葉山で11月15日まで日本の版画史に足跡をのこした駒井哲郎の没後50年記念展。初期の油彩画や初公開となる童話『夢を追う子』の挿絵原画などを通して、初期から晩年までの軌跡をたどる。葉山神奈川県立近代美術館駒井哲郎銅版画展覧会没後50年アート">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -159,7 +161,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0109/" data-cat="c" data-area="鎌倉" data-search="激動の昭和を生き抜いた画家の眼——鎌倉市鏑木清方記念美術館、特別展「昭和100年 清方作品にみる日本のこころ」開幕関東大震災、戦争、戦後——時代の荒波に揺れながら、江戸・明治の美しい記憶を描き続けた鏑木清方。昭和100年の節目に、その精神を鎌倉でたどる。鏑木清方鎌倉美術館日本画昭和100年特別展文化秋の鎌倉">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -171,7 +173,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-culture-0080/" data-cat="c" data-area="鎌倉" data-search="江ノ電が走る参道に、奈良の面が蘇る——御霊神社「面掛行列」、9月18日に執り行われる鎌倉・坂ノ下の御霊神社で毎年9月18日に行われる例祭。県の無形民俗文化財に指定された「面掛行列」は、奈良時代の伎楽面を纏った10人の行列が坂ノ下の町を練り歩く、全国的にも希少な祭礼だ。鎌倉御霊神社面掛行列坂ノ下無形民俗文化財伎楽秋祭り江ノ電鎌倉権五郎景正">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -183,7 +185,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-culture-0069/" data-cat="c" data-area="茅ヶ崎" data-search="震災が地中から呼び覚ました800年前の橋——茅ヶ崎市博物館で古相模川展開催中旧相模川橋脚の国史跡指定100年を記念する展示が、茅ヶ崎市博物館で10月20日まで開催されている。茅ヶ崎市博物館旧相模川橋脚古相模川">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -195,7 +197,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-culture-0072/" data-cat="c" data-area="茅ヶ崎" data-search="写真家・瀧本幹也の国内美術館初の大規模個展が茅ヶ崎市美術館で開幕。海と月が紡ぐ「朔望」の世界9月2日、茅ヶ崎市美術館で「瀧本幹也 lunation 朔望―海から天体を読む」が開幕した。新月と満月がもたらす「朔望」を軸に、海の表情と天体の運動をとらえた新作『lunation 朔望』が展開されている。会期は11月8日まで。茅ヶ崎市美術館瀧本幹也写真展lunation朔望アート秋の展覧会茅ヶ崎">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -207,7 +209,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-culture-0067/" data-cat="c" data-area="茅ヶ崎" data-search="国史跡指定100年——「古相模川」をたどる企画展が茅ヶ崎市博物館で開催中旧相模川橋脚の国史跡指定からちょうど100年。縄文から江戸まで茅ヶ崎の「川の物語」を無料で体感できる企画展が10月20日まで続く。茅ヶ崎市博物館旧相模川橋脚無料展示">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -219,7 +221,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-culture-0049/" data-cat="c" data-area="藤沢" data-search="東海道六番目の宿場町、藤沢宿の記憶をたどる遊行寺の門前町として栄えた藤沢の、もうひとつの顔。藤沢宿東海道歴史">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -231,7 +233,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-culture-0042/" data-cat="c" data-area="葉山" data-search="日本のヨットは、葉山からはじまった日本のヨット発祥の地とされる葉山の海と、葉山マリーナの歩み。葉山マリーナヨット葉山">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -243,7 +245,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-culture-0043/" data-cat="c" data-area="葉山" data-search="皇室の保養地に選ばれた、葉山という土地の魅力明治政府に招かれたドイツ人医師が、逗子・葉山を保養地として推した。葉山御用邸ベルツ博士葉山">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -255,7 +257,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-culture-0020/" data-cat="c" data-area="大磯" data-search="日本の落花生栽培は、大磯からはじまった横浜から伝わった一粒の種から、150年続く産地文化が生まれた。落花生大磯歴史">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -267,7 +269,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-culture-0022/" data-cat="c" data-area="大磯" data-search="政財界の要人が愛した、大磯という保養地伊藤博文から吉田茂まで、大磯には8人の総理大臣が暮らした。大磯別荘地歴史">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -279,7 +281,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-culture-0017/" data-cat="c" data-area="大磯" data-search="「湘南」は、なぜ湘南と呼ばれるのか相模国南部の「相南」が、中国の景勝地「湘南」に重ねられた説がある。湘南地名の由来">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -291,7 +293,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-culture-0019/" data-cat="c" data-area="茅ヶ崎" data-search="「勝手にシンドバッド」が生まれた海の街桑田佳祐の地元・茅ヶ崎は、楽曲の中で何度も歌われてきた。桑田佳祐サザンオールスターズ茅ヶ崎">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -303,7 +305,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-culture-0018/" data-cat="c" data-area="平塚" data-search="「美しい海」というラテン語から生まれたクラブ名1968年創部のサッカー部が、湘南9市11町のクラブへと育つまで。湘南ベルマーレ平塚jリーグ">
-        <span class="list-item-icon" style="background:#EFE7F4; color:#6E4A96" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/culture.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#0F2038">文化</span>
@@ -331,10 +333,7 @@
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        <a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a>
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>

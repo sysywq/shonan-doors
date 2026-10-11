@@ -53,27 +53,29 @@
       </div>
       </a>
       <div class="head-actions">
-        <a class="head-icon-btn" href="/search/" aria-label="記事を検索">
+        <button type="button" class="head-icon-btn" id="siteSearchToggle" aria-label="記事を検索" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        </button>
         <button class="head-icon-btn" id="navMenuToggle" aria-label="メニュー" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
   </div>
+  <div class="site-search-scrim" id="siteSearchScrim" hidden></div><section class="site-search-panel" id="siteSearchPanel" aria-hidden="true" aria-label="記事検索" inert><div class="site-search-inner"><div class="site-search-top"><label for="siteSearchInput">記事を検索</label><button id="siteSearchClose" type="button" aria-label="閉じる">×</button></div><input type="search" id="siteSearchInput" placeholder="地域・店舗・キーワードを入力"><div class="site-search-results" id="siteSearchResults" aria-live="polite"></div></div></section>
   <div class="nav-menu-scrim" id="navMenuScrim" hidden></div>
   <nav class="nav-menu-panel" id="navMenuPanel" aria-label="サイトメニュー" aria-hidden="true" inert>
     <div class="nav-menu-inner">
       <button class="nav-menu-close" id="navMenuClose" aria-label="メニューを閉じる">×</button>
       <div class="nav-menu-group">
         <div class="nav-menu-label">カテゴリー</div>
-        <div class="nav-menu-links"><a href="/category/tourism/">観光</a><a href="/category/business/">企業・店舗</a><a href="/category/gourmet/">グルメ</a><a href="/category/people/">人</a><a href="/category/culture/">文化</a><a href="/category/event/">イベント</a><a href="/category/life/">暮らし</a></div>
+        <div class="nav-menu-links"><a class="nav-cat-link" href="/category/tourism/"><span class="cat-nav-icon" style="background:#E3F2F7;color:#1D6E8C"><svg viewBox="0 0 24 24" fill="none"><path d="M3 16l4.5-6 3 3.5L15 7l6 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="7.5" r="1.6" fill="currentColor"/></svg></span><span class="nav-icon-label">観光</span></a><a class="nav-cat-link" href="/category/business/"><span class="cat-nav-icon" style="background:#F6E4E7;color:#B5495B"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9l1.2-4h13.6L20 9M4 9h16M4 9v9a1 1 0 001 1h14a1 1 0 001-1V9M9 19v-5h6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">企業・店舗</span></a><a class="nav-cat-link" href="/category/gourmet/"><span class="cat-nav-icon" style="background:#FDE9DE;color:#B8532B"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3v7a2 2 0 002 2v9M7 3v9M5 3v9M17 3c-1.5 0-2.5 2-2.5 5s1 5 2.5 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">グルメ</span></a><a class="nav-cat-link" href="/category/people/"><span class="cat-nav-icon" style="background:#E4EAF6;color:#3B5998"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nav-icon-label">人</span></a><a class="nav-cat-link" href="/category/culture/"><span class="cat-nav-icon" style="background:#EFE7F4;color:#6E4A96"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8h18M5 8V6l2-2h10l2 2v2M7 8v13M17 8v13M4 21h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">文化</span></a><a class="nav-cat-link" href="/category/event/"><span class="cat-nav-icon" style="background:#E7F3E9;color:#357A4A"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3v18M6 4h11l-2.5 3.5L17 11H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">イベント</span></a><a class="nav-cat-link" href="/category/life/"><span class="cat-nav-icon" style="background:#FDF3DC;color:#A67A1E"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nav-icon-label">暮らし</span></a></div>
       </div>
       <div class="nav-menu-group">
         <div class="nav-menu-label">エリア</div>
-        <div class="nav-menu-links"><a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a></div>
+        <div class="nav-menu-links"><a class="area-nav-item" href="/area/chigasaki/"><span class="area-nav-icon" style="--area-color:#e87523"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8"/></svg></span><span class="area-nav-label">茅ヶ崎</span></a><a class="area-nav-item" href="/area/fujisawa/"><span class="area-nav-icon" style="--area-color:#1885ca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 15c3-4 5-4 8 0s5 4 8 0 4-4 4-4M2 20c3-4 5-4 8 0s5 4 8 0 4-4 4-4"/></svg></span><span class="area-nav-label">藤沢</span></a><a class="area-nav-item" href="/area/kamakura/"><span class="area-nav-icon" style="--area-color:#895bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M2 8h20M5 11h14M7 10v12M17 10v12M7 14h10"/></svg></span><span class="area-nav-label">鎌倉</span></a><a class="area-nav-item" href="/area/hiratsuka/"><span class="area-nav-icon" style="--area-color:#e64c83"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M5 6h14M6 6l-3 7 3-2 3 2-3-7M18 6l-3 7 3-2 3 2-3-7"/></svg></span><span class="area-nav-label">平塚</span></a><a class="area-nav-item" href="/area/zushi/"><span class="area-nav-icon" style="--area-color:#3265be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v16M11 3L3 16h8M13 7l8 9h-8M3 20q5 3 9 0t9 0"/></svg></span><span class="area-nav-label">逗子</span></a><a class="area-nav-item" href="/area/hayama/"><span class="area-nav-icon" style="--area-color:#39894e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4C10 4 5 9 5 16c0 3 2 5 5 5 7 0 11-7 10-17ZM5 21c3-5 6-8 12-12"/></svg></span><span class="area-nav-label">葉山</span></a><a class="area-nav-item" href="/area/oiso/"><span class="area-nav-icon" style="--area-color:#19969b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17h18l-3 4H7l-4-4M12 3v14M11 4L5 15h6M13 8l7 7h-7"/></svg></span><span class="area-nav-label">大磯</span></a><a class="area-nav-item" href="/area/ninomiya/"><span class="area-nav-icon" style="--area-color:#d6a000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v5M12 14v8M6 8c-5-2-5 5 0 5M18 8c5-2 5 5 0 5M8 6c-3-4 4-6 5 0M16 6c3-4-4-6-5 0M9 12c-5 4 3 7 3 2M15 12c5 4-3 7-3 2"/></svg></span><span class="area-nav-label">二宮</span></a></div>
       </div>
+      <div class="nav-submit-pending">無料掲載のお申し込み<small>申込フォーム準備中</small></div>
     </div>
   </nav>
 </header>
@@ -87,7 +89,7 @@
     <p class="hub-subtitle">「暮らし」に関する記事を16件掲載しています。</p>
     <div class="article-list">
       <a class="list-item" href="/articles/oiso-life-0171/" data-cat="l" data-area="大磯" data-search="毎月第3日曜日、大磯港が市（いち）になる - 「大磯市（おおいそいち）」神奈川県下最大の朝市と称される「大磯市（おおいそいち）」が、毎月第3日曜日に大磯港で開かれている。クラフトや飲食など120店舗前後が港に集い、海を眺めながらのんびり過ごす一日は、大磯の暮らしに根ざした風景のひとつだ。大磯大磯市おおいそいち朝市マルシェクラフト大磯港暮らしoiso connect">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -99,7 +101,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/zushi-life-0169/" data-cat="l" data-area="逗子" data-search="逗子駅に2028年春、新しい駅ビルが誕生する - jr東日本が9月末に建設工事を着手jr東日本が2026年9月29日、横須賀線・逗子駅に隣接する新しい駅ビルの建設工事着手を発表した。地上2階建ての地域密着型商業施設で、2028年春の開業を目指す。逗子駅ビルjr東日本まちづくり商業施設横須賀線逗子駅新改札防災津波避難">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -111,7 +113,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-life-0152/" data-cat="l" data-area="平塚" data-search="平塚駅ビルがまた動く - ラスカ平塚、11月に4店舗が新規・リニューアルオープンjr平塚駅直結の「ラスカ平塚」が2026年11月、4店舗の新規・リニューアルオープンを予定。スイス発のチョコレートブランド「リンツ ショコラ ブティック」が3階にラスカ初出店、5階には湘南エリア初のインド料理店「ローカルインディア」も加わる。ラスカ平塚リニューアル平塚ショッピンググルメリンツインド料理新規オープン">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -123,7 +125,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-life-0149/" data-cat="l" data-area="茅ヶ崎" data-search="毎月第1土曜は漁港へ - 茅ヶ崎漁港マルシェで相模湾の旬を手に入れる茅ヶ崎市漁業協同組合が主催する「茅ヶ崎漁港マルシェ」は、毎月第1土曜日の朝9時から茅ヶ崎漁港の敷地内で開催。水揚げされた旬の魚介類と地場野菜が並ぶ、地元の食の定番スポット。茅ヶ崎茅ヶ崎漁港マルシェ鮮魚しらす相模湾地場野菜キッチンカー朝市漁港">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -135,7 +137,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-life-0130/" data-cat="l" data-area="茅ヶ崎" data-search="茅ヶ崎の子育て支援センターは4か所——相談と親子の居場所を探す妊娠中や子育て中に立ち寄れる茅ヶ崎市の支援センター。4か所の拠点と、相談できる内容を市の案内から整理した。茅ヶ崎子育て親子子育て支援センター相談暮らし">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -147,7 +149,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/chigasaki-life-0131/" data-cat="l" data-area="茅ヶ崎" data-search="茅ケ崎駅北口の昇降設備2か所が停止中——復旧見込みと迂回の確認を北口バス降車場のエスカレーターと「blix茅ヶ崎」前のエレベーターが停止。茅ヶ崎市の案内から復旧見込みと代替経路の注意点を整理した。茅ヶ崎茅ケ崎駅北口エスカレーターエレベーターバリアフリー">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -159,7 +161,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/zushi-life-0132/" data-cat="l" data-area="逗子" data-search="逗子市の産後ケア、どう使う？——宿泊・通所・訪問の3種類と利用券逗子市の産後ケアは宿泊、通所、訪問から選べる。対象、利用券の受け取り方、予約の順番を市の最新案内で整理した。逗子産後ケア子育て利用券宿泊型通所型訪問型">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -171,7 +173,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-life-0103/" data-cat="l" data-area="平塚" data-search="軽トラが本を届ける——平塚市が県内初の小型移動図書館車を10月から運用開始マイクロバスでは届けられなかった場所へ。平塚市が軽トラックをベースにした小型移動図書館車を新たに導入し、図書館アウトリーチの幅を広げる。図書館移動図書館平塚市暮らし読書子育て地域サービス">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -183,7 +185,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hayama-life-0087/" data-cat="l" data-area="葉山" data-search="葉山への行き方——電車とバスを使う場合の現実的なルート葉山町には鉄道の駅がない。だからこそ「どうやって行くのか」が最初の壁になる。jr・京急それぞれのルートと、目的地別のバス乗り場・所要時間をまとめた。葉山アクセス電車バス京急バス逗子駅逗子・葉山駅交通森戸海岸一色海岸">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -195,7 +197,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-life-0078/" data-cat="l" data-area="鎌倉" data-search="鎌倉に22年ぶりのスーパー誕生——「ライフ鎌倉梶原店」9月1日グランドオープン2026年9月1日、鎌倉市梶原に「ライフ鎌倉梶原店」がグランドオープン。鎌倉市内への出店は2004年以来約22年ぶりとなり、カインズとともに新商業施設を形成する。地域の買い物事情が大きく変わりそうだ。鎌倉スーパーライフ梶原新店舗暮らし商業施設カインズ">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -207,7 +209,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/hiratsuka-life-0058/" data-cat="l" data-area="平塚" data-search="「湘南のまんなか」で暮らすという選択海、山、まつり、スポーツ。平塚には湘南のすべてが揃っている。平塚暮らし湘南のまんなか">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -219,7 +221,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/zushi-life-0045/" data-cat="l" data-area="逗子" data-search="御用邸の隣町として育まれた、逗子の暮らし葉山への玄関口として発展してきた、落ち着いた住宅地。逗子暮らし別荘地">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -231,7 +233,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/ninomiya-life-0035/" data-cat="l" data-area="二宮" data-search="落花生とオリーブに囲まれた、二宮という小さな町温暖な気候と海山の自然が育む、二宮ならではの日常。二宮移住田舎暮らし">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -243,7 +245,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/kamakura-life-0036/" data-cat="l" data-area="鎌倉" data-search="電車が生活道路と重なる、江ノ電沿線に暮らすということ観光客が写真を撮る風景が、住民にとっては通勤路でもある。江ノ電暮らし">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -255,7 +257,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/fujisawa-life-0033/" data-cat="l" data-area="藤沢" data-search="サーフィンも、都心通勤も。辻堂という選択駅直結の商業施設と、歩いて行ける海。二つの顔を持つ街での暮らし方。辻堂暮らし移住">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -267,7 +269,7 @@
         <span class="list-item-chevron" aria-hidden="true">›</span>
       </a>
       <a class="list-item" href="/articles/oiso-life-0034/" data-cat="l" data-area="大磯" data-search="賑わいから少し離れた、大磯の暮らしのリズム別荘地としての落ち着きが、今も町のかたちに残っている。大磯暮らし別荘地">
-        <span class="list-item-icon" style="background:#FDF3DC; color:#A67A1E" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7M6 10v10h12V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="/assets/images/category-photos/life.webp" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
             <span class="list-item-badge" style="background:#33424F">暮らし</span>
@@ -295,10 +297,7 @@
     <div class="foot-mission">
       <span class="serif">「湘南に関わるなら、この場所。」</span>
       湘南Doorsは、湘南の企業・お店・人・文化・イベント・観光など、地域のさまざまな魅力を発信するメディアです。湘南をもっと盛り上げ、この街の魅力をより多くの人に届けることを目指して運営しています。地域で暮らす人にも、湘南を訪れる人にも、新しい湘南と出会える「湘南を知る入口」であり続けます。
-      <div class="foot-area-links">
-        <span class="foot-area-links-label">エリアから探す</span>
-        <a href="/area/fujisawa/">藤沢</a><a href="/area/chigasaki/">茅ヶ崎</a><a href="/area/kamakura/">鎌倉</a><a href="/area/hiratsuka/">平塚</a><a href="/area/oiso/">大磯</a><a href="/area/ninomiya/">二宮</a><a href="/area/zushi/">逗子</a><a href="/area/hayama/">葉山</a>
-      </div>
+
     </div>
     <div class="foot-note">
       広告掲載については <a class="footer-email" href="mailto:info@shonandoors.com">info@shonandoors.com</a> までお問い合わせください。<br><br>
