@@ -890,13 +890,13 @@ def render_article_main(item, scenes, all_articles):
       <div class="modal-art">
         <img src="{hero_img_src}" width="1200" height="630" alt="{hero_img_alt}" fetchpriority="high">
         {hero_credit_html}
-        <span class="modal-art-badge" style="background:{CATS[item["cat"]]["bg"]}">{esc(CATS[item["cat"]]["label"])}</span>
+        <span class="modal-art-badge" style="background:{CATEGORY_NAV_STYLE[item["cat"]]["fg"]}">{esc(CATS[item["cat"]]["label"])}</span>
       </div>
       <div class="modal-body">
         <div class="modal-eyebrow">
           <span class="modal-eyebrow-date">{format_date(item["date"])}{(" (更新 " + format_date(item["updated"]) + ")") if item.get("updated") else ""}</span>
-          <span class="modal-eyebrow-badge" style="background:{CATS[item["cat"]]["bg"]}">{esc(CATS[item["cat"]]["label"])}</span>
-          <span class="modal-eyebrow-badge modal-eyebrow-area">{esc(item["area"])}</span>
+          <span class="modal-eyebrow-badge" style="background:{CATEGORY_NAV_STYLE[item["cat"]]["fg"]}">{esc(CATS[item["cat"]]["label"])}</span>
+          <span class="modal-eyebrow-badge modal-eyebrow-area" style="--item-area-color:{AREA_BADGES[item["area"]][0]}">{esc(item["area"])}</span>
         </div>
         {event_ended_banner}
         <h1 class="modal-title serif">{esc(item["title"])}</h1>
