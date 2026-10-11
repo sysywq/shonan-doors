@@ -753,8 +753,8 @@ def render_list_item(item, scenes, with_search_attrs=False):
         <span class="list-item-icon" aria-hidden="true"><img class="list-item-photo" src="{esc(thumb)}" alt="" loading="lazy" decoding="async"></span>
         <div class="list-item-body">
           <div class="list-item-meta">
-            <span class="list-item-badge" style="background:{CATS[item['cat']]['bg']}">{esc(CATS[item['cat']]['label'])}</span>
-            <span class="list-item-area">{esc(item['area'])}</span>
+            <span class="list-item-badge" style="background:{nav_style['fg']}">{esc(CATS[item['cat']]['label'])}</span>
+            <span class="list-item-area" style="--item-area-color:{AREA_BADGES[item['area']][0]}">{esc(item['area'])}</span>
           </div>
           <div class="list-item-title serif">{esc(item['title'])}</div>
           <div class="list-item-date">{format_date(item['date'])}</div>
@@ -1271,7 +1271,7 @@ def render_listing_page(*, title, description, canonical_url, breadcrumb_items,
         bg, fg, icon_svg = category_icon
         heading_html = (
             f'<div class="hub-heading-row">'
-            f'<span class="hub-heading-icon" style="background:{bg}; color:{fg}">{icon_svg}</span>'
+            f'<span class="hub-heading-icon" style="background:{bg}; color:{fg}; border:{"2px solid " + fg if bg == "#ffffff" else "0"}">{icon_svg}</span>'
             f'<h1 class="hub-title serif">{esc(heading)}</h1>'
             f'</div>'
         )
@@ -1330,7 +1330,8 @@ def render_area_hub_pages(area_ja, area_articles, scenes):
     articles_sorted = sorted(area_articles, key=lambda d: d["date"], reverse=True)
     total_pages = max(1, -(-len(articles_sorted) // HUB_PAGE_SIZE))
     pages = {}
-    hero_image = resolve_area_hero_image(area_ja)
+    area_color, area_svg = AREA_BADGES[area_ja]
+    area_heading_icon = ("#ffffff", area_color, area_svg)
     for page_num in range(1, total_pages + 1):
         chunk = articles_sorted[(page_num - 1) * HUB_PAGE_SIZE: page_num * HUB_PAGE_SIZE]
         base_path = f"/area/{area_en}/"
@@ -1348,7 +1349,7 @@ def render_area_hub_pages(area_ja, area_articles, scenes):
             page_num=page_num,
             total_pages=total_pages,
             total_count=len(articles_sorted),
-            hero_image=hero_image,
+            category_icon=area_heading_icon,
         )
     return pages
 
