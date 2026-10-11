@@ -536,3 +536,12 @@ body.drawer-open{overflow:hidden}
 @media(max-width:639px){.area-nav-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 2px}.area-nav-icon{width:48px;height:48px}.pickup-card{width:72vw}.pickup-viewport{margin:0 -16px}.pickup-track{gap:12px}.pickup-card-img{height:160px}}
 @media(min-width:640px) and (max-width:1023px){.area-nav-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}}
 .site-search-scrim[hidden]{display:none!important}.site-search-scrim{position:fixed;inset:0;background:rgba(15,32,56,.42);z-index:1100}.site-search-panel{position:fixed;top:0;left:0;right:0;max-height:85vh;overflow-y:auto;z-index:1101;background:var(--card);transform:translateY(-110%);visibility:hidden;transition:transform .2s ease;box-shadow:0 20px 50px #14253d33}.site-search-panel.is-open{transform:translateY(0);visibility:visible}.site-search-inner{max-width:760px;margin:auto;padding:26px var(--space-page-x)}.site-search-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:700}.site-search-top button{border:0;background:none;font-size:29px;cursor:pointer}#siteSearchInput{width:100%;padding:15px;border:1px solid var(--line);border-radius:5px;font:inherit;background:var(--bg)}.site-search-results{padding-top:14px}.site-search-results a{display:block;padding:13px 4px;text-decoration:none;border-bottom:1px solid var(--line-soft)}.site-search-results small{display:block;color:var(--ink-faint);font-size:11px;margin-bottom:5px}.site-search-results strong{font-size:14px}@media(prefers-reduced-motion:reduce){.site-search-panel{transition:none}}
+
+/* Navigation clarity adjustments (Oct 11) */
+.cat-nav-heading{max-width:1160px;margin:0 auto;padding:18px var(--space-page-x) 0;font-size:16px;color:var(--ink);font-weight:700}
+.cat-nav-track{padding-top:14px}
+.list-item-area{display:inline-flex;align-items:center;max-width:100%;padding:2px 7px;border-radius:3px;background:#e4eff6;color:#265d7a;font-size:10px;font-weight:700;line-height:1.4;white-space:nowrap}
+.pickup-pause{width:32px;height:32px;min-width:32px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pickup-pause svg{width:14px;height:14px;display:block}
+.pickup-pause:hover{border-color:var(--trust);color:var(--trust)}
+.pickup-pause:focus-visible{outline:2px solid var(--trust);outline-offset:2px}
