@@ -550,3 +550,6 @@ body.drawer-open{overflow:hidden}
 @media(min-width:640px){.area-nav-grid{grid-template-columns:repeat(8,minmax(0,1fr));gap:12px}}
 /* Area labels reuse the eight distinct navigation badge colors */
 .list-item-area{background:color-mix(in srgb,var(--item-area-color) 13%,white);color:var(--item-area-color);border:1px solid color-mix(in srgb,var(--item-area-color) 25%,white);font-weight:700}
+
+/* Article detail labels share navigation taxonomy colors with listing cards. */
+.modal-eyebrow-badge.modal-eyebrow-area{background:color-mix(in srgb,var(--item-area-color) 13%,white);color:var(--item-area-color);border:1px solid color-mix(in srgb,var(--item-area-color) 25%,white);padding:2px 9px}
