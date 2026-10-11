@@ -155,3 +155,5 @@ document.querySelectorAll('.share-btn-copy').forEach(btn => {
 /* Generated pages synced; validate production navigation via CI. */
 
 /* Navigation presentation CI validation marker. */
+
+/* Area visual consistency validation. */
