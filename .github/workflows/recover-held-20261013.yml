@@ -45,8 +45,15 @@ jobs:
           import resolve_daily_hold as r
           import fact_audit as fa
           client=fa.make_client()
+          import daily_fact_audit as dfa
+          original=dfa.audit_article
+          def audit_and_record(*args,**kwargs):
+              result=original(*args,**kwargs)
+              print(json.dumps(result,ensure_ascii=False),flush=True)
+              return result
+          dfa.audit_article=audit_and_record
           results=[]
-          for id in (199,200):
+          for id in (199,):
               with open(f'/tmp/held-{id}.json') as f:
                   payload=json.load(f)
               assert payload['requireConfirmed'] is True
