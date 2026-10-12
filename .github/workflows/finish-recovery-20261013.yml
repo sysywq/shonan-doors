@@ -1,0 +1,46 @@
+name: Finish October 13 Recovery
+on:
+  push:
+    branches: [repair/finish-daily-20261013]
+permissions:
+  contents: read
+  actions: write
+jobs:
+  finish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Verify three live articles before stopping redundant generation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json,time,urllib.request,subprocess
+          rows=[a for a in json.load(open('data/articles.json')) if a.get('date')=='2026-10-13' and not a.get('mergedInto')]
+          assert len(rows)>=3
+          def get(url):
+              with urllib.request.urlopen(urllib.request.Request(url,headers={'Cache-Control':'no-cache'}),timeout=20) as r:
+                  assert r.status==200
+                  return r.read().decode()
+          for attempt in range(12):
+              try:
+                  listing=get('https://www.shonandoors.com/')
+                  for a in rows:
+                      path='/articles/'+a['slug']+'/'
+                      assert path in listing
+                      get('https://www.shonandoors.com'+path)
+                  break
+              except Exception:
+                  if attempt==11:raise
+                  time.sleep(10)
+          print('Verified live articles:',[a['id'] for a in rows],flush=True)
+          run=json.loads(subprocess.check_output(['gh','api','repos/sysywq/shonan-doors/actions/runs/38319110747']))
+          if run['status']!='completed':
+              subprocess.run(['gh','api','-X','POST','repos/sysywq/shonan-doors/actions/runs/38319110747/cancel'],check=True)
+              print('Cancelled redundant in-flight refill; schedules unchanged.')
+          else:
+              print('Refill already finished.')
+          PY
