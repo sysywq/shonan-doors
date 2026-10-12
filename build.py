@@ -23,7 +23,8 @@ import os
 import re
 import html
 import shutil
-from datetime import date as _date
+from datetime import date as _date, datetime as _datetime
+from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_DOMAIN = "https://www.shonandoors.com"  # CNAMEファイルに準拠(wwwあり)
@@ -34,7 +35,7 @@ ADSENSE_PUBLISHER_ID = "ca-pub-2458583563727225"
 ADS_TXT_PUBLISHER_ID = "pub-2458583563727225"  # ads.txtはca-pub-ではなくpub-表記が仕様
 SITE_TITLE = "湘南Doors｜湘南の人・企業・文化・体験をつなぐメディア"
 
-# ビルド基準日の環境変数。未設定なら実行日(date.today())を使う。
+# ビルド基準日の環境変数。未設定なら日本時間の実行日を使う。
 # CIではコミット済みsitemap.xmlのlastmodをここに渡し、実行日が変わっても
 # 同じ入力から同じ生成物になるか(生成物の再生成漏れが無いか)を検証する。
 BUILD_DATE_ENV = "SHONAN_DOORS_BUILD_DATE"
@@ -42,7 +43,7 @@ BUILD_DATE_ENV = "SHONAN_DOORS_BUILD_DATE"
 
 def build_today():
     value = os.environ.get(BUILD_DATE_ENV, "").strip()
-    return _date.fromisoformat(value) if value else _date.today()
+    return _date.fromisoformat(value) if value else _datetime.now(ZoneInfo("Asia/Tokyo")).date()
 
 
 CATS = {
@@ -430,10 +431,8 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
     """終了イベントを除外して、直近イベント・実用ガイド・新しいニュースを評価。
     特例: 記事89を2026-10-12(JST)まで先頭固定。残り枠だけ通常ロジック。
     """
-    from datetime import date as _pickup_date, datetime as _pickup_datetime
-    from zoneinfo import ZoneInfo as _pickup_zone
-    current_day = today or (build_today() if os.environ.get(BUILD_DATE_ENV, "").strip()
-                            else _pickup_datetime.now(_pickup_zone("Asia/Tokyo")).date())
+    from datetime import date as _pickup_date
+    current_day = today or build_today()
     if isinstance(current_day, str):
         current_day = _pickup_date.fromisoformat(current_day)
     if count <= 0:
