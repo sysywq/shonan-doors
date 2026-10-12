@@ -4008,7 +4008,9 @@
       199,
       200
      ],
-     "system_errors": []
+     "system_errors": [],
+     "refill_dispatched": true,
+     "refill_dispatched_at": "2026-10-13 05:22"
     }
    },
    "rejected": [
