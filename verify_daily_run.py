@@ -38,7 +38,7 @@ def fail(msg):
 
 
 LEDGER_FILES = ("data/articles.json", "data/id_counter.json", "data/stock_topics.json",
-                "data/event_series.json", "data/x_post_log.json")
+                "data/event_series.json", "data/x_post_log.json", "assets/search-index.json")
 
 
 def verify_holds_excluded(held):

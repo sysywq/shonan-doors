@@ -432,7 +432,8 @@ def select_pickup_articles(articles, count=5, popularity_scores=None, today=None
     """
     from datetime import date as _pickup_date, datetime as _pickup_datetime
     from zoneinfo import ZoneInfo as _pickup_zone
-    current_day = today or _pickup_datetime.now(_pickup_zone("Asia/Tokyo")).date()
+    current_day = today or (build_today() if os.environ.get(BUILD_DATE_ENV, "").strip()
+                            else _pickup_datetime.now(_pickup_zone("Asia/Tokyo")).date())
     if isinstance(current_day, str):
         current_day = _pickup_date.fromisoformat(current_day)
     if count <= 0:

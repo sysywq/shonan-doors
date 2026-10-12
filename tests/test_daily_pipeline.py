@@ -538,6 +538,9 @@ class MergeDecisionTest(unittest.TestCase):
         # 保留記事(103)が articles.json に無ければ、confirmed 記事だけの PR はマージしてよい
         self.assertEqual(self.blockers(meta=dict(META, held_ids=[103, 104])), [])
 
+    def test_search_index_is_allowed_generated_output(self):
+        self.assertEqual(self.blockers(files=FILES + ["assets/search-index.json"]), [])
+
     def test_each_failed_condition_blocks(self):
         cases = {
             "CI": dict(ci="failure"),
