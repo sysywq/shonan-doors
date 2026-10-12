@@ -6556,5 +6556,71 @@
       "openingDate": "",
       "effectiveDate": ""
     }
+  },
+  {
+    "id": 250,
+    "articleType": "news",
+    "cat": "c",
+    "area": "藤沢",
+    "scene": "street",
+    "title": "昭和の温もりをまとった童画の世界へ - 「黒崎義介 - 童話の世界」展、藤沢市アートスペースで12月20日まで開催",
+    "dek": "「僕の生命線は童画である」と宣言した童画家・黒崎義介の原画を藤沢市所蔵作品から厳選。藤沢にゆかりの昔話や、子ぐまの兄弟を描いた「クロサキヱ本」など、やさしい色彩の世界が広がる入場無料の企画展。",
+    "link": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+    "subjectNames": [
+      "黒崎義介 - 童話の世界",
+      "企画展Ⅱ「黒崎義介-童話の世界」",
+      "黒崎義介",
+      "藤沢市アートスペース",
+      "FAS",
+      "エファース"
+    ],
+    "sources": [
+      "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+      "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/event/index.html",
+      "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/"
+    ],
+    "date": "2026-10-13",
+    "eventStartDate": "2026-10-10",
+    "eventEndDate": "2026-12-20",
+    "eventSeriesKey": "kurosaki-yoshisuke-douga-fas",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "藤沢市",
+    "eventOrganizerUrl": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/",
+    "eventMetadataSource": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+    "eventPerformers": [],
+    "address": "神奈川県藤沢市辻堂神台2-2-2 ココテラス湘南6階",
+    "access": "JR東海道線・辻堂駅北口から徒歩約5分",
+    "hours": "10:00〜19:00（入場は閉館の30分前まで）",
+    "closedDays": "月曜日（月曜日が祝日の場合は翌火曜日が休館）",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "辻堂駅北口、ココテラス湘南6階の藤沢市アートスペース（愛称：FAS）で、企画展Ⅱ「黒崎義介—童話の世界」が開催されている。会期は10月10日（土）から12月20日（日）まで。入場無料。\n\n黒崎義介（1905〜1984）は長崎県平戸市生まれの日本画家・童画家で、「僕の生命線は童画である」と宣言し、月刊保育絵本『キンダーブック』や『コドモノクニ』を中心に約48年間にわたって多くの童画を手がけた。1952年からは藤沢市で地域の子どもたちへの絵画教室や成人向けの墨絵教室を開きながら創作を続け、藤沢市との縁が深い作家でもある。\n\n本展は藤沢市が所蔵する黒崎の作品の中から「童話の世界」をテーマに選んだ原画で構成される。さまざまな童話にまつわる絵のほか、藤沢に伝わる昔話を描いた作品、そして元気な子ぐまの兄弟を描いた「クロサキヱ本」と呼ばれる物語シリーズも見どころだ。近年の昭和レトロへの関心の高まりとともに、温かみのある色彩と懐かしさを感じさせる表現が改めて注目されている。\n\n関連イベントとして、11月8日（日）午後2時から担当学芸員による展示解説（申し込み不要・無料）、12月5日（土）には童話をテーマにしたワークショップ（要申し込み・無料）が11時と15時の2回実施される。開館時間は午前10時から午後7時。月曜休館（祝日の場合は翌火曜日）。ただし10月12日（月・祝）と11月23日（月・祝）は開館し、10月13日（火）と11月24日（火）が振替休館となる。",
+    "tags": [
+      "黒崎義介",
+      "童画",
+      "浮世絵",
+      "藤沢市アートスペース",
+      "FAS",
+      "辻堂",
+      "企画展",
+      "昭和レトロ",
+      "無料",
+      "キンダーブック"
+    ],
+    "slug": "fujisawa-culture-0250",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催期間2026-10-10〜2026-12-20",
+      "reason": "開催中(終了まであと68日)",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    },
+    "newsKind": "event"
   }
 ]
