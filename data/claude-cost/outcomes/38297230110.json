@@ -1,0 +1,118 @@
+{
+  "run_id": "38297230110",
+  "date_jst": "2026-10-13",
+  "outcomes": [
+    {
+      "article_id": 199,
+      "title": "平塚で迎える朝 - 「葦」と「シャポー」、地元に愛され続ける2軒のモーニング",
+      "outcome": "held",
+      "verdict": "fix",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": 200,
+      "title": "北鎌倉の隠れた古刹で秋の庭を静かに眺める - 「長寿寺」秋の特別拝観、10月2日から12月7日まで",
+      "outcome": "held",
+      "verdict": "fix",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "仮装して商店街をゆく - 「第6回藤沢ハロウィンウォーク2026」、10月18日に藤沢駅北口商店街で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ギターの現世代トップランナー2人が逗子に集う - 「大萩康司＆朴葵姫 ギター・デュオリサイタル」、11月23日になぎさホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "由比ヶ浜に市（いち）が立つ一日 - 「第29回 鎌人（かまんど）いち場」、10月25日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "揚げたてを自分好みに - 「串揚げバイキング くし葉 ららぽーと湘南平塚店」、10月9日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "江戸の物語を宿場に見る - 「ザ・ストーリーオブ・東海道五十三対 国貞・国芳・広重」展、藤澤浮世絵館で11月3日まで開催中",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "神社の境内で発酵文化を祝う一日 - 「どぶろっくフェス其ノ十六」、10月17日に白旗神社で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "昭和の温もりをまとった童画の世界へ - 「黒崎義介 - 童話の世界」展、藤沢市アートスペースで12月20日まで開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "千年の修行に勝る四日間 - 光明寺「十夜法要（お十夜）」、10月12日から材木座で開幕",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "年に春秋4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が3件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "鉄棒で空を舞い、音楽とダンスで魅せる - 「AIRFOOTWORKS＋EBIKEN THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大かまどで炊く3種のごはんがおかわり自由 - 「大かまど飯 寅福 テラスモール湘南店」、辻堂に誕生",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "古着、アート、レコードが集まる湘南の新拠点 - カルチャーマーケット「KENDRICKS BASED ON SHONAN」、大庭に11月開業へ",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
