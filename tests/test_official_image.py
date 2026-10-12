@@ -252,7 +252,8 @@ class ResumeTest(unittest.TestCase):
         with open(self.counter, "w", encoding="utf-8") as f:
             json.dump({"next_id": 200}, f)
         self.payload = {"imageChecks": [pg.image_check_item(AMBIGUOUS)], "draft": dict(ENTRY)}
-        self.patch = mock.patch.object(ric.g, "ID_COUNTER_PATH", self.counter)
+        self.patch = mock.patch.multiple(ric.g, ID_COUNTER_PATH=self.counter,
+                                         ARTICLES_JSON_PATH=self.arts)
         self.patch.start()
 
     def tearDown(self):
