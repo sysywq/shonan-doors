@@ -2893,39 +2893,13 @@
      "branch": "daily/2026-10-12-r2",
      "run_id": "38187473981",
      "started_at": "2026-10-12 12:12",
-     "published_ids": [],
-     "held_ids": [],
-     "system_errors": [
-      {
-       "where": "企画: 補充探索",
-       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRgDMSbyfsMFxpNK9d'}",
-       "at": "2026-10-12 09:34"
-      },
-      {
-       "where": "企画: 補充探索",
-       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRh3i1Nsm4VKKX1CDD'}",
-       "at": "2026-10-12 09:34"
-      },
-      {
-       "where": "post-audit top-up 1",
-       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRmU7pouMSARXesG2A'}",
-       "at": "2026-10-12 09:34"
-      },
-      {
-       "where": "post-audit top-up 2",
-       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRnGEP7DhGLpgwUe5y'}",
-       "at": "2026-10-12 09:34"
-      },
-      {
-       "where": "post-audit top-up 3",
-       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRo47wemZcXAPz3ZY7'}",
-       "at": "2026-10-12 09:34"
-      },
-      {
-       "where": "監査: 東欧革命が生んだ芸術 - 神奈川県立近代美術館 鎌倉別館「ポーランド・ポスター２」、10月17日開幕",
-       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQReccSwvSbaQrZb6PS'} 監査応答の形式異常・監査処理の例外(監査できていない)"
-      }
-     ]
+     "published_ids": [
+      198
+     ],
+     "held_ids": [
+      197
+     ],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -3770,11 +3744,252 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 2
+    },
+    {
+     "title": "404号線沿いの甘沼に「マクドナルド 茅ヶ崎甘沼店」 - 11月25日グランドオープン",
+     "dek": "茅ヶ崎市甘沼に「マクドナルド 茅ヶ崎甘沼店」が2026年11月25日にグランドオープン。ドライブスルーやMcCafé by Baristを備え、午前7時から午後11時まで営業する。",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "https://crewrecruiting.mcdonalds.co.jp/map/14804",
+     "subjectNames": [
+      "マクドナルド 茅ヶ崎甘沼店",
+      "マクドナルド茅ヶ崎甘沼店"
+     ],
+     "tags": [
+      "マクドナルド",
+      "茅ヶ崎",
+      "甘沼",
+      "新規オープン",
+      "ファストフード",
+      "ドライブスルー"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "葉山の里山で馬と過ごす - 葉山道草牧場と葉山ハーモニーガーデン、2つの体験施設ガイド",
+     "dek": "海と山が共存する葉山には、里山の緑の中で馬と向き合える体験施設がある。初心者でも参加できるコースの内容・料金・アクセスをまとめた。",
+     "area": "葉山",
+     "cat": "t",
+     "link": "https://hayamamichikusa.wixsite.com/mysite",
+     "subjectNames": [
+      "葉山道草牧場",
+      "葉山ハーモニーガーデン",
+      "道草牧場",
+      "michikusa_bokujyou"
+     ],
+     "tags": [
+      "葉山",
+      "乗馬",
+      "馬体験",
+      "葉山道草牧場",
+      "葉山ハーモニーガーデン",
+      "里山",
+      "上山口",
+      "初心者",
+      "体験",
+      "湘南"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "テラスモール湘南にディズニー公式オンラインストアのポップアップが上陸 - 「Disney store.jp Japan Tour」神奈川会場、10月16日から",
+     "dek": "全国9都市を巡回するポップアップ「Disney store.jp Japan Tour」の神奈川会場が、10月16日からテラスモール湘南1Fにオープン。会場限定グッズやスタンプラリーで、オンラインの買い物体験をリアルに届ける。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.disney.co.jp/store/news/new/2026-2027_260910",
+     "subjectNames": [
+      "Disney store.jp Japan Tour",
+      "ディズニーストア.jp Japan Tour",
+      "Disneystore.jp Japan Tour",
+      "Disney store Japan Tour"
+     ],
+     "tags": [
+      "ディズニー",
+      "テラスモール湘南",
+      "ポップアップ",
+      "藤沢",
+      "辻堂",
+      "グッズ",
+      "Disney store",
+      "ファミリー",
+      "イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "disney-store-jp-japan-tour",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "150穴のやぐらが秋の山肌に現れる - 「まんだら堂やぐら群」、10月24日から秋の限定公開",
+     "dek": "鎌倉と逗子の境にある国史跡「名越切通」の中に眠る大規模やぐら群が、今秋も期間限定で姿を現す。年に2回だけ扉が開く、中世の葬送の地へ。",
+     "area": "逗子",
+     "cat": "e",
+     "link": "https://www.city.zushi.kanagawa.jp/shiminkatsudo/bunkazai/1004537/1007768.html",
+     "subjectNames": [
+      "まんだら堂やぐら群",
+      "まんだらどうやぐらぐん",
+      "名越切通",
+      "なごえきりどおし"
+     ],
+     "tags": [
+      "まんだら堂やぐら群",
+      "名越切通",
+      "やぐら",
+      "逗子",
+      "限定公開",
+      "国史跡",
+      "鎌倉時代",
+      "中世",
+      "文化財",
+      "紅葉"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "mandarado-yaguragun-kogen",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 2
+    },
+    {
+     "title": "地名の由来は、この神社にある——二宮・川匂（川勾）神社と相模国二宮の歴史",
+     "dek": "",
+     "area": "二宮",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "江ノ電14駅、ぜんぶ降りてみる——各駅から歩いて行ける観光スポットまとめ",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "えぼし岩に上陸できる日——茅ヶ崎のランドマーク、烏帽子岩上陸ツアーの全貌",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "海の見える丘で馬に乗る——葉山で乗馬体験ができる場所と楽しみ方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "まだ誰もいない逗子海岸へ——早朝に訪れる、静かなビーチの魅力",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "農家レストランいぶき - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "農家レストランいぶき"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "70万人が訪れる七夕を、地元目線で歩く——平塚七夕まつりの楽しみ方ガイド",
+     "dek": "",
+     "area": "平塚",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "むさしの森珈琲 藤沢湘南台店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "むさしの森珈琲 藤沢湘南台店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
     }
    ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-12 12:12",
+   "updated_at": "2026-10-12 12:44",
    "social_pending": []
   }
  }
