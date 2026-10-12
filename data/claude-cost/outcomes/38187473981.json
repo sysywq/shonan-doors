@@ -1,0 +1,15 @@
+{
+  "run_id": "38187473981",
+  "date_jst": "2026-10-12",
+  "outcomes": [
+    {
+      "article_id": null,
+      "title": "東欧革命が生んだ芸術 - 神奈川県立近代美術館 鎌倉別館「ポーランド・ポスター２」、10月17日開幕",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
