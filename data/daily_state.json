@@ -2888,6 +2888,11 @@
      ],
      "held_ids": [],
      "system_errors": []
+    },
+    "2": {
+     "branch": "daily/2026-10-12-r2",
+     "run_id": "38187473981",
+     "started_at": "2026-10-12 09:18"
     }
    },
    "rejected": [
@@ -3578,8 +3583,8 @@
     }
    ],
    "failure": null,
-   "confirmed_today": 0,
-   "updated_at": "2026-10-12 08:52",
+   "confirmed_today": 2,
+   "updated_at": "2026-10-12 09:18",
    "social_pending": []
   }
  }
