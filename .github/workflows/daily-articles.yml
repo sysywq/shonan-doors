@@ -252,9 +252,10 @@ jobs:
           # Optional generated directories (especially article images) may legitimately not exist.
           # A literal missing path makes git add abort the whole daily publish.
           git add data/articles.json data/id_counter.json data/stock_topics.json data/event_series.json \
-                  data/x_post_log.json index.html sitemap.xml robots.txt
+                  data/x_post_log.json index.html sitemap.xml robots.txt assets/search-index.json \
+                  404.html site.webmanifest ads.txt
           if [ -f data/places_seen.json ]; then git add data/places_seen.json; fi
-          for path in articles area category page assets/images/articles; do
+          for path in articles area category page privacy about contact assets/images/articles; do
             if [ -e "$path" ]; then
               git add -A -- "$path"
             fi
