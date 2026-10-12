@@ -3,11 +3,41 @@
   "date_jst": "2026-10-12",
   "outcomes": [
     {
+      "article_id": 198,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 197,
+      "title": "150穴のやぐらが秋の山肌に現れる - 「まんだら堂やぐら群」、10月24日から秋の限定公開",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
       "article_id": null,
-      "title": "東欧革命が生んだ芸術 - 神奈川県立近代美術館 鎌倉別館「ポーランド・ポスター２」、10月17日開幕",
+      "title": "404号線沿いの甘沼に「マクドナルド 茅ヶ崎甘沼店」 - 11月25日グランドオープン",
       "outcome": "gate_rejected",
       "reasons": [
-        "監査応答の形式異常・監査処理の例外(監査できていない)"
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "葉山の里山で馬と過ごす - 葉山道草牧場と葉山ハーモニーガーデン、2つの体験施設ガイド",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "テラスモール湘南にディズニー公式オンラインストアのポップアップが上陸 - 「Disney store.jp Japan Tour」神奈川会場、10月16日から",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
       ]
     }
   ],
