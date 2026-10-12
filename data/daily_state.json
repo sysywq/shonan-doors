@@ -2861,7 +2861,7 @@
   },
   "2026-10-12": {
    "date": "2026-10-12",
-   "status": "system_failure",
+   "status": "incomplete",
    "rounds": {
     "0": {
      "branch": "daily/2026-10-12",
@@ -2892,7 +2892,7 @@
     "2": {
      "branch": "daily/2026-10-12-r2",
      "run_id": "38187473981",
-     "started_at": "2026-10-12 09:18",
+     "started_at": "2026-10-12 12:12",
      "published_ids": [],
      "held_ids": [],
      "system_errors": [
@@ -3772,14 +3772,9 @@
      "round": 2
     }
    ],
-   "failure": {
-    "kind": "system_failure",
-    "reason": "システム障害: 企画: 補充探索: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRgDMSbyfsMFxpNK9d'}; 企画: 補充探索: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRh3i1Nsm4VKKX1CDD'}; post-audit top-up 1: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRmU7pouMSARXesG2A'}",
-    "at": "2026-10-12 09:34",
-    "run_id": "38187473981"
-   },
+   "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-12 09:34",
+   "updated_at": "2026-10-12 12:12",
    "social_pending": []
   }
  }
