@@ -1,0 +1,40 @@
+name: Recover October 12 daily publication
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/recover-daily-20261012.yml']
+permissions:
+  actions: write
+  contents: read
+jobs:
+  recover:
+    if: github.event.deleted != true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dispatch fixed daily workflow once for October 12 shortfall
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          import urllib.request
+          if datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat() != "2026-10-12":
+              raise SystemExit("Recovery date has passed; no action")
+          with open("data/articles.json", encoding="utf-8") as f:
+              count = sum(a.get("date") == "2026-10-12" and not a.get("mergedInto") for a in json.load(f))
+          if count >= 3:
+              raise SystemExit("Already published at least three articles; no action")
+          req = urllib.request.Request(
+              "https://api.github.com/repos/sysywq/shonan-doors/actions/workflows/daily-articles.yml/dispatches",
+              data=json.dumps({"ref": "main"}).encode(),
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"},
+              method="POST")
+          with urllib.request.urlopen(req) as response:
+              print("Dispatched fixed workflow:", response.status)
+          PY
