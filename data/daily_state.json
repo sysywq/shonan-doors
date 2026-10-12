@@ -4012,6 +4012,11 @@
      "refill_dispatched": true,
      "refill_dispatched_at": "2026-10-13 05:22",
      "live_ids": []
+    },
+    "1": {
+     "branch": "daily/2026-10-13-r1",
+     "run_id": "38319110747",
+     "started_at": "2026-10-13 08:25"
     }
    },
    "rejected": [
@@ -4552,7 +4557,7 @@
    ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-13 08:24",
+   "updated_at": "2026-10-13 08:25",
    "social_pending": []
   }
  }
