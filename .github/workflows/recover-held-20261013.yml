@@ -1,0 +1,77 @@
+name: October 13 Held Article Recovery
+on:
+  push:
+    branches: [repair/held-articles-20261013]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+concurrency:
+  group: held-recovery-20261013
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install anthropic
+      - name: Prepare corrected payloads on latest main
+        run: |
+          python - <<'PY'
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+          assert datetime.now(ZoneInfo('Asia/Tokyo')).date().isoformat() == '2026-10-13'
+          PY
+          cp .github/manual-holds/349.json /tmp/held-199.json
+          cp .github/manual-holds/350.json /tmp/held-200.json
+          git fetch origin main
+          git switch -c "hold-recovery/20261013-${GITHUB_RUN_ID}" origin/main
+          git config user.name "shonan-doors-bot"
+          git config user.email "bot@users.noreply.github.com"
+      - name: Recheck corrected articles with official sources
+        run: |
+          python - <<'PY'
+          import json
+          import resolve_daily_hold as r
+          import fact_audit as fa
+          client=fa.make_client()
+          results=[]
+          for id in (199,200):
+              with open(f'/tmp/held-{id}.json') as f:
+                  payload=json.load(f)
+              assert payload['requireConfirmed'] is True
+              code,message,entry=r.resolve(payload,'approve',client=client)
+              print(message,flush=True)
+              results.append(dict(id=id,code=code,message=message,published=bool(entry)))
+          with open('/tmp/held-recovery-results.json','w') as f:
+              json.dump(results,f,ensure_ascii=False,indent=2)
+          if not any(x['published'] for x in results):
+              raise SystemExit('No confirmed articles; publishing nothing')
+          PY
+      - name: Test and build
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 build.py
+          git diff --check
+      - name: Persist confirmed articles in publication PR
+        run: |
+          git add data/articles.json data/stock_topics.json data/event_series.json index.html sitemap.xml robots.txt 404.html site.webmanifest ads.txt assets/search-index.json
+          git add -A -- articles area category page privacy about contact search
+          git commit -m "content: publish corrected confirmed articles for October 13"
+          git push origin HEAD
+          gh pr create --base main --head "$(git branch --show-current)" --title "Publish corrected confirmed October 13 articles" --body "Corrects official opening hours and autumn viewing dates in held articles 199/200. Only articles that pass Fact Audit as confirmed are included. Tests and build passed. IDs and slugs preserved."
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: held-recovery-results
+          path: /tmp/held-recovery-results.json
