@@ -4002,13 +4002,554 @@
     "0": {
      "branch": "daily/2026-10-13",
      "run_id": "38297230110",
-     "started_at": "2026-10-13 04:22"
+     "started_at": "2026-10-13 04:22",
+     "published_ids": [],
+     "held_ids": [
+      199,
+      200
+     ],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "仮装して商店街をゆく - 「第6回藤沢ハロウィンウォーク2026」、10月18日に藤沢駅北口商店街で開催",
+     "dek": "NPO法人hinataboccoが主催する人気の親子ハロウィンイベントが今年も藤沢駅北口商店街で開催。仮装した子どもたちが3つのルートを歩きながら対象店舗でお菓子をもらう。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "藤沢ハロウィンウォーク",
+      "第6回藤沢ハロウィンウォーク2026",
+      "藤沢ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "藤沢",
+      "ハロウィン",
+      "子ども",
+      "商店街",
+      "イベント",
+      "親子",
+      "藤沢北口商店街",
+      "hinatabocco"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "fujisawa-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "ギターの現世代トップランナー2人が逗子に集う - 「大萩康司＆朴葵姫 ギター・デュオリサイタル」、11月23日になぎさホールで",
+     "dek": "クラシックギター界を代表する大萩康司と朴葵姫によるスペシャルデュオコンサートが、逗子文化プラザなぎさホールで開催される。ソルやグラナドスらの名曲を2本のギターが奏でる。",
+     "area": "逗子",
+     "cat": "e",
+     "link": "https://www.bunka-plazahall.com/eventinfo/25095/",
+     "subjectNames": [
+      "大萩康司＆朴葵姫 ギター・デュオリサイタル",
+      "大萩康司",
+      "朴葵姫",
+      "パク・キュヒ",
+      "大萩康司＆朴葵姫"
+     ],
+     "tags": [
+      "逗子",
+      "クラシック",
+      "ギター",
+      "コンサート",
+      "大萩康司",
+      "朴葵姫",
+      "逗子文化プラザ",
+      "音楽"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "ohagi-pakkuhi-guitar-duo-zushi",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "由比ヶ浜に市（いち）が立つ一日 - 「第29回 鎌人（かまんど）いち場」、10月25日開催",
+     "dek": "フリーマーケット、ワークショップ、文化交流、飲食ブースが鎌倉海浜公園に集結。鎌倉に縁のある人たちが主役のコミュニティ・マーケットが、今秋も由比ヶ浜地区に姿を現す。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://kamandoichiba.com/",
+     "subjectNames": [
+      "鎌人いち場",
+      "かまんど",
+      "かまんどいちば",
+      "第29回鎌人いち場",
+      "鎌人（かまんど）いち場"
+     ],
+     "tags": [
+      "鎌倉",
+      "マルシェ",
+      "由比ヶ浜",
+      "フリーマーケット",
+      "コミュニティ",
+      "秋イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "kamando-ichiba",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "揚げたてを自分好みに - 「串揚げバイキング くし葉 ららぽーと湘南平塚店」、10月9日グランドオープン",
+     "dek": "大型モール内の串揚げ・串天ブッフェ。素材を選んで自分でタイミングを決めて揚げるセルフスタイルで、串揚げのほかお寿司やスイーツ串、ジェラートまで楽しめる。84席・全席禁煙。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://www.nilax.jp/store/104",
+     "subjectNames": [
+      "串揚げバイキング くし葉 ららぽーと湘南平塚店",
+      "くし葉 ららぽーと湘南平塚店",
+      "くし葉",
+      "串揚げバイキング くし葉"
+     ],
+     "tags": [
+      "串揚げ",
+      "バイキング",
+      "食べ放題",
+      "平塚",
+      "ららぽーと湘南平塚",
+      "新店",
+      "ニラックス",
+      "くし葉"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "江戸の物語を宿場に見る - 「ザ・ストーリーオブ・東海道五十三対 国貞・国芳・広重」展、藤澤浮世絵館で11月3日まで開催中",
+     "dek": "歌川国貞・国芳・広重が手がけた幕末の浮世絵シリーズ「東海道五十三対」全55点が一堂に。旧東海道藤沢宿に立つ浮世絵館で、各宿場の故事や伝説を題材にした絵師たちの競演が楽しめる。",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "https://fujisawa-ukiyoekan.net/",
+     "subjectNames": [
+      "ザ・ストーリーオブ・東海道五十三対 国貞・国芳・広重",
+      "東海道五十三対",
+      "藤沢市藤澤浮世絵館",
+      "藤澤浮世絵館"
+     ],
+     "tags": [
+      "浮世絵",
+      "東海道",
+      "藤澤浮世絵館",
+      "歌川広重",
+      "歌川国芳",
+      "歌川国貞",
+      "辻堂",
+      "企画展",
+      "無料",
+      "東海道五十三対"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "神社の境内で発酵文化を祝う一日 - 「どぶろっくフェス其ノ十六」、10月17日に白旗神社で開催",
+     "dek": "発酵・発光・発幸と御神酒をテーマに16回目を迎える秋のフェスが、藤沢の白旗神社境内で今年も開幕。どぶろくをはじめ屋台・マルシェ・音楽ステージが揃う入場無料の一日。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.shirahata-jinja.jp/",
+     "subjectNames": [
+      "どぶろっくフェス其ノ十六",
+      "どぶろっくフェス",
+      "どぶろっくフェス2026",
+      "元祖へっころ谷"
+     ],
+     "tags": [
+      "どぶろっくフェス",
+      "発酵",
+      "白旗神社",
+      "藤沢",
+      "御神酒",
+      "マルシェ",
+      "音楽",
+      "入場無料",
+      "秋祭り"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "doburockfes-shirahata",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "昭和の温もりをまとった童画の世界へ - 「黒崎義介 - 童話の世界」展、藤沢市アートスペースで12月20日まで開催",
+     "dek": "「僕の生命線は童画である」と宣言した童画家・黒崎義介の原画を藤沢市所蔵作品から厳選。藤沢にゆかりの昔話や、子ぐまの兄弟を描いた「クロサキヱ本」など、やさしい色彩の世界が広がる入場無料の企画展。",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "https://www.city.fujisawa.kanagawa.jp/bunka/FAS/exhibition/ex20260609/index.html",
+     "subjectNames": [
+      "黒崎義介 - 童話の世界",
+      "企画展Ⅱ「黒崎義介-童話の世界」",
+      "黒崎義介",
+      "藤沢市アートスペース",
+      "FAS",
+      "エファース"
+     ],
+     "tags": [
+      "黒崎義介",
+      "童画",
+      "浮世絵",
+      "藤沢市アートスペース",
+      "FAS",
+      "辻堂",
+      "企画展",
+      "昭和レトロ",
+      "無料",
+      "キンダーブック"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "kurosaki-yoshisuke-douga-fas",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "千年の修行に勝る四日間 - 光明寺「十夜法要（お十夜）」、10月12日から材木座で開幕",
+     "dek": "浄土宗大本山・光明寺（材木座）で、500年以上の歴史を持つ「十夜法要（お十夜）」が10月12日（月・祝）から15日（木）まで執り行われている。引声念仏や練行列、稚児礼讃舞など多彩な行事が境内を彩る、鎌倉の秋を代表する大法要だ。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://komyoji-kamakura.or.jp/%E5%85%89%E6%98%8E%E5%AF%BA%E5%8D%81%E5%A4%9C%E6%B3%95%E8%A6%81/",
+     "subjectNames": [
+      "光明寺",
+      "光明寺十夜法要",
+      "光明寺のお十夜",
+      "十夜法要",
+      "お十夜",
+      "浄土宗大本山光明寺"
+     ],
+     "tags": [
+      "鎌倉",
+      "光明寺",
+      "十夜法要",
+      "お十夜",
+      "浄土宗",
+      "材木座",
+      "法要",
+      "伝統行事",
+      "秋"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "komyoji-juyaho",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "年に春秋4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に",
+     "dek": "鎌倉・浄明寺の緑に包まれた旧華頂宮邸が、2026年の秋の建物公開を10月24日（土）・25日（日）に実施する。ハーフティンバー様式の洋館内部を無料で見学できる、年に春秋合わせて4日間だけの特別な機会だ。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.city.kamakura.kanagawa.jp/keikan/k-index1.html",
+     "subjectNames": [
+      "旧華頂宮邸",
+      "旧華頂宮邸秋の建物公開",
+      "旧華頂宮邸一般公開",
+      "きゅうかちょうのみやてい"
+     ],
+     "tags": [
+      "鎌倉",
+      "旧華頂宮邸",
+      "洋館",
+      "建物公開",
+      "浄明寺",
+      "ハーフティンバー",
+      "鎌倉三大洋館",
+      "秋",
+      "無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "kyu-kachou-building-open",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "鉄棒で空を舞い、音楽とダンスで魅せる - 「AIRFOOTWORKS＋EBIKEN THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで開催",
+     "dek": "世界初の鉄棒ダンスユニットAIRFOOTWORKSと、アメリカズ・ゴット・タレント優勝者EBIKENが共演するスペシャルステージが平塚に初登場。10月24日（土）、ひらしん平塚文化芸術ホール大ホールにて15時開演。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/hall/261024_AIRFOOTWORKSEBIKEN.html",
+     "subjectNames": [
+      "AIRFOOTWORKS＋EBIKEN THE SHOWTIME！",
+      "AIRFOOTWORKS+EBIKEN THE SHOWTIME!",
+      "AIRFOOTWORKS",
+      "EBIKEN"
+     ],
+     "tags": [
+      "ダンス",
+      "エンターテインメント",
+      "AIRFOOTWORKS",
+      "EBIKEN",
+      "平塚",
+      "ひらしん平塚文化芸術ホール",
+      "公演"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "airfootworks-ebiken-showtime-hiratsuka",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "平塚で迎える朝 - 「葦」と「シャポー」、地元に愛され続ける2軒のモーニング",
+     "dek": "昭和30年代に創業した老舗が、今日も平塚駅のそばで朝の扉を開ける。洋菓子店のカフェと、自家焙煎の純喫茶。スタイルは違えど、どちらも地元の人々の「いつもの朝」を支える一軒だ。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://ashi-cake.com/cafe/",
+     "subjectNames": [
+      "湘南クリエイティブガトー 葦 平塚駅西口本店",
+      "フランス菓子 葦",
+      "葦",
+      "Ashi",
+      "喫茶シャポー",
+      "Chapeau",
+      "シャポー"
+     ],
+     "tags": [
+      "平塚",
+      "モーニング",
+      "朝食",
+      "カフェ",
+      "喫茶店",
+      "老舗",
+      "湘南クリエイティブガトー葦",
+      "喫茶シャポー",
+      "湘南グルメ",
+      "平塚駅"
+     ],
+     "articleType": "stock",
+     "topicId": "t0210",
+     "date": "2026-10-13",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で fix(保留)",
+     "round": 0
+    },
+    {
+     "title": "北鎌倉の隠れた古刹で秋の庭を静かに眺める - 「長寿寺」秋の特別拝観、10月2日から12月7日まで",
+     "dek": "足利尊氏ゆかりの北鎌倉・長寿寺が、金・土・日・祝日に限り拝観を開放。苔の庭、観音像、やぐら内の石塔など、普段は閉ざされた空間に、秋だけ足を踏み入れることができる。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.trip-kamakura.com/event/1323.html",
+     "subjectNames": [
+      "長寿寺",
+      "ちょうじゅじ",
+      "宝亀山長寿寺",
+      "宝亀山長壽寺"
+     ],
+     "tags": [
+      "鎌倉",
+      "北鎌倉",
+      "長寿寺",
+      "特別拝観",
+      "足利尊氏",
+      "紅葉",
+      "秋"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-13",
+     "eventSeriesKey": "chojuji-tokubetsu-haikan",
+     "reason": "Fact Audit で fix(保留)",
+     "round": 0
+    },
+    {
+     "title": "大かまどで炊く3種のごはんがおかわり自由 - 「大かまど飯 寅福 テラスモール湘南店」、辻堂に誕生",
+     "dek": "150kgの石のかまどと鉄の釜で炊く白米・雑穀ごはん・栗ごはんが何杯でもお替り自由。ごはんを主役に据えた和食ブランド「大かまど飯 寅福」がJR辻堂駅直結のテラスモール湘南4階にオープンした。",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "https://prtimes.jp/main/html/rd/p/000000933.000002646.html",
+     "subjectNames": [
+      "大かまど飯 寅福 テラスモール湘南店",
+      "大かまど飯 寅福",
+      "寅福",
+      "TORAFUKU"
+     ],
+     "tags": [
+      "藤沢",
+      "辻堂",
+      "テラスモール湘南",
+      "ごはん",
+      "和食",
+      "新店",
+      "大かまど飯",
+      "寅福"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店から18日経過。15日以上前の出来事は今日のニュースとして扱わない)",
+     "round": 0
+    },
+    {
+     "title": "古着、アート、レコードが集まる湘南の新拠点 - カルチャーマーケット「KENDRICKS BASED ON SHONAN」、大庭に11月開業へ",
+     "dek": "Kanoa株式会社が2026年11月、藤沢市大庭にコミュニティ型カルチャーマーケット「KENDRICKS BASED ON SHONAN」をオープン予定。古着・アート・雑貨・レコードなど多彩なジャンルが集まり、1坪から最短1か月で出店できる新しい仕組みが特徴だ。",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "https://prtimes.jp/main/html/rd/p/000000003.000189666.html",
+     "subjectNames": [
+      "KENDRICKS BASED ON SHONAN",
+      "ケンドリックス ベースドオン ショウナン",
+      "KENDRICKS"
+     ],
+     "tags": [
+      "カルチャーマーケット",
+      "藤沢",
+      "大庭",
+      "新店",
+      "マーケット",
+      "古着",
+      "アート",
+      "雑貨",
+      "KENDRICKS"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店日(openingDate)が一次情報で確認できていない。推測で補完しない)",
+     "round": 0
+    },
+    {
+     "title": "江ノ電 全15駅、それぞれの「降りる理由」——沿線観光スポットをまとめて歩く",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "昭和の海水浴文化を牽引した伝説の施設——大磯ロングビーチ跡地の今",
+     "dek": "",
+     "area": "大磯",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "1日を海から始める——茅ヶ崎・サザンビーチ〜えぼし岩の朝散歩コース",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "晴ノ鮨 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "晴ノ鮨"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "湘南平塚フランス料理 マリー・ルイーズ - 平塚の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "平塚",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "湘南平塚フランス料理 マリー・ルイーズ"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "エテ 鎌倉 - 鎌倉の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "エテ 鎌倉"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "和cafe 黒糖茶房 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "和cafe 黒糖茶房"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-13 04:22"
+   "updated_at": "2026-10-13 05:22"
   }
  }
 }
