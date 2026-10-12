@@ -2737,13 +2737,11 @@
     "area": "平塚",
     "category": "g",
     "searchIntent": "平塚駅周辺で朝食・モーニングが食べられるカフェ・喫茶店を探しており、チェーン店ではなく地元らしい雰囲気の店を知りたい",
-    "status": "held",
+    "status": "generated",
     "generatedArticleId": 199,
-    "generatedAt": "2026-10-13 04:56",
+    "generatedAt": "2026-10-13 08:38",
     "skipReason": null,
-    "createdAt": "2026-10-13",
-    "heldAt": "2026-10-13 04:56",
-    "holdReason": "Fact Audit で保留: 一次情報と矛盾する記述(contradicted)が2件 / 骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+    "createdAt": "2026-10-13"
   },
   {
     "id": "t0211",
