@@ -2892,7 +2892,40 @@
     "2": {
      "branch": "daily/2026-10-12-r2",
      "run_id": "38187473981",
-     "started_at": "2026-10-12 09:18"
+     "started_at": "2026-10-12 09:18",
+     "published_ids": [],
+     "held_ids": [],
+     "system_errors": [
+      {
+       "where": "企画: 補充探索",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRgDMSbyfsMFxpNK9d'}",
+       "at": "2026-10-12 09:34"
+      },
+      {
+       "where": "企画: 補充探索",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRh3i1Nsm4VKKX1CDD'}",
+       "at": "2026-10-12 09:34"
+      },
+      {
+       "where": "post-audit top-up 1",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRmU7pouMSARXesG2A'}",
+       "at": "2026-10-12 09:34"
+      },
+      {
+       "where": "post-audit top-up 2",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRnGEP7DhGLpgwUe5y'}",
+       "at": "2026-10-12 09:34"
+      },
+      {
+       "where": "post-audit top-up 3",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQRo47wemZcXAPz3ZY7'}",
+       "at": "2026-10-12 09:34"
+      },
+      {
+       "where": "監査: 東欧革命が生んだ芸術 - 神奈川県立近代美術館 鎌倉別館「ポーランド・ポスター２」、10月17日開幕",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfwQReccSwvSbaQrZb6PS'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      }
+     ]
     }
    },
    "rejected": [
@@ -3580,11 +3613,168 @@
      "eventSeriesKey": "",
      "reason": "公開前監査で不合格",
      "round": 1
+    },
+    {
+     "title": "東欧革命が生んだ芸術 - 神奈川県立近代美術館 鎌倉別館「ポーランド・ポスター２」、10月17日開幕",
+     "dek": "銅版画家・渡辺千尋が1989年の東欧革命直後から収集したポスターを中核に、革命前後に活躍した4人のポスター作家の作品約70点を紹介するコレクション展が鎌倉別館に登場。2027年1月31日まで開催。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.moma.pref.kanagawa.jp/exhibition/",
+     "subjectNames": [
+      "ポーランド・ポスター２ 銅版画家渡辺千尋旧蔵品から",
+      "ポーランド・ポスター2",
+      "神奈川県立近代美術館 鎌倉別館",
+      "神奈川県立近代美術館鎌倉別館",
+      "渡辺千尋"
+     ],
+     "tags": [
+      "ポーランド",
+      "ポスター芸術",
+      "美術館",
+      "コレクション展",
+      "東欧革命",
+      "渡辺千尋",
+      "鎌倉別館",
+      "神奈川県立近代美術館",
+      "秋のアート"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-12",
+     "eventSeriesKey": "moma-kamakura-polish-posters",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "海を感じながら泊まる茅ヶ崎——浜辺に近い宿と、駅から歩ける宿の選び方",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "北鎌倉をゆっくり歩く——円覚寺・東慶寺・明月院を結ぶ、半日散策ルートの歩き方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "葉山の磯で子どもと遊ぶ——一色海岸・真名瀬・森戸海岸、潮だまり観察のコツ",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "相模湾と相模川が交わる平塚の釣り場——海釣り初心者が知っておきたいポイントと狙える魚種",
+     "dek": "",
+     "area": "平塚",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "逗子で朝から寄りたい——地元に根ざしたパン屋とカフェの選び方",
+     "dek": "",
+     "area": "逗子",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "MOM’S TOUCH マムズタッチ BLiX 茅ヶ崎店 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "MOM’S TOUCH マムズタッチ BLiX 茅ヶ崎店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "Windera Cafe 鵠沼海岸店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "Windera Cafe 鵠沼海岸店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "濱時間 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "濱時間"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
     }
    ],
    "failure": null,
    "confirmed_today": 2,
-   "updated_at": "2026-10-12 09:18",
+   "updated_at": "2026-10-12 09:34",
    "social_pending": []
   }
  }
