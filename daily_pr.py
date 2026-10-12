@@ -447,6 +447,7 @@ def cmd_open(gh, meta):
 def ci_state(runs, since=None):
     """CI の実行一覧から状態を返す: success / failure / pending / none。
     since を指定すると、それ以降に作られた実行(この呼び出しで起動したもの)と実行中のものだけを見る。"""
+    runs = [r for r in runs if r.get("conclusion") != "skipped"]
     if any(r.get("status") == "completed" and r.get("conclusion") == "success" for r in runs):
         return "success"
     live = [r for r in runs if r.get("status") != "completed"]
@@ -461,16 +462,19 @@ def ci_state(runs, since=None):
 def cmd_ci(gh, meta, sleep=time.sleep, clock=time.monotonic):
     pr = gh.call("GET", f"/repos/{{repo}}/pulls/{meta['pr']}")
     sha = pr["head"]["sha"]
-    state = ci_state(gh.ci_runs(sha))
+    existing_runs = gh.ci_runs(sha)
+    state = ci_state(existing_runs)
+    previous_ids = set()
     since = None
     if state in ("none", "failure"):
+        previous_ids = {r["id"] for r in existing_runs if r.get("id") is not None}
         # 時計のずれで起動した実行を見落とさないよう、少し前の時刻を基準にする
         since = (datetime.now(timezone.utc) - timedelta(seconds=120)).strftime("%Y-%m-%dT%H:%M:%SZ")
         gh.call("POST", f"/repos/{{repo}}/actions/workflows/{CI_WORKFLOW}/dispatches", {"ref": meta["branch"]})
         print(f"CI({CI_WORKFLOW})を {meta['branch']}@{sha[:7]} で起動しました。")
     deadline = clock() + CI_TIMEOUT_SEC
     while True:
-        state = ci_state(gh.ci_runs(sha), since)
+        state = ci_state([r for r in gh.ci_runs(sha) if r.get("id") not in previous_ids], since)
         if state == "success":
             summary(f"CI 成功: {meta['branch']}@{sha[:7]}")
             return 0

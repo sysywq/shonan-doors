@@ -569,6 +569,7 @@ class MergeDecisionTest(unittest.TestCase):
 
     def test_ci_state(self):
         self.assertEqual(dpr.ci_state([]), "none")
+        self.assertEqual(dpr.ci_state([{"status": "completed", "conclusion": "skipped"}]), "none")
         self.assertEqual(dpr.ci_state([{"status": "in_progress"}]), "pending")
         self.assertEqual(dpr.ci_state([{"status": "completed", "conclusion": "failure"},
                                        {"status": "completed", "conclusion": "success"}]), "success")
@@ -664,6 +665,17 @@ class DailyPrCommandTest(unittest.TestCase):
                      {"workflow_runs": [{"head_sha": "abc", "status": "completed", "conclusion": "failure"}]}])
         gh.routes[("GET", "/repos/o/r/actions/")] = lambda _p: next(runs)
         self.assertEqual(dpr.cmd_ci(gh, META, sleep=lambda s: None), 1)
+
+    def test_ci_waits_for_new_dispatch_despite_old_failure_and_skipped_pr(self):
+        old = {"id": 1, "head_sha": "abc", "status": "completed", "conclusion": "failure", "created_at": "2099-01-01T00:00:00Z"}
+        skipped = {"id": 2, "head_sha": "abc", "status": "completed", "conclusion": "skipped"}
+        fresh = {"id": 3, "head_sha": "abc", "status": "completed", "conclusion": "success"}
+        runs = iter([{"workflow_runs": [old, skipped]}, {"workflow_runs": [old, skipped]},
+                     {"workflow_runs": [old, skipped, fresh]}])
+        gh = FakeGitHub({("GET", "/repos/o/r/pulls/7"): pr(), ("GET", "/repos/o/r/actions/"): lambda _p: next(runs),
+                         ("POST", "/repos/o/r/actions/workflows/ci.yml/dispatches"): None})
+        self.assertEqual(dpr.cmd_ci(gh, META, sleep=lambda s: None), 0)
+
 
     def merge_gh(self, **pr_kw):
         return FakeGitHub({
