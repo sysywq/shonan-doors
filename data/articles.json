@@ -6436,5 +6436,66 @@
       "openingDate": "",
       "effectiveDate": ""
     }
+  },
+  {
+    "id": 198,
+    "articleType": "news",
+    "cat": "e",
+    "area": "平塚",
+    "scene": "portrait",
+    "title": "金属に刻む庭の記憶 - 「中嶋明希展 MY GARDEN－たねをまく－」、平塚市美術館で12月27日まで開催中",
+    "dek": "銅や鉄で自然の造形を表現する金属工芸作家・中嶋明希のロビー展が、平塚市美術館で2026年12月27日まで開催中。入場無料で、テーマホール全体を使った伸びやかな立体作品が並ぶ。",
+    "link": "https://www.city.hiratsuka.kanagawa.jp/art-muse/kaisaichu.html",
+    "subjectNames": [
+      "中嶋明希展 MY GARDEN－たねをまく－",
+      "中嶋明希展 MY GARDEN",
+      "中嶋明希",
+      "Aki Nakajima"
+    ],
+    "sources": [
+      "https://www.city.hiratsuka.kanagawa.jp/art-muse/kaisaichu.html",
+      "https://x.com/HiratsukaArt",
+      "https://www.artpr.jp/hiratsuka-art/2026-schedule",
+      "https://www.city.hiratsuka.kanagawa.jp/art-muse/info1.html"
+    ],
+    "date": "2026-10-12",
+    "eventStartDate": "2026-09-15",
+    "eventEndDate": "2026-12-27",
+    "eventSeriesKey": "nakajima-aki-my-garden-hiratsuka",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "",
+    "eventOrganizerUrl": "",
+    "eventMetadataSource": "https://www.city.hiratsuka.kanagawa.jp/art-muse/kaisaichu.html",
+    "eventPerformers": [],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "https://x.com/HiratsukaArt",
+      "tiktok": ""
+    },
+    "body": "平塚市美術館のロビーとテーマホールに、金属でつくられた「庭」が広がっている。工芸作家・中嶋明希によるロビー展「MY GARDEN－たねをまく－」は、2026年9月15日から12月27日まで同館で開催中だ。入場は無料で、だれでも足を運ぶことができる。\n\n中嶋明希の制作の着想源は、湯河原にある自宅の庭だという。日々移ろう自然の様相を観察するなかで、植物や動物の種を超えた普遍的なかたちや性質を発見し、それを銅や鉄といった素材を用いて造形へと変換してきた。生命の形態をメタルに置き換えることで、自然と人工、時間と造形のあいだにある関係を静かに問いかける作品群は、見る者に独特の感覚体験をもたらす。\n\n今回の展示では、テーマホールの大空間を最大限に活かした伸びやかな立体作品が並ぶ。天井に向かって伸びる金属の造形は、植物が芽吹く姿とも、生き物が躍動する瞬間とも映る。「たねをまく」というサブタイトルには、鑑賞者それぞれの中に何かが芽生えてほしいという意が込められているようだ。同館では現在、企画展「生誕110年 工藤甲人展」（11月23日まで）や「シュヴェグジュダと湘南の画家たち」（11月23日まで）も同時開催されており、異なる時代・素材・発想の作品を一日で巡ることができる。\n\n開館時間は9時30分から17時（入館は16時30分まで）。休館日は月曜日（祝日の場合は翌火曜日）。平塚市美術館はJR東海道線平塚駅(東口改札)北口、または西口から徒歩約20分の場所に位置する。秋から冬にかけて足を運ぶ一つの理由として、無料で楽しめるこのロビー展を選択肢に加えてみてはいかがだろうか。",
+    "tags": [
+      "平塚市美術館",
+      "中嶋明希",
+      "金属工芸",
+      "彫刻",
+      "ロビー展",
+      "無料",
+      "アート"
+    ],
+    "slug": "hiratsuka-event-0198",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催期間2026-09-15〜2026-12-27",
+      "reason": "開催中(終了まであと76日)",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
   }
 ]
