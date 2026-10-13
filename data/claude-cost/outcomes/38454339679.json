@@ -1,0 +1,101 @@
+{
+  "run_id": "38454339679",
+  "date_jst": "2026-10-14",
+  "outcomes": [
+    {
+      "article_id": null,
+      "title": "地元の書店で、地元の絵本作家に会う - おおいじゅんこ「おなかぺこぺこめだかさん」原画展、10月20日から長谷川書店ネスパ茅ヶ崎店で",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "揚げる、選ぶ、食べる - 串揚げバイキング「くし葉」がららぽーと湘南平塚に10月9日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "空中で踊るエアダンスが平塚に上陸 - AIRFOOTWORKS+EBIKEN「THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "仮装した子どもたちが商店街を歩く - 「第6回藤沢ハロウィンウォーク2026」、10月18日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大船の仲通商店街をお菓子とともに歩く - 「第8回大船ハロウィンウォーク2026」、10月31日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "年に4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "今だけ大磯で会えるかながわブランドの秋野菜 - 「大磯マコモ」、10月から収穫シーズン本番へ",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯港が毎月第1土曜の市（いち）に変わる - 「コネクトマルシェ/さかなの朝市」、次回は11月1日",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯に移り住むということ - 交通・子育て支援・保育事情、リアルな暮らしの指標",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "映画が生活に溶け込む町 - 逗子の映画文化とCINEMA AMIGOが育てたもの",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件",
+        "人物の発言(他メディアの取材コメント流用の疑い)を含む"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "1坪から湘南に自分の店を持つ - カルチャーマーケット「KENDRICKS BASED ON SHONAN」、藤沢・大庭に開業へ",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "障がい福祉事業所の手づくりが平塚市役所に集まる - 秋の展示即売会、9月29日に公式発表",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
