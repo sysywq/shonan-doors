@@ -4581,13 +4581,521 @@
     "0": {
      "branch": "daily/2026-10-14",
      "run_id": "38454339679",
-     "started_at": "2026-10-14 04:22"
+     "started_at": "2026-10-14 04:22",
+     "published_ids": [],
+     "held_ids": [],
+     "system_errors": [
+      {
+       "where": "企画: 補充探索",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpWJt9VdH2fyPX2YDhe'}",
+       "at": "2026-10-14 04:52"
+      },
+      {
+       "where": "post-audit top-up 1",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpWR2F1Pn81WFvsZthr'}",
+       "at": "2026-10-14 04:52"
+      },
+      {
+       "where": "post-audit top-up 2",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpWRxZAGgMU5ATiQhyD'}",
+       "at": "2026-10-14 04:52"
+      },
+      {
+       "where": "post-audit top-up 3",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpWSwaT6SbRqGiV3sQe'}",
+       "at": "2026-10-14 04:52"
+      },
+      {
+       "where": "監査: 年に4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に開催",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpVpcHfm7jrcuDre1vJ'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      },
+      {
+       "where": "監査: 今だけ大磯で会えるかながわブランドの秋野菜 - 「大磯マコモ」、10月から収穫シーズン本番へ",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpW3N1YJubMtaZsKZvb'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      },
+      {
+       "where": "監査: 大磯港が毎月第1土曜の市（いち）に変わる - 「コネクトマルシェ/さかなの朝市」、次回は11月1日",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-11-01 at 00:00 UTC.'}, 'request_id': 'req_011CfzpWJ24JD6xcwPvNHR7z'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      }
+     ]
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "地元の書店で、地元の絵本作家に会う - おおいじゅんこ「おなかぺこぺこめだかさん」原画展、10月20日から長谷川書店ネスパ茅ヶ崎店で",
+     "dek": "茅ヶ崎市在住の絵本作家・おおいじゅんこさんの新刊刊行を記念した原画展が、10月20日から11月8日まで長谷川書店ネスパ茅ヶ崎店で開催される。初日は作者によるトークと「絵本とおはなし会」も。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://x.com/junkooi3",
+     "subjectNames": [
+      "おおいじゅんこ絵本原画展",
+      "おなかぺこぺこめだかさん原画展",
+      "おおいじゅんこ"
+     ],
+     "tags": [
+      "茅ヶ崎",
+      "絵本",
+      "絵本原画展",
+      "おおいじゅんこ",
+      "長谷川書店",
+      "ネスパ茅ヶ崎",
+      "子ども",
+      "アリス館"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "ooijunko-gahara-nespa-chigasaki",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "揚げる、選ぶ、食べる - 串揚げバイキング「くし葉」がららぽーと湘南平塚に10月9日グランドオープン",
+     "dek": "ニラックス株式会社が運営する串揚げバイキング「くし葉」の2号店が、ららぽーと湘南平塚1階に誕生。卓上で自分好みに揚げたての串を楽しむ体験型の食べ放題レストランで、84席を構える。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://prtimes.jp/main/html/rd/p/000001245.000033462.html",
+     "subjectNames": [
+      "くし葉 ららぽーと湘南平塚店",
+      "串揚げバイキング くし葉 ららぽーと湘南平塚店",
+      "くし葉",
+      "くしよう"
+     ],
+     "tags": [
+      "平塚",
+      "ららぽーと湘南平塚",
+      "グルメ",
+      "串揚げ",
+      "食べ放題",
+      "バイキング",
+      "新店",
+      "ニラックス"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "空中で踊るエアダンスが平塚に上陸 - AIRFOOTWORKS+EBIKEN「THE SHOWTIME！」、10月24日にひらしん平塚文化芸術ホールで",
+     "dek": "世界初の鉄棒ダンスユニットAIRFOOTWORKSと、アメリカズ・ゴット・タレント優勝者EBIKENが平塚で共演。圧倒的な身体表現と卓越したテクニックが凝縮したスペシャルステージ。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/hall/261024_AIRFOOTWORKSEBIKEN.html",
+     "subjectNames": [
+      "AIRFOOTWORKS",
+      "EBIKEN",
+      "AIRFOOTWORKS+EBIKEN THE SHOWTIME！",
+      "エアフットワークス"
+     ],
+     "tags": [
+      "平塚",
+      "ひらしん平塚文化芸術ホール",
+      "AIRFOOTWORKS",
+      "EBIKEN",
+      "エアダンス",
+      "ダンス",
+      "公演"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "airfootworks-ebiken-hiratsuka",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "仮装した子どもたちが商店街を歩く - 「第6回藤沢ハロウィンウォーク2026」、10月18日開催",
+     "dek": "NPO法人hinataboccoが主催する親子向けハロウィンイベントが今年も藤沢駅北口商店街を舞台に開催。仮装した子どもたちが商店街の参加店舗をめぐってお菓子をもらいながら歩く、地域密着型の人気イベント。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "藤沢ハロウィンウォーク",
+      "第6回藤沢ハロウィンウォーク",
+      "第6回藤沢ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "藤沢",
+      "ハロウィン",
+      "商店街",
+      "親子",
+      "hinatabocco",
+      "地域イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "fujisawa-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大船の仲通商店街をお菓子とともに歩く - 「第8回大船ハロウィンウォーク2026」、10月31日開催",
+     "dek": "NPO法人hinataboccoが主催する大船ハロウィンウォークが今年も開催。仮装した子どもたちが大船仲通商店街の参加店舗をめぐり、お菓子をもらいながら地域を歩く親子向けイベント。今年で8回目。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://hinatabocco.org/event-1",
+     "subjectNames": [
+      "大船ハロウィンウォーク",
+      "第8回大船ハロウィンウォーク",
+      "第8回大船ハロウィンウォーク2026",
+      "大船ハロウィンウォーク2026",
+      "hinatabocco",
+      "ヒナタボッコ"
+     ],
+     "tags": [
+      "鎌倉",
+      "大船",
+      "ハロウィン",
+      "商店街",
+      "親子",
+      "hinatabocco",
+      "地域イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "ofuna-halloween-walk",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "年に4日だけ洋館の扉が開く - 旧華頂宮邸「秋の建物公開」、10月24・25日に開催",
+     "dek": "鎌倉・浄明寺の緑の中にたたずむ国登録有形文化財「旧華頂宮邸」が、秋の建物公開を10月24日・25日の2日間実施する。普段は庭園のみの見学だが、この期間だけ1929年築のハーフティンバー様式の洋館内部に足を踏み入れられる。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.city.kamakura.kanagawa.jp/keikan/k-index1.html",
+     "subjectNames": [
+      "旧華頂宮邸",
+      "きゅうかちょうのみやてい"
+     ],
+     "tags": [
+      "旧華頂宮邸",
+      "鎌倉三大洋館",
+      "建物公開",
+      "浄明寺",
+      "洋館",
+      "有形文化財",
+      "秋",
+      "鎌倉"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "kyu-kachonomiya-aki-kokai",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "今だけ大磯で会えるかながわブランドの秋野菜 - 「大磯マコモ」、10月から収穫シーズン本番へ",
+     "dek": "大磯マコモ研究会が育てるマコモタケ「大磯マコモ」が今年も収穫シーズンを迎えた。かながわブランドに認証された希少な野菜は、大磯港そばのOISO CONNECTや大磯駅前の地場屋ほっこりなどで販売される。旬は11月上旬まで。",
+     "area": "大磯",
+     "cat": "l",
+     "link": "https://www.town.oiso.kanagawa.jp/soshiki/sangyokankoubu/sangyo/tanto/nourinsuisan/nousanbutsu/13096.html",
+     "subjectNames": [
+      "大磯マコモ",
+      "大磯マコモ研究会",
+      "おおいそマコモ"
+     ],
+     "tags": [
+      "大磯マコモ",
+      "マコモタケ",
+      "かながわブランド",
+      "大磯",
+      "秋野菜",
+      "OISO CONNECT",
+      "地産地消"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大磯港が毎月第1土曜の市（いち）に変わる - 「コネクトマルシェ/さかなの朝市」、次回は11月1日",
+     "dek": "大磯港の賑わい創出施設「OISO CONNECT」前で毎月第1土曜日に開かれる「コネクトマルシェ」と「さかなの朝市」。地元農家が旬の野菜を直売し、大磯二宮漁業協同組合が水揚げ直後の魚を販売する、大磯ならではの朝市だ。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "https://www.town.oiso.kanagawa.jp/isotabi/eat/pagedate/19686.html",
+     "subjectNames": [
+      "コネクトマルシェ",
+      "さかなの朝市",
+      "OISO CONNECT",
+      "大磯港賑わい創出施設",
+      "大磯コネクト",
+      "OISOコネクト"
+     ],
+     "tags": [
+      "コネクトマルシェ",
+      "さかなの朝市",
+      "大磯港",
+      "OISO CONNECT",
+      "大磯",
+      "朝市",
+      "地産地消",
+      "漁協"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "oiso-connect-marche",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大磯に移り住むということ - 交通・子育て支援・保育事情、リアルな暮らしの指標",
+     "dek": "海と丘陵に囲まれた小さな町・大磯町。観光地としてのイメージが先行しがちだが、JR東海道線の利便性や充実した子育て支援制度を背景に、移住先として本格的に検討する家族が増えている。交通アクセスから保育施設、医療費助成まで、暮らしの具体的な指標をまとめた。",
+     "area": "大磯",
+     "cat": "l",
+     "link": "https://www.town.oiso.kanagawa.jp/soshiki/seisaku/seisaku/tantou/ijyu/index.html",
+     "subjectNames": [
+      "大磯町",
+      "おおいそまち",
+      "Oiso Town"
+     ],
+     "tags": [
+      "大磯",
+      "移住",
+      "暮らし",
+      "子育て",
+      "子育て支援",
+      "保育",
+      "アクセス",
+      "交通",
+      "医療費助成",
+      "湘南",
+      "空き家バンク",
+      "定住"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "映画が生活に溶け込む町 - 逗子の映画文化とCINEMA AMIGOが育てたもの",
+     "dek": "「太陽の季節」のロケ地として刻まれた昭和の記憶から、海辺のシネマカフェ、砂浜に出現する野外映画館まで。逗子という町と映画の深い関係を、文化史の視点から読み解く。",
+     "area": "逗子",
+     "cat": "c",
+     "link": "https://cinema-amigo.com/",
+     "subjectNames": [
+      "CINEMA AMIGO",
+      "シネマアミーゴ",
+      "Cinema Amigo",
+      "BASE合同会社",
+      "BASE LLC"
+     ],
+     "tags": [
+      "逗子",
+      "映画文化",
+      "CINEMA AMIGO",
+      "シネマアミーゴ",
+      "逗子海岸映画祭",
+      "CINEMA CARAVAN",
+      "太陽の季節",
+      "シネマカフェ",
+      "文化",
+      "湘南"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-10-14",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "1坪から湘南に自分の店を持つ - カルチャーマーケット「KENDRICKS BASED ON SHONAN」、藤沢・大庭に開業へ",
+     "dek": "古着、アート、レコード、クラフトなど多様なジャンルの出店者が集まる「1坪テナントモール」が藤沢市大庭に誕生予定。Kanoa株式会社が運営し、個人から法人まで最短1カ月から出店できるスタイルが特徴。",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "https://prtimes.jp/main/html/rd/p/000000003.000189666.html",
+     "subjectNames": [
+      "KENDRICKS BASED ON SHONAN",
+      "ケンドリックス",
+      "ケンドリックス ベースド オン ショウナン",
+      "KENDRICKS"
+     ],
+     "tags": [
+      "藤沢",
+      "大庭",
+      "カルチャーマーケット",
+      "テナントモール",
+      "KENDRICKS",
+      "新店舗",
+      "出店"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店日(openingDate)が一次情報で確認できていない。推測で補完しない)",
+     "round": 0
+    },
+    {
+     "title": "障がい福祉事業所の手づくりが平塚市役所に集まる - 秋の展示即売会、9月29日に公式発表",
+     "dek": "平塚市の障がい福祉事業所を利用する人たちが職員やボランティアと製作した手づくり品を展示・販売するイベントが平塚市役所で開催予定。地域の中にある障がい福祉事業所の日常を知る貴重な機会として毎年開かれている。",
+     "area": "平塚",
+     "cat": "c",
+     "link": "https://www.city.hiratsuka.kanagawa.jp/press/index.html",
+     "subjectNames": [
+      "秋の展示即売会",
+      "平塚市地域作業所連絡会"
+     ],
+     "tags": [
+      "障がい福祉",
+      "展示即売会",
+      "平塚市役所",
+      "手づくり",
+      "地域福祉",
+      "平塚"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開催日(eventStartDate)が一次情報で確認できていない)",
+     "round": 0
+    },
+    {
+     "title": "日本最初の禅宗専門道場・建長寺——1253年の開創から続く境内の歩き方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "海辺の町のパン選び——葉山で地元に愛されるベーカリーと、その楽しみ方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "大磯に暮らすという選択——海と歴史と、子育て世代が感じるリアル",
+     "dek": "",
+     "area": "大磯",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "相模湾を見下ろす梅の段々畑——二宮「吾妻山〜中村農園」梅めぐりの歩き方",
+     "dek": "",
+     "area": "二宮",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "長谷川書店 ネスパ茅ヶ崎店 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "長谷川書店 ネスパ茅ヶ崎店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "映画が生活に溶け込む町——逗子の映画文化とCINEMA AMIGOが育てたもの",
+     "dek": "",
+     "area": "逗子",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "肉汁餃子のダンダダン 茅ヶ崎店 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "肉汁餃子のダンダダン 茅ヶ崎店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "NOBU Shokudou/cafe - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "NOBU Shokudou/cafe"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-10-14 04:22"
+   "updated_at": "2026-10-14 04:52"
   }
  }
 }
