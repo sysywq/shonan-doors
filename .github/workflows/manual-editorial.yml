@@ -6,16 +6,35 @@ on:
         description: editorial/manual/<slug>/article.json
         required: true
         type: string
+      r2_prefix:
+        description: Optional R2 object prefix containing article images
+        required: false
+        type: string
 permissions:
   contents: write
   pull-requests: write
 jobs:
   preview:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+      R2_BUCKET: shonan-doors-editorial
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
+      - name: Fetch editorial images from private R2
+        if: ${{ inputs.r2_prefix != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "${{ inputs.package }}"
+          DEST="$(dirname "${{ inputs.package }}")"
+          aws s3 cp "s3://$R2_BUCKET/${{ inputs.r2_prefix }}/" "$DEST/" \
+            --recursive --endpoint-url "$R2_ENDPOINT" --no-progress
       - name: Prepare manual article
         run: python manual_editorial.py prepare --input "${{ inputs.package }}"
       - name: Validate
@@ -33,4 +52,4 @@ jobs:
           git add data/articles.json assets/images/articles articles area category page index.html sitemap.xml robots.txt 404.html 2>/dev/null || true
           git commit -m "editorial: prepare manual article preview"
           git push origin "HEAD:refs/heads/$BRANCH"
-          gh pr create --draft --base main --head "$BRANCH" --title "Manual Editorial Preview" --body "手動記事の確認用PRです。確認後にマージしてください。"
+          gh pr create --draft --base main --head "$BRANCH" --title "Manual Editorial Preview" --body "手動記事の確認用PRです。R2から非公開画像を取得し、確認用ビルドを生成しています。確認後にマージしてください。"
