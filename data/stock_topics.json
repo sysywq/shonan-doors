@@ -2711,10 +2711,10 @@
     "area": "鎌倉",
     "category": "c",
     "searchIntent": "建長寺に参拝・観光に訪れる前に、境内の七堂伽藍・仏殿・唐門・天源院など見どころの意味や歴史的背景を知った上でゆっくり歩きたい。既存の「stock/鎌倉/観光 日本最初の禅宗専門道場、建長寺」は概要どまりで、訪問実用情報と歴史読み物を統合した深掘り記事を求めている",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「建長寺」が既存記事id:54と一致",
     "createdAt": "2026-10-13"
   },
   {
@@ -2750,10 +2750,10 @@
     "area": "大磯",
     "category": "l",
     "searchIntent": "大磯への移住・定住を検討しており、交通アクセス・家賃相場・保育事情・地域コミュニティなど、観光情報ではなく生活者目線のリアルな情報を知りたい。既存の「大磯の暮らしのリズム」はライフスタイル紹介にとどまり、移住検討者向けの具体的指標が不足している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「おおいそ」が既存記事id:171と一致",
     "createdAt": "2026-10-13"
   },
   {
@@ -2776,10 +2776,10 @@
     "area": "葉山",
     "category": "g",
     "searchIntent": "葉山に観光や散策で訪れた、または在住する人が、チェーン店にない個性派・地元密着のパン屋・ベーカリーを探しており、場所・特徴・おすすめ商品の手がかりを知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「ブレドール」が既存記事id:111と一致",
     "createdAt": "2026-10-13"
   },
   {
@@ -2789,10 +2789,10 @@
     "area": "二宮",
     "category": "t",
     "searchIntent": "冬〜早春に二宮エリアで梅を見たいと考えており、吾妻山公園の菜の花と組み合わせて楽しめる中村農園などの梅畑の場所・見頃の時期・アクセスを知りたい。既存の「吾妻山公園 菜の花」記事とは異なる梅の切り口で、季節が若干重なるが検索意図が分離している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "候補タイトルに登場する「中村農園（二宮）」について、二宮固有の梅農園・梅の里として公式サイト・公式SNS等の一次情報が確認できなかった。また、二宮唯一の梅の名所であった徳富蘇峰堂の梅園は2022年12月末に閉園済みで記事化不可。吾妻山公園内に梅が存在する可能性はあるが、公式の花情報ページに梅の項目が独立して掲載されておらず、「梅の段々畑」「梅めぐり」として成立させるだけの一次情報が揃わない。情報源ポリシー（一次情報で確認できない事実は書かない）に照らし、信頼性のある記事を構成できないためskip。",
     "createdAt": "2026-10-13"
   }
 ]

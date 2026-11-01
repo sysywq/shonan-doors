@@ -6675,5 +6675,214 @@
       "平塚駅"
     ],
     "slug": "hiratsuka-gourmet-0199"
+  },
+  {
+    "id": 251,
+    "articleType": "news",
+    "cat": "e",
+    "area": "藤沢",
+    "scene": "festival",
+    "title": "藤沢駅前がジャズで揺れる一日 - 「湘南ふじさわジャズミーティング Vol.7」、11月7日に3会場で開催",
+    "dek": "地元藤沢を愛する商店主や企業経営者、ジャズを愛する仲間が作り上げた屋外ジャズイベントの第7弾。藤沢駅北口周辺の3会場に湘南ゆかりのプロ・アマチュアミュージシャンが集い、終日無料で楽しめる音楽祭を届ける。",
+    "link": "https://sfjm.info/",
+    "subjectNames": [
+      "湘南ふじさわジャズミーティング",
+      "SHONAN FUJISAWA JAZZ MEETING",
+      "ふじさわジャズミーティング"
+    ],
+    "sources": [
+      "https://sfjm.info/",
+      "https://x.com/sfjmofficial"
+    ],
+    "date": "2026-11-02",
+    "eventStartDate": "2026-11-07",
+    "eventEndDate": "",
+    "eventSeriesKey": "shonan-fujisawa-jazz-meeting",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "",
+    "eventOrganizerUrl": "https://sfjm.info/",
+    "eventMetadataSource": "https://sfjm.info/",
+    "eventPerformers": [
+      {
+        "name": "矢野沙織カルテット",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "松島啓之カルテット",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "中野渡章子とGate4 St. Trombones",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "福島ミサト＋Mr. Jazz Quartet",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "しろくま楽団",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "日本大学生物資源科学部ジャズ音楽研究会「羅刹」",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "azbil music friends",
+        "type": "PerformingGroup"
+      }
+    ],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "https://www.facebook.com/sfjmofficial/",
+      "x": "https://x.com/sfjmofficial",
+      "tiktok": ""
+    },
+    "body": "毎年11月に藤沢駅前を丸ごとジャズに染める「湘南ふじさわジャズミーティング」が、2026年は11月7日（土）に7回目の開催を迎える。会場はサンパール広場（パークステージ）、サンパレット広場、北口地下広場の3カ所で、観覧はすべて無料だ。\n\n「市民による市民のための音楽祭」をコンセプトに2020年に産声を上げたこのイベントは、湘南・藤沢ゆかりのプロミュージシャンとアマチュアバンドが一堂に会する場として地域に定着してきた。ジャズだけにとどまらず、ボサノバやラテン、ゴスペルなど幅広いジャンルの生演奏が街に溢れるのが特徴で、買い物客や通行人も自然と足を止める光景が毎回見られる。\n\n2026年の出演ラインナップには、矢野沙織カルテット、松島啓之カルテット、中野渡章子とGate4 St. Trombones、福島ミサト＋Mr. Jazz Quartet、しろくま楽団、日本大学生物資源科学部ジャズ音楽研究会「羅刹」、azbil music friendsなど多彩な顔ぶれが並んでいる。また、出演者を公募するジャズストリートとキタチカジャズの参加型ステージも設けられており、地元のアマチュア演奏家が表現の場を持てる仕掛けも継続している。\n\nさわやかな晩秋の風に乗ってジャズが流れる藤沢駅前。仕事帰りや週末の買い物のついでに立ち寄れる気軽さも、このイベントならではの魅力だ。公式サイトでは出演アーティストの詳細やタイムスケジュールが公開されている。",
+    "tags": [
+      "ジャズ",
+      "音楽フェス",
+      "藤沢",
+      "藤沢駅",
+      "無料",
+      "野外ライブ"
+    ],
+    "slug": "fujisawa-event-0251",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-07",
+      "reason": "開催まであと5日",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
+  },
+  {
+    "id": 252,
+    "articleType": "news",
+    "cat": "e",
+    "area": "茅ヶ崎",
+    "scene": "farm",
+    "title": "里山で食と農と音楽が交わる秋の一日 - 「HARVEST PARK 2026」、11月3日に茅ヶ崎里山公園で開催",
+    "dek": "茅ヶ崎在住のシンガーソングライター・Caravanらが主催する手作りの収穫祭が今年も文化の日に開催。キッチンカーや物販、子ども向けワークショップも充実し、入場無料で誰でも参加できる。",
+    "link": "https://www.harvestpark-chigasaki.com/",
+    "subjectNames": [
+      "HARVEST PARK",
+      "ハーベストパーク",
+      "HARVEST PARK 2026"
+    ],
+    "sources": [
+      "https://www.harvestpark-chigasaki.com/",
+      "https://www.chigasaki-kankou.org/topics/817/"
+    ],
+    "date": "2026-11-02",
+    "eventStartDate": "2026-11-03",
+    "eventEndDate": "",
+    "eventSeriesKey": "harvest-park-chigasaki",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "HARVEST PARK実行委員会",
+    "eventOrganizerUrl": "https://www.harvestpark-chigasaki.com/",
+    "eventMetadataSource": "https://www.harvestpark-chigasaki.com/",
+    "eventPerformers": [
+      {
+        "name": "Caravan",
+        "type": "Person"
+      }
+    ],
+    "address": "神奈川県茅ヶ崎市芹沢1030",
+    "access": "JR茅ヶ崎駅北口より茅50系統バス「芹沢入口」下車、徒歩約5分",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "https://www.instagram.com/harvest_park/",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "茅ヶ崎市芹沢の神奈川県立茅ヶ崎里山公園に毎年11月3日（文化の日）の恒例となったフリーイベント「HARVEST PARK」が、2026年も同日に開催される。時間は10:00〜16:00、入場無料だ。\n\nこのイベントは、茅ヶ崎在住のシンガーソングライター・Caravanとはちいち農園を中心とするHARVEST PARK実行委員会が主催している。茅ヶ崎北部の里山エリアが抱える不法投棄の問題に楽しみながら向き合おうという思いを出発点に2023年にスタートし、初回から1万5000人が来場するほどの盛況ぶりを見せた。\n\n「食×農×音楽」をテーマに、プロミュージシャンによるメインステージのライブを軸に、農や環境問題をテーマにしたトークセッション、地産食材を使ったキッチンカー、物販ブース、子ども向けのワークショップなどが多目的広場を彩る。環境への配慮から会場内にはごみ箱を設置しない「ごみを出さないフェス」の姿勢を貫いており、来場者に持ち帰りを呼びかけているのも特徴だ。当日は茅ヶ崎駅北口と湘南台駅から会場直通のシャトルバスも運行される（協力金として500円以上の寄付を求める）。\n\n秋色に染まった里山の田園風景の中で過ごす、もう一つの茅ヶ崎の姿がここにある。「論より行動」をスローガンに積み重ねてきた地元コミュニティの熱量を、秋の日差しの下で体感しに行ってみたい。アクセスはJR茅ヶ崎駅北口より茅50系統バスで「芹沢入口」下車、徒歩約5分。",
+    "tags": [
+      "茅ヶ崎",
+      "里山",
+      "音楽",
+      "フリーイベント",
+      "収穫祭",
+      "環境",
+      "無料",
+      "子ども"
+    ],
+    "slug": "chigasaki-event-0252",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-03",
+      "reason": "開催まであと1日",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
+  },
+  {
+    "id": 253,
+    "articleType": "news",
+    "cat": "e",
+    "area": "平塚",
+    "scene": "garden",
+    "title": "スポーツも、グルメも、アートも - 花菜ガーデン「GO!GO!オータムフェスティバル2026」、11月7日から開幕",
+    "dek": "平塚市の県立花と緑のふれあいセンター「花菜ガーデン」が秋の大型イベントを展開。3つの柱で秋の園内をまるごと楽しめる企画が11月29日まで続く。入園料が別途必要。",
+    "link": "https://kana-garden.com/event/autumnfestival2026/",
+    "subjectNames": [
+      "花菜ガーデン",
+      "神奈川県立花と緑のふれあいセンター",
+      "GO!GO!オータムフェスティバル2026",
+      "GO GO オータムフェスティバル"
+    ],
+    "sources": [
+      "https://kana-garden.com/event/autumnfestival2026/",
+      "https://kana-garden.com/event/cat/event/"
+    ],
+    "date": "2026-11-02",
+    "eventStartDate": "2026-11-07",
+    "eventEndDate": "2026-11-29",
+    "eventSeriesKey": "kanagarden-autumn-festival",
+    "eventPrice": "",
+    "eventTicketUrl": "",
+    "eventOrganizer": "",
+    "eventOrganizerUrl": "https://kana-garden.com/",
+    "eventMetadataSource": "https://kana-garden.com/event/autumnfestival2026/",
+    "eventPerformers": [],
+    "address": "神奈川県平塚市寺田縄496-1",
+    "access": "",
+    "hours": "9:00〜17:00",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "https://x.com/kanagarden_2010",
+      "tiktok": ""
+    },
+    "body": "神奈川県立花と緑のふれあいセンター「花菜ガーデン」（平塚市寺田縄）で、秋の恒例イベント「GO!GO!オータムフェスティバル2026」が11月7日（土）から11月29日（日）まで開催される。「スポーツ」「グルメ」「アート」を柱に、園内のさまざまな場所で期間中イベントが次々と展開される構成だ。\n\n例年秋のバラシーズンと重なるこの時期の花菜ガーデンは、バラ以外にも多様なコンテンツが楽しめる。期間中はステージイベントとしてよさこいやキッズダンスの発表、キッズフラ教室の発表会（花菜ステージ）なども予定されている。子どもが楽しめる体験型の企画や、秋野菜の収穫体験など、農業テーマパークならではのプログラムも充実している。\n\nまた、今年は特別企画として通常ペット同伴入園ができない園内に愛犬と入れる「わんわんデー」が2026年11月11日(水)、28日(土)（各日定員あり、参加費300円）。バラ園を散策したり広場でのんびりしたりと、愛犬との特別な秋の時間を楽しめる。さらに薪能「羽衣」の開催日時は2026年11月8日(日) 17:00〜18:00とアナウンスされている。\n\n花菜ガーデンはJR平塚駅より路線バスでアクセスでき、富士山が見えることでも知られる。秋バラと季節の草花が見ごろを迎えるこの季節に、多彩なプログラムを一緒に楽しめる贅沢な空間が広がる。",
+    "tags": [
+      "花菜ガーデン",
+      "平塚",
+      "秋バラ",
+      "アウトドア",
+      "ファミリー",
+      "イベント",
+      "スポーツ"
+    ],
+    "slug": "hiratsuka-event-0253",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-07",
+      "reason": "開催まであと5日",
+      "announcementDate": "2026-09-08",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
   }
 ]
