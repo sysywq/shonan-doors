@@ -179,5 +179,29 @@
     "area": "鎌倉",
     "category": "e",
     "createdAt": "2026-10-13"
+  },
+  {
+    "seriesKey": "shonan-fujisawa-jazz-meeting",
+    "canonicalName": "藤沢駅前がジャズで揺れる一日 - 「湘南ふじさわジャズミーティング Vol.7」、11月7日に3会場で開催",
+    "aliases": [],
+    "area": "藤沢",
+    "category": "e",
+    "createdAt": "2026-11-02"
+  },
+  {
+    "seriesKey": "harvest-park-chigasaki",
+    "canonicalName": "里山で食と農と音楽が交わる秋の一日 - 「HARVEST PARK 2026」、11月3日に茅ヶ崎里山公園で開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-11-02"
+  },
+  {
+    "seriesKey": "kanagarden-autumn-festival",
+    "canonicalName": "スポーツも、グルメも、アートも - 花菜ガーデン「GO!GO!オータムフェスティバル2026」、11月7日から開幕",
+    "aliases": [],
+    "area": "平塚",
+    "category": "e",
+    "createdAt": "2026-11-02"
   }
 ]
