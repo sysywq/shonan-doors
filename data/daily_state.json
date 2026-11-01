@@ -5379,13 +5379,177 @@
     "0": {
      "branch": "daily/2026-11-02",
      "run_id": "41341413307",
-     "started_at": "2026-11-02 04:22"
+     "started_at": "2026-11-02 04:22",
+     "published_ids": [
+      251,
+      252,
+      253
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "神奈川県初出店のロースターが本鵠沼に - 「ライブコーヒー 湘南藤沢 The PIER店」、11月3日グランドオープン",
+     "dek": "1955年創業の老舗コーヒー豆ロースター「ライブコーヒー」が、藤沢市本鵠沼に神奈川県初の直営店をオープン。全40種のコーヒー豆を試飲しながら選べる「豆問屋のファクトリー」がいよいよ湘南に誕生する。",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "https://live-coffee.com/",
+     "subjectNames": [
+      "ライブコーヒー 湘南藤沢 The PIER店",
+      "ライブコーヒー",
+      "LIVE COFFEE",
+      "ライブコーヒー湘南藤沢ザピア",
+      "ライブコーヒー株式会社"
+     ],
+     "tags": [
+      "コーヒー",
+      "カフェ",
+      "新店",
+      "藤沢",
+      "本鵠沼",
+      "グルメ",
+      "ロースター",
+      "テイクアウト"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-02",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "日本最初の禅宗専門道場・建長寺——1253年の開創から続く境内の歩き方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "海辺の町のパン選び——葉山で地元に愛されるベーカリーと、その楽しみ方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "大磯に暮らすという選択——海と歴史と、子育て世代が感じるリアル",
+     "dek": "",
+     "area": "大磯",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "映画が生活に溶け込む町——逗子の映画文化とCINEMA AMIGOが育てたもの",
+     "dek": "",
+     "area": "逗子",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "相模湾を見下ろす梅の段々畑——二宮「吾妻山〜中村農園」梅めぐりの歩き方",
+     "dek": "",
+     "area": "二宮",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "ジュンク堂書店 藤沢店 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "ジュンク堂書店 藤沢店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "セカンドストリート茅ヶ崎店 - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "セカンドストリート茅ヶ崎店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "江之島亭 - 藤沢の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "江之島亭"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-11-02 04:22"
+   "updated_at": "2026-11-02 04:52"
   }
  }
 }
