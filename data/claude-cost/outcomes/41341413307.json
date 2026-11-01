@@ -1,0 +1,27 @@
+{
+  "run_id": "41341413307",
+  "date_jst": "2026-11-02",
+  "outcomes": [
+    {
+      "article_id": 251,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 252,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 253,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "神奈川県初出店のロースターが本鵠沼に - 「ライブコーヒー 湘南藤沢 The PIER店」、11月3日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
