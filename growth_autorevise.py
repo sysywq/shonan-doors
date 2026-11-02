@@ -68,7 +68,9 @@ def eligible(tables, articles, signal, now):
 
 def draft(client, article, query):
     """Return only revised title/dek; body, URL, IDs and source data are immutable."""
-    response = client.messages.create(
+    from scripts.claude_cost_meter import metered_create
+    response = metered_create(client, stage="growth_title_dek", article_id=article.get("id"),
+        cache_control=None,  # A one-shot short draft has no repeated context to cache.
         model="claude-sonnet-4-6", max_tokens=600,
         system=("あなたは湘南の地域メディアの編集者。既存記事の事実・意味を保ち、検索意図を正確に表すtitle/dekのみ提案する。"
                 "検索語は事実の根拠ではない。記事本文や一次情報にない事実、断定、数字を追加しない。"

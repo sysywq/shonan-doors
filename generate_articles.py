@@ -417,7 +417,7 @@ def call_claude_news(recent_titles, event_series=None, count=None, candidate=Non
         "content": f"本日分の{count}記事を、直近1週間以内のニュースまたは今後のイベント情報から作成し、submit_articlesツールで提出してください。{targeted}{hint_text}",
     }]
     tools = [
-        {"type": "web_search_20250305", "name": "web_search"},
+        {"type": "web_search_20250305", "name": "web_search", "max_uses": 8},
         NEWS_ARTICLE_TOOL,
     ]
 
@@ -982,7 +982,7 @@ def call_claude_stock_selection(candidates, existing_articles, stock_topics, lim
                     "submit_stock_decisionsツールで全候補の判定結果を提出してください。",
     }]
     tools = [
-        {"type": "web_search_20250305", "name": "web_search"},
+        {"type": "web_search_20250305", "name": "web_search", "max_uses": 8},
         STOCK_DECISION_TOOL,
     ]
 

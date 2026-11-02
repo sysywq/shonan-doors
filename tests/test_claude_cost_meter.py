@@ -3,9 +3,23 @@ import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import Mock, patch
 from scripts.claude_cost_meter import metered_create
 
 class UsageMeterTests(unittest.TestCase):
+    def test_cache_preserves_payload_and_explicit_override(self):
+        client = SimpleNamespace(messages=SimpleNamespace(create=Mock()))
+        messages = [{"role": "user", "content": "Check the official source"}]
+        tools = [{"type": "web_search_20250305", "name": "web_search"}]
+        with patch("scripts.claude_cost_meter.record_usage"):
+            metered_create(client, stage="fact_audit", messages=messages, tools=tools)
+            sent = client.messages.create.call_args.kwargs
+            self.assertEqual(sent["cache_control"], {"type": "ephemeral"})
+            self.assertIs(sent["messages"], messages)
+            self.assertIs(sent["tools"], tools)
+            metered_create(client, stage="fact_audit", cache_control=None)
+            self.assertIsNone(client.messages.create.call_args.kwargs["cache_control"])
+
     def test_records_usage_without_second_api_call(self):
         with tempfile.TemporaryDirectory() as folder:
             import os
