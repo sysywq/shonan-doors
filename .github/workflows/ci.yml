@@ -30,7 +30,7 @@ jobs:
       # 追跡対象の __pycache__/*.pyc を書き換えて差分チェックを誤検知させないため
       PYTHONDONTWRITEBYTECODE: '1'
       # Stubbed API responses in tests must not create production usage artifacts.
-      CLAUDE_USAGE_LOG: ${{ runner.temp }}/claude-test-usage.jsonl
+      CLAUDE_USAGE_LOG: /tmp/claude-test-usage.jsonl
     steps:
       - name: リポジトリをチェックアウト
         uses: actions/checkout@v4
