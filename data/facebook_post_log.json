@@ -244,6 +244,34 @@
       "posted_at": "2026-11-01T20:00:06Z",
       "article_url": "https://www.shonandoors.com/articles/hiratsuka-event-0253/",
       "status": "posted"
+    },
+    {
+      "article_id": 255,
+      "facebook_post_id": "1330527416809259_122119002381490368",
+      "posted_at": "2026-11-02T19:57:49Z",
+      "article_url": "https://www.shonandoors.com/articles/chigasaki-event-0255/",
+      "status": "posted"
+    },
+    {
+      "article_id": 256,
+      "facebook_post_id": "1330527416809259_122119002903490368",
+      "posted_at": "2026-11-02T20:00:53Z",
+      "article_url": "https://www.shonandoors.com/articles/chigasaki-event-0256/",
+      "status": "posted"
+    },
+    {
+      "article_id": 257,
+      "facebook_post_id": "1330527416809259_122119003209490368",
+      "posted_at": "2026-11-02T20:03:59Z",
+      "article_url": "https://www.shonandoors.com/articles/kamakura-event-0257/",
+      "status": "posted"
+    },
+    {
+      "article_id": 258,
+      "facebook_post_id": "1330527416809259_122119003731490368",
+      "posted_at": "2026-11-02T20:07:03Z",
+      "article_url": "https://www.shonandoors.com/articles/fujisawa-gourmet-0258/",
+      "status": "posted"
     }
   ]
 }
