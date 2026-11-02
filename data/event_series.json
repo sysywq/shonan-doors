@@ -203,5 +203,29 @@
     "area": "平塚",
     "category": "e",
     "createdAt": "2026-11-02"
+  },
+  {
+    "seriesKey": "shiroyama-festa",
+    "canonicalName": "文化の日に茅ヶ崎が集まる - 「第9回しろやまフェスタ」、11月3日にBRANCH茅ヶ崎・しろやま公園で開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-11-03"
+  },
+  {
+    "seriesKey": "chigasaki-minna-no-art-fes",
+    "canonicalName": "音楽も展示もステージも - 「茅ヶ崎みんなのアートフェス2026」、11月15日まで茅ヶ崎市民文化会館で開催中",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-11-03"
+  },
+  {
+    "seriesKey": "ofuna-yoichi",
+    "canonicalName": "大船の秋の風物詩、今年も開幕 - 「大船夜市2026」、11月3日に芸術館通りで開催",
+    "aliases": [],
+    "area": "鎌倉",
+    "category": "e",
+    "createdAt": "2026-11-03"
   }
 ]
