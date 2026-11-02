@@ -48,7 +48,13 @@ def record_usage(response, *, stage, run_id=None, path=None, article_id=None):
     return row
 
 def metered_create(client, *, stage, article_id=None, **kwargs):
-    """Call Claude once, then best-effort record the response usage."""
+    """Cache repeated context, call Claude once, and record response usage.
+
+    Automatic caching advances the breakpoint as pause_turn conversations grow,
+    including server-side search results. It changes billing, not prompt content.
+    An explicit caller setting (including None to opt out) takes precedence.
+    """
+    kwargs.setdefault("cache_control", {"type": "ephemeral"})
     response = client.messages.create(**kwargs)
     try:
         record_usage(response, stage=stage, article_id=article_id)

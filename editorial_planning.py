@@ -57,10 +57,11 @@ SCORE_TOOL = {
 
 
 def _tool_call(client, system, prompt, tool, with_search=False, turns=8, meta=None):
-    available = ([{"type": "web_search_20250305", "name": "web_search"}] if with_search else []) + [tool]
+    from scripts.claude_cost_meter import metered_create
+    available = ([{"type": "web_search_20250305", "name": "web_search", "max_uses": 8}] if with_search else []) + [tool]
     messages = [{"role": "user", "content": prompt}]
     for _ in range(turns):
-        response = client.messages.create(model="claude-sonnet-4-6", max_tokens=5000,
+        response = metered_create(client, stage=tool["name"], model="claude-sonnet-4-6", max_tokens=5000,
                                           system=system, tools=available, messages=messages)
         for block in response.content:
             if block.type == "tool_use" and block.name == tool["name"]:

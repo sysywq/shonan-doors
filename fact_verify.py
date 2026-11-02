@@ -294,6 +294,7 @@ def build_verify_prompt(article, items):
 
 
 def call_verify_api(client, article, items, model=None):
+    from scripts.claude_cost_meter import metered_create
     prompt = build_verify_prompt(article, items)
     content = prompt
     images = [(n, it["image"]) for n, it in enumerate(items) if it.get("image")]
@@ -302,7 +303,7 @@ def call_verify_api(client, article, items, model=None):
         for n, img in images:
             content += [{"type": "text", "text": f"[{n}] の一次情報(公式画像)。文字が明瞭に読めない場合は review_required:"},
                         img]
-    resp = client.messages.create(
+    resp = metered_create(client, stage="fact_verify", article_id=article.get("id"),
         model=model or fa.MODEL, max_tokens=2000, system=VERIFY_SYSTEM_PROMPT,
         tools=[VERIFY_TOOL], tool_choice={"type": "tool", "name": "submit_verification"},
         messages=[{"role": "user", "content": content}],

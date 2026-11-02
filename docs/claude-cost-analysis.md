@@ -1,5 +1,19 @@
 # Claude API cost analysis (Issue #260)
 
+## 2026-11-02 recovery and cost controls
+
+- The failed run [41248162466](https://github.com/sysywq/shonan-doors/actions/runs/41248162466) returned Anthropic `invalid_request_error`: specified API usage limits reached; access resumes at `2026-11-01 00:00 UTC` (09:00 JST). This is an API billing limit, not evidence of a Claude subscription limit.
+- [Daily PR #367](https://github.com/sysywq/shonan-doors/pull/367) merged on November 2 JST with three full-audit-confirmed articles (251, 252, 253). Run [41358699424](https://github.com/sysywq/shonan-doors/actions/runs/41358699424) verified all three in production. No duplicate generation is needed to resume today.
+- The archive currently contains 205 October calls, from October 11 through October 14 JST, estimated token cost **$206.914983**. This is a partial historical sample, not the October bill. News generation accounts for $143.602050 (69.4%), stock selection $33.017997, fact audit $28.877517, and stock-topic refill $1.417419.
+- The November 2 run has 18 archived calls and $11.529696 in estimated token cost for three published articles. Candidate discovery/scoring, verify, Claude Code tasks, and search fees are absent from the historical token totals. Do not extrapolate a complete monthly bill from these figures.
+- All 223 currently archived responses report zero cache-read and cache-write tokens. Automatic five-minute prompt caching is now requested through `metered_create`, allowing repeated search/continuation context to be reused. Actual savings require new production usage; first writes cost more than ordinary input and cache hits are not guaranteed.
+- Generation and candidate discovery now specify `max_uses: 8` for each web-search tool request, matching the existing bounded-audit design. This is a per-request limit, not a daily dollar cap. Existing continuation/attempt limits, primary-source policy, full audit and minimum-three publication checks remain in place. If evidence is insufficient, the quality gates still reject/hold the article.
+- Candidate discovery/scoring, verify and growth title/dek drafting now use the existing meter, without extra API calls. Growth draft records still require workflow-level persistence outside Daily Articles; historical missing costs cannot be recovered by this change.
+- Issue-triggered Claude Code has a 40-turn limit, a $5 estimated budget per invocation, and a 45-minute job timeout. This budget covers that Claude Code session, not the Python article pipeline or Python API calls launched by it. The CLI checks cost after responses, so this is not an exact invoice ceiling. A capped task can finish incomplete.
+- No Anthropic account spending limit or billing setting is changed. Model and editorial rules are preserved. A monthly/daily pipeline budget needs an owner-selected amount and durable accounting across runs, including tool fees.
+
+Official references: [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [web search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool), [Claude Code CLI limits](https://code.claude.com/docs/en/cli-reference).
+
 This is a **read-only, on-demand** workflow. No dashboard, daily report, or extra Claude API request is required.
 
 ## Retrieve data
