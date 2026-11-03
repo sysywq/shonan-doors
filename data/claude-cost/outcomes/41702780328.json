@@ -1,0 +1,73 @@
+{
+  "run_id": "41702780328",
+  "date_jst": "2026-11-04",
+  "outcomes": [
+    {
+      "article_id": 259,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 260,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 261,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "旧三井別邸の紅葉が夜に輝く - 「もみじのライトアップ2026」、大磯城山公園で11月27日から3日間",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ピアノと弦楽が紡ぐ物語 - 「山田麗 デュオコンサート」、11月14日に逗子なぎさホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "湘南の青い光で迎えるクリスマス - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日点灯",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "花と緑の縁日へ - 花菜ガーデン「花菜マルシェ」、11月28日・29日に開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が4件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "障がいの有無を問わない、音楽でつながる一日 - 「ちがさきユニバーサル音楽祭2026」、11月7日に駅周辺3会場で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "葉山の里山で馬に出会う - 上山口の乗馬・ふれあい体験施設ガイド",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "もみじの紅葉が見頃を迎える大磯城山公園 - 旧三井別邸を彩る秋の絶景散策",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
