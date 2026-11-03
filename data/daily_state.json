@@ -5748,13 +5748,345 @@
     "0": {
      "branch": "daily/2026-11-04",
      "run_id": "41702780328",
-     "started_at": "2026-11-04 04:23"
+     "started_at": "2026-11-04 04:23",
+     "published_ids": [
+      259,
+      260,
+      261
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "旧三井別邸の紅葉が夜に輝く - 「もみじのライトアップ2026」、大磯城山公園で11月27日から3日間",
+     "dek": "神奈川県立大磯城山公園・旧三井別邸地区で、恒例の「もみじのライトアップ2026」が11月27日（金）から29日（日）の3日間開催される。不動池に映る逆さもみじや竹林との幻想的なコントラストが、秋の大磯の夜を彩る。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "http://www.kanagawa-park.or.jp/ooisojoyama/event.html",
+     "subjectNames": [
+      "もみじのライトアップ2026",
+      "大磯城山公園もみじのライトアップ",
+      "大磯城山公園",
+      "神奈川県立大磯城山公園"
+     ],
+     "tags": [
+      "もみじのライトアップ",
+      "大磯城山公園",
+      "大磯",
+      "紅葉",
+      "ライトアップ",
+      "旧三井別邸",
+      "秋",
+      "夜間イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "oiso-joyama-momiji-lightup",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "ピアノと弦楽が紡ぐ物語 - 「山田麗 デュオコンサート」、11月14日に逗子なぎさホールで",
+     "dek": "名曲の数々をストーリー仕立てで届ける「山田麗 デュオコンサート」が、2026年11月14日（土）に逗子文化プラザなぎさホールで開催される。逗子の秋の午後を、豊かな音楽の時間で満たす一夜。",
+     "area": "逗子",
+     "cat": "e",
+     "link": "https://www.bunka-plazahall.com/",
+     "subjectNames": [
+      "山田麗 デュオコンサート",
+      "山田麗"
+     ],
+     "tags": [
+      "山田麗",
+      "デュオコンサート",
+      "逗子",
+      "なぎさホール",
+      "逗子文化プラザ",
+      "クラシック",
+      "音楽",
+      "コンサート"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "yamada-rei-zushi-duo-concert",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "湘南の青い光で迎えるクリスマス - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日点灯",
+     "dek": "開業15周年を迎えるテラスモール湘南が、湘南の海と空をイメージした青いイルミネーション「Our Blue Xmas」を11月11日から開催。高さ約8mのメインツリーと参加型オーナメントで、地域とつくるクリスマスシーズンが幕を開ける。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://shonan.terracemall.com/illumination2026/",
+     "subjectNames": [
+      "テラスモール湘南イルミネーション2026 Our Blue Xmas",
+      "Our Blue Xmas",
+      "テラスモール湘南イルミネーション2026"
+     ],
+     "tags": [
+      "テラスモール湘南",
+      "イルミネーション",
+      "Our Blue Xmas",
+      "辻堂",
+      "クリスマス",
+      "藤沢",
+      "開業15周年"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "terracemall-shonan-illumination",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "花と緑の縁日へ - 花菜ガーデン「花菜マルシェ」、11月28日・29日に開催",
+     "dek": "平塚の花と緑の体験型施設「花菜ガーデン」の園外エリアで、今秋も「花菜マルシェ」が開催される。11月28日（土）・29日（日）の2日間、旬の植物や緑にまつわる出店が並ぶ。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "http://www.kana-garden.com/event/cat/event/",
+     "subjectNames": [
+      "花菜マルシェ",
+      "KANA GARDEN マルシェ"
+     ],
+     "tags": [
+      "花菜マルシェ",
+      "花菜ガーデン",
+      "平塚",
+      "マルシェ",
+      "植物",
+      "秋",
+      "11月"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "kana-garden-marche",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "障がいの有無を問わない、音楽でつながる一日 - 「ちがさきユニバーサル音楽祭2026」、11月7日に駅周辺3会場で開催",
+     "dek": "社会福祉法人翔の会が主催する「ちがさきユニバーサル音楽祭2026」が11月7日（土）、茅ケ崎駅周辺の3会場でストリートライブ形式で開催される。入場無料で、音楽の力で誰もが暮らしやすいユニバーサルな社会を目指すイベントだ。",
+     "area": "茅ヶ崎",
+     "cat": "e",
+     "link": "https://www.syonokai.jp/chigasaki-universal-music-festival/",
+     "subjectNames": [
+      "ちがさきユニバーサル音楽祭2026",
+      "ちがさきユニバーサル音楽祭",
+      "茅ヶ崎ユニバーサル音楽祭"
+     ],
+     "tags": [
+      "ちがさきユニバーサル音楽祭",
+      "茅ヶ崎",
+      "音楽",
+      "ストリートライブ",
+      "ユニバーサル",
+      "イベント",
+      "翔の会",
+      "無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "chigasaki-universal-music-fes",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "葉山の里山で馬に出会う - 上山口の乗馬・ふれあい体験施設ガイド",
+     "dek": "葉山町の里山に広がる上山口エリアには、馬とのふれあいや乗馬体験ができる施設がふたつある。初心者・ファミリーでも気軽に参加できるコースの内容・料金・アクセスをまとめた。",
+     "area": "葉山",
+     "cat": "t",
+     "link": "https://hayamamichikusa.wixsite.com/mysite",
+     "subjectNames": [
+      "葉山道草牧場",
+      "葉山ハーモニーガーデン",
+      "道草牧場",
+      "michikusa_bokujyou",
+      "ホースハーモニーガーデン"
+     ],
+     "tags": [
+      "葉山",
+      "乗馬",
+      "体験",
+      "馬",
+      "里山",
+      "ふれあい",
+      "上山口",
+      "葉山道草牧場",
+      "葉山ハーモニーガーデン",
+      "初心者",
+      "ファミリー"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-04",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "もみじの紅葉が見頃を迎える大磯城山公園 - 旧三井別邸を彩る秋の絶景散策",
+     "dek": "旧三井財閥の別荘跡地に広がる神奈川県立大磯城山公園・旧三井別邸地区では、11月下旬から12月上旬にかけてモミジが見頃を迎える。不動池に映る逆さもみじと竹林のコントラストが、保養地・大磯らしい静かな秋の情緒を演出する。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "http://www.kanagawa-park.or.jp/ooisojoyama/about.html",
+     "subjectNames": [
+      "大磯城山公園",
+      "神奈川県立大磯城山公園",
+      "旧三井別邸地区",
+      "旧吉田茂邸地区"
+     ],
+     "tags": [
+      "大磯城山公園",
+      "大磯",
+      "紅葉",
+      "もみじ",
+      "旧三井別邸",
+      "旧吉田茂邸",
+      "秋の散策",
+      "逆さもみじ",
+      "神奈川県立公園"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開催日(eventStartDate)が一次情報で確認できていない)",
+     "round": 0
+    },
+    {
+     "title": "東海道の道標になった、時宗総本山「遊行寺」の歴史と境内の歩き方",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "烏帽子岩を眺めながら糸を垂れる——茅ヶ崎の海釣りスポット案内",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "古都で炎と息を使う——鎌倉でガラス工芸・吹きガラス体験ができる工房",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "路面を走る100年の鉄道——江ノ電はなぜ、この道を走り続けているのか",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "アエナ ジ アウトレット湘南平塚店 - 平塚の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "平塚",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "アエナ ジ アウトレット湘南平塚店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "波音が聞こえる距離で焼かれるパン——茅ヶ崎で通いたいベーカリー案内",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "海を見下ろす丘で馬に乗る——葉山の乗馬体験施設と初心者向け案内",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "山と道 鎌倉 - 鎌倉の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "山と道 鎌倉"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-11-04 04:23"
+   "updated_at": "2026-11-04 05:07"
   }
  }
 }
