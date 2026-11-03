@@ -272,6 +272,27 @@
       "posted_at": "2026-11-02T20:07:03Z",
       "article_url": "https://www.shonandoors.com/articles/fujisawa-gourmet-0258/",
       "status": "posted"
+    },
+    {
+      "article_id": 259,
+      "facebook_post_id": "1330527416809259_122119249371490368",
+      "posted_at": "2026-11-03T20:11:31Z",
+      "article_url": "https://www.shonandoors.com/articles/fujisawa-event-0259/",
+      "status": "posted"
+    },
+    {
+      "article_id": 260,
+      "facebook_post_id": "1330527416809259_122119249839490368",
+      "posted_at": "2026-11-03T20:14:36Z",
+      "article_url": "https://www.shonandoors.com/articles/zushi-event-0260/",
+      "status": "posted"
+    },
+    {
+      "article_id": 261,
+      "facebook_post_id": "1330527416809259_122119250517490368",
+      "posted_at": "2026-11-03T20:17:42Z",
+      "article_url": "https://www.shonandoors.com/articles/chigasaki-event-0261/",
+      "status": "posted"
     }
   ]
 }
