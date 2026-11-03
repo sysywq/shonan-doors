@@ -227,5 +227,29 @@
     "area": "鎌倉",
     "category": "e",
     "createdAt": "2026-11-03"
+  },
+  {
+    "seriesKey": "shonan-kids-day",
+    "canonicalName": "湘南の未来を担うキッズが主役の2日間 - 「湘南キッズデイ2026」、11月14・15日に辻堂海浜公園で開催",
+    "aliases": [],
+    "area": "藤沢",
+    "category": "e",
+    "createdAt": "2026-11-04"
+  },
+  {
+    "seriesKey": "ohagi-gyuhee-zushi-guitar-duo",
+    "canonicalName": "二本のギターが紡ぐ対話 - 大萩康司＆朴葵姫 ギター・デュオリサイタル、11月23日に逗子なぎさホールで",
+    "aliases": [],
+    "area": "逗子",
+    "category": "e",
+    "createdAt": "2026-11-04"
+  },
+  {
+    "seriesKey": "honolulu-meets-chigasaki",
+    "canonicalName": "ハワイが茅ヶ崎市役所に出現する一日 - 「ホノルルミーツ2026」、11月8日に姉妹都市交流イベント開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-11-04"
   }
 ]

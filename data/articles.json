@@ -7123,5 +7123,226 @@
       "openingDate": "2026-11-03",
       "effectiveDate": ""
     }
+  },
+  {
+    "id": 259,
+    "articleType": "news",
+    "cat": "e",
+    "area": "藤沢",
+    "scene": "beach",
+    "title": "湘南の未来を担うキッズが主役の2日間 - 「湘南キッズデイ2026」、11月14・15日に辻堂海浜公園で開催",
+    "dek": "ダンス・フラ・チア・マーチングバンドなど地元キッズチームのステージや、ものづくり・自然体験・湘南グルメが集結する入場無料の子どもイベントが、今年も辻堂海浜公園を舞台に2日間繰り広げられる。",
+    "link": "https://prtimes.jp/main/html/rd/p/000000115.000080611.html",
+    "subjectNames": [
+      "湘南キッズデイ",
+      "湘南キッズデイ2026",
+      "SHONAN KIDS DAY"
+    ],
+    "sources": [
+      "https://prtimes.jp/main/html/rd/p/000000115.000080611.html"
+    ],
+    "date": "2026-11-04",
+    "eventStartDate": "2026-11-14",
+    "eventEndDate": "2026-11-15",
+    "eventSeriesKey": "shonan-kids-day",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "湘南キッズデイ実行委員会",
+    "eventOrganizerUrl": "",
+    "eventMetadataSource": "https://prtimes.jp/main/html/rd/p/000000115.000080611.html",
+    "eventPerformers": [
+      {
+        "name": "Studio HANA!",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "カロケメレメレフラスタジオ",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "湘南ベルマーレチアダンススクール",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "ナー・レイ・オ・ポーポーハウ",
+        "type": "PerformingGroup"
+      },
+      {
+        "name": "聖和学院第二幼稚園",
+        "type": "PerformingGroup"
+      }
+    ],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "海と空が近い辻堂海浜公園を舞台に、2024年から始まった「湘南キッズデイ」が今年で3回目を迎える。主催は湘南キッズデイ実行委員会で、地域情報誌「湘南スタイルmagazine」を手がける株式会社EDITORSを中心に、公園協会・オーチュー・サカタのタネ・小田急電鉄共同事業体が共催する。湘南を次世代に残し、つなぐことをテーマに掲げ、子どもたちが主役になれる2日間として企画されている。\n\nイベントは「まなぶ」「あそぶ」「つくる」「たべる」「であう」の5つのテーマで構成される。ステージではStudio HANA!、カロケメレメレフラスタジオ、湘南ベルマーレチアダンススクール、ナー・レイ・オ・ポーポーハウ、聖和学院第二幼稚園などのキッズチームが出演予定。ダンス・フラ・チア・マーチングバンドとジャンルも多彩で、子どもたちが練習の成果を披露し合う場になっている。\n\n体験コンテンツも充実しており、ものづくりや自然に触れる体験、湘南ゆかりのグルメが並ぶキッチンカーなどが会場を賑わせる予定だ。環境への配慮も意識されており、カップ・お皿・お箸の持参によるゴミ削減を参加者に呼びかけている。また、ひとり親家庭への食料寄付活動を行う「フードバンクふじさわ」が食料の寄付を受け付け、売上の一部も同団体へ寄付される。\n\n開催は2026年11月14日（土）・15日（日）の両日、いずれも9時から15時まで。会場は神奈川県藤沢市辻堂西海岸3-2の辻堂海浜公園。入場料は無料で、家族連れで一日楽しめる構成になっている。なお、当日はイベントのもようを取材・撮影するカメラが入る予定で、12月24日発売の「湘南スタイルmagazine108号」でその様子が紹介される。",
+    "tags": [
+      "湘南キッズデイ",
+      "辻堂海浜公園",
+      "藤沢",
+      "子どもイベント",
+      "無料イベント",
+      "キッズ",
+      "ダンス",
+      "フラ",
+      "チア",
+      "マーチングバンド",
+      "マルシェ",
+      "湘南グルメ"
+    ],
+    "slug": "fujisawa-event-0259",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-14",
+      "reason": "開催まであと10日",
+      "announcementDate": "2026-10-23",
+      "openingDate": "",
+      "effectiveDate": ""
+    },
+    "heroImage": "/assets/images/articles/259.jpg",
+    "heroImageSourceUrl": "https://prtimes.jp/main/html/rd/p/000000115.000080611.html",
+    "heroImageCredit": "画像出典：PR TIMES",
+    "heroImageOriginUrl": "https://prcdn.freetls.fastly.net/release_image/80611/115/80611-115-7e2a823dfe70a14cbc2012d79ae00836-1980x989.jpg?format=jpeg&auto=webp&fit=bounds&width=2400&height=1260"
+  },
+  {
+    "id": 260,
+    "articleType": "news",
+    "cat": "e",
+    "area": "逗子",
+    "scene": "music",
+    "title": "二本のギターが紡ぐ対話 - 大萩康司＆朴葵姫 ギター・デュオリサイタル、11月23日に逗子なぎさホールで",
+    "dek": "クラシックギター界の現世代を牽引する大萩康司と朴葵姫のデュオリサイタルが、勤労感謝の日の11月23日（月・祝）に逗子文化プラザなぎさホールで開かれる。",
+    "link": "https://www.bunka-plazahall.com/eventinfo/25095/",
+    "subjectNames": [
+      "大萩康司＆朴葵姫 ギター・デュオリサイタル",
+      "大萩康司",
+      "朴葵姫",
+      "Yasuji Ohagi",
+      "Gyuhee Park"
+    ],
+    "sources": [
+      "https://www.bunka-plazahall.com/eventinfo/25095/"
+    ],
+    "date": "2026-11-04",
+    "eventStartDate": "2026-11-23",
+    "eventEndDate": "",
+    "eventSeriesKey": "ohagi-gyuhee-zushi-guitar-duo",
+    "eventPrice": "4000",
+    "eventTicketUrl": "https://www.s2.e-get.jp/bunkaplaza/pt/",
+    "eventOrganizer": "逗子文化プラザホール",
+    "eventOrganizerUrl": "https://www.bunka-plazahall.com/",
+    "eventMetadataSource": "https://www.bunka-plazahall.com/eventinfo/25095/",
+    "eventPerformers": [
+      {
+        "name": "大萩康司",
+        "type": "Person"
+      },
+      {
+        "name": "朴葵姫",
+        "type": "Person"
+      }
+    ],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "2本のギターが向き合い、まるで会話するように音が響き合う——そんな特別なステージが、勤労感謝の日の祝日に逗子で実現する。ギタリストの大萩康司と朴葵姫によるデュオリサイタルが、2026年11月23日（月・祝）に逗子文化プラザなぎさホールで開催される。主催は逗子文化プラザホール（指定管理者：逗子文化プラザパートナーズ）。\n\n大萩康司は日本を代表するクラシックギタリストのひとりで、国内外で幅広い活動を続けている。朴葵姫（パク・キュヒ）は韓国出身のギタリストで、そのしなやかで表情豊かな演奏は高く評価されている。二人のデュオはそれぞれの個性がせめぎ合い、また響き合う独自の世界観を生み出す。\n\n開演は14時（開場13時30分）で、終演は16時を予定。会場は逗子文化プラザなぎさホールで、京急逗子・葉山駅またはJR逗子駅から徒歩圏内に位置する。チケットは全席指定で、一般前売4,000円（当日4,500円）、高校生以下前売2,000円（当日2,500円）。なお未就学児は入場できない。チケット購入や問い合わせは逗子文化プラザホール（046-870-6622）へ。\n\n逗子文化プラザなぎさホールはプロのアーティストを招いた質の高いコンサートを継続的に開催しており、音楽愛好家にとって身近なクラシック体験の場になっている。祝日のひとときを、2本のギターが奏でる豊かな時間に浸ってみてはいかがだろうか。",
+    "tags": [
+      "大萩康司",
+      "朴葵姫",
+      "ギターデュオ",
+      "クラシックギター",
+      "逗子",
+      "なぎさホール",
+      "逗子文化プラザ",
+      "コンサート",
+      "音楽"
+    ],
+    "slug": "zushi-event-0260",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-23",
+      "reason": "開催まであと19日",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
+  },
+  {
+    "id": 261,
+    "articleType": "news",
+    "cat": "e",
+    "area": "茅ヶ崎",
+    "scene": "festival",
+    "title": "ハワイが茅ヶ崎市役所に出現する一日 - 「ホノルルミーツ2026」、11月8日に姉妹都市交流イベント開催",
+    "dek": "茅ヶ崎市とホノルル市・郡の姉妹都市締結12周年を記念した体験型イベント「ホノルルミーツ2026」が11月8日（日）、茅ヶ崎市役所本庁舎・前広場・総合体育館で開催される。ハワイアンフードや雑貨の出店、フラのステージ、ウクレレ体験など、入場無料で楽しめる。",
+    "link": "https://www.city.chigasaki.kanagawa.jp/profile/1012577/1049984.html",
+    "subjectNames": [
+      "ホノルルミーツ2026",
+      "ホノルルミーツ",
+      "HONOLULU Meets"
+    ],
+    "sources": [
+      "https://www.city.chigasaki.kanagawa.jp/profile/1012577/1049984.html"
+    ],
+    "date": "2026-11-04",
+    "eventStartDate": "2026-11-08",
+    "eventEndDate": "",
+    "eventSeriesKey": "honolulu-meets-chigasaki",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "茅ヶ崎市",
+    "eventOrganizerUrl": "https://www.city.chigasaki.kanagawa.jp/",
+    "eventMetadataSource": "https://www.city.chigasaki.kanagawa.jp/profile/1012577/1049984.html",
+    "eventPerformers": [
+      {
+        "name": "ケアリイ・カリマ",
+        "type": "Person"
+      }
+    ],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "茅ヶ崎市とホノルル市・郡が姉妹都市の絆を結んでから12年。その記念として、毎年恒例の交流イベント「ホノルルミーツ」が今年も茅ヶ崎の市役所周辺に「ハワイ」を出現させる。開催日は11月8日（日）、時間は10時から16時30分まで。会場は茅ヶ崎市役所本庁舎の市民ふれあいプラザ・前広場・総合体育館の3エリアにまたがり、入場は無料だ。\n\n市役所前広場にはハワイアンフードのキッチンカーやハワイ雑貨の店舗が立ち並ぶ。本庁舎1階の特設ステージでは、市内のフラ教室（ハラウ）によるパフォーマンスに加え、ハワイから招いたミュージシャン・ケアリイ・カリマが生演奏を披露する予定だ。ケアリイ・カリマはハワイのアカデミー賞とも称される「ナホク・ハノハノ・アワード」を受賞した実力派アーティストとして知られている。\n\nワークショップも充実しており、無料のウクレレ体験教室が11時・13時・15時の3回開かれる。総合体育館ではピックルボールのフリーコートも用意され、スポーツを通じた交流も楽しめる内容となっている。スポーツと文化の双方から姉妹都市との絆を深めるというコンセプトが、今年のプログラムにも反映されている。\n\n茅ヶ崎市はホノルルとの交流を市民レベルで丁寧に育ててきた。フラ、ウクレレ、ハワイアンフードという異国の文化が、茅ヶ崎の日常に少しずつ根を張っている。この一日だけの特別なアロハの空気を、ぜひ市役所前で感じてみてほしい。主催は茅ヶ崎市。",
+    "tags": [
+      "ホノルルミーツ",
+      "茅ヶ崎",
+      "ホノルル",
+      "姉妹都市",
+      "フラ",
+      "ウクレレ",
+      "ハワイ",
+      "イベント",
+      "無料"
+    ],
+    "slug": "chigasaki-event-0261",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-08",
+      "reason": "開催まであと4日",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
   }
 ]
