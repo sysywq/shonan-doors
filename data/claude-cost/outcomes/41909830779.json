@@ -1,0 +1,11 @@
+{
+  "run_id": "41909830779",
+  "date_jst": "2026-11-05",
+  "outcomes": [
+    {
+      "article_id": 266,
+      "outcome": "confirmed_for_publication"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
