@@ -1,0 +1,86 @@
+{
+  "run_id": "41896385706",
+  "date_jst": "2026-11-05",
+  "outcomes": [
+    {
+      "article_id": 262,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 263,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 264,
+      "title": "スキマ時間に気軽に体を動かす - 「チョコザップ 逗子一丁目店」、11月19日グランドオープン",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "茅ヶ崎市南西部に新たなマック - 「マクドナルド 茅ヶ崎甘沼店」、11月25日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "濃厚つけ麺の名店が藤沢・石川に上陸 - 「三田製麺所 藤沢石川店」、11月13日オープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯港の芝生広場がロックで揺れる - 「第3回 大磯ファミリーロックフェスティバル」、11月8日に大磯港芝生広場で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能3件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "波音が聞こえる距離で焼かれるパン - 茅ヶ崎で通いたいベーカリー案内",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「子育てするなら平塚で」 - 保育所・つどいの広場・公園、平塚の子育て環境を整理する",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "港町・逗子で食べる地魚ランチ - 小坪漁港の水揚げが光る、地元の食卓",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "旧イトーヨーカドー跡地に誕生した茅ヶ崎駅北口の新拠点 - 「BLiX茅ヶ崎」の使い方ガイド",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "湘南の青い誇りと歩んだ15年 - テラスモール湘南、11月11日に開業15周年を迎える",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
