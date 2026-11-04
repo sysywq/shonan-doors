@@ -5948,6 +5948,11 @@
      "refill_dispatched": true,
      "refill_dispatched_at": "2026-11-05 05:46",
      "live_ids": []
+    },
+    "2": {
+     "branch": "daily/2026-11-05-r2",
+     "run_id": "41909830779",
+     "started_at": "2026-11-05 05:47"
     }
    },
    "rejected": [
