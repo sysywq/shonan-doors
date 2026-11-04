@@ -1,0 +1,63 @@
+{
+  "run_id": "41904043200",
+  "date_jst": "2026-11-05",
+  "outcomes": [
+    {
+      "article_id": 265,
+      "title": "不動池に揺れる紅葉の鏡 - 「もみじのライトアップ2026」、大磯城山公園で11月27日から3日間",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "相模湾の恵みを食卓へ - 平塚市漁協直営「平塚漁港の食堂」で地魚ランチを味わう",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "街なかを流れる川で漕ぐ - 平塚・相模川でSUPを体験する",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "葉山で、やきものと出会う - 陶芸体験ができる工房と作家ものが買えるスポット",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "湘南の青い光で迎えるクリスマス - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日から点灯",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "14ブルワリーと地元グルメが海辺に集結 - 「うみちかマルシェ vol.6 ～11月の海とクラフトビールと～」、11月7・8日に鵠沼海浜公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "海の幸も山の幸も、葉山産だけが並ぶ一日 - 地産地消マルシェ「いちろくいち」が葉山ステーションで定期開催",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
