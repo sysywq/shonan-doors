@@ -5920,13 +5920,413 @@
     "0": {
      "branch": "daily/2026-11-05",
      "run_id": "41896385706",
-     "started_at": "2026-11-05 04:23"
+     "started_at": "2026-11-05 04:23",
+     "published_ids": [
+      262,
+      263
+     ],
+     "held_ids": [
+      264
+     ],
+     "system_errors": []
     }
    },
-   "rejected": [],
+   "rejected": [
+    {
+     "title": "茅ヶ崎市南西部に新たなマック - 「マクドナルド 茅ヶ崎甘沼店」、11月25日グランドオープン",
+     "dek": "茅ヶ崎市甘沼の国道404号線沿いに「マクドナルド 茅ヶ崎甘沼店」が誕生。ドライブスルーやMcCafé by Barista、マックデリバリーを備え、2026年11月25日グランドオープン。",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "https://crewrecruiting.mcdonalds.co.jp/map/14804",
+     "subjectNames": [
+      "マクドナルド 茅ヶ崎甘沼店",
+      "マクドナルド茅ヶ崎甘沼店",
+      "McDonald's 茅ヶ崎甘沼店"
+     ],
+     "tags": [
+      "マクドナルド",
+      "茅ヶ崎",
+      "甘沼",
+      "新規オープン",
+      "ファストフード",
+      "ドライブスルー"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "濃厚つけ麺の名店が藤沢・石川に上陸 - 「三田製麺所 藤沢石川店」、11月13日オープン",
+     "dek": "東京・三田創業の人気つけ麺専門店「三田製麺所」が藤沢市石川に新店舗をオープン。濃厚豚骨魚介つけ麺のほか、油そばや中華そばも揃える。開業18周年を記念した特別キャンペーンも同時展開中。",
+     "area": "藤沢",
+     "cat": "g",
+     "link": "https://www.mita-seimen.com/",
+     "subjectNames": [
+      "三田製麺所 藤沢石川店",
+      "三田製麺所藤沢石川店",
+      "つけ麺専門店 三田製麺所 藤沢石川店",
+      "三田製麺所",
+      "MITASEIMEN"
+     ],
+     "tags": [
+      "三田製麺所",
+      "藤沢",
+      "石川",
+      "つけ麺",
+      "新規オープン",
+      "18周年感謝祭",
+      "油そば"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "大磯港の芝生広場がロックで揺れる - 「第3回 大磯ファミリーロックフェスティバル」、11月8日に大磯港芝生広場で開催",
+     "dek": "「大磯より潮風『黒潮』に乗せて全世界へ』をテーマに、地元ゆかりのミュージシャンとアマチュアが同じ舞台に立つ入場無料のフェスが今年も開催される。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "https://sites.google.com/view/oiso-artculfes",
+     "subjectNames": [
+      "大磯ファミリーロックフェスティバル",
+      "第3回大磯ファミリーロックフェスティバル",
+      "おおいそ文化芸術祭2026"
+     ],
+     "tags": [
+      "大磯",
+      "ロックフェス",
+      "音楽",
+      "大磯港",
+      "おおいそ文化芸術祭",
+      "イベント",
+      "入場無料"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "oiso-family-rock-festival",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "波音が聞こえる距離で焼かれるパン - 茅ヶ崎で通いたいベーカリー案内",
+     "dek": "サーフカルチャーと住宅街が交差する茅ヶ崎には、個性豊かなベーカリーが点在する。地元の日課にしたい4軒を、各店の一次情報をもとにまとめた。",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "https://www.nanosh.net/",
+     "subjectNames": [
+      "Pain de Nanosh",
+      "パン・ド・ナノッシュ",
+      "パンドナノッシュ",
+      "MOKICHI Baker & Sweets",
+      "モキチベーカー＆スイーツ",
+      "mokichi baker & sweets",
+      "B-grotto",
+      "ビーグロット",
+      "PLAIN",
+      "プレイン"
+     ],
+     "tags": [
+      "茅ヶ崎",
+      "パン屋",
+      "ベーカリー",
+      "Pain de Nanosh",
+      "MOKICHI Baker & Sweets",
+      "B-grotto",
+      "PLAIN",
+      "湘南グルメ",
+      "地元パン屋"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "「子育てするなら平塚で」 - 保育所・つどいの広場・公園、平塚の子育て環境を整理する",
+     "dek": "湘南のほぼ中央に位置する平塚市。市が掲げるキャッチフレーズのとおり、保育所の整備から支援センター・つどいの広場・大規模公園まで、子育て世帯を受け入れる仕組みが市内各地に揃っている。",
+     "area": "平塚",
+     "cat": "l",
+     "link": "https://www.city.hiratsuka.kanagawa.jp/kodomo/index.html",
+     "subjectNames": [
+      "平塚市子育て支援センター",
+      "つどいの広場もこもこ",
+      "つどいの広場きりんのおうち",
+      "つどいの広場どれみ",
+      "つどいの広場ぽけっと",
+      "つどいの広場ここにくらす",
+      "平塚市総合公園",
+      "こども家庭センター",
+      "なでしこ公園",
+      "桜ケ丘公園"
+     ],
+     "tags": [
+      "平塚",
+      "子育て",
+      "保育所",
+      "つどいの広場",
+      "子育て支援センター",
+      "暮らし",
+      "移住",
+      "公園",
+      "平塚市総合公園",
+      "湘南"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "港町・逗子で食べる地魚ランチ - 小坪漁港の水揚げが光る、地元の食卓",
+     "dek": "逗子市唯一の漁港「小坪漁港」。鎌倉時代から続くこの港の目と鼻の先に、地魚・生しらす・地ダコを昼食で気軽に味わえる食堂が集まっている。",
+     "area": "逗子",
+     "cat": "g",
+     "link": "http://www.mesiyacchan.com/",
+     "subjectNames": [
+      "めしやっちゃん",
+      "小坪漁港",
+      "和食 魚佐次",
+      "魚佐次",
+      "うおさじ"
+     ],
+     "tags": [
+      "逗子",
+      "小坪漁港",
+      "地魚",
+      "海鮮ランチ",
+      "しらす",
+      "定食",
+      "めしやっちゃん",
+      "和食魚佐次",
+      "湘南グルメ",
+      "小坪"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 0
+    },
+    {
+     "title": "スキマ時間に気軽に体を動かす - 「チョコザップ 逗子一丁目店」、11月19日グランドオープン",
+     "dek": "RIZAPグループが展開するコンビニジム「チョコザップ」が逗子駅徒歩5分の場所に登場。着替え不要で利用できる24時間対応のフィットネス施設が、逗子に初上陸する。",
+     "area": "逗子",
+     "cat": "b",
+     "link": "https://chocozap.jp/studios/newest",
+     "subjectNames": [
+      "チョコザップ 逗子一丁目店",
+      "チョコザップ逗子一丁目",
+      "chocoZAP 逗子一丁目",
+      "チョコザップ",
+      "chocoZAP"
+     ],
+     "tags": [
+      "チョコザップ",
+      "コンビニジム",
+      "フィットネス",
+      "24時間ジム",
+      "逗子",
+      "新店オープン",
+      "RIZAP"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-05",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 0
+    },
+    {
+     "title": "旧イトーヨーカドー跡地に誕生した茅ヶ崎駅北口の新拠点 - 「BLiX茅ヶ崎」の使い方ガイド",
+     "dek": "2025年11月にオープンした複合商業施設「BLiX茅ヶ崎」。地下1階から6階まで35店舗が揃い、スーパーからクリニック、飲食、エンタメまで日常のほぼすべてが一棟に集まっている。",
+     "area": "茅ヶ崎",
+     "cat": "l",
+     "link": "https://blix-chigasaki.com/",
+     "subjectNames": [
+      "BLiX茅ヶ崎",
+      "ブリックスチガサキ",
+      "BLiX",
+      "ブリックス茅ヶ崎"
+     ],
+     "tags": [
+      "茅ヶ崎",
+      "BLiX茅ヶ崎",
+      "商業施設",
+      "暮らし",
+      "イトーヨーカドー跡地",
+      "マルエツ"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店日(openingDate)が一次情報で確認できていない。推測で補完しない)",
+     "round": 0
+    },
+    {
+     "title": "湘南の青い誇りと歩んだ15年 - テラスモール湘南、11月11日に開業15周年を迎える",
+     "dek": "JR辻堂駅直結のテラスモール湘南が2026年11月11日に開業15周年の節目を迎える。「Update Our Blue Pride」をメッセージに掲げ、イルミネーション点灯やコラボイベントなど記念企画が目白押しだ。",
+     "area": "藤沢",
+     "cat": "l",
+     "link": "https://shonan.terracemall.com/2026birthday/",
+     "subjectNames": [
+      "テラスモール湘南",
+      "Terrace Mall SHONAN",
+      "テラスモールショウナン"
+     ],
+     "tags": [
+      "テラスモール湘南",
+      "辻堂",
+      "ショッピングモール",
+      "15周年",
+      "藤沢",
+      "イルミネーション"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店日(openingDate)が一次情報で確認できていない。推測で補完しない)",
+     "round": 0
+    },
+    {
+     "title": "北鎌倉を半日で歩き尽くす——円覚寺・東慶寺・浄智寺・明月院をつなぐ徒歩ルート",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "軒先をかすめる路面電車は、なぜ生まれたのか——江ノ電100年の歴史と廃線危機の真実",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "波音が聞こえる距離で焼かれるパン——茅ヶ崎で通いたいベーカリー案内",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "「湘南のまんなか」平塚で子育てする——保育所・公園・支援センターのリアル",
+     "dek": "",
+     "area": "平塚",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "なるとキッチン 二宮店 - 二宮の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "二宮",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "なるとキッチン 二宮店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "港町・逗子で食べる地魚ランチ——小坪漁港の水揚げが光る、地元の食卓",
+     "dek": "",
+     "area": "逗子",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "サザンビーチから烏帽子岩まで——茅ヶ崎の海岸線を歩く朝散歩ガイド",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    },
+    {
+     "title": "菜の花の季節に、梅の香りを追いかける——二宮・中村農園と梅の里を歩く",
+     "dek": "",
+     "area": "二宮",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 0
+    }
+   ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-11-05 04:23"
+   "updated_at": "2026-11-05 05:09"
   }
  }
 }
