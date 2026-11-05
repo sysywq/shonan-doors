@@ -3181,9 +3181,9 @@
     "area": "葉山",
     "category": "c",
     "searchIntent": "葉山に陶芸や工芸のアトリエ・ギャラリーが多いと聞き、実際に体験できる工房や作家ものが買えるスポットを知りたい",
-    "status": "candidate",
-    "generatedArticleId": null,
-    "generatedAt": null,
+    "status": "generated",
+    "generatedArticleId": 267,
+    "generatedAt": "2026-11-06 05:03",
     "skipReason": null,
     "createdAt": "2026-11-05"
   },
@@ -3220,10 +3220,10 @@
     "area": "藤沢",
     "category": "g",
     "searchIntent": "江の島観光の際に、どこで何を食べ歩きすればよいか知りたい。しらす・たこせんべい・生しらすソフトなど名物グルメの場所と、効率よく食べながら歩けるルートを把握したい。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件",
     "createdAt": "2026-11-05"
   },
   {
@@ -3233,10 +3233,10 @@
     "area": "茅ヶ崎",
     "category": "l",
     "searchIntent": "茅ヶ崎への移住・転居を検討しているが、同じ「茅ヶ崎市」でも駅ごと・エリアごとに雰囲気や利便性が異なると聞き、どのエリアを選ぶべきか生活者目線で比較したい。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「茅ケ崎駅」が既存記事id:131と一致",
     "createdAt": "2026-11-05"
   },
   {
@@ -3246,10 +3246,10 @@
     "area": "平塚",
     "category": "c",
     "searchIntent": "平塚が古代の相模国の国府（政治・行政の中心地）が置かれた場所であることを知り、その歴史的意義・遺跡の場所・現在の見どころを深く知りたい。七夕まつりや湘南ベルマーレとは異なる歴史文化の切り口を求めている。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 監査応答の形式異常・監査処理の例外(監査できていない)",
     "createdAt": "2026-11-05"
   },
   {
@@ -3259,10 +3259,10 @@
     "area": "逗子",
     "category": "g",
     "searchIntent": "逗子に住んでいる、または訪れる大人が、観光客向けではなく地元民も通うような落ち着いたイタリアン・ワインバーを探しており、雰囲気・価格帯・立地の手がかりを知りたい。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件 / 一次情報同士の食い違いなど、人の確認が必要(review_required)",
     "createdAt": "2026-11-05"
   },
   {
@@ -3272,10 +3272,10 @@
     "area": "大磯",
     "category": "g",
     "searchIntent": "大磯を観光・散策するついでに、または在住者が、チェーン店でない地元密着の個性的なパン屋・ベーカリーを探しており、場所・特徴・おすすめの一品を知りたい。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が1件 / 一次情報同士の食い違いなど、人の確認が必要(review_required)",
     "createdAt": "2026-11-05"
   },
   {
@@ -3285,10 +3285,10 @@
     "area": "鎌倉",
     "category": "l",
     "searchIntent": "鎌倉への移住を検討している、または新たに住み始めた人が、観光地のイメージとは別に、日常の買い物をどこでできるかという生活実用情報を知りたい。スーパー・農協直売所・魚屋など、エリア別に整理された情報を求めている。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 一次情報URLが同じ(既存記事id:78)",
     "createdAt": "2026-11-05"
   },
   {
@@ -3298,10 +3298,10 @@
     "area": "葉山",
     "category": "t",
     "searchIntent": "葉山の海の透明度・豊かな生態系に興味があり、シュノーケリングや素潜り体験ができるスポット・ツアー・ショップの料金・予約方法・シーズンを事前に把握したい。磯遊びや釣りとは異なる「水中から海を楽しむ」意図がある。",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報と矛盾する記述(contradicted)が2件",
     "createdAt": "2026-11-05"
   },
   {
