@@ -1,0 +1,112 @@
+{
+  "run_id": "42093363693",
+  "date_jst": "2026-11-06",
+  "outcomes": [
+    {
+      "article_id": 267,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 268,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": 269,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "紅葉の古刹で、秘仏の庭に分け入る - 覚園寺「紅葉特別参拝」、11月25日から12月10日まで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ワインの街・藤沢が11回目の乾杯 - 「藤沢ワイン祭り2026」、11月21日に藤沢駅北口サンパール広場で",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "濃厚豚骨魚介つけ麺が藤沢・石川に - 「三田製麺所 藤沢石川店」、11月13日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯港の芝生広場がロックで揺れる - 「大磯ファミリーロックフェスティバル」、11月8日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "江の島食べ歩きガイド - 弁財天仲見世通りから稚児ヶ淵まで、外せない一品と歩く順番",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯のパン屋さん案内 - 駅近の路地裏から、松並木沿いの古民家まで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "葉山の海に潜る - シュノーケリング体験で出会う、相模湾の水中世界",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "逗子で夜をゆっくり過ごす - 自然派ワインとイタリアンが揃う、地元の大人の店",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "古代、平塚は相模国の「都」だった - 国府推定地と前鳥神社が語る、湘南の知られざる歴史",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "開業15年の「青」が辻堂を包む - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日から",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "戦争が奪った村の記憶、逗子の一軒家が語りかける - 逗子市立図書館「逗子の登録有形文化財建造物」郷土展示、2月まで",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "節目の第30回、世界が平塚の原っぱに集う - 「ひらつか国際交流フェスティバル」、11月1日開催",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
