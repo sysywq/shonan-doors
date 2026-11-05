@@ -267,5 +267,21 @@
     "area": "平塚",
     "category": "e",
     "createdAt": "2026-11-05"
+  },
+  {
+    "seriesKey": "chigasaki-kankyo-fair",
+    "canonicalName": "ワークショップ・リユース・エコカーが集結 - 「ちがさき環境フェア2026」、11月15日に茅ヶ崎市役所で開催",
+    "aliases": [],
+    "area": "茅ヶ崎",
+    "category": "e",
+    "createdAt": "2026-11-06"
+  },
+  {
+    "seriesKey": "hiratsuka-hachimangu-tori-no-ichi",
+    "canonicalName": "商売繁盛の熊手が平塚に並ぶ - 平塚八幡宮「酉の市2026」、11月7日・19日に開催",
+    "aliases": [],
+    "area": "平塚",
+    "category": "e",
+    "createdAt": "2026-11-06"
   }
 ]
