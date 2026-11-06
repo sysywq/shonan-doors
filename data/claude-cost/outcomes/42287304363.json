@@ -1,0 +1,68 @@
+{
+  "run_id": "42287304363",
+  "date_jst": "2026-11-07",
+  "outcomes": [
+    {
+      "article_id": 271,
+      "title": "50回目の秋、村岡で - 「第50回村岡ふれあいまつり」、11月7・8日に村岡市民センターで開催",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「書く」と「贈る」が日常になる - 有隣堂の文具・雑貨新ブランド「Penno Penna」、大船ルミネウィングに誕生",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「涼しい風だね」 - 大磯に刻まれた島崎藤村の晩年をたどる",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "「葉山ブルー」の海へ潜る - 葉山でシュノーケリング体験ができるスポットとショップの選び方",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "旧三井別邸の紅葉が夜に輝く - 「もみじのライトアップ2026」、大磯城山公園で11月27日から3日間",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "音楽と暮らしをつなぐ小坪の一軒 - 逗子「Living with Music PHANTASiA」",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "旧三井財閥の別荘跡に広がる紅葉の名所 - 大磯城山公園を歩く",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "純米酒と和の肴が茅ヶ崎駅南口に - 「高橋マート 茅ヶ崎駅前店」、茅ヶ崎市幸町でプレオープン",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "国宝・舎利殿の扉が3日間だけ開く - 円覚寺「宝物風入・国宝舎利殿特別公開」、10月31日から開催",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
