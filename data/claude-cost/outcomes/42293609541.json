@@ -1,0 +1,80 @@
+{
+  "run_id": "42293609541",
+  "date_jst": "2026-11-07",
+  "outcomes": [
+    {
+      "article_id": 272,
+      "outcome": "confirmed_for_publication"
+    },
+    {
+      "article_id": null,
+      "title": "地図を手に、東海道の3市町を歩き抜く - 「湘南WESTフォトロゲイニング2026 in 平塚・大磯・二宮」、11月7日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "七里ヶ浜の海を窓越しに - 鎌倉・由比ヶ浜とは違う、静かな海辺カフェの選び方",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "逗子に引っ越して、子育てはどう変わった - 保育・学校・自然・交通のリアル",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "江の島でSUPデビュー - 片瀬海岸のスクール選び方と初心者ガイド",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "世界の音楽を平塚で体験する午後 - 「小粋な音楽人へ 室内楽」、11月21日にひらしんホール大ホールで開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "朝6時から平塚駅前で本格バーガー - 「バーガーキング 平塚駅北口店」、12月3日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "紅葉の城山を歩き、陶芸を体験する午後 - NPO法人大磯ガイド協会「城山の里山歩き」、11月28日開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "お米と食の「いいもの」が茅ヶ崎に揃う - 「AKOMEYA TOKYO ラスカ茅ヶ崎店」、湘南エリア初出店で登場",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "製菓・製パン材料2500点が茅ヶ崎に - 「富澤商店 ラスカ茅ヶ崎店」、茅ヶ崎市初出店",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
