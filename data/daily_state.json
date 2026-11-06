@@ -6323,7 +6323,12 @@
     "1": {
      "branch": "daily/2026-11-07-r1",
      "run_id": "42287304363",
-     "started_at": "2026-11-07 05:20"
+     "started_at": "2026-11-07 05:20",
+     "published_ids": [],
+     "held_ids": [
+      271
+     ],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -6922,11 +6927,405 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 0
+    },
+    {
+     "title": "「書く」と「贈る」が日常になる - 有隣堂の文具・雑貨新ブランド「Penno Penna」、大船ルミネウィングに誕生",
+     "dek": "1909年創業の書店・有隣堂が初めて手がける文具・雑貨専門の独立ブランド「Penno Penna（ペンノ ペンナ）」が、大船ルミネウィング6階に11月5日オープンした。",
+     "area": "鎌倉",
+     "cat": "b",
+     "link": "https://www.yurindo.co.jp/information/40039/",
+     "subjectNames": [
+      "Penno Penna",
+      "ペンノ ペンナ",
+      "Penno Penna大船ルミネウィング店",
+      "有隣堂 大船ルミネウィング店"
+     ],
+     "tags": [
+      "有隣堂",
+      "Penno Penna",
+      "文具",
+      "雑貨",
+      "大船",
+      "鎌倉",
+      "新店",
+      "筆記具",
+      "ギフト",
+      "ステーショナリー"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "「涼しい風だね」 - 大磯に刻まれた島崎藤村の晩年をたどる",
+     "dek": "政財界の要人が愛した保養の地・大磯には、近代文学を代表する文豪・島崎藤村が人生最後の2年を過ごした旧居が今も残る。大磯駅から歩いてめぐれる、文学ファン必訪のゆかりの地を案内する。",
+     "area": "大磯",
+     "cat": "c",
+     "link": "https://www.town.oiso.kanagawa.jp/isotabi/meguru/pagedate/14423.html",
+     "subjectNames": [
+      "島崎藤村",
+      "旧島崎藤村邸",
+      "旧島崎藤村住宅 静の草屋",
+      "静の草屋",
+      "町屋園"
+     ],
+     "tags": [
+      "大磯",
+      "島崎藤村",
+      "旧島崎藤村邸",
+      "静の草屋",
+      "地福寺",
+      "文学",
+      "歴史",
+      "近代文学",
+      "ゆかりの地",
+      "藤村忌"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "「葉山ブルー」の海へ潜る - 葉山でシュノーケリング体験ができるスポットとショップの選び方",
+     "dek": "天然記念物指定の自然保護区「芝崎ナチュラルリザーブ」を擁する葉山の海は、関東屈指の透明度を誇るシュノーケリングの名所。初心者向け体験から始められる地元ショップと、海を楽しむための基本情報をまとめた。",
+     "area": "葉山",
+     "cat": "t",
+     "link": "https://hayamadive.com/",
+     "subjectNames": [
+      "葉山ダイビングサービス",
+      "DIVING SHOP NANA",
+      "ダイビングショップNANA",
+      "芝崎ナチュラルリザーブ",
+      "葉山芝崎海岸及び周辺水域"
+     ],
+     "tags": [
+      "葉山",
+      "シュノーケリング",
+      "体験",
+      "ダイビング",
+      "芝崎海岸",
+      "ナチュラルリザーブ",
+      "自然保護区",
+      "葉山ブルー",
+      "マリンレジャー",
+      "湘南",
+      "初心者",
+      "海アクティビティ"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "旧三井別邸の紅葉が夜に輝く - 「もみじのライトアップ2026」、大磯城山公園で11月27日から3日間",
+     "dek": "神奈川県立大磯城山公園・旧三井別邸地区で、恒例の「もみじのライトアップ2026」が11月27日（金）から29日（日）の3日間開催される。不動池に映る逆さもみじや竹林の幻想的なコントラストが、秋の大磯の夜を彩る。入場無料。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "http://www.kanagawa-park.or.jp/ooisojoyama/about.html",
+     "subjectNames": [
+      "もみじのライトアップ2026",
+      "大磯城山公園もみじのライトアップ",
+      "大磯城山公園",
+      "神奈川県立大磯城山公園"
+     ],
+     "tags": [
+      "もみじのライトアップ",
+      "大磯城山公園",
+      "紅葉",
+      "大磯",
+      "ライトアップ",
+      "旧三井別邸",
+      "神奈川県立公園"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "oiso-joyama-momiji-lightup",
+     "reason": "公開前監査で不合格",
+     "round": 1
+    },
+    {
+     "title": "50回目の秋、村岡で - 「第50回村岡ふれあいまつり」、11月7・8日に村岡市民センターで開催",
+     "dek": "市民センターの移転後初めての開催でもある、節目の第50回。藤沢・村岡の地域の縁を紡ぎ続けてきた恒例の秋まつりが、今年も2日間にわたって開かれる。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.city.fujisawa.kanagawa.jp/mura-c/",
+     "subjectNames": [
+      "村岡ふれあいまつり",
+      "第50回村岡ふれあいまつり",
+      "むらおかふれあいまつり"
+     ],
+     "tags": [
+      "村岡ふれあいまつり",
+      "藤沢",
+      "地域イベント",
+      "秋まつり",
+      "村岡",
+      "村岡市民センター"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "muraoka-fureai-matsuri",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 1
+    },
+    {
+     "title": "音楽と暮らしをつなぐ小坪の一軒 - 逗子「Living with Music PHANTASiA」",
+     "dek": "逗子市小坪のマンション一角に店を構える「Living with Music PHANTASiA」。フェアトレード商品も扱う、音楽と日常が交差するユニークなショップだ。",
+     "area": "逗子",
+     "cat": "b",
+     "link": "https://www.instagram.com/phantasia_zushi",
+     "subjectNames": [
+      "Living with Music PHANTASiA",
+      "PHANTASiA",
+      "リビングウィズミュージック ファンタジア",
+      "phantasia_zushi"
+     ],
+     "tags": [
+      "逗子",
+      "小坪",
+      "音楽",
+      "フェアトレード",
+      "セレクトショップ",
+      "ZUSHI COFFEE",
+      "Living with Music PHANTASiA"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(発表日・実施日(announcementDate / effectiveDate)が一次情報で確認できていない)",
+     "round": 1
+    },
+    {
+     "title": "旧三井財閥の別荘跡に広がる紅葉の名所 - 大磯城山公園を歩く",
+     "dek": "大磯城山公園は、旧三井財閥の別荘跡と旧吉田茂邸跡地を整備した神奈川県立の都市公園。春の新緑から秋の紅葉まで四季折々の自然が楽しめ、例年11月下旬から12月上旬にかけてモミジの見頃を迎える。",
+     "area": "大磯",
+     "cat": "t",
+     "link": "http://www.kanagawa-park.or.jp/ooisojoyama/about.html",
+     "subjectNames": [
+      "大磯城山公園",
+      "神奈川県立大磯城山公園",
+      "旧三井別邸地区",
+      "旧吉田茂邸地区",
+      "城山庵"
+     ],
+     "tags": [
+      "大磯城山公園",
+      "紅葉",
+      "大磯",
+      "旧吉田茂邸",
+      "旧三井別邸",
+      "神奈川県立公園",
+      "観光",
+      "秋の湘南"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(発表日・実施日(announcementDate / effectiveDate)が一次情報で確認できていない)",
+     "round": 1
+    },
+    {
+     "title": "純米酒と和の肴が茅ヶ崎駅南口に - 「高橋マート 茅ヶ崎駅前店」、茅ヶ崎市幸町でプレオープン",
+     "dek": "藤沢に2店舗を持つ純米酒専門の居酒屋「高橋マート」が、茅ヶ崎駅南口から徒歩1分の場所に3店舗目を開いた。完全キャッシュレスで、大人が落ち着いて過ごせる空間を提供している。",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "https://www.instagram.com/takahashi_mart/",
+     "subjectNames": [
+      "高橋マート 茅ヶ崎駅前店",
+      "高橋マート茅ヶ崎駅前店",
+      "高橋マート",
+      "たかはしマート",
+      "TAKAHASHI MART"
+     ],
+     "tags": [
+      "高橋マート",
+      "純米酒",
+      "居酒屋",
+      "茅ヶ崎",
+      "茅ヶ崎駅",
+      "新店",
+      "日本酒"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店日(openingDate)が一次情報で確認できていない。推測で補完しない)",
+     "round": 1
+    },
+    {
+     "title": "国宝・舎利殿の扉が3日間だけ開く - 円覚寺「宝物風入・国宝舎利殿特別公開」、10月31日から開催",
+     "dek": "臨済宗大本山・円覚寺が年に一度行う「宝物風入」に合わせ、国宝の舎利殿が3日間限りで特別公開される。鎌倉の紅葉シーズン幕開けの時期に重なる、千載一遇の機会。",
+     "area": "鎌倉",
+     "cat": "e",
+     "link": "https://www.engakuji.or.jp/events/gyoji/",
+     "subjectNames": [
+      "円覚寺",
+      "宝物風入",
+      "国宝舎利殿特別公開",
+      "円覚寺宝物風入",
+      "臨済宗大本山円覚寺",
+      "えんかくじ"
+     ],
+     "tags": [
+      "円覚寺",
+      "宝物風入",
+      "国宝舎利殿",
+      "鎌倉",
+      "北鎌倉",
+      "特別公開",
+      "紅葉"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(2026-11-02 に終了済みのイベント(終了後の告知はしない))",
+     "round": 1
+    },
+    {
+     "title": "海と山が交互に現れる道——逗子・葉山の海沿いドライブコースと途中の立ち寄りスポット",
+     "dek": "",
+     "area": "逗子",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "日本にサーフィンを根付かせた砂浜——鵠沼海岸とサーフカルチャーの誕生史",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "PHANTASiA - 逗子の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "逗子",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "PHANTASiA"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "「夜明け前」を書いた作家の晩年——大磯に刻まれた島崎藤村の足跡をたどる",
+     "dek": "",
+     "area": "大磯",
+     "cat": "c",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "関東屈指の透明度の海に潜る——葉山でシュノーケリング体験ができるスポットとツアーの選び方",
+     "dek": "",
+     "area": "葉山",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "WOOHOO CAFE - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [
+      "WOOHOO CAFE"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "ラサルメリア - 茅ヶ崎の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "ラサルメリア"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
+    },
+    {
+     "title": "神奈川県藤沢市・藤沢(ＪＲ東海道本線、小田急江ノ島線、江ノ島電鉄)にて｢家系ラーメン 五翔家(ごしょうや)｣のラーメンを食す。G系ラーメンの｢豚仙人 藤沢店｣(未食)が、昨年12月に家系ブランドへ完全リニューアル。 https://t.co…",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 1
     }
    ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-11-07 05:20",
+   "updated_at": "2026-11-07 06:04",
    "social_pending": []
   }
  }
