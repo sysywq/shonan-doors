@@ -6336,7 +6336,12 @@
     "2": {
      "branch": "daily/2026-11-07-r2",
      "run_id": "42293609541",
-     "started_at": "2026-11-07 06:05"
+     "started_at": "2026-11-07 06:05",
+     "published_ids": [
+      272
+     ],
+     "held_ids": [],
+     "system_errors": []
     }
    },
    "rejected": [
@@ -7329,11 +7334,406 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 1
+    },
+    {
+     "title": "地図を手に、東海道の3市町を歩き抜く - 「湘南WESTフォトロゲイニング2026 in 平塚・大磯・二宮」、11月7日開催",
+     "dek": "平塚・大磯・二宮の3市町を舞台に、3時間のフォトロゲイニングイベントが11月7日（土）に開催。家族や友人と地図を片手に歴史と自然を感じながら巡る、スポーツ×観光の一日。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://photorogaining.com/event/",
+     "subjectNames": [
+      "湘南WESTフォトロゲイニング2026 in 平塚・大磯・二宮",
+      "湘南WESTフォトロゲイニング",
+      "フォトロゲイニング"
+     ],
+     "tags": [
+      "フォトロゲイニング",
+      "平塚",
+      "大磯",
+      "二宮",
+      "ウォーキング",
+      "スポーツ",
+      "観光",
+      "東海道",
+      "神奈川県観光協会",
+      "アウトドア"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "shonan-west-photoro-hiratsuka-oiso-ninomiya",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "七里ヶ浜の海を窓越しに - 鎌倉・由比ヶ浜とは違う、静かな海辺カフェの選び方",
+     "dek": "江ノ電に揺られて七里ヶ浜駅を降りると、鎌倉市街の賑やかさが嘘のように消える。稲村ヶ崎から小動岬まで続く約3kmの弧状の海岸線と、その向こうに浮かぶ江ノ島・富士山のシルエット。このエリアだからこそ出会える、海ビューのカフェの選び方を整理する。",
+     "area": "鎌倉",
+     "cat": "g",
+     "link": "https://billsjapan.com/jp/%E4%B8%83%E9%87%8C%E3%83%B6%E6%B5%9C",
+     "subjectNames": [
+      "bills 七里ヶ浜",
+      "ビルズ七里ヶ浜",
+      "bills shichirigahama",
+      "Pacific DRIVE-IN",
+      "パシフィックドライブイン",
+      "Pacific DRIVE-IN 七里ヶ浜"
+     ],
+     "tags": [
+      "七里ヶ浜",
+      "鎌倉",
+      "カフェ",
+      "海が見える",
+      "江ノ電",
+      "bills",
+      "Pacific DRIVE-IN",
+      "湘南",
+      "海ビュー",
+      "ランチ",
+      "オーシャンビュー",
+      "七里ヶ浜海岸"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "逗子に引っ越して、子育てはどう変わった - 保育・学校・自然・交通のリアル",
+     "dek": "海と山が駅から徒歩圏内に広がる逗子市。保育施設の種類、小学校区の仕組み、放課後の居場所、18歳まで医療費無料の制度、そして東京への通勤との両立まで、移住を子育て目線で考える人のために整理した。",
+     "area": "逗子",
+     "cat": "l",
+     "link": "https://www.city.zushi.kanagawa.jp/kurashi/ijuteiju/1002527/1002530.html",
+     "subjectNames": [
+      "逗子市",
+      "逗子",
+      "ずし"
+     ],
+     "tags": [
+      "逗子",
+      "移住",
+      "子育て",
+      "保育",
+      "小学校",
+      "放課後",
+      "医療費",
+      "通勤",
+      "暮らし",
+      "自然",
+      "ふれあいスクール",
+      "湘南"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "江の島でSUPデビュー - 片瀬海岸のスクール選び方と初心者ガイド",
+     "dek": "湘南を代表する観光地・江の島を海の上から眺める。片瀬東浜に集まるSUP体験スクールの特徴と、はじめて参加する前に知っておきたい基本知識をまとめた。",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "https://www.chotto-yacht.com/marine-school/sup",
+     "subjectNames": [
+      "ちょっとヨットビーチマリーナ江ノ島",
+      "ちょっとヨット",
+      "Chotto Yacht Beach Marina Enoshima",
+      "江ノ島3E",
+      "江の島3E",
+      "3Ewindsurf",
+      "スリーイー"
+     ],
+     "tags": [
+      "藤沢",
+      "江の島",
+      "片瀬海岸",
+      "SUP",
+      "サップ",
+      "スタンドアップパドル",
+      "マリンスポーツ",
+      "体験スクール",
+      "湘南",
+      "初心者",
+      "海アクティビティ",
+      "片瀬東浜"
+     ],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "世界の音楽を平塚で体験する午後 - 「小粋な音楽人へ 室内楽」、11月21日にひらしんホール大ホールで開催",
+     "dek": "平塚の音楽アンバサダー・加藤昌則が企画する室内楽シリーズが今年も開幕。「世界旅行」をテーマに、ヴァイオリン・ヴィオラ・チェロの奏者と若手演奏家が一堂に集う。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/hall/261121_shitsunaigaku.html",
+     "subjectNames": [
+      "小粋な音楽人へ 室内楽",
+      "小粋な音楽人へ 室内楽2026",
+      "あなたを平塚で音楽人に",
+      "ひらしん平塚文化芸術ホール"
+     ],
+     "tags": [
+      "室内楽",
+      "クラシック音楽",
+      "平塚",
+      "加藤昌則",
+      "川田知子",
+      "ひらしん平塚文化芸術ホール",
+      "ひらしんホール"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "hiratsuka-koiki-na-ongakujin-shitsunai-gaku",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "朝6時から平塚駅前で本格バーガー - 「バーガーキング 平塚駅北口店」、12月3日グランドオープン",
+     "dek": "世界的なハンバーガーチェーン「バーガーキング」が平塚駅北口に12月3日オープン。早朝6時から夜11時まで営業し、平塚の朝食シーンを刷新する。",
+     "area": "平塚",
+     "cat": "g",
+     "link": "https://prtimes.jp/main/html/rd/p/000000442.000038980.html",
+     "subjectNames": [
+      "バーガーキング 平塚駅北口店",
+      "バーガーキング平塚駅北口店",
+      "BURGER KING 平塚駅北口店"
+     ],
+     "tags": [
+      "バーガーキング",
+      "平塚",
+      "グルメ",
+      "ハンバーガー",
+      "新店",
+      "平塚駅"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "紅葉の城山を歩き、陶芸を体験する午後 - NPO法人大磯ガイド協会「城山の里山歩き」、11月28日開催",
+     "dek": "大磯・城山公園の里山を案内付きで歩き、陶芸体験と夕映えの富士山、夜の紅葉ライトアップまでを楽しむ企画ツアー。申込締切は11月21日。",
+     "area": "大磯",
+     "cat": "e",
+     "link": "https://www.oisoguide.com/",
+     "subjectNames": [
+      "大磯ガイド協会城山里山歩き2026",
+      "城山の里山歩き・陶芸体験から紅葉ライトアップまで大磯の秋を満喫",
+      "NPO法人大磯ガイド協会"
+     ],
+     "tags": [
+      "大磯",
+      "ガイドツアー",
+      "里山",
+      "陶芸体験",
+      "紅葉",
+      "城山公園",
+      "大磯ガイド協会",
+      "イベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "oiso-guide-shiroyama-satoyama-aruki",
+     "reason": "公開前監査で不合格",
+     "round": 2
+    },
+    {
+     "title": "お米と食の「いいもの」が茅ヶ崎に揃う - 「AKOMEYA TOKYO ラスカ茅ヶ崎店」、湘南エリア初出店で登場",
+     "dek": "全国から厳選したお米やごはんのお供、調理道具を扱うライフスタイルショップ「AKOMEYA TOKYO」が、JR茅ヶ崎駅直結のラスカ茅ヶ崎3Fに湘南エリア初出店。熊澤酒造とのコラボ商品も展開。",
+     "area": "茅ヶ崎",
+     "cat": "b",
+     "link": "https://www.jryscc.co.jp/lusca/chigasaki/news/detail.php?topics_id=194",
+     "subjectNames": [
+      "AKOMEYA TOKYO ラスカ茅ヶ崎店",
+      "AKOMEYA TOKYO",
+      "アコメヤ トウキョウ",
+      "アコメヤ"
+     ],
+     "tags": [
+      "AKOMEYA TOKYO",
+      "ラスカ茅ヶ崎",
+      "茅ヶ崎",
+      "お米",
+      "ライフスタイル",
+      "食雑貨",
+      "湘南エリア初出店",
+      "熊澤酒造"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店から365日経過。15日以上前の出来事は今日のニュースとして扱わない)",
+     "round": 2
+    },
+    {
+     "title": "製菓・製パン材料2500点が茅ヶ崎に - 「富澤商店 ラスカ茅ヶ崎店」、茅ヶ崎市初出店",
+     "dek": "1919年創業の食材・製菓専門店「富澤商店」が、JR茅ヶ崎駅直結のラスカ茅ヶ崎1Fに市内初出店。製菓・製パン材料から調理器具まで約2500点を揃え、手作り派の強い味方となる。",
+     "area": "茅ヶ崎",
+     "cat": "g",
+     "link": "https://tomiz.com/information/detail/2566",
+     "subjectNames": [
+      "富澤商店 ラスカ茅ヶ崎店",
+      "富澤商店",
+      "TOMIZ"
+     ],
+     "tags": [
+      "富澤商店",
+      "ラスカ茅ヶ崎",
+      "茅ヶ崎",
+      "製菓材料",
+      "製パン",
+      "食材専門店",
+      "手作り",
+      "お菓子",
+      "パン"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開店から365日経過。15日以上前の出来事は今日のニュースとして扱わない)",
+     "round": 2
+    },
+    {
+     "title": "6月の鎌倉、明月院に「青」を見に行く——あじさいの見頃・混雑を避ける時間帯・周辺の歩き方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "七里ヶ浜の海を窓越しに——鎌倉・由比ヶ浜とは違う、静かな海辺カフェの選び方",
+     "dek": "",
+     "area": "鎌倉",
+     "cat": "g",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "ミニストップ 二宮駅前店 - 二宮の新規発見店舗（開業日未確認）",
+     "dek": "",
+     "area": "二宮",
+     "cat": "b",
+     "link": "",
+     "subjectNames": [
+      "ミニストップ 二宮駅前店"
+     ],
+     "tags": [],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "逗子に引っ越して、子育てはどう変わった——保育・学校・自然・交通のリアルな声",
+     "dek": "",
+     "area": "逗子",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "政治家たちが愛した丘の邸宅群へ——「明治記念大磯邸園」の見どころと歩き方",
+     "dek": "",
+     "area": "大磯",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "江の島でSUPデビュー——体験スクールの選び方と、片瀬海岸での乗り方ガイド",
+     "dek": "",
+     "area": "藤沢",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "湘南を自転車で横断する——大磯から江の島まで、太平洋岸自転車道・海沿いルートの全記録",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
+    },
+    {
+     "title": "茅ヶ崎で子どもと遊ぶ——子育て支援施設・広い公園・海遊びスポットをエリア別に整理",
+     "dek": "",
+     "area": "茅ヶ崎",
+     "cat": "l",
+     "link": "",
+     "subjectNames": [],
+     "tags": [],
+     "articleType": "stock",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "企画で試したが採用されなかった",
+     "round": 2
     }
    ],
    "failure": null,
    "confirmed_today": 0,
-   "updated_at": "2026-11-07 06:05",
+   "updated_at": "2026-11-07 06:56",
    "social_pending": []
   }
  }
