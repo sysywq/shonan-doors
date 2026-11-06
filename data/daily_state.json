@@ -6351,7 +6351,31 @@
     "3": {
      "branch": "daily/2026-11-07-r3",
      "run_id": "42300911621",
-     "started_at": "2026-11-07 06:58"
+     "started_at": "2026-11-07 06:58",
+     "published_ids": [],
+     "held_ids": [
+      273
+     ],
+     "system_errors": [
+      {
+       "where": "post-audit top-up 2",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1qFBuLG1Mvy9GHKCu'}",
+       "at": "2026-11-07 07:17"
+      },
+      {
+       "where": "post-audit top-up 3",
+       "reason": "BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1r4Ju7iZbyJiK4JRz'}",
+       "at": "2026-11-07 07:17"
+      },
+      {
+       "where": "監査: 師匠と弟子の粋な高座 - 「湘南百番寄席 小文治・小すみ 親子会」、11月14日にひらしんホールで",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1koHsGh5fTQ46Mb6Z'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      },
+      {
+       "where": "監査: 昭和の名曲が平塚に響く一日 - 「昭和100年記念コンサート 心に残る名曲と共に2026」、11月7日にひらしんホールで",
+       "reason": "監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1pQLZdtUbn6GzUg4h'} 監査応答の形式異常・監査処理の例外(監査できていない)"
+      }
+     ]
     }
    },
    "rejected": [
@@ -7739,11 +7763,181 @@
      "eventSeriesKey": "",
      "reason": "企画で試したが採用されなかった",
      "round": 2
+    },
+    {
+     "title": "九州の肉料理が辻堂に集結 - 「第77回 肉肉パーク」、11月6日から8日まで神台公園で開催",
+     "dek": "福岡発の肉料理グルメイベントが辻堂・神台公園に登場。入場無料で20店舗以上が出店し、炭火焼鳥やシュラスコなど多彩な肉料理が並ぶ3日間。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://www.instagram.com/sunao_tokimatsu/",
+     "subjectNames": [
+      "肉肉パーク",
+      "第77回 肉肉パーク",
+      "にくにくパーク"
+     ],
+     "tags": [
+      "肉肉パーク",
+      "辻堂",
+      "藤沢",
+      "グルメイベント",
+      "神台公園",
+      "肉料理"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "nikuniku-park-tsujido",
+     "reason": "公開前監査で不合格",
+     "round": 3
+    },
+    {
+     "title": "辻堂の夜が「青」に染まる - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日から12月25日まで",
+     "dek": "JR辻堂駅直結のテラスモール湘南が、開業15周年を記念したクリスマスイルミネーション「Our Blue Xmas」を11月11日から開催。高さ約8mのメインツリーを湘南の海と空を象徴する青い光で包む。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://prtimes.jp/main/html/rd/p/000000056.000116791.html",
+     "subjectNames": [
+      "テラスモール湘南イルミネーション2026",
+      "Our Blue Xmas",
+      "アワブルークリスマス",
+      "LIGHT OUR BLUE PRIDE",
+      "テラスモール湘南イルミネーション"
+     ],
+     "tags": [
+      "テラスモール湘南",
+      "辻堂",
+      "イルミネーション",
+      "クリスマス",
+      "藤沢",
+      "Our Blue Xmas",
+      "冬",
+      "夜のお出かけ"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "terrace-mall-shonan-illumination",
+     "reason": "公開前監査で不合格",
+     "round": 3
+    },
+    {
+     "title": "師匠と弟子の粋な高座 - 「湘南百番寄席 小文治・小すみ 親子会」、11月14日にひらしんホールで",
+     "dek": "落語芸術協会の噺家・桂小文治と、その弟子で音曲師の桂小すみによる親子会。平塚の多目的ホールで15時30分開演。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_post/gallery/261114tamoku.html",
+     "subjectNames": [
+      "湘南百番寄席 小文治・小すみ 親子会",
+      "湘南百番寄席",
+      "桂小文治",
+      "桂小すみ"
+     ],
+     "tags": [
+      "落語",
+      "寄席",
+      "平塚",
+      "桂小文治",
+      "桂小すみ",
+      "湘南百番寄席",
+      "ひらしんホール",
+      "音曲"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "shonan-hyakuban-yose",
+     "reason": "公開前監査で不合格",
+     "round": 3
+    },
+    {
+     "title": "昭和の名曲が平塚に響く一日 - 「昭和100年記念コンサート 心に残る名曲と共に2026」、11月7日にひらしんホールで",
+     "dek": "昭和100年を記念し、懐かしい名曲を集めたコンサートがひらしん平塚文化芸術ホール大ホールで開催。昭和の音楽を通じて時代の記憶をたどる。",
+     "area": "平塚",
+     "cat": "e",
+     "link": "https://hiratsuka.hall-info.jp/event_calendar.html",
+     "subjectNames": [
+      "昭和100年記念コンサート 心に残る名曲と共に2026",
+      "昭和100年記念コンサート",
+      "心に残る名曲と共に2026"
+     ],
+     "tags": [
+      "コンサート",
+      "平塚",
+      "昭和100年",
+      "音楽",
+      "ひらしんホール",
+      "懐メロ"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "2026-11-07",
+     "eventSeriesKey": "hiratsuka-showa100-concert",
+     "reason": "公開前監査で不合格",
+     "round": 3
+    },
+    {
+     "title": "沖合1.4kmの岩へ、船で渡る - えぼし岩周遊船の予約・料金・楽しみ方",
+     "dek": "茅ヶ崎のシンボル「えぼし岩」に、実際に船で近づける。周遊船は通年運航、予約制で1日2便。東に江の島、西に富士山を望む40分の船旅を、事前の段取りから丸ごと解説する。",
+     "area": "茅ヶ崎",
+     "cat": "t",
+     "link": "https://eboshi-maru.com/",
+     "subjectNames": [
+      "えぼし岩周遊船",
+      "渡船えぼし丸",
+      "有限会社渡船えぼし丸",
+      "えぼし丸"
+     ],
+     "tags": [
+      "茅ヶ崎",
+      "えぼし岩",
+      "烏帽子岩",
+      "周遊船",
+      "渡船えぼし丸",
+      "体験",
+      "マリンアクティビティ",
+      "湘南",
+      "茅ヶ崎漁港"
+     ],
+     "articleType": "stock",
+     "topicId": "t0272",
+     "date": "2026-11-07",
+     "eventSeriesKey": "",
+     "reason": "Fact Audit で review_required(保留)",
+     "round": 3
+    },
+    {
+     "title": "ワインの街・藤沢、今年も駅前で乾杯 - 「藤沢ワイン祭り2026」、藤沢駅北口サンパール広場で開催予定",
+     "dek": "国産ワインの出荷量日本一を誇る藤沢市で、毎年秋に開かれる「藤沢ワイン祭り」が今年も開催予定。地元店舗のおつまみ屋台やメルシャン藤沢工場のワイン試飲が楽しめる、駅前の一日イベント。",
+     "area": "藤沢",
+     "cat": "e",
+     "link": "https://fujisawa-yeg.com/wine/",
+     "subjectNames": [
+      "藤沢ワイン祭り2026",
+      "藤沢ワイン祭り",
+      "The Fujisawa Wine Festival",
+      "ふじさわワインまつり"
+     ],
+     "tags": [
+      "藤沢ワイン祭り",
+      "藤沢",
+      "ワイン",
+      "サンパール広場",
+      "メルシャン",
+      "藤沢駅",
+      "まちおこし",
+      "秋のイベント"
+     ],
+     "articleType": "news",
+     "topicId": "",
+     "date": "",
+     "eventSeriesKey": "",
+     "reason": "ニュース鮮度ゲートで対象外(開催日(eventStartDate)が一次情報で確認できていない)",
+     "round": 3
     }
    ],
    "failure": null,
    "confirmed_today": 1,
-   "updated_at": "2026-11-07 06:58",
+   "updated_at": "2026-11-07 07:17",
    "social_pending": []
   }
  }
