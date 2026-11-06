@@ -7677,5 +7677,63 @@
       "openingDate": "",
       "effectiveDate": ""
     }
+  },
+  {
+    "id": 272,
+    "articleType": "news",
+    "cat": "e",
+    "area": "平塚",
+    "scene": "festival",
+    "title": "半世紀の節目に地域の伝統芸能が一堂に - 「第50回ひらつか民俗芸能まつり」、11月22日に入場無料で開催",
+    "dek": "平塚市内各地区に受け継がれてきた伝統芸能を一堂に披露する「ひらつか民俗芸能まつり」が、今年で第50回を迎える。11月22日、ひらしん平塚文化芸術ホール大ホールにて入場無料で開催される。",
+    "link": "https://hiratsuka.hall-info.jp/event_post/hall/261122dai.html",
+    "subjectNames": [
+      "ひらつか民俗芸能まつり",
+      "第50回ひらつか民俗芸能まつり",
+      "ひらしん平塚文化芸術ホール"
+    ],
+    "sources": [
+      "https://hiratsuka.hall-info.jp/event_post/hall/261122dai.html",
+      "https://www.city.hiratsuka.kanagawa.jp/bunka/page-c_01344.html"
+    ],
+    "date": "2026-11-07",
+    "eventStartDate": "2026-11-22",
+    "eventEndDate": "",
+    "eventSeriesKey": "hiratsuka-minzoku-geino-matsuri",
+    "eventPrice": "0",
+    "eventTicketUrl": "",
+    "eventOrganizer": "ひらつか民俗芸能まつり実行委員会・平塚市教育委員会",
+    "eventOrganizerUrl": "https://www.city.hiratsuka.kanagawa.jp/bunka/page-c_01344.html",
+    "eventMetadataSource": "https://hiratsuka.hall-info.jp/event_post/hall/261122dai.html",
+    "eventPerformers": [],
+    "address": "",
+    "access": "",
+    "hours": "",
+    "closedDays": "",
+    "snsLinks": {
+      "instagram": "",
+      "facebook": "",
+      "x": "",
+      "tiktok": ""
+    },
+    "body": "平塚の各地域で代々受け継がれてきた民俗芸能を広く市民に伝えるために続けられてきた「ひらつか民俗芸能まつり」が、今年で第50回の節目を迎える。11月22日（日）、ひらしん平塚文化芸術ホール大ホールで開催される。開場12時30分、開演13時、終演16時の予定。入場料は無料で、事前申し込みは不要だ。\n\n主催はひらつか民俗芸能まつり実行委員会と平塚市教育委員会。平塚市はこの節目に先立ち、2026年8月から9月にかけて市役所本館にて「第50回開催記念展」を開催するなど、半世紀にわたる歩みを改めて振り返る取り組みも進めてきた。\n\n民俗芸能まつりは、各地区に伝わる獅子舞・神楽・お囃子といった芸能を次世代に引き継いでいくための場として、地域の担い手たちが年に一度集まる貴重な機会だ。ホールという公共の場に持ち込まれることで、普段は神社の境内や祭礼の場でしか出会えない芸能を、より多くの市民が気軽に鑑賞できる形になっている。50回にわたって継続されてきたという事実が、地域の文化への関心の深さを物語る。\n\n問い合わせは平塚市社会教育課（電話：0463-35-8124）まで。ひらしん平塚文化芸術ホール公式サイトのイベントページでも詳細を確認できる。",
+    "tags": [
+      "民俗芸能",
+      "伝統芸能",
+      "平塚",
+      "ひらつか民俗芸能まつり",
+      "ひらしん平塚文化芸術ホール",
+      "ひらしんホール",
+      "無料"
+    ],
+    "slug": "hiratsuka-event-0272",
+    "freshness": {
+      "kind": "event",
+      "basis": "開催日2026-11-22",
+      "reason": "開催まであと15日",
+      "announcementDate": "",
+      "openingDate": "",
+      "effectiveDate": ""
+    }
   }
 ]
