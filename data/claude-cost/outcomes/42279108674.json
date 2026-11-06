@@ -1,0 +1,137 @@
+{
+  "run_id": "42279108674",
+  "date_jst": "2026-11-07",
+  "outcomes": [
+    {
+      "article_id": 270,
+      "title": "農と花が交わる週末 - 花菜ガーデン「花菜マルシェ」、11月28・29日に開催",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "濃厚豚骨魚介つけ麺が藤沢・石川に登場 - 「三田製麺所 藤沢石川店」、11月13日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "明治の偉人が行進し、夜空にランタンが舞う - 「大磯まつり2026」、11月14日にロングビーチ駐車場で",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "大磯港の芝生がロックで揺れる一日 - 「第3回大磯ファミリーロックフェスティバル」、11月8日に大磯港芝生広場で",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能4件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "14ブルワリーと地元グルメが海辺に集結 - 「うみちかマルシェ vol.6 ～11月の海とクラフトビールと～」、11月7・8日に鵠沼海浜公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "自動修正後の再監査で不合格",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "茅ヶ崎市南西部に新たなマック - 「マクドナルド 茅ヶ崎甘沼店」、11月25日グランドオープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "和の情緒をまとった「しろたん」が小町通りに - 「しろたんふんわりストア 鎌倉小町通り店」、12月4日オープン",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "鎌倉の隣にある静かな氏神をめぐる - 逗子・亀岡八幡宮・久木神社・天照大神社、3社参拝のすすめ",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が2件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "古代相模の中心地は平塚だった - 相模国府跡と国府祭が語る、もうひとつの平塚史",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "子どもから大人まで楽しめる秋の体験祭 - 「スポーツまつりふじさわ2026」、11月8日に秋葉台公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "25年ぶりの里帰り - 平塚市博物館「開館50周年記念秋期特別展 名品たちの里帰り」、12月27日まで開催中",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能2件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "わんちゃんと触れ合える「いぬカフェRio」、11月28日にららぽーと湘南平塚へ",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件",
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "空手と沖縄文化が由比ヶ浜に集結 - 「鎌倉空手の日 沖縄鎌倉交流祭」、11月8日に初開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "一次情報と矛盾する記述(contradicted)が1件",
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能1件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "丹精の菊が大船に揃う - 「第63回神奈川県菊花大会」、11月23日まで大船フラワーセンターで開催中",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能3件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "71年目の文化と芸術の祭典 - 「おおいそ文化芸術祭2026」、10月10日から12月5日まで大磯全域で開催中",
+      "outcome": "freshness_rejected"
+    },
+    {
+      "article_id": null,
+      "title": "辻堂の顔が15年目を迎えた - テラスモール湘南、2026年11月11日に開業15周年",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
