@@ -3363,10 +3363,10 @@
     "area": "逗子",
     "category": "t",
     "searchIntent": "逗子から葉山にかけての海岸線（国道134号〜県道207号）をドライブしたいと考えており、景色の良いビューポイント・途中で寄れるカフェや神社・展望スポットの組み合わせを知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「長者ヶ崎」が既存記事id:120と一致",
     "createdAt": "2026-11-07"
   },
   {
@@ -3376,10 +3376,10 @@
     "area": "大磯",
     "category": "c",
     "searchIntent": "大磯が政財界人の保養地として知られるだけでなく、島崎藤村が晩年を過ごし『夜明け前』を完成させた土地でもあることを知り、文学・歴史ファンとしてゆかりのスポットを訪ね歩くための情報を知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 監査応答の形式異常・監査処理の例外(監査できていない)",
     "createdAt": "2026-11-07"
   },
   {
@@ -3389,10 +3389,10 @@
     "area": "藤沢",
     "category": "c",
     "searchIntent": "鵠沼海岸がなぜ「日本のサーフィン発祥の地」と呼ばれるのか、戦後にサーフィン文化が根付いた歴史的経緯と、現在もサーファーが集まる理由を文化・歴史読み物として知りたい",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "同一対象の既存記事あり: 対象名「鵠沼海岸」が既存記事id:66と一致",
     "createdAt": "2026-11-07"
   },
   {
@@ -3402,10 +3402,10 @@
     "area": "葉山",
     "category": "t",
     "searchIntent": "葉山の海の透明度・豊かな生態系に興味があり、シュノーケリングや素潜り体験ができるスポット・ツアー・ショップの料金・予約方法・シーズンを事前に把握したい。磯遊びや釣りとは異なる「水中から海を楽しむ」体験を探している",
-    "status": "candidate",
+    "status": "skipped",
     "generatedArticleId": null,
     "generatedAt": null,
-    "skipReason": null,
+    "skipReason": "公開前監査で不合格: 一次情報同士の食い違いなど、人の確認が必要(review_required)",
     "createdAt": "2026-11-07"
   }
 ]
