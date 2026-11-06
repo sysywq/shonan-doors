@@ -1,0 +1,53 @@
+{
+  "run_id": "42300911621",
+  "date_jst": "2026-11-07",
+  "outcomes": [
+    {
+      "article_id": 273,
+      "title": "沖合1.4kmの岩へ、船で渡る - えぼし岩周遊船の予約・料金・楽しみ方",
+      "outcome": "held",
+      "verdict": "review_required",
+      "reasons": [
+        "一次情報同士の食い違いなど、人の確認が必要(review_required)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "九州の肉料理が辻堂に集結 - 「第77回 肉肉パーク」、11月6日から8日まで神台公園で開催",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "骨格(title/dek/central)の記述が一次情報で未確認・確認不能5件"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "辻堂の夜が「青」に染まる - テラスモール湘南イルミネーション2026「Our Blue Xmas」、11月11日から12月25日まで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "師匠と弟子の粋な高座 - 「湘南百番寄席 小文治・小すみ 親子会」、11月14日にひらしんホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "昭和の名曲が平塚に響く一日 - 「昭和100年記念コンサート 心に残る名曲と共に2026」、11月7日にひらしんホールで",
+      "outcome": "gate_rejected",
+      "reasons": [
+        "監査応答の形式異常・監査処理の例外(監査できていない)"
+      ]
+    },
+    {
+      "article_id": null,
+      "title": "ワインの街・藤沢、今年も駅前で乾杯 - 「藤沢ワイン祭り2026」、藤沢駅北口サンパール広場で開催予定",
+      "outcome": "freshness_rejected"
+    }
+  ],
+  "status_note": "confirmed_for_publication means passed gate, not verified HTTP 200"
+}
