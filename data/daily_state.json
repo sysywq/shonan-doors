@@ -6315,7 +6315,9 @@
      "held_ids": [
       270
      ],
-     "system_errors": []
+     "system_errors": [],
+     "refill_dispatched": true,
+     "refill_dispatched_at": "2026-11-07 05:19"
     }
    },
    "rejected": [
