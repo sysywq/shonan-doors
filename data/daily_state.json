@@ -6305,7 +6305,7 @@
   },
   "2026-11-07": {
    "date": "2026-11-07",
-   "status": "incomplete",
+   "status": "system_failure",
    "rounds": {
     "0": {
      "branch": "daily/2026-11-07",
@@ -7935,7 +7935,12 @@
      "round": 3
     }
    ],
-   "failure": null,
+   "failure": {
+    "kind": "system_failure",
+    "reason": "システム障害: post-audit top-up 2: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1qFBuLG1Mvy9GHKCu'}; post-audit top-up 3: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1r4Ju7iZbyJiK4JRz'}; 監査: 師匠と弟子の粋な高座 - 「湘南百番寄席 小文治・小すみ 親子会」、11月14日にひらしんホールで: 監査処理で例外: BadRequestError: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'You have reached your specified API usage limits. You will regain access on 2026-12-01 at 00:00 UTC.'}, 'request_id': 'req_011CgnT1koHsGh5fTQ46Mb6Z'} 監査応答の形式異常・監査処理の例外(監査できていない)",
+    "at": "2026-11-07 07:17",
+    "run_id": "42300911621"
+   },
    "confirmed_today": 1,
    "updated_at": "2026-11-07 07:17",
    "social_pending": []
