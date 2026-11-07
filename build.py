@@ -23,6 +23,7 @@ import os
 import re
 import html
 import shutil
+from urllib.parse import urljoin
 from datetime import date as _date, datetime as _datetime
 from zoneinfo import ZoneInfo
 
@@ -541,9 +542,9 @@ def build_meta_description(item):
 
 
 def build_ogp_image_url(item):
-    if item.get("heroImage"):
-        return f"{SITE_DOMAIN}{item['heroImage']}"
-    return f"{SITE_DOMAIN}/assets/ogp/{item['scene']}.png"
+    """Share the exact photo selected for the visible article hero."""
+    source, _alt = resolve_article_hero_image(item)
+    return urljoin(SITE_DOMAIN + "/", source)
 
 
 def event_optional_data(item):
@@ -667,14 +668,14 @@ def render_head_seo(item, canonical_url):
 <meta property="og:title" content="{esc(seo_title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:url" content="{canonical_url}">
-<meta property="og:image" content="{image_url}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="{esc(image_url)}">
+<meta property="og:image:secure_url" content="{esc(image_url)}">
+<meta property="og:image:alt" content="{resolve_article_hero_image(item)[1]}">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(seo_title)}">
 <meta name="twitter:description" content="{esc(description)}">
-<meta name="twitter:image" content="{image_url}">
+<meta name="twitter:image" content="{esc(image_url)}">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>"""
 
 
