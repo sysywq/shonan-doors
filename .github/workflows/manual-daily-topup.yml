@@ -16,6 +16,8 @@ jobs:
   topup:
     runs-on: ubuntu-latest
     timeout-minutes: 300
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
     permissions:
       contents: write
       pull-requests: write
@@ -76,8 +78,19 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: python report_gate_rejections.py
       - name: Test and build
+        env:
+          CLAUDE_BUDGET_ENFORCE: '0'
+          DAILY_MIN_ARTICLES: '3'
+          DAILY_TARGET_ARTICLES: '5'
+          DAILY_MAX_REFILL_ROUNDS: '4'
+          DAILY_TOPUP_MAX_ATTEMPTS: '3'
+          DAILY_POST_AUDIT_TOPUP: '1'
+          DAILY_REUSE_FULL_AUDIT: '0'
+          MAX_GATE_DRAFTS_PER_RUN: '15'
+          MAX_EDITORIAL_DRAFT_ATTEMPTS: '8'
+          NEWS_REFILL_MAX_ATTEMPTS: '3'
         run: |
-          python -m unittest discover -s tests -v
+          CLAUDE_BUDGET_ENFORCE=0 DAILY_REUSE_FULL_AUDIT=0 python -m unittest discover -s tests -v
           python build.py
       - name: Verify minimum and target date
         env:

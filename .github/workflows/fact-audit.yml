@@ -42,13 +42,15 @@ on:
         default: ''
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
   audit:
     runs-on: ubuntu-latest
     timeout-minutes: 350
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

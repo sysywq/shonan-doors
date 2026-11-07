@@ -77,7 +77,10 @@ def audit_article(client, entry, confirmations=None, fetcher=None, image_fetcher
       verdict   … 最終判定(confirmed / fix / rewrite / review_required)
       result    … full 監査の正規化済み結果(fact_audit の形式)
       reasons / blocking / autofix / verify"""
-    result = pg._audit_safely(client, entry, confirmations)
+    import audit_receipts
+    result = audit_receipts.load(entry)
+    if result is None:
+        result = pg._audit_safely(client, entry, confirmations)
     passed, reasons, blocking = pg.evaluate(result)
     out = {"confirmed": passed, "entry": entry, "result": result, "reasons": reasons,
            "blocking": blocking, "autofix": [], "verify": []}

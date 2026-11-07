@@ -69,5 +69,10 @@ class GrowthFeedbackTest(unittest.TestCase):
                 self.assertEqual(json.load(f)["next_id"], 133)
 
 
+    def test_daily_signal_log_is_deduplicated_and_does_not_claim_a_revision(self):
+        record=gf.daily_signal_record({'gsc_period':['2026-11-01','2026-11-04']},[['Action_ID']],dt.date(2026,11,7))
+        self.assertEqual(record[4],'EDITORIAL_SIGNAL_READY')
+        self.assertIsNone(gf.daily_signal_record({},[['Action_ID'],[record[0]]],dt.date(2026,11,7)))
+
 if __name__ == "__main__":
     unittest.main()

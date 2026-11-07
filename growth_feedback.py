@@ -258,6 +258,18 @@ def proposals(signal, existing):
     return output
 
 
+def daily_signal_record(signal, existing, today=None):
+    today = today or dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).date()
+    ident = 'editorial-signal-' + today.isoformat()
+    if any(r.get('Action_ID') == ident for r in rows(existing)):
+        return None
+    return [ident, dt.datetime.now(dt.timezone.utc).isoformat(), '', '',
+            'EDITORIAL_SIGNAL_READY', 'GA4/GSC signal prepared; not proof of publication or ranking gains',
+            '', json.dumps({'period': signal.get('gsc_period'), 'hints': signal.get('discovery_hints'),
+                            'segments': signal.get('editorial_segments')}, ensure_ascii=False),
+            'github-actions', '', 'Daily candidate selection reads this signal; revisions have separate eligibility gates']
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("mode", choices=("daily", "weekly"))
@@ -274,6 +286,10 @@ def main():
         signal = analyze(tables, articles)
         write_signal(signal)
         print(f"Growth: {len(signal['opportunities'])} review opportunities; trend={signal['trend_available']}")
+        if args.mode == "daily" and not args.snapshot:
+            record = daily_signal_record(signal, tables["Action_Log"])
+            if record:
+                append_action(spreadsheet_id, record)
         if args.mode == "weekly" and not args.snapshot:
             items = proposals(signal, tables["AI_Analysis"])
             append_analysis(spreadsheet_id, items)

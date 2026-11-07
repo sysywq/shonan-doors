@@ -45,3 +45,12 @@ class UsageMeterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class SearchPricingTests(unittest.TestCase):
+    def test_search_fees_are_added_to_token_estimate(self):
+        from scripts.claude_cost_meter import record_usage
+        with tempfile.TemporaryDirectory() as d:
+            response=SimpleNamespace(model='claude-sonnet-4-6',usage=SimpleNamespace(input_tokens=1000,output_tokens=0,server_tool_use=SimpleNamespace(web_search_requests=3)))
+            row=record_usage(response,stage='news',path=Path(d)/'usage.jsonl')
+            self.assertAlmostEqual(row['estimated_usd'],.033)
+            self.assertEqual(row['web_search_requests'],3)
