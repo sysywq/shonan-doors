@@ -22,6 +22,8 @@ jobs:
       actions: write   # Daily Articles の workflow_dispatch
       contents: read
       pages: write     # 本番未反映時の Pages 再ビルド要求
+    env:
+      DAILY_MIN_ARTICLES: '1'
     steps:
       - uses: actions/checkout@v4
         with:

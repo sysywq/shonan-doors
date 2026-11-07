@@ -46,6 +46,17 @@ jobs:
         run: pip install anthropic
 
       - name: ユニットテスト
+        env:
+          CLAUDE_BUDGET_ENFORCE: '0'
+          DAILY_MIN_ARTICLES: '3'
+          DAILY_TARGET_ARTICLES: '5'
+          DAILY_MAX_REFILL_ROUNDS: '4'
+          DAILY_TOPUP_MAX_ATTEMPTS: '3'
+          DAILY_POST_AUDIT_TOPUP: '1'
+          DAILY_REUSE_FULL_AUDIT: '0'
+          MAX_GATE_DRAFTS_PER_RUN: '15'
+          MAX_EDITORIAL_DRAFT_ATTEMPTS: '8'
+          NEWS_REFILL_MAX_ATTEMPTS: '3'
         run: python3 -m unittest discover -s tests -v
 
       # build.pyはsitemap.xmlのlastmodやイベントの開催状況に実行日を使う。

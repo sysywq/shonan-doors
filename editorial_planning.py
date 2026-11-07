@@ -34,6 +34,8 @@ DISCOVERY_TOOL = {
             "query": {"type": "string"}, "titleIdea": {"type": "string"},
             "area": {"type": "string"}, "cat": {"type": "string"},
             "subject": {"type": "string"}, "sourceUrl": {"type": "string"},
+            "leadUrl": {"type": "string", "description": "話題発見に使った地域メディアの実在する記事URL。推測禁止"},
+            "leadSourceType": {"type": "string", "enum": ["local_media", "official"]},
             "searchIntent": {"type": "string"},
             "newsKind": {"type": "string", "enum": ["store_opening", "event", "news"],
                          "description": "新店・開業=store_opening、イベント=event、それ以外=news"},
@@ -76,6 +78,9 @@ def _tool_call(client, system, prompt, tool, with_search=False, turns=8, meta=No
 
 
 def discover(client, areas, cats, existing, hints, count=30):
+    import json
+    from local_media_signal import headlines
+    media_leads = headlines()
     digest = "\n".join(f"- {a.get('title','')} / {','.join(a.get('subjectNames') or [])}" for a in existing[-150:])
     system = ("湘南Doorsの編集者。湘南8エリアのニュース、イベント、新店、グルメ、観光、暮らし、"
               "子育て、高単価領域などを横断して新規テーマを調査する。候補は記事本文ではない。"
@@ -83,17 +88,25 @@ def discover(client, areas, cats, existing, hints, count=30):
               "新店は発表日ではなく開店日で鮮度を判断する(開店から15日以上たった店舗、終了済みのイベントは候補にしない。"
               "これから開店・開催するものは発表が1か月以上前でもよい)。日付は一次情報で確認できたものだけを入れ、推測しない。"
               "Google Trendsは参照可能な時だけ季節性の補助情報として使い、数値を推測しない。"
-              "他媒体は事実の根拠にしない。既存と同一対象・検索意図は候補にしない。"
+              "ネタ探しは湘南人(shonanjin.com)、湘南経済新聞(shonan.keizai.biz)、号外NET(goguynet.jp)、"
+              "ジモハック湘南(jimohack-shonan.jp)、タウンニュース(townnews.co.jp)を積極的に見る。"
+              "収集枠の目標は地域メディア発見60%、店舗・主催者の公式SNS/プレスリリース30%、自治体10%。"
+              "これは候補探索の配分目標で、架空のURLや弱い候補で埋めない。自治体のお知らせだけで枠を埋めない。"
+              "地域メディアはleadUrlに記録しleadSourceType=local_media。sourceUrlは別途確認した一次情報URL、未確認は空文字。"
+              "開店・限定メニュー・週末のお出かけ・地域の店や人など、誰が行く理由になるか明確なテーマを優先。"
+              "他媒体の文章・独自取材・写真は転載しない。他媒体は事実の根拠にしない。既存と同一対象・検索意図は候補にしない。"
               f"エリア: {areas}。カテゴリ: {cats}。既存記事:\n{digest}")
     result = _tool_call(client, system, f"異なる地域・検索意図から最大{count}件の候補を広く調査。候補段階では本文を書かず、メタデータだけを提出。"
-                        f"GSCの参考語句: {hints[:5]}。すべてsubmit_topic_candidatesで提出。",
+                        f"GSCの参考語句: {hints[:5]}。地域媒体の新着見出し(発見用、事実確認用ではない): "
+                        + json.dumps(media_leads, ensure_ascii=False)
+                        + "。この見出しだけで断定せず店舗・主催者の公式発信を別途確認。すべてsubmit_topic_candidatesで提出。",
                         DISCOVERY_TOOL, with_search=True)
     raw = result.get("candidates", [])
     if not isinstance(raw, list) or len(raw) > count or any(not isinstance(x, dict) for x in raw):
         raise ValueError("invalid discovery response")
     return [{"id": f"news-{i:02d}", "articleType": "news", **x}
             for i, x in enumerate(raw) if x.get("area") in areas and x.get("cat") in cats
-            and x.get("query") and x.get("sourceUrl")]
+            and x.get("query") and (x.get("sourceUrl") or x.get("leadUrl"))]
 
 
 class EditorialScoreError(ValueError):

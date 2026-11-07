@@ -178,7 +178,7 @@ def save_context(ctx, path=None):
 
 # ---------- システム障害(候補を変えても解決しない障害)の判定 ----------
 
-SYSTEM_ERROR_NAMES = ("AuthenticationError", "PermissionDeniedError", "RateLimitError", "InternalServerError",
+SYSTEM_ERROR_NAMES = ("BudgetExceeded", "BudgetStoreError", "AuthenticationError", "PermissionDeniedError", "RateLimitError", "InternalServerError",
                       "APIConnectionError", "APITimeoutError", "OverloadedError", "ServiceUnavailableError")
 SYSTEM_ERROR_RE = re.compile(
     r"\b(" + "|".join(SYSTEM_ERROR_NAMES) + r")\b"

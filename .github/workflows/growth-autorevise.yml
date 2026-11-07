@@ -61,7 +61,7 @@ jobs:
           action_id=$(python -c 'import json; print(json.load(open("/tmp/shonan_growth_autorevise.json"))["action_id"])')
           branch="growth/${action_id}"
           git switch -c "$branch"
-          python -m unittest discover -s tests -v
+          CLAUDE_BUDGET_ENFORCE=0 DAILY_REUSE_FULL_AUDIT=0 python -m unittest discover -s tests -v
           python build.py
           git add data/articles.json index.html articles/ area/ category/ page/ sitemap.xml robots.txt
           if git diff --cached --quiet; then

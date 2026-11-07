@@ -1878,6 +1878,9 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         fallback = planning_fallback_info("候補収集", cause, exc, today)
         return run_cross_selection(existing_articles, today, event_series, log_lines,
                                    news_gate_rejections, stock_gate_rejections, avoid=avoid, fallback=fallback)
+    from collections import Counter
+    lead_mix = Counter(c.get("leadSourceType", "official") for c in discovered)
+    log_lines.append(f"候補の発見元内訳(実測): {dict(lead_mix)}")
     stock_candidates = [{"id": t["id"], "articleType": "stock", "query": t["query"],
                          "titleIdea": t["titleIdea"], "area": t["area"],
                          "cat": t["category"], "searchIntent": t["searchIntent"],
@@ -1938,7 +1941,7 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
             continue
         attempt = {"id": candidate["id"], "score": result,
                    **{k: candidate.get(k, "") for k in ("articleType", "titleIdea", "subject", "sourceUrl",
-                                                        "area", "cat")}}
+                                                        "area", "cat", "leadUrl", "leadSourceType")}}
         attempts.append(attempt)
         log_lines.append(f"企画: {candidate['id']} {candidate['titleIdea']} score={result['total']} "
                          f"parts={result['parts']}")

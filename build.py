@@ -609,7 +609,10 @@ def build_structured_data(item, canonical_url):
         }
         if item.get("eventEndDate"):
             data["endDate"] = item["eventEndDate"]
-        data.update(event_optional_data(item))
+        optional = event_optional_data(item)
+        if optional.get("organizer") and not optional["organizer"].get("url"):
+            optional.pop("organizer")
+        data.update(optional)
         return data
 
     if item["cat"] in ("b", "g") and item.get("address"):

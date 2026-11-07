@@ -1,0 +1,7 @@
+{
+  "monthly_usd": 80.0,
+  "daily_usd": 2.5,
+  "reservation_usd": 0.5,
+  "historical_spend_usd": {"2026-11": 100.0},
+  "note": "November baseline is owner-reported account spend, not the partial token archive. Estimated totals include web search. $20 headroom below provider $100 cap. UTC billing month, JST daily limit."
+}

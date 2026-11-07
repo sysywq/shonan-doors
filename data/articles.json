@@ -7139,7 +7139,8 @@
       "SHONAN KIDS DAY"
     ],
     "sources": [
-      "https://prtimes.jp/main/html/rd/p/000000115.000080611.html"
+      "https://prtimes.jp/main/html/rd/p/000000115.000080611.html",
+      "https://shonanstyle.blue/lp/shonan-kidsday/"
     ],
     "date": "2026-11-04",
     "eventStartDate": "2026-11-14",
@@ -7148,7 +7149,7 @@
     "eventPrice": "0",
     "eventTicketUrl": "",
     "eventOrganizer": "湘南キッズデイ実行委員会",
-    "eventOrganizerUrl": "",
+    "eventOrganizerUrl": "https://shonanstyle.blue/lp/shonan-kidsday/",
     "eventMetadataSource": "https://prtimes.jp/main/html/rd/p/000000115.000080611.html",
     "eventPerformers": [
       {
@@ -7361,7 +7362,8 @@
       "湘南える新聞社"
     ],
     "sources": [
-      "https://www.shonan-fill.com/"
+      "https://www.shonan-fill.com/",
+      "https://shonan-el.co.jp/service/"
     ],
     "date": "2026-11-05",
     "eventStartDate": "2026-11-14",
@@ -7370,7 +7372,7 @@
     "eventPrice": "",
     "eventTicketUrl": "",
     "eventOrganizer": "株式会社湘南える新聞社",
-    "eventOrganizerUrl": "",
+    "eventOrganizerUrl": "https://shonan-el.co.jp/",
     "eventMetadataSource": "https://www.shonan-fill.com/",
     "eventPerformers": [],
     "address": "",

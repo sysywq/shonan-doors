@@ -455,6 +455,9 @@ def check_draft(entry, client=None, confirmations=None):
         autofix += fixes
         current = fixed
         passed, reasons, blocking = evaluate(result)
+    if passed:
+        import audit_receipts
+        audit_receipts.save(current, result)
     if not passed and autofix:
         reasons = ["自動修正後の再監査で不合格"] + reasons
     return {

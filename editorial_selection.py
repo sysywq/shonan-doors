@@ -85,6 +85,7 @@ def score(candidate, judgment, signal, existing, today):
 def plan(candidates, judgments, signal, existing, today, target=5):
     """Rank 3+2 in October, 4+1 in November; retain backups for gate failures."""
     exploration_slots = 2 if period(today) == "broad_exploration" else 1 if period(today) == "light_optimization" else 0
+    exploration_slots = min(exploration_slots, max(0, target - 1))
     # 採点が無い候補は 0点として混ぜず、順位付けから外す(呼び出し元が除外理由をログに残す)
     annotated = [(c, score(c, judgments[c["id"]], signal, existing, today))
                  for c in candidates if c["id"] in judgments]

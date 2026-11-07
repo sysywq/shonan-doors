@@ -1,0 +1,2 @@
+# Per-run reports, receipts and usage are persisted by workflows, not site source.
+artifacts/

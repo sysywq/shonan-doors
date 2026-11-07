@@ -45,3 +45,10 @@ class EventStructuredDataTests(unittest.TestCase):
         data = build.event_optional_data(item)
         self.assertNotIn('offers', data)
         self.assertIn('organizer', data)
+
+    def test_jsonld_never_emits_incomplete_organizer_but_display_keeps_name(self):
+        item=self.item(eventMetadataSource='https://official.example/event',eventOrganizer='確認済み主催者')
+        self.assertNotIn('organizer',build.build_structured_data(item,'https://example.com/article'))
+        self.assertIn('確認済み主催者',build.render_infobox(item))
+        item['eventOrganizerUrl']='https://official.example/'
+        self.assertEqual(build.build_structured_data(item,'https://example.com/article')['organizer']['url'],'https://official.example/')
