@@ -292,6 +292,11 @@ def main():
         # Selection happens before constructing a paid client.
         signal = analyze(tables, articles, today=today())
         if not eligible(tables, articles, signal, today()):
+            ident = 'growth-review-' + today().isoformat()
+            if not any(r.get('Action_ID') == ident for r in rows(tables['Action_Log'])):
+                append_action(sheet_id, [ident, dt.datetime.now(dt.timezone.utc).isoformat(), '', '',
+                    'GROWTH_REVIEW_NO_CHANGE', 'No article meets the automatic revision thresholds',
+                    '', '', 'github-actions', '', 'No paid drafting or article change'])
             print("No eligible revision; no article changes")
             return
         meta = prepare(tables, articles, anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"]), today())

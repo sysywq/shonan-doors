@@ -1831,6 +1831,7 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                        news_gate_rejections, stock_gate_rejections, avoid=None):
     """Plan 10-30 metadata topics, draft only the ranked candidates.
     avoid … 同じ日の前の round で見送った対象(daily_state.avoid_articles)。重複チェックにだけ使い、articles.json には書かない"""
+    global DAILY_TARGET_ARTICLES
     import editorial_planning as ep
     from editorial_selection import plan
 
@@ -1945,6 +1946,11 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
         attempts.append(attempt)
         log_lines.append(f"企画: {candidate['id']} {candidate['titleIdea']} score={result['total']} "
                          f"parts={result['parts']}")
+        previous_purpose = os.environ.get("CLAUDE_BUDGET_PURPOSE")
+        previous_secured = os.environ.get("CLAUDE_BUDGET_MINIMUM_SECURED")
+        if selected:
+            os.environ["CLAUDE_BUDGET_PURPOSE"] = "optional"
+            os.environ["CLAUDE_BUDGET_MINIMUM_SECURED"] = "1"
         try:
             if candidate["articleType"] == "news":
                 drafts, draft_log, _ = run_news_generation(
@@ -1968,9 +1974,23 @@ def run_editorial_plan(existing_articles, today, event_series, log_lines,
                     continue
                 selected.append(entry)
                 attempt["selected"] = True
+                if len(selected) == 1 and DAILY_TARGET_ARTICLES == 1 and growth_signal():
+                    from scripts.claude_budget import optional_article_available
+                    if optional_article_available():
+                        DAILY_TARGET_ARTICLES = 2
+                        log_lines.append("最低1本のfull監査合格を確保。将来分の予算と観測データを確認し、追加1本を試行")
         except Exception as exc:
             daily_state.note_system_error(exc, f"企画: {candidate['id']} の生成")
             log_lines.append(f"警告(企画): {candidate['id']} の生成を見送り: {type(exc).__name__}: {exc}")
+        finally:
+            if previous_purpose is None:
+                os.environ.pop("CLAUDE_BUDGET_PURPOSE", None)
+            else:
+                os.environ["CLAUDE_BUDGET_PURPOSE"] = previous_purpose
+            if previous_secured is None:
+                os.environ.pop("CLAUDE_BUDGET_MINIMUM_SECURED", None)
+            else:
+                os.environ["CLAUDE_BUDGET_MINIMUM_SECURED"] = previous_secured
 
     # A planned topic can become unusable during source checks. Use the existing
     # broad discovery path for the shortfall while retaining the same audit gate.

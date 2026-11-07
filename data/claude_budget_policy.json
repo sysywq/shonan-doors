@@ -1,7 +1,10 @@
 {
-  "monthly_usd": 80.0,
-  "daily_usd": 2.5,
+  "account_limit_usd": 200.0,
+  "monthly_usd": 190.0,
+  "daily_usd": 8.0,
+  "minimum_daily_reserve_usd": 3.5,
+  "optional_article_allowance_usd": 5.0,
   "reservation_usd": 0.5,
   "historical_spend_usd": {"2026-11": 100.0},
-  "note": "November baseline is owner-reported account spend, not the partial token archive. Estimated totals include web search. $20 headroom below provider $100 cap. UTC billing month, JST daily limit."
+  "note": "Owner approved $200 total/month. Instrumented pipeline estimate stops at $190, leaving $10 for estimation differences and untracked spend. $8 is a daily abnormal-spend ceiling, not a daily target. Minimum publication takes priority over optional work. Account billing limit is not changed by this file."
 }

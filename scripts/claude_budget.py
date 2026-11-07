@@ -2,7 +2,7 @@
 
 Reservations use GitHub's contents SHA compare-and-swap, including across runs.
 The estimate is not an invoice cap: a server-tool response can exceed a reservation.
-The provider's $100 limit remains the final ceiling; $20 is held as headroom.
+Owner-approved account ceiling is $200; the local guard leaves $10 headroom.
 """
 import base64
 import calendar
@@ -44,9 +44,26 @@ def reserve(state, settings, now, call_id, stage):
     monthly = sum(r['usd'] for r in calls.values() if r['month'] == month)
     monthly += settings.get('historical_spend_usd', {}).get(month, 0)
     daily = sum(r['usd'] for r in calls.values() if r['day'] == day)
-    allowance = settings['monthly_usd'] * now.day / calendar.monthrange(now.year, now.month)[1]
+    # Rebase pacing on actual remaining money when installed mid-month.
+    openings = state.setdefault('month_openings', {})
+    opening = openings.setdefault(month, {'day': now.day, 'usd': monthly})
+    total_days = calendar.monthrange(now.year, now.month)[1]
+    remaining_span = max(1, total_days - opening['day'] + 1)
+    elapsed = max(1, now.day - opening['day'] + 1)
+    allowance = opening['usd'] + max(0, settings['monthly_usd'] - opening['usd']) * elapsed / remaining_span
+    # Minimum-publication calls may use the daily ceiling; only optional work
+    # uses paced allowance and must protect the future minimum reserve.
+    optional = os.environ.get('CLAUDE_BUDGET_PURPOSE') == 'optional'
+    if not optional:
+        allowance = settings['monthly_usd']
+    protected_days = total_days - now.day + (1 if optional and os.environ.get('CLAUDE_BUDGET_MINIMUM_SECURED') != '1' else 0)
+    if monthly + settings['reservation_usd'] + protected_days * settings.get('minimum_daily_reserve_usd', 0) > settings['monthly_usd']:
+        raise BudgetExceeded('Future minimum-publication reserve protects remaining days')
+    daily_limit = settings['daily_usd']
+    if optional and os.environ.get('CLAUDE_BUDGET_MINIMUM_SECURED') != '1':
+        daily_limit = max(0, daily_limit - settings.get('minimum_daily_reserve_usd', 3.5))
     hold = settings['reservation_usd']
-    if monthly + hold > min(settings['monthly_usd'], allowance) or daily + hold > settings['daily_usd']:
+    if monthly + hold > min(settings['monthly_usd'], allowance) or daily + hold > daily_limit:
         raise BudgetExceeded(f'Claude estimated budget exhausted: month=${monthly:.2f}, day=${daily:.2f}; defer until next budget window')
     calls[call_id] = dict(month=month, day=day, usd=hold, stage=stage, status='reserved')
     return state
@@ -88,6 +105,15 @@ class GitHubLedger:
             except urllib.error.HTTPError as race:
                 if race.code != 422:
                     raise
+
+    def snapshot(self):
+        try:
+            doc = self.request('GET', '/contents/' + FILE + '?ref=' + BRANCH)
+            return json.loads(base64.b64decode(doc['content']))
+        except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                return {'calls': {}}
+            raise
 
     def update(self, transition):
         self.initialize()
@@ -137,3 +163,21 @@ def finish(ticket, row):
         ledger, ident = ticket
         # On failure keep the reservation charged; never silently release unknown spend.
         ledger.update(lambda s: settle(s, ident, row.get('estimated_usd') if row else None))
+
+
+def optional_article_available(now=None):
+    """Fail closed on missing balance or stale/missing editorial observations."""
+    if os.environ.get('CLAUDE_BUDGET_ENFORCE') == '0' or os.environ.get('DAILY_ADAPTIVE_TARGET') != '1':
+        return False
+    now = now or datetime.now(timezone.utc)
+    settings = policy()
+    try:
+        state = GitHubLedger().snapshot()
+        month = now.strftime('%Y-%m')
+        spent = settings.get('historical_spend_usd', {}).get(month, 0) + sum(
+            r['usd'] for r in state.get('calls', {}).values() if r['month'] == month)
+        future = calendar.monthrange(now.year, now.month)[1] - now.day
+        spare = settings['monthly_usd'] - spent - future * settings['minimum_daily_reserve_usd']
+        return spare >= settings['optional_article_allowance_usd']
+    except Exception:
+        return False

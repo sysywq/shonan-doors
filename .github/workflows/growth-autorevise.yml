@@ -26,6 +26,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GITHUB_TOKEN: ${{ github.token }}
       GROWTH_SPREADSHEET_ID: ${{ vars.GROWTH_SPREADSHEET_ID }}
+      CLAUDE_BUDGET_PURPOSE: 'optional'
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4

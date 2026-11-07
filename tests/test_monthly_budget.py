@@ -21,9 +21,10 @@ class BudgetTests(unittest.TestCase):
         s=settle(s,'a',2.4)
         with self.assertRaises(BudgetExceeded):reserve(s,self.p,self.now,'b','news')
     def test_early_month_cannot_consume_full_month_allowance(self):
+        from unittest.mock import patch
         now=datetime(2026,12,1,1,tzinfo=timezone.utc)
         s=reserve({},self.p,now,'a','audit');s=settle(s,'a',2.4)
-        with self.assertRaises(BudgetExceeded):reserve(s,self.p,now,'b','audit')
+        with patch.dict('os.environ', CLAUDE_BUDGET_PURPOSE='optional'), self.assertRaises(BudgetExceeded):reserve(s,self.p,now,'b','audit')
     def test_unknown_cost_keeps_reservation(self):
         s=reserve({},self.p,self.now,'a','news')
         self.assertEqual(settle(s,'a',None)['calls']['a']['status'],'reserved')
@@ -59,3 +60,16 @@ class BudgetTests(unittest.TestCase):
         ranked=plan(candidates,judgments,{},[],'2026-12-02',target=1)
         self.assertEqual(ranked[0][0]['id'],'a')
         self.assertEqual(ranked[0][1]['slot'],'regular')
+
+    def test_midmonth_installation_does_not_wait_for_old_spend_to_catch_up(self):
+        from unittest.mock import patch
+        p=dict(monthly_usd=190,daily_usd=8,reservation_usd=.5,historical_spend_usd={'2026-11':100})
+        now=datetime(2026,11,7,1,tzinfo=timezone.utc)
+        with patch.dict('os.environ',CLAUDE_BUDGET_PURPOSE='minimum'):
+            result=reserve({},p,now,'first','news')
+        self.assertEqual(result['calls']['first']['usd'],.5)
+    def test_optional_work_cannot_spend_future_minimum_budget(self):
+        from unittest.mock import patch
+        p=dict(monthly_usd=190,daily_usd=8,reservation_usd=.5,minimum_daily_reserve_usd=4,historical_spend_usd={'2026-11':100})
+        with patch.dict('os.environ',CLAUDE_BUDGET_PURPOSE='optional'), self.assertRaises(BudgetExceeded):
+            reserve({},p,datetime(2026,11,7,1,tzinfo=timezone.utc),'extra','growth')
