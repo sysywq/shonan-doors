@@ -53,6 +53,7 @@ Secrets(GitHub Secrets から環境変数で渡す):
 終了コード: 0=成功/対象なし/未設定でスキップ  1=投稿失敗・結果不明・公開未確認あり  2=引数や Secrets の設定ミス
 """
 import argparse
+from html.parser import HTMLParser
 import json
 import os
 import re
@@ -325,11 +326,58 @@ def publish_post(page_id, token, message, link, env=None):
 
 # ---------- 公開確認 ----------
 
+class ArticlePreviewParser(HTMLParser):
+    """Extract the declared share image and the visible article hero."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.images = []
+        self.hero = None
+        self.art_depth = 0
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'meta' and attrs.get('property') == 'og:image':
+            self.images.append(attrs.get('content', ''))
+        if tag == 'div':
+            if self.art_depth:
+                self.art_depth += 1
+            elif 'modal-art' in attrs.get('class', '').split():
+                self.art_depth = 1
+        if tag == 'img' and self.art_depth and self.hero is None:
+            self.hero = attrs.get('src')
+
+    def handle_endtag(self, tag):
+        if tag == 'div' and self.art_depth:
+            self.art_depth -= 1
+
+
+def preview_matches_hero(document, url, expected_image=None):
+    parser = ArticlePreviewParser()
+    parser.feed(document)
+    if not parser.hero or len(parser.images) != 1:
+        return False
+    hero = urllib.parse.urljoin(url, parser.hero)
+    return (hero.startswith('https://') and parser.images[0] == hero
+            and (expected_image is None or hero == expected_image))
+
+
 def url_ok(url):
+    """Wait for the correct build, not only a stale page returning HTTP 200."""
     try:
-        req = urllib.request.Request(url, method="GET", headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            return resp.status == 200
+        from build import build_ogp_image_url
+        article = next((a for a in load_json(ARTICLES_JSON_PATH, [])
+                        if f"{SITE_DOMAIN}/articles/{a.get('slug')}/" == url
+                        and not a.get('mergedInto')), None)
+        if article is None:
+            return False
+        req = urllib.request.Request(url, method="GET", headers={"User-Agent": USER_AGENT,
+                                                               "Cache-Control": "no-cache"})
+        with _urlopen(req, timeout=10) as resp:
+            if resp.status != 200:
+                return False
+            raw = resp.read(1_000_001)
+            return len(raw) <= 1_000_000 and preview_matches_hero(
+                raw.decode('utf-8', 'replace'), url, build_ogp_image_url(article))
     except Exception:
         return False
 
@@ -416,7 +464,7 @@ def process_articles(target_ids, articles_by_id, records, page_id, token, *, dry
             continue
 
         if not skip_url_check and not wait_for_url_published(url, check=check, sleep=sleep):
-            print(f"  {url} が HTTP 200 にならないため投稿しません。", file=sys.stderr)
+            print(f"  {url} の公開または共有画像と記事写真の一致を確認できないため投稿しません。", file=sys.stderr)
             counts["unpublished"] += 1
             continue
 
